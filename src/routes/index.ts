@@ -7,7 +7,9 @@ export const router: FastifyPluginCallback = (
   next
 ) => {
 
-  const routes = [  ...healthRoutes ];
+  const routes = [  
+    ...healthRoutes 
+  ];
 
   for (const route of routes) {
     fastify.route(route);

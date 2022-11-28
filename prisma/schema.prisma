@@ -1,0 +1,380 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model actions {
+  id         Int          @id @default(autoincrement())
+  userid     Int
+  name       String       @db.VarChar(255)
+  type       String       @db.VarChar(255)
+  subtype    String?      @db.VarChar(255)
+  source     String       @db.VarChar(255)
+  object     Json
+  users      users        @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "actions_ibfk_1")
+  actiontags actiontags[]
+
+  @@index([userid], map: "userid")
+}
+
+model actiontags {
+  id      Int
+  tag     String  @db.VarChar(255)
+  actions actions @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "actiontags_ibfk_1")
+
+  @@id([id, tag])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model armor {
+  name   String @db.VarChar(255)
+  object Json
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model backgrounds {
+  background String @db.VarChar(255)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model bases {
+  age   String @db.VarChar(255)
+  part  String @db.VarChar(255)
+  value String @db.VarChar(255)
+
+  @@ignore
+}
+
+model characters {
+  id             Int       @id @default(autoincrement())
+  userid         Int
+  game           String    @db.VarChar(255)
+  created        DateTime? @default(now()) @db.DateTime(0)
+  lastedited     DateTime? @default(now()) @db.DateTime(0)
+  folderid       Int?
+  object         Json
+  trashed        Boolean?  @default(false)
+  originalid     Int?
+  originaluserid Int?
+  folders        folders?  @relation(fields: [folderid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "characters_ibfk_1")
+  users          users     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "characters_ibfk_2")
+
+  @@index([folderid], map: "folderid")
+  @@index([userid], map: "userid")
+}
+
+model classes {
+  id             Int             @id @default(autoincrement())
+  userid         Int
+  game           String          @db.VarChar(255)
+  object         Json
+  created        DateTime?       @default(now()) @db.DateTime(0)
+  lastedited     DateTime?       @default(now()) @db.DateTime(0)
+  folderid       Int?
+  trashed        Boolean?        @default(false)
+  originaluserid Int?
+  originalid     Int?
+  folders        folders?        @relation(fields: [folderid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "classes_ibfk_1")
+  users          users           @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "classes_ibfk_2")
+  classvariants  classvariants[]
+
+  @@index([folderid], map: "folderid")
+  @@index([userid], map: "userid")
+}
+
+model classvariants {
+  name       String    @db.VarChar(255)
+  classid    Int
+  object     Json
+  created    DateTime? @default(now()) @db.DateTime(0)
+  lastedited DateTime? @default(now()) @db.DateTime(0)
+  classes    classes   @relation(fields: [classid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "classvariants_ibfk_1")
+
+  @@id([name, classid])
+  @@index([classid], map: "classid")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model damagetypes {
+  name        String  @db.VarChar(255)
+  description String? @db.Text
+
+  @@ignore
+}
+
+model folders {
+  id            Int          @id @default(autoincrement())
+  userid        Int
+  created       DateTime?    @default(now()) @db.DateTime(0)
+  lastedited    DateTime?    @default(now()) @db.DateTime(0)
+  folderid      Int?
+  name          String       @db.VarChar(255)
+  trashed       Boolean?     @default(false)
+  folders       folders?     @relation("foldersTofolders", fields: [folderid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "folders_ibfk_1")
+  users         users        @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "folders_ibfk_2")
+  characters    characters[]
+  classes       classes[]
+  other_folders folders[]    @relation("foldersTofolders")
+  races         races[]
+  templates     templates[]
+
+  @@index([folderid], map: "folderid")
+  @@index([userid], map: "userid")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model languages {
+  name   String  @db.VarChar(255)
+  script String? @db.VarChar(255)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model names {
+  race   String @db.VarChar(255)
+  gender String @db.VarChar(255)
+  name   String @db.VarChar(255)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model professions {
+  age         String  @db.VarChar(255)
+  name        String  @db.VarChar(255)
+  description String? @db.Text
+  object      Json
+
+  @@ignore
+}
+
+model publications {
+  id                       Int
+  type                     String                     @db.VarChar(255)
+  datepublished            DateTime?                  @default(now()) @db.DateTime(0)
+  datemodified             DateTime?                  @default(now()) @db.DateTime(0)
+  name                     String                     @db.VarChar(255)
+  monstertype              Int?
+  cr                       Float?                     @db.Float
+  size                     Int?
+  alignment                Int?
+  adds                     Int?                       @default(0)
+  url                      String                     @db.VarChar(255)
+  meta                     String?                    @db.VarChar(255)
+  publicationsenvironments publicationsenvironments[]
+  publicationsratings      publicationsratings[]
+  publicationssearchtags   publicationssearchtags[]
+  publicationssubtypes     publicationssubtypes[]
+
+  @@id([id, type])
+}
+
+model publicationsenvironments {
+  id           Int
+  type         String       @db.VarChar(255)
+  string       String       @db.VarChar(255)
+  publications publications @relation(fields: [id, type], references: [id, type], onDelete: Cascade, onUpdate: NoAction, map: "publicationsenvironments_ibfk_1")
+
+  @@id([id, type, string])
+}
+
+model publicationsratings {
+  id           Int
+  type         String       @db.VarChar(255)
+  userid       Int
+  value        Int
+  publications publications @relation(fields: [id, type], references: [id, type], onDelete: Cascade, onUpdate: NoAction, map: "publicationsratings_ibfk_1")
+  users        users        @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "publicationsratings_ibfk_2")
+
+  @@id([id, type, userid])
+  @@index([userid], map: "userid")
+}
+
+model publicationssearchtags {
+  id           Int
+  type         String       @db.VarChar(255)
+  string       String       @db.VarChar(255)
+  publications publications @relation(fields: [id, type], references: [id, type], onDelete: Cascade, onUpdate: NoAction, map: "publicationssearchtags_ibfk_1")
+
+  @@id([id, type, string])
+}
+
+model publicationssubtypes {
+  id           Int
+  type         String       @db.VarChar(255)
+  string       String       @db.VarChar(255)
+  publications publications @relation(fields: [id, type], references: [id, type], onDelete: Cascade, onUpdate: NoAction, map: "publicationssubtypes_ibfk_1")
+
+  @@id([id, type, string])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model quirks {
+  quirk String @db.VarChar(255)
+
+  @@ignore
+}
+
+model races {
+  id             Int            @id @default(autoincrement())
+  userid         Int
+  game           String         @db.VarChar(255)
+  nameType       String?        @default("human") @db.VarChar(255)
+  object         Json
+  created        DateTime?      @default(now()) @db.DateTime(0)
+  lastedited     DateTime?      @default(now()) @db.DateTime(0)
+  folderid       Int?
+  trashed        Boolean?       @default(false)
+  originalid     Int?
+  originaluserid Int?
+  folders        folders?       @relation(fields: [folderid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "races_ibfk_1")
+  users          users          @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "races_ibfk_2")
+  racevariants   racevariants[]
+
+  @@index([folderid], map: "folderid")
+  @@index([userid], map: "userid")
+}
+
+model racevariants {
+  name       String    @db.VarChar(255)
+  raceid     Int
+  object     Json
+  created    DateTime? @default(now()) @db.DateTime(0)
+  lastedited DateTime? @default(now()) @db.DateTime(0)
+  races      races     @relation(fields: [raceid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "racevariants_ibfk_1")
+
+  @@id([name, raceid])
+  @@index([raceid], map: "raceid")
+}
+
+model reports {
+  reportid     Int       @id @default(autoincrement())
+  id           Int
+  type         String    @db.VarChar(255)
+  userid       Int
+  reason       String    @db.VarChar(255)
+  report       String?   @db.Text
+  datereported DateTime? @default(now()) @db.DateTime(0)
+  dateaction   DateTime? @db.DateTime(0)
+  moderator    Int?
+  action       String?   @db.Text
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model skills {
+  game String @db.VarChar(255)
+  name String @db.VarChar(255)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model sources {
+  description String @db.VarChar(255)
+  link        String @db.VarChar(255)
+
+  @@ignore
+}
+
+model spells {
+  userid Int
+  name   String @db.VarChar(255)
+  object Json
+
+  @@id([userid, name])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model surnames {
+  race    String @db.VarChar(255)
+  gender  String @db.VarChar(255)
+  surname String @db.VarChar(255)
+
+  @@ignore
+}
+
+model templates {
+  id             Int       @id @default(autoincrement())
+  userid         Int
+  game           String    @db.VarChar(255)
+  object         Json
+  created        DateTime? @default(now()) @db.DateTime(0)
+  lastedited     DateTime? @default(now()) @db.DateTime(0)
+  folderid       Int?
+  trashed        Boolean?  @default(false)
+  originalid     Int?
+  originaluserid Int?
+  folders        folders?  @relation(fields: [folderid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "templates_ibfk_1")
+  users          users     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "templates_ibfk_2")
+
+  @@index([folderid], map: "folderid")
+  @@index([userid], map: "userid")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model traits {
+  name        String   @db.VarChar(255)
+  type        String   @db.VarChar(255)
+  subtitle    Boolean? @default(false)
+  category    String   @db.VarChar(255)
+  feeling     Boolean? @default(false)
+  description String?  @db.Text
+
+  @@ignore
+}
+
+model users {
+  id                  Int                   @id @default(autoincrement())
+  email               String                @unique(map: "email") @db.VarChar(255)
+  username            String                @db.VarChar(32)
+  password            String                @db.VarChar(255)
+  token               String?               @db.VarChar(255)
+  tokenpwd            String?               @db.VarChar(255)
+  verified            Int?                  @default(0) @db.TinyInt
+  premium             DateTime?             @db.DateTime(0)
+  level               Int?                  @default(0) @db.TinyInt
+  created             DateTime?             @default(now()) @db.DateTime(0)
+  publishsuspension   DateTime?             @db.DateTime(0)
+  sessiontoken        String?               @db.VarChar(255)
+  name                String?               @db.VarChar(255)
+  country             String?               @db.VarChar(255)
+  street              String?               @db.VarChar(255)
+  city                String?               @db.VarChar(255)
+  zipcode             String?               @db.VarChar(255)
+  phone               String?               @db.VarChar(255)
+  subscriptionstatus  String?               @db.VarChar(255)
+  subscriptionmethod  String?               @db.VarChar(255)
+  customerid          String?               @db.VarChar(255)
+  subscriptionid      String?               @db.VarChar(255)
+  actions             actions[]
+  characters          characters[]
+  classes             classes[]
+  folders             folders[]
+  publicationsratings publicationsratings[]
+  races               races[]
+  templates           templates[]
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model voices {
+  voice String @db.VarChar(255)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model weapons {
+  name   String @db.VarChar(255)
+  object Json
+
+  @@ignore
+}
