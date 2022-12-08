@@ -30,10 +30,10 @@ model actiontags {
 }
 
 model armor {
+  userid Int
   name   String @db.VarChar(255)
   object Json
-  userid Int
-  users  users  @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "armor_ibfk_1")
+  users  users  @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "armor_ibfk_1")
 
   @@id([userid, name])
 }
@@ -93,16 +93,16 @@ model classvariants {
   object     Json
   created    DateTime? @default(now()) @db.DateTime(0)
   lastedited DateTime? @default(now()) @db.DateTime(0)
-  classes    classes   @relation(fields: [classid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "classvariants_ibfk_1")
+  classes    classes   @relation(fields: [classid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "classvariants_ibfk_1")
 
   @@id([name, classid])
   @@index([classid], map: "classid")
 }
 
 model damagetypes {
+  userid      Int
   name        String  @db.VarChar(255)
   description String? @db.Text
-  userid      Int
   users       users   @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "damagetypes_ibfk_1")
 
   @@id([userid, name])
@@ -116,11 +116,11 @@ model folders {
   folderid      Int?
   name          String       @db.VarChar(255)
   trashed       Boolean?     @default(false)
-  folders       folders?     @relation("foldersTofolders", fields: [folderid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "folders_ibfk_1")
-  users         users        @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "folders_ibfk_2")
   characters    characters[]
   classes       classes[]
+  folders       folders?     @relation("foldersTofolders", fields: [folderid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "folders_ibfk_1")
   other_folders folders[]    @relation("foldersTofolders")
+  users         users        @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "folders_ibfk_2")
   races         races[]
   templates     templates[]
 
@@ -129,9 +129,9 @@ model folders {
 }
 
 model languages {
+  userid Int
   name   String  @db.VarChar(255)
   script String? @db.VarChar(255)
-  userid Int
   users  users   @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "languages_ibfk_1")
 
   @@id([userid, name])
@@ -146,11 +146,11 @@ model names {
 }
 
 model professions {
+  userid      Int
   age         String  @db.VarChar(255)
   name        String  @db.VarChar(255)
   description String? @db.Text
   object      Json
-  userid      Int
   users       users   @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "professions_ibfk_1")
 
   @@id([userid, name])
@@ -265,6 +265,9 @@ model reports {
   dateaction   DateTime? @db.DateTime(0)
   moderator    Int?
   action       String?   @db.Text
+  users        users     @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "reports_ibfk_1")
+
+  @@index([userid], map: "userid")
 }
 
 model skills {
@@ -355,6 +358,7 @@ model users {
   professions         professions[]
   publicationsratings publicationsratings[]
   races               races[]
+  reports             reports[]
   templates           templates[]
   weapons             weapons[]
 
@@ -366,9 +370,9 @@ model voices {
 }
 
 model weapons {
+  userid Int
   name   String @db.VarChar(255)
   object Json
-  userid Int
   users  users  @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "weapons_ibfk_1")
 
   @@id([userid, name])

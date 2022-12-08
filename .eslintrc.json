@@ -1,8 +1,6 @@
 {
     "env": {
-        "browser": true,
-        "es2021": true,
-        "node": true
+        "es2021": true
     },
     "extends": [
         "eslint:recommended",
@@ -29,7 +27,7 @@
         ],
         "quotes": [
             "error",
-            "double"
+            "single"
         ],
         "semi": [
             "error",
@@ -41,9 +39,9 @@
             "alias": {
                 "map": [
                     ["@", "./resources"],
-                    ["~", "./"]
+                    ["~", "./resources/js"]
                 ],
-                "extensions": [".js", ".vue"]
+                "extensions": [".js", ".ts"]
             }
         }
     }
