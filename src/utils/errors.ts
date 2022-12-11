@@ -27,3 +27,7 @@ function createErrorJSON(code: number, message: string) {
     message
   };
 }
+
+export function requiredString(name: string) {
+  return `${name} is a required field`;
+}

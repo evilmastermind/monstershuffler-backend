@@ -22,3 +22,25 @@ export async function findUserByEmail(email: string) {
     }
   });
 }
+
+export async function getUsers() {
+  return prisma.users.findMany({
+    select: {
+      id: true,
+      username: true,
+      email: true,
+      created: true,
+    }
+  });
+}
+
+export async function getUserLevel(id: number) {
+  return prisma.users.findUnique({
+    select: {
+      level: true,
+    },
+    where: {
+      id
+    }
+  });
+}

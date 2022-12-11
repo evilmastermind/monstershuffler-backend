@@ -2,8 +2,9 @@ import { server } from '@/app';
 import { comparePassword } from '@/utils/hash';
 import { CreateUserInput, LoginInput } from './user.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { createUser, findUserByEmail } from './user.service';
+import { createUser, findUserByEmail, getUsers, getUserLevel } from './user.service';
 import { handleError } from '@/utils/errors';
+
 
 export async function registerUserHandler (
   request: FastifyRequest<{ Body: CreateUserInput }>, 
@@ -21,6 +22,8 @@ export async function registerUserHandler (
 }
 
 
+// TODO: moving from ms1 to ms2 will require to reset the users' passwords 
+// since the new verification/hashing process is different
 export async function loginHandler (
   request: FastifyRequest<{ Body: LoginInput; }>, 
   reply: FastifyReply
@@ -42,6 +45,26 @@ export async function loginHandler (
     });
   }
   // generate accesstoken
-  const { password, ...rest} = user;
-  return { accessToken: server.jwt.sign(rest) };
+  const { id } = user;
+  return { accessToken: server.jwt.sign({ id }) };
+}
+
+
+export async function getUsersHandler(request: FastifyRequest, reply: FastifyReply) {
+  console.log(request.user);
+  
+  if(!await isUserAdmin(request.user.id)) {
+    return reply.unauthorized();
+  }
+
+  return await getUsers();
+}
+
+
+export async function isUserAdmin(id: number) {
+  const { level } = await getUserLevel(id) || {};
+  if (!level || level < 5) {
+    return false;
+  }
+  return true;
 }
