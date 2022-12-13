@@ -1,6 +1,8 @@
 # Monstershuffler API
 New backend interface for [monstershuffler.com](https://www.monstershuffler.com)
 
+The purpose of this new interface is to allow other websites and platforms to access monsters and npcs created in Monstershuffler.com
+
 ( this project is still very incomplete, but you can check its progress if you want to )
 
 ## Dependencies & tools used
