@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { loginHandler, registerUserHandler, getUsersHandler } from './user.controller';
+import { jwtHeaderRequired } from '@/modules/schemas';
 import { $ref } from './user.schema';
 
 async function userRoutes(server: FastifyInstance) {
@@ -7,6 +8,10 @@ async function userRoutes(server: FastifyInstance) {
     '/', 
     {
       schema: {
+        summary: 'Registers a new user in the database.',
+        // TODO: users can only be created from monstershuffler.com
+        description: 'Registers a new user in the database. Only accessible locally (users can only be created from monstershuffler.com).',
+        tags: ['user'],
         body: $ref('createUserSchema'),
         response: {
           201: $ref('createUserResponseSchema')
@@ -20,6 +25,7 @@ async function userRoutes(server: FastifyInstance) {
     '/login',
     {
       schema: {
+        tags: ['user'],
         body: $ref('loginSchema'),
         response: {
           200: $ref('loginResponseSchema')
@@ -32,6 +38,10 @@ async function userRoutes(server: FastifyInstance) {
   server.get(
     '/', {
       preHandler: [server.authenticate],
+      schema: {
+        tags: ['user'],
+        headers: jwtHeaderRequired,
+      }
     }
     ,getUsersHandler
   );

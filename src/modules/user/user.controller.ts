@@ -29,34 +29,27 @@ export async function loginHandler (
   reply: FastifyReply
 ) {
   const body = request.body; 
-
-  // find user by email
   const user = await findUserByEmail(body.email);
+  const genericErrorMessage = { 
+    message: 'Invalid email or password' 
+  };
   if (!user) {
-    return reply.code(401).send({
-      message: 'Invalid email or password'
-    });
+    return reply.code(401).send(genericErrorMessage);
   }
-  // verify password
-  const isPasswordCorrect = comparePassword(body.password, user.password);
-  if (!isPasswordCorrect) {
-    return reply.code(401).send({
-      message: 'Invalid email or password'
-    });
+  const isPasswordCorrect = await comparePassword(body.password, user.password);
+  if (isPasswordCorrect) {
+    const { id } = user;
+    return { accessToken: server.jwt.sign({ id }) };
   }
-  // generate accesstoken
-  const { id } = user;
-  return { accessToken: server.jwt.sign({ id }) };
+  return reply.code(401).send(genericErrorMessage);
 }
 
 
 export async function getUsersHandler(request: FastifyRequest, reply: FastifyReply) {
-  console.log(request.user);
-  
-  if(!await isUserAdmin(request.user.id)) {
+  const isUserAllowed = await isUserAdmin(request.user.id);
+  if(!isUserAllowed) {
     return reply.unauthorized();
   }
-
   return await getUsers();
 }
 

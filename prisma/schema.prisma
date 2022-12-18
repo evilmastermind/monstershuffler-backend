@@ -30,12 +30,13 @@ model actiontags {
 }
 
 model armor {
+  id     Int    @id @default(autoincrement())
   userid Int
   name   String @db.VarChar(255)
   object Json
-  users  users  @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "armor_ibfk_1")
+  users  users  @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "armor_ibfk_1")
 
-  @@id([userid, name])
+  @@index([userid], map: "userid")
 }
 
 model backgrounds {
@@ -88,24 +89,25 @@ model classes {
 }
 
 model classvariants {
+  id         Int       @id @default(autoincrement())
   name       String    @db.VarChar(255)
   classid    Int
   object     Json
   created    DateTime? @default(now()) @db.DateTime(0)
   lastedited DateTime? @default(now()) @db.DateTime(0)
-  classes    classes   @relation(fields: [classid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "classvariants_ibfk_1")
+  classes    classes   @relation(fields: [classid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "classvariants_ibfk_1")
 
-  @@id([name, classid])
   @@index([classid], map: "classid")
 }
 
 model damagetypes {
+  id          Int     @id @default(autoincrement())
   userid      Int
   name        String  @db.VarChar(255)
   description String? @db.Text
-  users       users   @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "damagetypes_ibfk_1")
+  users       users   @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "damagetypes_ibfk_1")
 
-  @@id([userid, name])
+  @@index([userid], map: "userid")
 }
 
 model folders {
@@ -129,12 +131,13 @@ model folders {
 }
 
 model languages {
+  id     Int     @id @default(autoincrement())
   userid Int
   name   String  @db.VarChar(255)
   script String? @db.VarChar(255)
-  users  users   @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "languages_ibfk_1")
+  users  users   @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "languages_ibfk_1")
 
-  @@id([userid, name])
+  @@index([userid], map: "userid")
 }
 
 model names {
@@ -146,14 +149,15 @@ model names {
 }
 
 model professions {
+  id          Int     @id @default(autoincrement())
   userid      Int
   age         String  @db.VarChar(255)
   name        String  @db.VarChar(255)
   description String? @db.Text
   object      Json
-  users       users   @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "professions_ibfk_1")
+  users       users   @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "professions_ibfk_1")
 
-  @@id([userid, name])
+  @@index([userid], map: "userid")
 }
 
 model publications {
@@ -243,6 +247,7 @@ model races {
 }
 
 model racevariants {
+  id         Int       @id @default(autoincrement())
   name       String    @db.VarChar(255)
   raceid     Int
   object     Json
@@ -250,7 +255,6 @@ model racevariants {
   lastedited DateTime? @default(now()) @db.DateTime(0)
   races      races     @relation(fields: [raceid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "racevariants_ibfk_1")
 
-  @@id([name, raceid])
   @@index([raceid], map: "raceid")
 }
 
@@ -276,18 +280,14 @@ model skills {
   name String @db.VarChar(255)
 }
 
-model sources {
-  id          Int    @unique(map: "id") @default(autoincrement())
-  description String @db.VarChar(255)
-  link        String @db.VarChar(255)
-}
-
 model spells {
+  id     Int    @id @default(autoincrement())
   userid Int
   name   String @db.VarChar(255)
   object Json
+  users  users  @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "spells_ibfk_1")
 
-  @@id([userid, name])
+  @@index([userid], map: "userid")
 }
 
 model surnames {
@@ -359,6 +359,7 @@ model users {
   publicationsratings publicationsratings[]
   races               races[]
   reports             reports[]
+  spells              spells[]
   templates           templates[]
   weapons             weapons[]
 
@@ -370,10 +371,11 @@ model voices {
 }
 
 model weapons {
+  id     Int    @id @default(autoincrement())
   userid Int
   name   String @db.VarChar(255)
   object Json
-  users  users  @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "weapons_ibfk_1")
+  users  users  @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "weapons_ibfk_1")
 
-  @@id([userid, name])
+  @@index([userid], map: "userid")
 }

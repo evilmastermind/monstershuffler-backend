@@ -14,15 +14,19 @@ export async function createArmor(userid: number, input: createArmorInput) {
 }
 
 
-export async function getArmor(input: getArmorInput) {
-  const { userid, name } = input;
+export async function getArmor(userid: number, id: number) {
 
-  return await prisma.armor.findUnique({
+  return await prisma.armor.findMany({
     where: {
-      userid_name: {
-        userid,
-        name
-      }
+      id,
+      OR: [
+        {
+          userid: 0,
+        },
+        {
+          userid,
+        },
+      ]
     }
   });
 }
@@ -38,6 +42,14 @@ export async function getArmorList(userid: number) {
           userid,
         },
       ]
-    }
+    },
+    orderBy: [
+      {
+        userid: 'asc',
+      },
+      {
+        id: 'asc',
+      }
+    ]
   });
 }

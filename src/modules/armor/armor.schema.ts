@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { requiredString } from '@/utils/errors';
 import { buildJsonSchemas } from 'fastify-zod';
 
 const armorObject = z.object({
@@ -31,10 +30,13 @@ const getArmorSchema = z.object({
     }),
   ...armorCore,
 });
-const getArmorResponseSchema = z.object({
-  ...armorCore,
-  object: armorObject
-});
+
+// const getArmorResponseSchema = z.object({
+//   ...armorCore,
+//   id: z.number(),
+//   userid: z.number(),
+//   object: armorObject
+// });
 
 export type createArmorInput = z.infer<typeof createArmorSchema>;
 export type getArmorInput = z.infer<typeof getArmorSchema>;
@@ -42,5 +44,5 @@ export type getArmorInput = z.infer<typeof getArmorSchema>;
 export const {schemas: armorSchemas, $ref} = buildJsonSchemas({
   createArmorSchema,
   getArmorSchema,
-  getArmorResponseSchema
-});
+  // getArmorResponseSchema
+}, { $id: 'armorSchemas' });

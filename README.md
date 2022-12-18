@@ -1,4 +1,4 @@
-# Monstershuffler API
+# Monstershuffler REST API
 New backend interface for [monstershuffler.com](https://www.monstershuffler.com)
 
 The purpose of this new interface is to allow other websites and platforms to access monsters and npcs created in Monstershuffler.com
@@ -16,5 +16,37 @@ The purpose of this new interface is to allow other websites and platforms to ac
 Initial project setup based on TomDoesTech's YouTube tutorial:
 - YouTube: https://www.youtube.com/watch?v=LMoMHP44-xM
 - github: https://github.com/TomDoesTech/fastify-prisma-rest-api
+
+## How to run this project locally
+To run this project locally, you need to install the following requirements in your pc:
+- nodejs v16+
+- mysql v8+
+
+The steps to install node and mysql will depend on your operative system. Find a guide online or ask [ChatGPT](https://chat.openai.com/).
+
+Create an empty mysql database, then use the terminal to import the two .sql files inside the folder `/db` of this project:
+``` bash
+# first upload the structure of the database
+mysql -u your_mysql_username -p db_name < db_structure.sql
+# then upload the seeds (starting values, like the admin user, spells, etc...)
+mysql -u your_mysql_username -p db_name < db_structure.sql
+```
+Create a file called `.env` in the root folder of this project, then add the following lines of code inside:
+``` bash
+DATABASE_URL="mysql://your_mysql_username:your_password@localhost:3306/your_db_name"
+JWT_SECRET="add_some_16+_random_characters_here"
+```
+
+You can now run the project using npm or yarn:
+``` bash
+# npm
+npm run dev
+# yarn
+yarn dev
+```
+
+
+
+
 
 

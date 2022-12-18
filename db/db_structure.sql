@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 31.11.39.91:3306
--- Creato il: Dic 03, 2022 alle 14:26
+-- Creato il: Dic 18, 2022 alle 08:23
 -- Versione del server: 5.7.35-38-log
 -- Versione PHP: 8.0.7
 
@@ -55,6 +55,7 @@ CREATE TABLE `actiontags` (
 --
 
 CREATE TABLE `armor` (
+  `id` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `object` json NOT NULL
@@ -129,6 +130,7 @@ CREATE TABLE `classes` (
 --
 
 CREATE TABLE `classvariants` (
+  `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `classid` int(11) NOT NULL,
   `object` json NOT NULL,
@@ -143,6 +145,7 @@ CREATE TABLE `classvariants` (
 --
 
 CREATE TABLE `damagetypes` (
+  `id` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` text
@@ -171,6 +174,7 @@ CREATE TABLE `folders` (
 --
 
 CREATE TABLE `languages` (
+  `id` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `script` varchar(255) DEFAULT NULL
@@ -195,6 +199,7 @@ CREATE TABLE `names` (
 --
 
 CREATE TABLE `professions` (
+  `id` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
   `age` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -310,6 +315,7 @@ CREATE TABLE `races` (
 --
 
 CREATE TABLE `racevariants` (
+  `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `raceid` int(11) NOT NULL,
   `object` json NOT NULL,
@@ -351,22 +357,11 @@ CREATE TABLE `skills` (
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `sources`
---
-
-CREATE TABLE `sources` (
-  `id` int(11) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `link` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Struttura della tabella `spells`
 --
 
 CREATE TABLE `spells` (
+  `id` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `object` json NOT NULL
@@ -466,6 +461,7 @@ CREATE TABLE `voices` (
 --
 
 CREATE TABLE `weapons` (
+  `id` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `object` json NOT NULL
@@ -492,7 +488,8 @@ ALTER TABLE `actiontags`
 -- Indici per le tabelle `armor`
 --
 ALTER TABLE `armor`
-  ADD PRIMARY KEY (`userid`,`name`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `userid` (`userid`);
 
 --
 -- Indici per le tabelle `backgrounds`
@@ -526,14 +523,15 @@ ALTER TABLE `classes`
 -- Indici per le tabelle `classvariants`
 --
 ALTER TABLE `classvariants`
-  ADD PRIMARY KEY (`name`,`classid`),
+  ADD PRIMARY KEY (`id`),
   ADD KEY `classid` (`classid`);
 
 --
 -- Indici per le tabelle `damagetypes`
 --
 ALTER TABLE `damagetypes`
-  ADD PRIMARY KEY (`userid`,`name`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `userid` (`userid`);
 
 --
 -- Indici per le tabelle `folders`
@@ -547,7 +545,8 @@ ALTER TABLE `folders`
 -- Indici per le tabelle `languages`
 --
 ALTER TABLE `languages`
-  ADD PRIMARY KEY (`userid`,`name`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `userid` (`userid`);
 
 --
 -- Indici per le tabelle `names`
@@ -559,7 +558,8 @@ ALTER TABLE `names`
 -- Indici per le tabelle `professions`
 --
 ALTER TABLE `professions`
-  ADD PRIMARY KEY (`userid`,`name`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `userid` (`userid`);
 
 --
 -- Indici per le tabelle `publications`
@@ -611,7 +611,7 @@ ALTER TABLE `races`
 -- Indici per le tabelle `racevariants`
 --
 ALTER TABLE `racevariants`
-  ADD PRIMARY KEY (`name`,`raceid`),
+  ADD PRIMARY KEY (`id`),
   ADD KEY `raceid` (`raceid`);
 
 --
@@ -628,16 +628,11 @@ ALTER TABLE `skills`
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- Indici per le tabelle `sources`
---
-ALTER TABLE `sources`
-  ADD UNIQUE KEY `id` (`id`);
-
---
 -- Indici per le tabelle `spells`
 --
 ALTER TABLE `spells`
-  ADD PRIMARY KEY (`userid`,`name`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `userid` (`userid`);
 
 --
 -- Indici per le tabelle `surnames`
@@ -677,7 +672,8 @@ ALTER TABLE `voices`
 -- Indici per le tabelle `weapons`
 --
 ALTER TABLE `weapons`
-  ADD PRIMARY KEY (`userid`,`name`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `userid` (`userid`);
 
 --
 -- AUTO_INCREMENT per le tabelle scaricate
@@ -687,6 +683,12 @@ ALTER TABLE `weapons`
 -- AUTO_INCREMENT per la tabella `actions`
 --
 ALTER TABLE `actions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `armor`
+--
+ALTER TABLE `armor`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -714,9 +716,33 @@ ALTER TABLE `classes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT per la tabella `classvariants`
+--
+ALTER TABLE `classvariants`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `damagetypes`
+--
+ALTER TABLE `damagetypes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT per la tabella `folders`
 --
 ALTER TABLE `folders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `languages`
+--
+ALTER TABLE `languages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `professions`
+--
+ALTER TABLE `professions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -732,6 +758,12 @@ ALTER TABLE `races`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT per la tabella `racevariants`
+--
+ALTER TABLE `racevariants`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT per la tabella `reports`
 --
 ALTER TABLE `reports`
@@ -744,9 +776,9 @@ ALTER TABLE `skills`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT per la tabella `sources`
+-- AUTO_INCREMENT per la tabella `spells`
 --
-ALTER TABLE `sources`
+ALTER TABLE `spells`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -759,6 +791,12 @@ ALTER TABLE `templates`
 -- AUTO_INCREMENT per la tabella `users`
 --
 ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `weapons`
+--
+ALTER TABLE `weapons`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -781,7 +819,7 @@ ALTER TABLE `actiontags`
 -- Limiti per la tabella `armor`
 --
 ALTER TABLE `armor`
-  ADD CONSTRAINT `armor_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `armor_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`);
 
 --
 -- Limiti per la tabella `characters`
@@ -807,7 +845,7 @@ ALTER TABLE `classvariants`
 -- Limiti per la tabella `damagetypes`
 --
 ALTER TABLE `damagetypes`
-  ADD CONSTRAINT `damagetypes_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `damagetypes_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`);
 
 --
 -- Limiti per la tabella `folders`
@@ -820,13 +858,13 @@ ALTER TABLE `folders`
 -- Limiti per la tabella `languages`
 --
 ALTER TABLE `languages`
-  ADD CONSTRAINT `languages_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `languages_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`);
 
 --
 -- Limiti per la tabella `professions`
 --
 ALTER TABLE `professions`
-  ADD CONSTRAINT `professions_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `professions_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`);
 
 --
 -- Limiti per la tabella `publicationsenvironments`
@@ -873,6 +911,12 @@ ALTER TABLE `reports`
   ADD CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
+-- Limiti per la tabella `spells`
+--
+ALTER TABLE `spells`
+  ADD CONSTRAINT `spells_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`);
+
+--
 -- Limiti per la tabella `templates`
 --
 ALTER TABLE `templates`
@@ -883,7 +927,7 @@ ALTER TABLE `templates`
 -- Limiti per la tabella `weapons`
 --
 ALTER TABLE `weapons`
-  ADD CONSTRAINT `weapons_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `weapons_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
