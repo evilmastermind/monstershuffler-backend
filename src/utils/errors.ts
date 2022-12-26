@@ -31,3 +31,12 @@ function createErrorJSON(code: number, message: string) {
 export function requiredString(name: string) {
   return `${name} is a required field`;
 }
+
+export function isValidId(id: number) {
+  return (
+    id !== null &&
+    id !== undefined &&
+    typeof id !== 'undefined' &&
+    id >= 0
+  );
+}

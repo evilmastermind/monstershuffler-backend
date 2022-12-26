@@ -26,7 +26,7 @@ SET time_zone = "+00:00";
 --
 
 INSERT INTO `users` (`id`, `email`, `username`, `password`, `token`, `tokenpwd`, `verified`, `premium`, `level`, `created`, `publishsuspension`, `sessiontoken`, `name`, `country`, `street`, `city`, `zipcode`, `phone`, `subscriptionstatus`, `subscriptionmethod`, `customerid`, `subscriptionid`) VALUES
-(0, 'admin@admin.com', 'Admin', '', NULL, '', 1, '3022-06-30 10:00:00', 5, '2022-02-12 14:39:16', NULL, '', 'Bruce Wayne', 'USA', 'Wayne Street, 69', 'Gotham', '42069', '+69 6942069', 'canceled', 'paypal', '12345', '12345');
+(0, 'admin@admin.com', 'Admin', '$2b$10$EEuUdFeahX0xHszktCAFCePx.dUMoDQZVwxz5cehL2CziMnmchaEm', NULL, '', 1, '3022-06-30 10:00:00', 5, '2022-02-12 14:39:16', NULL, '', 'Bruce Wayne', 'USA', 'Wayne Street, 69', 'Gotham', '42069', '+69 6942069', 'canceled', 'paypal', '12345', '12345');
 
 --
 -- Dump dei dati per la tabella `actions`

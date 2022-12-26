@@ -1,8 +1,8 @@
 import { server } from '@/app';
 import { comparePassword } from '@/utils/hash';
-import { CreateUserInput, LoginInput } from './user.schema';
+import { CreateUserInput, LoginInput, UpdateUserInput } from './user.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { createUser, findUserByEmail, getUsers, getUserLevel } from './user.service';
+import { createUser, findUserByEmail, getUsers, getUser, updateUser, getUserLevel } from './user.service';
 import { handleError } from '@/utils/errors';
 
 
@@ -23,7 +23,7 @@ export async function registerUserHandler (
 
 
 // TODO: moving from ms1 to ms2 will require to reset the users' passwords 
-// since the new verification/hashing process is different
+// since the new validation/hashing process is different
 export async function loginHandler (
   request: FastifyRequest<{ Body: LoginInput; }>, 
   reply: FastifyReply
@@ -60,4 +60,29 @@ export async function isUserAdmin(id: number) {
     return false;
   }
   return true;
+}
+
+export async function getUserHandler(request: FastifyRequest, reply: FastifyReply) {
+  const { id } = request.user;
+  try {
+    const user = await getUser(id);
+    return reply.code(200).send(user);
+  }
+  catch (error) {
+    return handleError(error, reply);
+  }
+}
+
+export async function updateUserHandler(
+  request: FastifyRequest<{Body: UpdateUserInput}>,
+  reply: FastifyReply) {
+  const { id } = request.user;
+  const { body } = request;
+  try {
+    const user = await updateUser(id, body);
+    return reply.code(200).send(user);
+  }
+  catch (error) {
+    return handleError(error, reply);
+  }
 }

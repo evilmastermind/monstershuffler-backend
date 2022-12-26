@@ -10,6 +10,7 @@ import armorRoutes from './modules/armor/armor.route';
 import { armorSchemas } from '@/modules/armor/armor.schema';
 import { userSchemas } from '@/modules/user/user.schema';
 import { version } from '../package.json';
+import { hashPassword } from '@/utils/hash';
 
 export const server = Fastify();
 
@@ -49,7 +50,7 @@ server
   )
   // test route
   .get('/health', async function () {
-    return { status: 'ok' };
+    return { status: 'WORKIN\''  };
   });
 
 async function main() {

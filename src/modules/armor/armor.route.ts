@@ -1,34 +1,96 @@
 import { FastifyInstance } from 'fastify';
-import { createArmorHandler, getArmorHandler, getArmorListHandler } from './armor.controller';
+import { createArmorHandler, getArmorHandler, getArmorListHandler, updateArmorHandler, deleteArmorHandler  } from './armor.controller';
 import { $ref } from './armor.schema';
+import { jwtHeaderOptional, jwtHeaderRequired } from '@/modules/schemas';
+
 
 async function armorRoutes(server: FastifyInstance) {
-  server.post(
+  server.get(
     '/',
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticateOptional],
       schema: {
-        body: $ref('createArmorSchema'),
-      },
+        summary: 'Returns a list of all available armor in the db.',
+        description: 'Returns a list of all available armor in the db. If authenticated, also returns the list of armor created by the user.',
+        headers: jwtHeaderOptional,
+        tags: ['armor'],
+        response: {
+          200: $ref('getArmorListResponseSchema')
+        },
+      }
     },
-    createArmorHandler
+    getArmorListHandler
   );
 
   server.get(
     '/:armorId',
     {
       preHandler: [server.authenticateOptional],
+      schema: {
+        summary: 'Returns the details of the armor corresponding to the given id.',
+        description: 'Returns the details of the armor corresponding to the given id.',
+        headers: jwtHeaderOptional,
+        tags: ['armor'],
+        // params: $ref('getArmorParamsSchema'),
+        response: {
+          200: $ref('getArmorResponseSchema')
+        }
+      }
     },
     getArmorHandler
   );
 
-  server.get(
-    '/list',
+  server.post(
+    '/',
     {
-      preHandler: [server.authenticateOptional],
+      preHandler: [server.authenticate],
+      schema: {
+        summary: '[MS ONLY] Adds a new type of armor to the db.',
+        description: '[MS ONLY] Adds a new type of armor to the db.',
+        body: $ref('createArmorSchema'),
+        tags: ['armor'],
+        headers: jwtHeaderRequired,
+        response: 201,
+      },
     },
-    getArmorListHandler
+    createArmorHandler
   );
+
+  server.put(
+    '/:armorId',
+    {
+      preHandler: [server.authenticate],
+      schema: {
+        summary: '[MS ONLY] Updates the armor corresponding to the given id.',
+        description: '[MS ONLY] Updates the armor corresponding to the given id.',
+        body: $ref('createArmorSchema'),
+        tags: ['armor'],
+        headers: jwtHeaderRequired,
+        // params: $ref('getArmorParamsSchema'),
+        response: {
+          200: $ref('getArmorResponseSchema')
+        }
+      }
+    },
+    updateArmorHandler
+  );
+
+  server.delete(
+    '/:armorId',
+    {
+      preHandler: [server.authenticate],
+      schema: {
+        summary: '[MS ONLY] Deletes the armor corresponding to the given id.',
+        description: '[MS ONLY] Deletes the armor corresponding to the given id.',
+        tags: ['armor'],
+        headers: jwtHeaderRequired,
+        // params: $ref('getArmorParamsSchema'),
+        response: 200,
+      }
+    },
+    deleteArmorHandler
+  );
+
 }
 
 export default armorRoutes;

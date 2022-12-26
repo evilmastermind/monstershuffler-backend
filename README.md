@@ -20,7 +20,7 @@ Initial project setup based on TomDoesTech's YouTube tutorial:
 ## How to run this project locally
 To run this project locally, you need to install the following requirements in your pc:
 - nodejs v16+
-- mysql v8+
+- mysql v8+ (*will probably move to PostreSQL soon)
 
 The steps to install node and mysql will depend on your operative system. Find a guide online or ask [ChatGPT](https://chat.openai.com/).
 
@@ -29,7 +29,7 @@ Create an empty mysql database, then use the terminal to import the two .sql fil
 # first upload the structure of the database
 mysql -u your_mysql_username -p db_name < db_structure.sql
 # then upload the seeds (starting values, like the admin user, spells, etc...)
-mysql -u your_mysql_username -p db_name < db_structure.sql
+mysql -u your_mysql_username -p db_name < db_seeds.sql
 ```
 Create a file called `.env` in the root folder of this project, then add the following lines of code inside:
 ``` bash
@@ -43,6 +43,12 @@ You can now run the project using npm or yarn:
 npm run dev
 # yarn
 yarn dev
+```
+
+### Admin user in `db_seeds.sql`
+```
+user: admin@admin.com
+password: iambatman
 ```
 
 

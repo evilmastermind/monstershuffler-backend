@@ -11,38 +11,38 @@ const armorObject = z.object({
   stealthDis: z.union([z.literal(0),z.literal(1)])
 });
 
-const armorCore = {
-  name: z
-    .string({
-      required_error: 'Name is a required field',
-    })
-    .min(2, { message: 'Name is too short (min 2 characters)'
-    }),
-};
+const id = z.number();
+const userid = z.number();
+const name = z.string().min(2);
 
 const createArmorSchema = z.object({
   object: armorObject
 });
-const getArmorSchema = z.object({
-  userid: z
-    .number({
-      required_error: 'Userid is a required field',
-    }),
-  ...armorCore,
+
+const getArmorParamsSchema = z.object({
+  id,
 });
 
-// const getArmorResponseSchema = z.object({
-//   ...armorCore,
-//   id: z.number(),
-//   userid: z.number(),
-//   object: armorObject
-// });
+const getArmorResponseSchema = z.object({
+  object: armorObject
+});
+
+const getArmorListResponseSchema = z.object({
+  armor: z.array(
+    z.object({
+      id,
+      userid,
+      name,
+    })
+  ),
+});
 
 export type createArmorInput = z.infer<typeof createArmorSchema>;
-export type getArmorInput = z.infer<typeof getArmorSchema>;
+export type getArmorListResponse = z.infer<typeof getArmorListResponseSchema>;
 
 export const {schemas: armorSchemas, $ref} = buildJsonSchemas({
   createArmorSchema,
-  getArmorSchema,
-  // getArmorResponseSchema
+  getArmorParamsSchema,
+  getArmorResponseSchema,
+  getArmorListResponseSchema
 }, { $id: 'armorSchemas' });

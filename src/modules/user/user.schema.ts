@@ -45,17 +45,37 @@ const loginSchema = z.object({
   password: z.string(),
 });
 
+
 const loginResponseSchema = z.object({
   accessToken: z.string(),
 });
 
 
+const getUserResponseSchema = z.object({
+  id: z.number(),
+  ...userCore,
+  level: z.number(),
+  created: z.string().datetime(),
+  publishsuspension: z.string().datetime(),
+  avatar: z.string()
+}); 
+
+
+const updateUserSchema = z.object({
+  username: z.string().min(2).max(21),
+  avatar: z.string()
+});
+
+
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
+export type UpdateUserInput = z.infer<typeof updateUserSchema>;
 
 export const {schemas: userSchemas, $ref} = buildJsonSchemas({
   createUserSchema,
   createUserResponseSchema,
   loginSchema,
   loginResponseSchema,
+  getUserResponseSchema,
+  updateUserSchema,
 }, { $id: 'userSchemas' });
