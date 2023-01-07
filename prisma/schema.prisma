@@ -348,7 +348,6 @@ model users {
   subscriptionmethod  String?               @db.VarChar(255)
   customerid          String?               @db.VarChar(255)
   subscriptionid      String?               @db.VarChar(255)
-  avatar              String?               @db.VarChar(255)
   actions             actions[]
   armor               armor[]
   characters          characters[]

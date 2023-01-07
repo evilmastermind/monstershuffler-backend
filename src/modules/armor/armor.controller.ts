@@ -10,7 +10,6 @@ export async function getArmorListHandler (
   const { id } = request.user  || { id: 0 };
   try {
     const armorList = await getArmorList(id);
-    console.log(armorList);
     return reply.code(200).send({
       armor: armorList
     });

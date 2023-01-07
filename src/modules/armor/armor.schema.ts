@@ -1,14 +1,15 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
 
-const armorObject = z.object({
+export const armorObject = z.object({
   AC: z.string(),
-  cost: z.string().optional(),
   name: z.string().min(2),
-  type: z.enum(['light', 'medium','heavy']),
+  cost: z.string().optional(),
+  type: z.enum(['light', 'medium','heavy']).optional(),
   maxDex: z.number().optional(),
+  minStr: z.number().optional(),
   weight: z.number().optional(),
-  stealthDis: z.union([z.literal(0),z.literal(1)])
+  stealthDis: z.union([z.literal('0'),z.literal('1')]).optional(),
 });
 
 const id = z.number();
@@ -39,6 +40,7 @@ const getArmorListResponseSchema = z.object({
 
 export type createArmorInput = z.infer<typeof createArmorSchema>;
 export type getArmorListResponse = z.infer<typeof getArmorListResponseSchema>;
+export type Armor = z.infer<typeof armorObject>;
 
 export const {schemas: armorSchemas, $ref} = buildJsonSchemas({
   createArmorSchema,

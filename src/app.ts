@@ -1,4 +1,5 @@
 import 'module-alias/register';
+import * as dotenv from 'dotenv';
 import Fastify, { FastifyRequest, FastifyReply } from 'fastify';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
@@ -7,11 +8,16 @@ import Sensible from '@fastify/sensible';
 import fjwt from '@fastify/jwt';
 import userRoutes from './modules/user/user.route';
 import armorRoutes from './modules/armor/armor.route';
-import { armorSchemas } from '@/modules/armor/armor.schema';
+import backgroundRoutes from './modules/background/background.route';
+import weaponRoutes from './modules/weapon/weapon.route';
 import { userSchemas } from '@/modules/user/user.schema';
+import { armorSchemas } from '@/modules/armor/armor.schema';
+import { backgroundSchemas } from '@/modules/background/background.schema';
+import { weaponSchemas } from '@/modules/weapon/weapon.schema';
 import { version } from '../package.json';
-import { hashPassword } from '@/utils/hash';
+// import { hashPassword } from '@/utils/hash';
 
+dotenv.config();
 export const server = Fastify();
 
 const secret = process.env.JWT_SECRET;
@@ -56,7 +62,7 @@ server
 async function main() {
   try {
 
-    for(const schema of [...userSchemas, ...armorSchemas]) {
+    for(const schema of [...userSchemas, ...armorSchemas, ...backgroundSchemas, ...weaponSchemas]) {
       server.addSchema(schema);
     }
 
@@ -81,6 +87,8 @@ async function main() {
 
     server.register(userRoutes, { prefix: 'api/users' });
     server.register(armorRoutes, { prefix: 'api/armor' });
+    server.register(backgroundRoutes, { prefix: 'api/backgrounds' });
+    server.register(weaponRoutes, { prefix: 'api/weapons' });
     
     await server.listen({ port: 3000, host: '0.0.0.0' });
 
