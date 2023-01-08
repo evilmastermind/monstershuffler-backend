@@ -33,7 +33,7 @@ const getWeaponResponseSchema = z.object({
 });
 
 const getWeaponListResponseSchema = z.object({
-  weapon: z.array(
+  list: z.array(
     z.object({
       id,
       userid,

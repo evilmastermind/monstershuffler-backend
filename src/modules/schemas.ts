@@ -12,3 +12,10 @@ export const jwtHeaderOptional = {
     'authorization': { type: 'string' }
   },
 };
+
+export const BatchPayload = {
+  type: 'object',
+  properties: {
+    count: { type: 'number' }
+  }
+};

@@ -81,8 +81,8 @@ const valueIncrProgressionObject = z.object({
 const actionVariantObject = z.object({
   name: z.string(),
   type: z.enum(['trait', 'legendary', 'action', 'reaction', 'bonus', 'attack', 'multiattack', 'mythic', 'lair']),
-  levelMin: z.number().optional(),
-  levelMax: z.number().optional(),
+  levelMin: z.string().optional(),
+  levelMax: z.string().optional(),
   ability: z.enum(['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']).optional(),
   charges: z.string().optional(),
   recharge: z.string().optional(),
@@ -95,7 +95,7 @@ const actionVariantObject = z.object({
 });
 const actionObject = z.object({
   tag: z.string(),
-  priority: z.number().optional(),
+  priority: z.string().optional(),
   variants: z.array(actionVariantObject),
 });
 
@@ -163,7 +163,7 @@ const userid = z.number();
 const name = z.string().min(2);
 
 const getClassListResponseSchema = z.object({
-  classes: z.array(
+  list: z.array(
     z.object({
       id,
       userid,
@@ -181,6 +181,7 @@ const createClassSchema = z.object({
 });
 
 export type createClassInput = z.infer<typeof createClassSchema>;
+export type Class = z.infer<typeof classObject>;
 
 export const { schemas: classSchemas, $ref } = buildJsonSchemas({
   createClassSchema,

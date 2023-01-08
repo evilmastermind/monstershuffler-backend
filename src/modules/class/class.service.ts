@@ -15,6 +15,9 @@ export async function createClass(userid: number, input: createClassInput) {
 
 export async function getClass(userid: number, id: number) {
   return await prisma.classes.findMany({
+    select: {
+      object: true,
+    },
     where: {
       id,
       OR: [
@@ -30,7 +33,12 @@ export async function getClass(userid: number, id: number) {
 }
 
 export async function getClassList(userid: number) {
-  return await prisma.classes.findMany({
+  const classes = await prisma.classes.findMany({
+    select: {
+      id: true,
+      userid: true,
+      object: true,
+    },
     where: {
       OR: [
         {
@@ -50,12 +58,20 @@ export async function getClassList(userid: number) {
       }
     ]
   });
+
+  return classes.map( item => {
+    return {
+      id: item.id,
+      userid: item.userid,
+      name: item.object?.name || 'Class Name',
+    };
+  });
 }
 
 export async function updateClass(userid: number, id: number, input: createClassInput) {
   const { object } = input;
 
-  await prisma.classes.updateMany({
+  return await prisma.classes.updateMany({
     where: {
       id,
       userid,
@@ -67,7 +83,7 @@ export async function updateClass(userid: number, id: number, input: createClass
 }
 
 export async function deleteClass(userid: number, id: number) {
-  await prisma.classes.deleteMany({
+  return await prisma.classes.deleteMany({
     where: {
       id,
       userid,

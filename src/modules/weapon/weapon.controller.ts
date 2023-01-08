@@ -12,7 +12,7 @@ export async function getWeaponListHandler (
     const weaponList = await getWeaponList(id);
     console.log(weaponList);
     return reply.code(200).send({
-      weapon: weaponList
+      list: weaponList
     });
   } catch (error) {
     return handleError(error, reply);

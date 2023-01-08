@@ -11,7 +11,7 @@ export async function getClassListHandler (
   try {
     const classList = await getClassList(id);
     return reply.code(200).send({
-      classes: classList
+      list: classList
     });
   } catch (error) {
     return handleError(error, reply);

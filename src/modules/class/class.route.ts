@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { createClassHandler, getClassHandler, getClassListHandler, updateClassHandler, deleteClassHandler  } from './class.controller';
 import { $ref } from './class.schema';
-import { jwtHeaderOptional, jwtHeaderRequired } from '@/modules/schemas';
+import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/modules/schemas';
 
 async function classRoutes(server: FastifyInstance) {
   server.get(
@@ -49,7 +49,9 @@ async function classRoutes(server: FastifyInstance) {
         body: $ref('createClassSchema'),
         tags: ['classes'],
         headers: jwtHeaderRequired,
-        response: 201,
+        response: {
+          201: $ref('getClassResponseSchema')
+        }
       },
     },
     createClassHandler
@@ -66,7 +68,7 @@ async function classRoutes(server: FastifyInstance) {
         tags: ['classes'],
         headers: jwtHeaderRequired,
         response: {
-          200: $ref('getClassResponseSchema')
+          200: BatchPayload
         }
       }
     },
@@ -82,9 +84,13 @@ async function classRoutes(server: FastifyInstance) {
         description: '[MS ONLY] Deletes the class corresponding to the given id.',
         tags: ['classes'],
         headers: jwtHeaderRequired,
-        response: 200,
+        response: {
+          200: BatchPayload
+        },
       }
     },
     deleteClassHandler
   );
 }
+
+export default classRoutes;

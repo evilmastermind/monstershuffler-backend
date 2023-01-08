@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { createWeaponHandler, getWeaponHandler, getWeaponListHandler, updateWeaponHandler, deleteWeaponHandler  } from './weapon.controller';
 import { $ref } from './weapon.schema';
-import { jwtHeaderOptional, jwtHeaderRequired } from '@/modules/schemas';
+import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/modules/schemas';
 
 
 async function weaponRoutes(server: FastifyInstance) {
@@ -31,7 +31,6 @@ async function weaponRoutes(server: FastifyInstance) {
         description: 'Returns the details of the weapon corresponding to the given id.',
         headers: jwtHeaderOptional,
         tags: ['weapons'],
-        // params: $ref('getWeaponParamsSchema'),
         response: {
           200: $ref('getWeaponResponseSchema')
         }
@@ -50,7 +49,9 @@ async function weaponRoutes(server: FastifyInstance) {
         body: $ref('createWeaponSchema'),
         tags: ['weapons'],
         headers: jwtHeaderRequired,
-        response: 201,
+        response: {
+          201: $ref('getWeaponResponseSchema')
+        }
       },
     },
     createWeaponHandler
@@ -68,7 +69,7 @@ async function weaponRoutes(server: FastifyInstance) {
         headers: jwtHeaderRequired,
         // params: $ref('getWeaponParamsSchema'),
         response: {
-          200: $ref('getWeaponResponseSchema')
+          200: BatchPayload
         }
       }
     },
@@ -85,7 +86,9 @@ async function weaponRoutes(server: FastifyInstance) {
         tags: ['weapons'],
         headers: jwtHeaderRequired,
         // params: $ref('getWeaponParamsSchema'),
-        response: 200,
+        response: {
+          200: BatchPayload
+        },
       }
     },
     deleteWeaponHandler

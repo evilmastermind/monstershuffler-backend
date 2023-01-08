@@ -9,10 +9,12 @@ import fjwt from '@fastify/jwt';
 import userRoutes from './modules/user/user.route';
 import armorRoutes from './modules/armor/armor.route';
 import backgroundRoutes from './modules/background/background.route';
+import classRoutes from './modules/class/class.route';
 import weaponRoutes from './modules/weapon/weapon.route';
 import { userSchemas } from '@/modules/user/user.schema';
 import { armorSchemas } from '@/modules/armor/armor.schema';
 import { backgroundSchemas } from '@/modules/background/background.schema';
+import { classSchemas } from '@/modules/class/class.schema';
 import { weaponSchemas } from '@/modules/weapon/weapon.schema';
 import { version } from '../package.json';
 // import { hashPassword } from '@/utils/hash';
@@ -61,8 +63,15 @@ server
 
 async function main() {
   try {
+    const schemas = [
+      ...userSchemas,
+      ...armorSchemas,
+      ...backgroundSchemas,
+      ...classSchemas,
+      ...weaponSchemas
+    ];
 
-    for(const schema of [...userSchemas, ...armorSchemas, ...backgroundSchemas, ...weaponSchemas]) {
+    for(const schema of schemas) {
       server.addSchema(schema);
     }
 
@@ -88,6 +97,7 @@ async function main() {
     server.register(userRoutes, { prefix: 'api/users' });
     server.register(armorRoutes, { prefix: 'api/armor' });
     server.register(backgroundRoutes, { prefix: 'api/backgrounds' });
+    server.register(classRoutes, { prefix: 'api/classes' });
     server.register(weaponRoutes, { prefix: 'api/weapons' });
     
     await server.listen({ port: 3000, host: '0.0.0.0' });

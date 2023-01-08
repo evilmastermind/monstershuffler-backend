@@ -11,7 +11,7 @@ export async function getArmorListHandler (
   try {
     const armorList = await getArmorList(id);
     return reply.code(200).send({
-      armor: armorList
+      list: armorList
     });
   } catch (error) {
     return handleError(error, reply);

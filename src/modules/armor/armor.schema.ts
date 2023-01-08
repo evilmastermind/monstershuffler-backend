@@ -6,9 +6,9 @@ export const armorObject = z.object({
   name: z.string().min(2),
   cost: z.string().optional(),
   type: z.enum(['light', 'medium','heavy']).optional(),
-  maxDex: z.number().optional(),
-  minStr: z.number().optional(),
-  weight: z.number().optional(),
+  maxDex: z.string().optional(),
+  minStr: z.string().optional(),
+  weight: z.string().optional(),
   stealthDis: z.union([z.literal('0'),z.literal('1')]).optional(),
 });
 
@@ -29,7 +29,7 @@ const getArmorResponseSchema = z.object({
 });
 
 const getArmorListResponseSchema = z.object({
-  armor: z.array(
+  list: z.array(
     z.object({
       id,
       userid,

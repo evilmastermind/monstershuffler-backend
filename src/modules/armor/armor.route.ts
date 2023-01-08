@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { createArmorHandler, getArmorHandler, getArmorListHandler, updateArmorHandler, deleteArmorHandler  } from './armor.controller';
 import { $ref } from './armor.schema';
-import { jwtHeaderOptional, jwtHeaderRequired } from '@/modules/schemas';
+import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/modules/schemas';
 
 
 async function armorRoutes(server: FastifyInstance) {
@@ -50,7 +50,9 @@ async function armorRoutes(server: FastifyInstance) {
         body: $ref('createArmorSchema'),
         tags: ['armor'],
         headers: jwtHeaderRequired,
-        response: 201,
+        response: {
+          201: $ref('getArmorResponseSchema')
+        }
       },
     },
     createArmorHandler
@@ -68,7 +70,7 @@ async function armorRoutes(server: FastifyInstance) {
         headers: jwtHeaderRequired,
         // params: $ref('getArmorParamsSchema'),
         response: {
-          200: $ref('getArmorResponseSchema')
+          200: BatchPayload
         }
       }
     },
@@ -85,7 +87,9 @@ async function armorRoutes(server: FastifyInstance) {
         tags: ['armor'],
         headers: jwtHeaderRequired,
         // params: $ref('getArmorParamsSchema'),
-        response: 200,
+        response: {
+          200: BatchPayload
+        },
       }
     },
     deleteArmorHandler
