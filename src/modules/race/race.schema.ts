@@ -4,12 +4,25 @@ import { armorObject } from '@/modules/armor/armor.schema';
 import { choiceRandomObject, statObject, speedsObject, choiceListObject, sensesObject, actionObject, imageObject, } from '@/modules/schemas';
 
 
-const classObject = z.object({
+
+
+const raceObject = z.object({
   name: z.string(),
   armor: z.array(
     z.union([armorObject, choiceRandomObject])
   ).optional(),
+  // TODO: gender => pronouns
+  gender: z.enum(['male','female','neutral','thing']).optional(),
+  size: z.string().optional(),
+  type: z.string().optional(),
+  swarm: z.enum(['1','0']).optional(),
+  swarmSize: z.string().optional(),
   subtypes: z.array(statObject).optional(),
+  // TODO: this method of defining the alignment doesn' work:
+  // it's not possible to define races whose alignment lean towards neutral
+  // also: there were other types of alignment that I didn't handle
+  // any Good/Neutral/Evil alignment (See Lich)
+  alignment: z.tuple([z.string(), z.string()]).optional(),
   speeds: speedsObject.optional(),
   savingThrows: z.array(statObject).optional(),
   skills: z.union([z.array(statObject), choiceRandomObject, choiceListObject]).optional(),
@@ -39,7 +52,7 @@ const id = z.number();
 const userid = z.number();
 const name = z.string().min(2);
 
-const getClassListResponseSchema = z.object({
+const getRaceListResponseSchema = z.object({
   list: z.array(
     z.object({
       id,
@@ -49,19 +62,19 @@ const getClassListResponseSchema = z.object({
   ),
 });
 
-const getClassResponseSchema = z.object({
-  object: classObject,
+const getRaceResponseSchema = z.object({
+  object: raceObject,
 });
 
-const createClassSchema = z.object({
-  object: classObject,
+const createRaceSchema = z.object({
+  object: raceObject,
 });
 
-export type createClassInput = z.infer<typeof createClassSchema>;
-export type Class = z.infer<typeof classObject>;
+export type createRaceInput = z.infer<typeof createRaceSchema>;
+export type Race = z.infer<typeof raceObject>;
 
-export const { schemas: classSchemas, $ref } = buildJsonSchemas({
-  createClassSchema,
-  getClassListResponseSchema,
-  getClassResponseSchema,
-}, { $id: 'classSchemas' });
+export const { schemas: raceSchemas, $ref } = buildJsonSchemas({
+  createRaceSchema,
+  getRaceListResponseSchema,
+  getRaceResponseSchema,
+}, { $id: 'raceSchemas' });
