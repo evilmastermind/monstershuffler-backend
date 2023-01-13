@@ -1,16 +1,12 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
 import { armorObject } from '@/modules/armor/armor.schema';
-import { choiceRandomObject, statObject, speedsObject, choiceListObject, sensesObject, actionObject, imageObject, } from '@/modules/schemas';
+import { choiceRandomObject, statObject, speedsObject, choiceListObject, sensesObject, actionObject, imageObject, spellGroupObject } from '@/modules/schemas';
 
 
-
-
+// TODO: missing bonuses, spells
 const raceObject = z.object({
   name: z.string(),
-  armor: z.array(
-    z.union([armorObject, choiceRandomObject])
-  ).optional(),
   // TODO: gender => pronouns
   gender: z.enum(['male','female','neutral','thing']).optional(),
   size: z.string().optional(),
@@ -23,6 +19,10 @@ const raceObject = z.object({
   // also: there were other types of alignment that I didn't handle
   // any Good/Neutral/Evil alignment (See Lich)
   alignment: z.tuple([z.string(), z.string()]).optional(),
+  armor: z.array(
+    z.union([armorObject, choiceRandomObject])
+  ).optional(),
+  HD: z.number().optional(),
   speeds: speedsObject.optional(),
   savingThrows: z.array(statObject).optional(),
   skills: z.union([z.array(statObject), choiceRandomObject, choiceListObject]).optional(),
@@ -36,6 +36,8 @@ const raceObject = z.object({
   telepathy: z.string().optional(),
   languages: z.union([z.array(statObject), choiceRandomObject, choiceListObject]).optional(),
   actions: z.array(actionObject).optional(),
+  spellCasting: z.string().optional(),
+  spellSlots: z.array(spellGroupObject).optional(),
   // generator keys
   enableGenerator: z.enum(['1','0']).optional(),
   // publication keys

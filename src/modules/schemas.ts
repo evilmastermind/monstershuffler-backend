@@ -99,6 +99,14 @@ export const valueIncrProgressionObject = z.object({
   }).optional(),
 });
 
+export const spellGroupObject = z.object({
+  tag: z.string(),
+  levelMin: z.string(),
+  timesDay: z.string(),
+  timesDayMax: z.string(),
+  spells: z.union([z.array(z.string()), choiceRandomObject, choiceListObject]),
+}).strict();
+
 
 export const actionVariantObject = z.object({
   name: z.string(),
