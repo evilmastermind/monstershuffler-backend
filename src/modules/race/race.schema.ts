@@ -1,11 +1,11 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
 import { armorObject } from '@/modules/armor/armor.schema';
-import { choiceRandomObject, statObject, speedsObject, choiceListObject, sensesObject, actionObject, imageObject, spellGroupObject } from '@/modules/schemas';
+import { bonusesObject, choiceRandomObject, statObject, speedsObject, choiceListObject, sensesObject, actionObject, imageObject, spellGroupObject, abilitiesEnum } from '@/modules/schemas';
 
 
-// TODO: missing bonuses, spells
-const raceObject = z.object({
+// TODO: missing race-specific options (in generator, race-specific options)
+export const raceObject = z.object({
   name: z.string(),
   // TODO: gender => pronouns
   gender: z.enum(['male','female','neutral','thing']).optional(),
@@ -23,6 +23,7 @@ const raceObject = z.object({
     z.union([armorObject, choiceRandomObject])
   ).optional(),
   HD: z.number().optional(),
+  abilitiesLimit: z.string().optional(),
   speeds: speedsObject.optional(),
   savingThrows: z.array(statObject).optional(),
   skills: z.union([z.array(statObject), choiceRandomObject, choiceListObject]).optional(),
@@ -36,10 +37,17 @@ const raceObject = z.object({
   telepathy: z.string().optional(),
   languages: z.union([z.array(statObject), choiceRandomObject, choiceListObject]).optional(),
   actions: z.array(actionObject).optional(),
-  spellCasting: z.string().optional(),
+  bonuses: bonusesObject.optional(),
+  spellCasting: abilitiesEnum.optional(),
   spellSlots: z.array(spellGroupObject).optional(),
   // generator keys
   enableGenerator: z.enum(['1','0']).optional(),
+  ageAdult: z.string().optional(),
+  ageMax: z.string().optional(),
+  heightMin: z.number().optional(),
+  heightMax: z.number().optional(),
+  nameType: z.array(z.string()).optional(),
+  addSurname: z.number().optional(),
   // publication keys
   //published: z.enum(['1','0']).optional(),
   image: imageObject,

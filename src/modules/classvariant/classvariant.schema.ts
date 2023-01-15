@@ -1,10 +1,10 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
 import { armorObject } from '@/modules/armor/armor.schema';
-import { choiceRandomObject, statObject, speedsObject, choiceListObject, sensesObject, actionObject, imageObject, spellGroupObject } from '@/modules/schemas';
+import { spellGroupObject, bonusesObject, choiceRandomObject, statObject, speedsObject, choiceListObject, sensesObject, actionObject, imageObject, abilitiesEnum, } from '@/modules/schemas';
 
-// TODO: missing bonuses, spells
-const classObject = z.object({
+
+export const classvariantObject = z.object({
   name: z.string(),
   armor: z.array(
     z.union([armorObject, choiceRandomObject])
@@ -23,7 +23,8 @@ const classObject = z.object({
   telepathy: z.string().optional(),
   languages: z.union([z.array(statObject), choiceRandomObject, choiceListObject]).optional(),
   actions: z.array(actionObject).optional(),
-  spellCasting: z.string().optional(),
+  bonuses: bonusesObject.optional(),
+  spellCasting: abilitiesEnum.optional(),
   spellSlots: z.array(spellGroupObject).optional(),
   // generator keys
   enableGenerator: z.enum(['1','0']).optional(),
@@ -40,8 +41,10 @@ const classObject = z.object({
 const id = z.number();
 const userid = z.number();
 const name = z.string().min(2);
+const classId = z.number();
 
-const getClassListResponseSchema = z.object({
+
+const getClassvariantListResponseSchema = z.object({
   list: z.array(
     z.object({
       id,
@@ -51,19 +54,29 @@ const getClassListResponseSchema = z.object({
   ),
 });
 
-const getClassResponseSchema = z.object({
-  object: classObject,
+const getClassvariantListSchema = z.object({
+  classId,
 });
 
-const createClassSchema = z.object({
-  object: classObject,
+const getClassvariantResponseSchema = z.object({
+  object: classvariantObject,
 });
 
-export type createClassInput = z.infer<typeof createClassSchema>;
-export type Class = z.infer<typeof classObject>;
 
-export const { schemas: classSchemas, $ref } = buildJsonSchemas({
-  createClassSchema,
-  getClassListResponseSchema,
-  getClassResponseSchema,
-}, { $id: 'classSchemas' });
+const createClassvariantSchema = z.object({
+  classId,
+  object: classvariantObject,
+});
+
+
+export type getClassvariantListSchema = z.infer<typeof getClassvariantListSchema>;
+export type createClassvariantInput = z.infer<typeof createClassvariantSchema>;
+export type Classvariant = z.infer<typeof classvariantObject>;
+
+
+export const { schemas: classvariantSchemas, $ref } = buildJsonSchemas({
+  getClassvariantListSchema,
+  createClassvariantSchema,
+  getClassvariantListResponseSchema,
+  getClassvariantResponseSchema,
+}, { $id: 'classvariantSchemas' });

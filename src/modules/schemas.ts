@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { armorObject } from '@/modules/armor/armor.schema';
 
 export const jwtHeaderRequired = {
   type: 'object',
@@ -108,12 +109,24 @@ export const spellGroupObject = z.object({
 }).strict();
 
 
+export const abilitiesEnum = z.enum(['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']);
+
+export const abilitiesBaseObject = z.object({
+  STR: z.string().optional(),
+  DEX: z.string().optional(),
+  CON: z.string().optional(),
+  INT: z.string().optional(),
+  WIS: z.string().optional(),
+  CHA: z.string().optional(),
+});
+
+
 export const actionVariantObject = z.object({
   name: z.string(),
   type: z.enum(['trait', 'legendary', 'action', 'reaction', 'bonus', 'attack', 'multiattack', 'mythic', 'lair']),
   levelMin: z.string().optional(),
   levelMax: z.string().optional(),
-  ability: z.enum(['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']).optional(),
+  ability: abilitiesEnum,
   charges: z.string().optional(),
   recharge: z.string().optional(),
   cost: z.string().optional(),
@@ -150,7 +163,124 @@ export const sensesObject = z.object({
 });
 
 
+const bonusObject = z.object({
+  name: z.string(),
+  value: z.string(),
+});
+export const bonusesObject = z.object({
+  HPBonus: bonusObject.optional(),
+  ACBonus: bonusObject.optional(),
+  sizeBonus: bonusObject.optional(),
+  speedBaseBonus: bonusObject.optional(),
+  speedBurrowBonus: bonusObject.optional(),
+  speedClimbBonus: bonusObject.optional(),
+  speedFlyBonus: bonusObject.optional(),
+  speedHoverBonus: bonusObject.optional(),
+  speedSwimBonus: bonusObject.optional(),
+  STRBonus: bonusObject.optional(),
+  DEXBonus: bonusObject.optional(),
+  CONBonus: bonusObject.optional(),
+  INTBonus: bonusObject.optional(),
+  WISBonus: bonusObject.optional(),
+  CHABonus: bonusObject.optional(),
+  STRSaveBonus: bonusObject.optional(),
+  DEXSaveBonus: bonusObject.optional(),
+  CONSaveBonus: bonusObject.optional(),
+  INTSaveBonus: bonusObject.optional(),
+  WISSaveBonus: bonusObject.optional(),
+  CHASaveBonus: bonusObject.optional(),
+  AthleticsBonus: bonusObject.optional(),
+  AcrobaticsBonus: bonusObject.optional(),
+  SleightOfHandBonus: bonusObject.optional(),
+  StealthBonus: bonusObject.optional(),
+  ArcanaBonus: bonusObject.optional(),
+  HistoryBonus: bonusObject.optional(),
+  InvestigationBonus: bonusObject.optional(),
+  NatureBonus: bonusObject.optional(),
+  ReligionBonus: bonusObject.optional(),
+  AnimalHandlingBonus: bonusObject.optional(),
+  InsightBonus: bonusObject.optional(),
+  MedicineBonus: bonusObject.optional(),
+  PerceptionBonus: bonusObject.optional(),
+  SurvivalBonus: bonusObject.optional(),
+  DeceptionBonus: bonusObject.optional(),
+  IntimidationBonus: bonusObject.optional(),
+  PerformanceBonus: bonusObject.optional(),
+  PersuasionBonus: bonusObject.optional(),
+  blindsightBonus: bonusObject.optional(),
+  darkvisionBonus: bonusObject.optional(),
+  tremorsenseBonus: bonusObject.optional(),
+  truesightBonus: bonusObject.optional(),
+  rangedAttackBonus: bonusObject.optional(),
+  rangedDamageBonus: bonusObject.optional(),
+  meleeAttackBonus: bonusObject.optional(),
+  meleeDamageBonus: bonusObject.optional(),
+  spellAttackBonus: bonusObject.optional(),
+  spellDamageBonus: bonusObject.optional(),
+  weaponAttackBonus: bonusObject.optional(),
+  weaponDamageBonus: bonusObject.optional(),
+});
+
+
 export const imageObject = z.object({
   imgdir: z.string(),
   lastedited: z.number(),
+});
+
+
+export const CRTwoPointsObject = z.object({
+  x1: z.string(),
+  x2: z.string(),
+  y1: z.string(),
+  y2: z.string(),
+  name: z.literal('twopoints'),
+});
+export const CRNPCObject = z.object({
+  name: z.literal('npcstandard'),
+});
+export const CREstimatedObject = z.object({
+  name: z.literal('estimated'),
+});
+
+
+export const userObject = z.object({
+  name: z.string(),
+  // TODO: gender => pronouns
+  gender: z.enum(['male','female','neutral','thing']).optional(),
+  size: z.string().optional(),
+  type: z.string().optional(),
+  swarm: z.enum(['1','0']).optional(),
+  swarmSize: z.string().optional(),
+  subtypes: z.array(statObject).optional(),
+  armor: z.array(
+    z.union([armorObject, choiceRandomObject])
+  ).optional(),
+  HD: z.number().optional(),
+  speeds: speedsObject.optional(),
+  abilitiesBase: abilitiesBaseObject.optional(),
+  savingThrows: z.array(statObject).optional(),
+  skills: z.union([z.array(statObject), choiceRandomObject, choiceListObject]).optional(),
+  resistances: z.array(statObject).optional(),
+  immunities: z.array(statObject).optional(),
+  vulnerabilities: z.array(statObject).optional(),
+  conditionImmunities: z.array(statObject).optional(),
+  senses: sensesObject.optional(),
+  blind: z.enum(['1','0']).optional(),
+  canspeak: z.enum(['1','0']).optional(),
+  telepathy: z.string().optional(),
+  languages: z.union([z.array(statObject), choiceRandomObject, choiceListObject]).optional(),
+  actions: z.array(actionObject).optional(),
+  bonuses: bonusesObject.optional(),
+  spellCasting: abilitiesEnum.optional(),
+  spellSlots: z.array(spellGroupObject).optional(),
+  // publication keys
+  //published: z.enum(['1','0']).optional(),
+  image: imageObject,
+  searchTags: z.array(z.string()).optional(),
+  environments: z.array(z.string()).optional(),
+  backgroundImage: z.string().optional(),
+  background: z.object({}).passthrough(),
+  // roleplaying helpers
+  smallbackground: z.string().optional(),
+  trait: z.string().optional(),
 });
