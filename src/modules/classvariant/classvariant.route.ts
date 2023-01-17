@@ -5,15 +5,15 @@ import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/modules/sc
 
 async function classvariantRoutes(server: FastifyInstance) {
   server.get(
-    '/',
+    '/class/:classId',
     {
       preHandler: [server.authenticateOptional],
       schema: {
         summary: 'Returns a list of all available class variants for a specific class.',
         description: 'Returns a list of all available class variants for a specific class. The class must be public or owned by the user (if authenticated).',
-        body: $ref('getClassvariantListSchema'),
         headers: jwtHeaderOptional,
         tags: ['class variants'],
+        // params: $ref('getClassvariantParamsSchema'),
         response: {
           200: $ref('getClassvariantListResponseSchema')
         },

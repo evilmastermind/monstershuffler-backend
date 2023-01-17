@@ -54,11 +54,9 @@ const getClassvariantListResponseSchema = z.object({
   ),
 });
 
-const getClassvariantListSchema = z.object({
-  classId,
-});
-
 const getClassvariantResponseSchema = z.object({
+  id,
+  name,
   object: classvariantObject,
 });
 
@@ -69,13 +67,11 @@ const createClassvariantSchema = z.object({
 });
 
 
-export type getClassvariantListSchema = z.infer<typeof getClassvariantListSchema>;
 export type createClassvariantInput = z.infer<typeof createClassvariantSchema>;
 export type Classvariant = z.infer<typeof classvariantObject>;
 
 
 export const { schemas: classvariantSchemas, $ref } = buildJsonSchemas({
-  getClassvariantListSchema,
   createClassvariantSchema,
   getClassvariantListResponseSchema,
   getClassvariantResponseSchema,

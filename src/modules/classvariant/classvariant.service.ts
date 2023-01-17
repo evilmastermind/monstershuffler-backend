@@ -1,5 +1,7 @@
 import prisma from '@/utils/prisma';
-import { createClassvariantInput, getClassvariantListSchema } from './classvariant.schema';
+import { createClassvariantInput } from './classvariant.schema';
+
+// TODO: these queries are still incomplete
 
 export async function createClassvariant(userid: number, input: createClassvariantInput) {
   const { object } = input;
@@ -14,12 +16,20 @@ export async function createClassvariant(userid: number, input: createClassvaria
 }
 
 export async function getClassvariant(userid: number, id: number) {
-  return await prisma.classvariants.findMany({
+  const classResult = await prisma.classes.findMany({
     select: {
-      object: true,
+      classvariants: {
+        select: {
+          id: true,
+          name: true,
+          object: true,
+        },
+        where: {
+          id,
+        }
+      }
     },
     where: {
-      id,
       OR: [
         {
           userid: 0,
@@ -30,9 +40,11 @@ export async function getClassvariant(userid: number, id: number) {
       ]
     }
   });
+
+  return classResult[0].classvariants[0];
 }
 
-export async function getClassvariantList(userid: number, input: getClassvariantListSchema) {
+export async function getClassvariantList(userid: number, classid: number) {
   const classResult = await prisma.classes.findMany({
     select: {
       id: true,
@@ -52,7 +64,8 @@ export async function getClassvariantList(userid: number, input: getClassvariant
         {
           userid,
         },
-      ]
+      ],
+      id: classid,
     },
     orderBy: [
       {
@@ -64,11 +77,12 @@ export async function getClassvariantList(userid: number, input: getClassvariant
     ]
   });
 
-  return classResult.classvariants.map( item => {
+  return classResult[0].classvariants.map( item => {
     return {
       id: item.id,
-      userid: item.userid,
-      name: item.object?.name || 'Classvariant Name',
+      classid,
+      userid,
+      name: item.name || 'Classvariant Name',
     };
   });
 }

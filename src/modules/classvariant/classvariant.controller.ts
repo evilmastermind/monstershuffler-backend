@@ -1,16 +1,20 @@
-import { createClassvariantInput, getClassvariantListSchema } from './classvariant.schema';
+import { createClassvariantInput } from './classvariant.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createClassvariant, getClassvariant, getClassvariantList, updateClassvariant, deleteClassvariant } from './classvariant.service';
 import { handleError } from '@/utils/errors';
 
 export async function getClassvariantListHandler (
-  request: FastifyRequest<{Body: getClassvariantListSchema }>,
+  request: FastifyRequest<{
+    Params: {
+      classId: string;
+    } 
+  }>,
   reply: FastifyReply
 ) {
   const { id } = request.user  || { id: 0 };
-  const { body } = request;
+  const classId = request.params.classId;
   try {
-    const classvariantList = await getClassvariantList(id, body);
+    const classvariantList = await getClassvariantList(id, parseInt(classId));
     return reply.code(200).send({
       list: classvariantList
     });

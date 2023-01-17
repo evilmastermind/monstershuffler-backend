@@ -17,6 +17,14 @@ import { backgroundSchemas } from '@/modules/background/background.schema';
 import { classSchemas } from '@/modules/class/class.schema';
 import { weaponSchemas } from '@/modules/weapon/weapon.schema';
 import { version } from '../package.json';
+import { classvariantSchemas } from './modules/classvariant/classvariant.schema';
+import { raceSchemas } from './modules/race/race.schema';
+import { templateSchemas } from './modules/template/template.schema';
+import { characterSchemas } from './modules/character/character.schema';
+import characterRoutes from './modules/character/character.route';
+import classvariantRoutes from './modules/classvariant/classvariant.route';
+import raceRoutes from './modules/race/race.route';
+import templateRoutes from './modules/template/template.route';
 // import { hashPassword } from '@/utils/hash';
 
 dotenv.config();
@@ -67,7 +75,11 @@ async function main() {
       ...userSchemas,
       ...armorSchemas,
       ...backgroundSchemas,
+      ...characterSchemas,
       ...classSchemas,
+      ...classvariantSchemas,
+      ...raceSchemas,
+      ...templateSchemas,
       ...weaponSchemas
     ];
 
@@ -100,7 +112,11 @@ async function main() {
     server.register(userRoutes, { prefix: 'api/users' });
     server.register(armorRoutes, { prefix: 'api/armor' });
     server.register(backgroundRoutes, { prefix: 'api/backgrounds' });
+    server.register(characterRoutes, { prefix: 'api/characters' });
     server.register(classRoutes, { prefix: 'api/classes' });
+    server.register(classvariantRoutes, { prefix: 'api/classvariants' });
+    server.register(raceRoutes, { prefix: 'api/races' });
+    server.register(templateRoutes, { prefix: 'api/templates' });
     server.register(weaponRoutes, { prefix: 'api/weapons' });
     
     await server.listen({ port: 3000, host: '0.0.0.0' });
