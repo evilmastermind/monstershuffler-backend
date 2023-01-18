@@ -35,7 +35,7 @@ export async function getClassvariantHandler (
   const classvariantId = request.params.classvariantId;
   try {
     const classvariantObject = await getClassvariant(id, parseInt(classvariantId));
-    return reply.code(200).send(classvariantObject[0]);
+    return reply.code(200).send(classvariantObject);
   } catch (error) {
     return handleError(error, reply);
   }

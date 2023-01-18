@@ -1,5 +1,5 @@
 import prisma from '@/utils/prisma';
-import { createCharacterInput } from './character.schema';
+import { Character, createCharacterInput } from './character.schema';
 
 export async function createCharacter(userid: number, input: createCharacterInput) {
   const { object } = input;
@@ -63,7 +63,8 @@ export async function getCharacterList(userid: number) {
     return {
       id: item.id,
       userid: item.userid,
-      name: item.object?.name || 'Character Name',
+      // TODO: define Statistics (they are necessary in order to pass a parsable Character to other websites)
+      name: (item.object as Character).statistics?.FullName || 'Unnamed Character',
     };
   });
 }

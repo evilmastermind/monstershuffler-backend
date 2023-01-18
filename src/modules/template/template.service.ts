@@ -1,5 +1,5 @@
 import prisma from '@/utils/prisma';
-import { createTemplateInput } from './template.schema';
+import { Template, createTemplateInput } from './template.schema';
 
 export async function createTemplate(userid: number, input: createTemplateInput) {
   const { object } = input;
@@ -63,7 +63,7 @@ export async function getTemplateList(userid: number) {
     return {
       id: item.id,
       userid: item.userid,
-      name: item.object?.name || 'Template Name',
+      name: (item.object as Template).name,
     };
   });
 }

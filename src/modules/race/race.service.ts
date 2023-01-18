@@ -1,5 +1,5 @@
 import prisma from '@/utils/prisma';
-import { createRaceInput } from './race.schema';
+import { Race, createRaceInput } from './race.schema';
 
 export async function createRace(userid: number, input: createRaceInput) {
   const { object } = input;
@@ -63,7 +63,7 @@ export async function getRaceList(userid: number) {
     return {
       id: item.id,
       userid: item.userid,
-      name: item.object?.name || 'Race Name',
+      name: (item.object as Race).name,
     };
   });
 }

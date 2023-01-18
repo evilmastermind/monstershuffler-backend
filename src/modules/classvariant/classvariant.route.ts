@@ -67,7 +67,7 @@ async function classvariantRoutes(server: FastifyInstance) {
         summary: '[MS ONLY] Updates the class variant corresponding to the given id.',
         description: '[MS ONLY] Updates the class variant corresponding to the given id.',
         body: $ref('createClassvariantSchema'),
-        tags: ['classvariants'],
+        tags: ['class variants'],
         headers: jwtHeaderRequired,
         response: {
           200: BatchPayload
@@ -84,7 +84,7 @@ async function classvariantRoutes(server: FastifyInstance) {
       schema: {
         summary: '[MS ONLY] Deletes the class variant corresponding to the given id.',
         description: '[MS ONLY] Deletes the class variant corresponding to the given id.',
-        tags: ['classvariants'],
+        tags: ['class variants'],
         headers: jwtHeaderRequired,
         response: {
           200: BatchPayload

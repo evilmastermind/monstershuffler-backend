@@ -4,13 +4,28 @@ import { createClassvariantInput } from './classvariant.schema';
 // TODO: these queries are still incomplete
 
 export async function createClassvariant(userid: number, input: createClassvariantInput) {
-  const { object } = input;
+  const { object, classId } = input;
+
+  // check if class exists and belongs to user
+  const classResult = await prisma.classes.findFirst({
+    select: {
+      id: true,
+    },
+    where: {
+      id: classId,
+      userid,
+    }
+  });
+
+  if (!classResult) {
+    throw new Error('Class not found');
+  }
 
   return await prisma.classvariants.create({
     data: {
-      userid,
-      object,
-      game: '5e',
+      classid: classId,
+      name: object.name,
+      object
     }
   });
 }
@@ -40,7 +55,6 @@ export async function getClassvariant(userid: number, id: number) {
       ]
     }
   });
-
   return classResult[0].classvariants[0];
 }
 
@@ -82,7 +96,7 @@ export async function getClassvariantList(userid: number, classid: number) {
       id: item.id,
       classid,
       userid,
-      name: item.name || 'Classvariant Name',
+      name: item.name,
     };
   });
 }

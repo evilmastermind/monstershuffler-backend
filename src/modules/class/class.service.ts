@@ -1,5 +1,5 @@
 import prisma from '@/utils/prisma';
-import { createClassInput } from './class.schema';
+import { createClassInput, Class } from './class.schema';
 
 export async function createClass(userid: number, input: createClassInput) {
   const { object } = input;
@@ -63,7 +63,7 @@ export async function getClassList(userid: number) {
     return {
       id: item.id,
       userid: item.userid,
-      name: item.object?.name || 'Class Name',
+      name: (item.object as Class).name,
     };
   });
 }
