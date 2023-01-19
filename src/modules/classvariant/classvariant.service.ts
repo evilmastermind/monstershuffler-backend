@@ -115,7 +115,7 @@ async function doesItBelongToUser(userid: number, classvariantid: number) {
   const { classid } = await getClassidFromClassvariantid(userid, classvariantid) || {};
   if (!classid) { throw new Error('Class not found'); }
 
-  return prisma.classes.findMany({
+  const classArray = await prisma.classes.findMany({
     select: {
       id: true,
     },
@@ -124,12 +124,14 @@ async function doesItBelongToUser(userid: number, classvariantid: number) {
       userid,
     }
   });
+
+  return !!classArray.length;
 }
 
 export async function updateClassvariant(userid: number, id: number, input: createClassvariantInput) {
   const { object } = input;
   const doesItBelong = await doesItBelongToUser(userid, id);
-  if(!doesItBelong.length) { throw new Error('Class not found'); }
+  if(!doesItBelong) { throw new Error('Class not found'); }
 
   return await prisma.classvariants.updateMany({
     where: {
@@ -143,7 +145,7 @@ export async function updateClassvariant(userid: number, id: number, input: crea
 
 export async function deleteClassvariant(userid: number, id: number) {
   const doesItBelong = await doesItBelongToUser(userid, id);
-  if(!doesItBelong.length) { throw new Error('Class not found'); }
+  if(!doesItBelong) { throw new Error('Class not found'); }
 
   return await prisma.classvariants.deleteMany({
     where: {
