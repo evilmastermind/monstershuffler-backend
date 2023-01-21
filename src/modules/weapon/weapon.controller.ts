@@ -65,8 +65,8 @@ export async function updateWeaponHandler (
     const { id } = request.user;
     const { body } = request;
     const weaponId = request.params.weaponId;
-    const weapon = await updateWeapon(id, parseInt(weaponId), body);
-    return reply.code(200).send(weapon[0]);
+    const response = await updateWeapon(id, parseInt(weaponId), body);
+    return reply.code(200).send(response);
   } catch (error) {
     return handleError(error, reply);
   }
@@ -83,8 +83,8 @@ export async function deleteWeaponHandler (
   try {
     const { id } = request.user;
     const weaponId = request.params.weaponId;
-    const weapon = await deleteWeapon(id, parseInt(weaponId));
-    return reply.code(200).send(weapon);
+    const response = await deleteWeapon(id, parseInt(weaponId));
+    return reply.code(200).send(response);
   } catch (error) {
     return handleError(error, reply);
   }

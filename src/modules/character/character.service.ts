@@ -64,6 +64,8 @@ export async function getCharacterList(userid: number) {
       id: item.id,
       userid: item.userid,
       // TODO: define Statistics (they are necessary in order to pass a parsable Character to other websites)
+      //       you might want to consider creating a field specifically for the string that is used to describe
+      //       the character inside folders (e.g. "Large Aberration, CR 10")
       name: (item.object as Character).statistics?.FullName || 'Unnamed Character',
     };
   });

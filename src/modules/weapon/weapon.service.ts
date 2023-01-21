@@ -56,7 +56,7 @@ export async function getWeaponList(userid: number) {
 export async function updateWeapon(userid: number, id: number, input: createWeaponInput) {
   const { object } = input;
 
-  await prisma.weapons.updateMany({
+  return await prisma.weapons.updateMany({
     where: {
       id,
       userid
@@ -66,8 +66,6 @@ export async function updateWeapon(userid: number, id: number, input: createWeap
       object
     }
   });
-
-  return await getWeapon(userid, id);
 }
 
 export async function deleteWeapon(userid: number, id: number) {

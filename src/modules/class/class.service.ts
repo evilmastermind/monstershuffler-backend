@@ -68,6 +68,7 @@ export async function getClassList(userid: number) {
   });
 }
 
+// TODO: I am not updating lastedited, originaluserid, etc... Find the missing columns and update all the other services
 export async function updateClass(userid: number, id: number, input: createClassInput) {
   const { object } = input;
 

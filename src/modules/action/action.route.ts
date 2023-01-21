@@ -1,15 +1,18 @@
 import { FastifyInstance } from 'fastify';
+import { getActionListHandler, getActionHandler, createActionHandler, updateActionHandler, deleteActionHandler } from './action.controller';
+import { $ref } from './action.schema';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/modules/schemas';
 
 
 async function actionRoutes(server: FastifyInstance) {
-  server.get(
-    '/',
+  server.post(
+    '/filter',
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: 'Returns a list of all available actions in the db.',
-        description: 'Returns a list of all available actions in the db. If authenticated, also returns the list of actions created by the user.',
+        summary: 'Returns a list of actions from the db, filtered by the values specified in the body.',
+        description: 'Returns a list of actions from the db, filtered by the values specified in the body. If authenticated, also returns the actions created by the user.',
+        body: $ref('getActionListSchema'),
         headers: jwtHeaderOptional,
         tags: ['action'],
         response: {
@@ -43,8 +46,8 @@ async function actionRoutes(server: FastifyInstance) {
     {
       preHandler: [server.authenticate],
       schema: {
-        summary: '[MS ONLY] Adds a new type of action to the db.',
-        description: '[MS ONLY] Adds a new type of action to the db.',
+        summary: '[MS ONLY] Adds a new action to the db.',
+        description: '[MS ONLY] Adds a new action to the db.',
         body: $ref('createActionSchema'),
         tags: ['action'],
         headers: jwtHeaderRequired,
@@ -63,7 +66,33 @@ async function actionRoutes(server: FastifyInstance) {
       schema: {
         summary: '[MS ONLY] Updates the action corresponding to the given id.',
         description: '[MS ONLY] Updates the action corresponding to the given id.',
-        body: $ref('updateActionSchema'),
+        body: $ref('createActionSchema'),
         tags: ['action'],
         headers: jwtHeaderRequired,
-        response:
+        response: {
+          200: BatchPayload
+        },
+      },
+    },
+    updateActionHandler
+  );
+
+  server.delete(
+    '/:actionId',
+    {
+      preHandler: [server.authenticate],
+      schema: {
+        summary: '[MS ONLY] Deletes the action corresponding to the given id.',
+        description: '[MS ONLY] Deletes the action corresponding to the given id.',
+        tags: ['action'],
+        headers: jwtHeaderRequired,
+        response: {
+          200: BatchPayload
+        },
+      },
+    },
+    deleteActionHandler
+  );
+}
+
+export default actionRoutes;
