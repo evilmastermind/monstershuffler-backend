@@ -64,8 +64,6 @@ const templates = z.array(
 );
 
 const getFolderContentResponseSchema = z.object({
-  id,
-  name,
   folders,
   characters,
   races,
@@ -84,8 +82,8 @@ const createFolderResponseSchema = z.object({
 
 export type CreateFolderInput = z.infer<typeof createFolderSchema>;
 
-export const jsonSchemas = buildJsonSchemas({
+export const { schemas: folderSchemas, $ref} = buildJsonSchemas({
   createFolderSchema,
   createFolderResponseSchema,
   getFolderContentResponseSchema,
-});
+}, { $id: 'folderSchemas' });
