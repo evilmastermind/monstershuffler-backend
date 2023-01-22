@@ -85,9 +85,10 @@ export async function getAction(userid: number, id: number) {
 
 export async function updateAction(userid: number, id: number, input: createActionInput) {
   const { object, name, type, subtype, source, actiontags } = input;
-  const result = await prisma.actions.update({
+  const result = await prisma.actions.updateMany({
     where: {
       id,
+      userid,
     },
     data: {
       name: name,
@@ -117,9 +118,10 @@ export async function updateAction(userid: number, id: number, input: createActi
 }
 
 export async function deleteAction(userid: number, id: number) {
-  return await prisma.actions.delete({
+  return await prisma.actions.deleteMany({
     where: {
       id,
+      userid,
     },
   });
 }

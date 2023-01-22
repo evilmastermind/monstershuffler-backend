@@ -42,14 +42,7 @@ export async function updateDamageType(userid: number, id: number, input: create
   return await prisma.damagetypes.updateMany({
     where: {
       id,
-      OR: [
-        {
-          userid: 0,
-        },
-        {
-          userid,
-        },
-      ]
+      userid,
     },
     data: {
       name,
@@ -62,14 +55,7 @@ export async function deleteDamageType(userid: number, id: number) {
   return await prisma.damagetypes.deleteMany({
     where: {
       id,
-      OR: [
-        {
-          userid: 0,
-        },
-        {
-          userid,
-        },
-      ]
+      userid,
     }
   });
 }
