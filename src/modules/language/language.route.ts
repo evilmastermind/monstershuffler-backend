@@ -9,10 +9,10 @@ async function languageRoutes(server: FastifyInstance) {
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: 'Returns a list of all available damage types in the db.',
-        description: 'Returns a list of all available damage types in the db. If authenticated, also returns the list of damage types created by the user.',
+        summary: 'Returns a list of all available languages in the db.',
+        description: 'Returns a list of all available languages in the db. If authenticated, also returns the list of languages created by the user.',
         headers: jwtHeaderOptional,
-        tags: ['damage types'],
+        tags: ['languages'],
         response: {
           200: $ref('getLanguageListResponseSchema')
         },
@@ -26,10 +26,10 @@ async function languageRoutes(server: FastifyInstance) {
     {
       preHandler: [server.authenticate],
       schema: {
-        summary: '[MS ONLY] Adds a new type of damage to the db.',
-        description: '[MS ONLY] Adds a new type of damage to the db.',
+        summary: '[MS ONLY] Adds a new type of language to the db.',
+        description: '[MS ONLY] Adds a new type of language to the db.',
         body: $ref('createLanguageSchema'),
-        tags: ['damage types'],
+        tags: ['languages'],
         headers: jwtHeaderRequired,
         response: {
           201: $ref('getLanguageResponseSchema')
@@ -44,10 +44,10 @@ async function languageRoutes(server: FastifyInstance) {
     {
       preHandler: [server.authenticate],
       schema: {
-        summary: '[MS ONLY] Updates the details of the damage type corresponding to the given id.',
-        description: '[MS ONLY] Updates the details of the damage type corresponding to the given id.',
+        summary: '[MS ONLY] Updates the details of the language corresponding to the given id.',
+        description: '[MS ONLY] Updates the details of the language corresponding to the given id.',
         body: $ref('updateLanguageSchema'),
-        tags: ['damage types'],
+        tags: ['languages'],
         headers: jwtHeaderRequired,
         response: {
           200: $ref('getLanguageResponseSchema')
@@ -62,9 +62,9 @@ async function languageRoutes(server: FastifyInstance) {
     {
       preHandler: [server.authenticate],
       schema: {
-        summary: '[MS ONLY] Deletes the damage type corresponding to the given id.',
-        description: '[MS ONLY] Deletes the damage type corresponding to the given id.',
-        tags: ['damage types'],
+        summary: '[MS ONLY] Deletes the language corresponding to the given id.',
+        description: '[MS ONLY] Deletes the language corresponding to the given id.',
+        tags: ['languages'],
         headers: jwtHeaderRequired,
         response: {
           200: BatchPayload

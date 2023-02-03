@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
 
-const id = z.number().int().positive();
+const id = z.number().int();
 const name = z.string().min(2);
 const adds = z.number().int().nonnegative().optional();
 const url = z.string().optional();
@@ -19,9 +19,9 @@ const characters = z.array(
   z.object({
     id,
     name,
-    size: z.number().int().positive(),
+    size: z.number().int(),
     type: z.string(),
-    cr: z.number().int().positive(),
+    cr: z.number().int(),
     meta: z.string(),
     adds,
     url,

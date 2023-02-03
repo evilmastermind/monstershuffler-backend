@@ -6,25 +6,37 @@ import swaggerUi from '@fastify/swagger-ui';
 import { withRefResolver } from 'fastify-zod';
 import Sensible from '@fastify/sensible';
 import fjwt from '@fastify/jwt';
-import userRoutes from './modules/user/user.route';
-import armorRoutes from './modules/armor/armor.route';
-import backgroundRoutes from './modules/background/background.route';
-import classRoutes from './modules/class/class.route';
-import weaponRoutes from './modules/weapon/weapon.route';
-import { userSchemas } from '@/modules/user/user.schema';
+import { actionSchemas } from './modules/action/action.schema';
 import { armorSchemas } from '@/modules/armor/armor.schema';
 import { backgroundSchemas } from '@/modules/background/background.schema';
-import { classSchemas } from '@/modules/class/class.schema';
-import { weaponSchemas } from '@/modules/weapon/weapon.schema';
-import { version } from '../package.json';
-import { classvariantSchemas } from './modules/classvariant/classvariant.schema';
-import { raceSchemas } from './modules/race/race.schema';
-import { templateSchemas } from './modules/template/template.schema';
 import { characterSchemas } from './modules/character/character.schema';
+import { classSchemas } from '@/modules/class/class.schema';
+import { classvariantSchemas } from './modules/classvariant/classvariant.schema';
+import { damageTypeSchemas } from './modules/damagetype/damagetype.schema';
+import { folderSchemas } from './modules/folder/folder.schema';
+import { languageSchemas } from './modules/language/language.schema';
+import { nameSchemas } from './modules/name/name.schema';
+import { raceSchemas } from './modules/race/race.schema';
+import { racevariantSchemas } from './modules/racevariant/racevariant.schema';
+import { templateSchemas } from './modules/template/template.schema';
+import { userSchemas } from '@/modules/user/user.schema';
+import { version } from '../package.json';
+import { weaponSchemas } from '@/modules/weapon/weapon.schema';
+import actionRoutes from './modules/action/action.route';
+import armorRoutes from './modules/armor/armor.route';
+import backgroundRoutes from './modules/background/background.route';
 import characterRoutes from './modules/character/character.route';
+import classRoutes from './modules/class/class.route';
 import classvariantRoutes from './modules/classvariant/classvariant.route';
+import damageTypeRoutes from './modules/damagetype/damagetype.route';
+import folderRoutes from './modules/folder/folder.route';
+import languageRoutes from './modules/language/language.route';
+import nameRoutes from './modules/name/name.route';
 import raceRoutes from './modules/race/race.route';
+import racevariantRoutes from './modules/racevariant/racevariant.route';
 import templateRoutes from './modules/template/template.route';
+import userRoutes from './modules/user/user.route';
+import weaponRoutes from './modules/weapon/weapon.route';
 // import { hashPassword } from '@/utils/hash';
 
 dotenv.config();
@@ -73,12 +85,18 @@ async function main() {
   try {
     const schemas = [
       ...userSchemas,
+      ...actionSchemas,
       ...armorSchemas,
       ...backgroundSchemas,
       ...characterSchemas,
       ...classSchemas,
       ...classvariantSchemas,
+      ...damageTypeSchemas,
+      ...folderSchemas,
+      ...languageSchemas,
+      ...nameSchemas,
       ...raceSchemas,
+      ...racevariantSchemas,
       ...templateSchemas,
       ...weaponSchemas
     ];
@@ -110,12 +128,18 @@ async function main() {
     });
 
     server.register(userRoutes, { prefix: 'api/users' });
+    server.register(actionRoutes, { prefix: 'api/actions' });
     server.register(armorRoutes, { prefix: 'api/armor' });
     server.register(backgroundRoutes, { prefix: 'api/backgrounds' });
     server.register(characterRoutes, { prefix: 'api/characters' });
     server.register(classRoutes, { prefix: 'api/classes' });
     server.register(classvariantRoutes, { prefix: 'api/classvariants' });
+    server.register(damageTypeRoutes, { prefix: 'api/damagetypes' });
+    server.register(folderRoutes, { prefix: 'api/folders' });
+    server.register(languageRoutes, { prefix: 'api/languages' });
+    server.register(nameRoutes, { prefix: 'api/names' });
     server.register(raceRoutes, { prefix: 'api/races' });
+    server.register(racevariantRoutes, { prefix: 'api/racevariants' });
     server.register(templateRoutes, { prefix: 'api/templates' });
     server.register(weaponRoutes, { prefix: 'api/weapons' });
     

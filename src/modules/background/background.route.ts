@@ -10,7 +10,7 @@ async function backgroundRoutes(server: FastifyInstance) {
       schema: {
         summary: 'Returns a random short background.',
         description: 'Returns a random short background , which is a string like \'from an unusual family line\' or \'cursed with bad luck\'.',
-        tags: ['background'],
+        tags: ['backgrounds'],
         response: {
           200: $ref('getRandomBackgroundResponseSchema'),
         },

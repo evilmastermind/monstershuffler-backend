@@ -75,3 +75,5 @@ async function folderRoutes(server: FastifyInstance) {
     deleteFolderHandler,
   );
 }
+
+export default folderRoutes;
