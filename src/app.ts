@@ -16,6 +16,7 @@ import { damageTypeSchemas } from './modules/damagetype/damagetype.schema';
 import { folderSchemas } from './modules/folder/folder.schema';
 import { languageSchemas } from './modules/language/language.schema';
 import { nameSchemas } from './modules/name/name.schema';
+import { professionSchemas } from './modules/profession/profession.schema';
 import { raceSchemas } from './modules/race/race.schema';
 import { racevariantSchemas } from './modules/racevariant/racevariant.schema';
 import { templateSchemas } from './modules/template/template.schema';
@@ -32,6 +33,7 @@ import damageTypeRoutes from './modules/damagetype/damagetype.route';
 import folderRoutes from './modules/folder/folder.route';
 import languageRoutes from './modules/language/language.route';
 import nameRoutes from './modules/name/name.route';
+import professionRoutes from './modules/profession/profession.route';
 import raceRoutes from './modules/race/race.route';
 import racevariantRoutes from './modules/racevariant/racevariant.route';
 import templateRoutes from './modules/template/template.route';
@@ -95,6 +97,7 @@ async function main() {
       ...folderSchemas,
       ...languageSchemas,
       ...nameSchemas,
+      ...professionSchemas,
       ...raceSchemas,
       ...racevariantSchemas,
       ...templateSchemas,
@@ -138,6 +141,7 @@ async function main() {
     server.register(folderRoutes, { prefix: 'api/folders' });
     server.register(languageRoutes, { prefix: 'api/languages' });
     server.register(nameRoutes, { prefix: 'api/names' });
+    server.register(professionRoutes, { prefix: 'api/professions' });
     server.register(raceRoutes, { prefix: 'api/races' });
     server.register(racevariantRoutes, { prefix: 'api/racevariants' });
     server.register(templateRoutes, { prefix: 'api/templates' });

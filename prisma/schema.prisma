@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["filteredRelationCount"]
 }
 
@@ -162,6 +162,7 @@ model names {
 model professions {
   id          Int     @id @default(autoincrement())
   userid      Int
+  game        String  @db.VarChar(255)
   age         String  @db.VarChar(255)
   name        String  @db.VarChar(255)
   description String? @db.Text
