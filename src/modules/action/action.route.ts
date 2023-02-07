@@ -14,7 +14,7 @@ async function actionRoutes(server: FastifyInstance) {
         description: 'Returns a list of actions from the db, filtered by the values specified in the body. If authenticated, also returns the actions created by the user.',
         body: $ref('getActionListSchema'),
         headers: jwtHeaderOptional,
-        tags: ['action'],
+        tags: ['actions'],
         response: {
           200: $ref('getActionListResponseSchema')
         },
@@ -31,7 +31,7 @@ async function actionRoutes(server: FastifyInstance) {
         summary: 'Returns the details of the action corresponding to the given id.',
         description: 'Returns the details of the action corresponding to the given id.',
         headers: jwtHeaderOptional,
-        tags: ['action'],
+        tags: ['actions'],
         // params: $ref('getActionParamsSchema'),
         response: {
           200: $ref('getActionResponseSchema')
@@ -49,7 +49,7 @@ async function actionRoutes(server: FastifyInstance) {
         summary: '[MS ONLY] Adds a new action to the db.',
         description: '[MS ONLY] Adds a new action to the db.',
         body: $ref('createActionSchema'),
-        tags: ['action'],
+        tags: ['actions'],
         headers: jwtHeaderRequired,
         response: {
           201: $ref('getActionResponseSchema')
@@ -67,7 +67,7 @@ async function actionRoutes(server: FastifyInstance) {
         summary: '[MS ONLY] Updates the action corresponding to the given id.',
         description: '[MS ONLY] Updates the action corresponding to the given id.',
         body: $ref('createActionSchema'),
-        tags: ['action'],
+        tags: ['actions'],
         headers: jwtHeaderRequired,
         response: {
           200: BatchPayload
@@ -84,7 +84,7 @@ async function actionRoutes(server: FastifyInstance) {
       schema: {
         summary: '[MS ONLY] Deletes the action corresponding to the given id.',
         description: '[MS ONLY] Deletes the action corresponding to the given id.',
-        tags: ['action'],
+        tags: ['actions'],
         headers: jwtHeaderRequired,
         response: {
           200: BatchPayload

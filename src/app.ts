@@ -119,7 +119,9 @@ async function main() {
             version,
           },
           tags: [
-            { name: 'class variants', description: 'Class variants can be subclasses, archetypes, variants or customizations that add new features on top of the ones of their base class.' },
+            { name: 'users', description: 'The users\' account. ' },
+            { name: 'actions', description: 'Retrieve the official actions of srd monsters, classes and races to build your creatures faster. Save your custom actions and share them with other users.' },
+            { name: 'class variants', description: 'Class variants can be subclasses, archetypes, variants or customizations that add new features on top of their base class.' },
           ],
         }
 
