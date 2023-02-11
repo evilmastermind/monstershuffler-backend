@@ -8,36 +8,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model actions {
-  id         Int          @id @default(autoincrement())
-  userid     Int
-  name       String       @db.VarChar(255)
-  type       String       @db.VarChar(255)
-  subtype    String?      @db.VarChar(255)
-  source     String       @db.VarChar(255)
-  object     Json
-  users      users        @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "actions_ibfk_1")
-  actiontags actiontags[]
-
-  @@index([userid], map: "userid")
+model actionsdetails {
+  objectid Int     @id
+  name     String  @db.VarChar(255)
+  type     String  @db.VarChar(255)
+  subtype  String? @db.VarChar(255)
+  source   String  @db.VarChar(255)
+  objects  objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "actionsdetails_ibfk_1")
 }
 
-model actiontags {
-  actionid Int
+model actionstags {
+  objectid Int
   tag      String  @db.VarChar(255)
-  actions  actions @relation(fields: [actionid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "actiontags_ibfk_1")
+  objects  objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "actionstags_ibfk_1")
 
-  @@id([actionid, tag])
-}
-
-model armor {
-  id     Int    @id @default(autoincrement())
-  userid Int
-  name   String @db.VarChar(255)
-  object Json
-  users  users  @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "armor_ibfk_1")
-
-  @@index([userid], map: "userid")
+  @@id([objectid, tag])
 }
 
 model backgrounds {
@@ -50,24 +35,6 @@ model bases {
   age   String @db.VarChar(255)
   part  String @db.VarChar(255)
   value String @db.VarChar(255)
-}
-
-model characters {
-  id             Int       @id @default(autoincrement())
-  userid         Int
-  game           String    @db.VarChar(255)
-  created        DateTime? @default(now()) @db.DateTime(0)
-  lastedited     DateTime? @default(now()) @db.DateTime(0)
-  folderid       Int?
-  object         Json
-  trashed        Boolean?  @default(false)
-  originalid     Int?
-  originaluserid Int?
-  folders        folders?  @relation(fields: [folderid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "characters_ibfk_1")
-  users          users     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "characters_ibfk_2")
-
-  @@index([folderid], map: "folderid")
-  @@index([userid], map: "userid")
 }
 
 model charactersdetails {
@@ -83,37 +50,6 @@ model charactersdetails {
   @@index([objectid], map: "objectid")
 }
 
-model classes {
-  id             Int             @id @default(autoincrement())
-  userid         Int
-  game           String          @db.VarChar(255)
-  object         Json
-  created        DateTime?       @default(now()) @db.DateTime(0)
-  lastedited     DateTime?       @default(now()) @db.DateTime(0)
-  folderid       Int?
-  trashed        Boolean?        @default(false)
-  originaluserid Int?
-  originalid     Int?
-  folders        folders?        @relation(fields: [folderid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "classes_ibfk_1")
-  users          users           @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "classes_ibfk_2")
-  classvariants  classvariants[]
-
-  @@index([folderid], map: "folderid")
-  @@index([userid], map: "userid")
-}
-
-model classvariants {
-  id         Int       @id @default(autoincrement())
-  name       String    @db.VarChar(255)
-  classid    Int
-  object     Json
-  created    DateTime? @default(now()) @db.DateTime(0)
-  lastedited DateTime? @default(now()) @db.DateTime(0)
-  classes    classes   @relation(fields: [classid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "classvariants_ibfk_1")
-
-  @@index([classid], map: "classid")
-}
-
 model damagetypes {
   id          Int     @id @default(autoincrement())
   userid      Int
@@ -125,21 +61,17 @@ model damagetypes {
 }
 
 model folders {
-  id            Int          @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   userid        Int
-  created       DateTime?    @default(now()) @db.DateTime(0)
-  lastedited    DateTime?    @default(now()) @db.DateTime(0)
+  created       DateTime? @default(now()) @db.DateTime(0)
+  lastedited    DateTime? @default(now()) @db.DateTime(0)
   folderid      Int?
-  name          String       @db.VarChar(255)
-  trashed       Boolean?     @default(false)
-  characters    characters[]
-  classes       classes[]
-  folders       folders?     @relation("foldersTofolders", fields: [folderid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "folders_ibfk_1")
-  other_folders folders[]    @relation("foldersTofolders")
-  users         users        @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "folders_ibfk_2")
+  name          String    @db.VarChar(255)
+  trashed       Boolean?  @default(false)
+  folders       folders?  @relation("foldersTofolders", fields: [folderid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "folders_ibfk_1")
+  other_folders folders[] @relation("foldersTofolders")
+  users         users     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "folders_ibfk_2")
   objects       objects[]
-  races         races[]
-  templates     templates[]
 
   @@index([folderid], map: "folderid")
   @@index([userid], map: "userid")
@@ -183,6 +115,8 @@ model objects {
   trashed            Boolean?            @default(false)
   variantof          Int?
   oldid              Int?
+  actionsdetails     actionsdetails?
+  actionstags        actionstags[]
   charactersdetails  charactersdetails?
   objecttypes        objecttypes         @relation(fields: [type], references: [type], onDelete: NoAction, onUpdate: NoAction, map: "objects_ibfk_1")
   users              users               @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "objects_ibfk_2")
@@ -206,20 +140,10 @@ model objecttypes {
   publications publications[]
 }
 
-model professions {
-  id          Int     @id @default(autoincrement())
-  userid      Int
-  age         String  @db.VarChar(255)
-  name        String  @db.VarChar(255)
-  description String? @db.Text
-  object      Json
-  users       users   @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "professions_ibfk_1")
-
-  @@index([userid], map: "userid")
-}
-
 model professionsdetails {
   objectid    Int     @id
+  name        String  @db.VarChar(255)
+  femalename  String  @db.VarChar(255)
   age         String  @db.VarChar(255)
   description String? @db.Text
   objects     objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "professionsdetails_ibfk_1")
@@ -228,63 +152,33 @@ model professionsdetails {
 }
 
 model publications {
-  objectid                 Int                       @id
+  objectid                 Int                        @id
   type                     Int
   oldid                    Int
-  oldtype                  String                    @db.VarChar(255)
-  datepublished            DateTime?                 @default(now()) @db.DateTime(0)
-  datemodified             DateTime?                 @default(now()) @db.DateTime(0)
-  adds                     Int?                      @default(0)
-  url                      String                    @db.VarChar(255)
-  objects                  objects                   @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "publications_ibfk_1")
-  objecttypes              objecttypes               @relation(fields: [type], references: [type], onDelete: NoAction, onUpdate: NoAction, map: "publications_ibfk_2")
-  publicationsenvironments publicationsenvironments?
+  oldtype                  String                     @db.VarChar(255)
+  datepublished            DateTime?                  @default(now()) @db.DateTime(0)
+  datemodified             DateTime?                  @default(now()) @db.DateTime(0)
+  adds                     Int?                       @default(0)
+  url                      String                     @db.VarChar(255)
+  objects                  objects                    @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "publications_ibfk_1")
+  objecttypes              objecttypes                @relation(fields: [type], references: [type], onDelete: NoAction, onUpdate: NoAction, map: "publications_ibfk_2")
+  publicationsenvironments publicationsenvironments[]
   publicationsratings      publicationsratings[]
-  publicationssearchtags   publicationssearchtags?
-  publicationssubtypes     publicationssubtypes?
+  publicationssearchtags   publicationssearchtags[]
+  publicationssubtypes     publicationssubtypes[]
   reports                  reports[]
 
   @@index([objectid], map: "objectid")
   @@index([type], map: "type")
 }
 
-model publications_old {
-  id                           Int
-  type                         String                         @db.VarChar(255)
-  datepublished                DateTime?                      @default(now()) @db.DateTime(0)
-  datemodified                 DateTime?                      @default(now()) @db.DateTime(0)
-  name                         String                         @db.VarChar(255)
-  monstertype                  Int?
-  cr                           Float?                         @db.Float
-  size                         Int?
-  alignment                    Int?
-  adds                         Int?                           @default(0)
-  url                          String                         @db.VarChar(255)
-  meta                         String?                        @db.VarChar(255)
-  publicationsenvironments_old publicationsenvironments_old[]
-  publicationsratings_old      publicationsratings_old[]
-  publicationssearchtags_old   publicationssearchtags_old[]
-  publicationssubtypes_old     publicationssubtypes_old[]
-
-  @@id([id, type])
-  @@unique([id, type], map: "id")
-}
-
 model publicationsenvironments {
-  objectid     Int          @id
+  objectid     Int
   string       String       @db.VarChar(255)
   publications publications @relation(fields: [objectid], references: [objectid], onDelete: Cascade, onUpdate: NoAction, map: "publicationsenvironments_ibfk_1")
 
+  @@id([objectid, string])
   @@index([objectid], map: "objectid")
-}
-
-model publicationsenvironments_old {
-  id               Int
-  type             String           @db.VarChar(255)
-  string           String           @db.VarChar(255)
-  publications_old publications_old @relation(fields: [id, type], references: [id, type], onDelete: Cascade, onUpdate: NoAction, map: "publicationsenvironments_old_ibfk_1")
-
-  @@id([id, type, string])
 }
 
 model publicationsratings {
@@ -299,87 +193,27 @@ model publicationsratings {
   @@index([userid], map: "userid")
 }
 
-model publicationsratings_old {
-  id               Int
-  type             String           @db.VarChar(255)
-  userid           Int
-  value            Int
-  publications_old publications_old @relation(fields: [id, type], references: [id, type], onDelete: Cascade, onUpdate: NoAction, map: "publicationsratings_old_ibfk_1")
-  users            users            @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "publicationsratings_old_ibfk_2")
-
-  @@id([id, type, userid])
-  @@index([userid], map: "userid")
-}
-
 model publicationssearchtags {
-  objectid     Int          @id
+  objectid     Int
   string       String       @db.VarChar(255)
   publications publications @relation(fields: [objectid], references: [objectid], onDelete: Cascade, onUpdate: NoAction, map: "publicationssearchtags_ibfk_1")
 
+  @@id([objectid, string])
   @@index([objectid], map: "objectid")
-}
-
-model publicationssearchtags_old {
-  id               Int
-  type             String           @db.VarChar(255)
-  string           String           @db.VarChar(255)
-  publications_old publications_old @relation(fields: [id, type], references: [id, type], onDelete: Cascade, onUpdate: NoAction, map: "publicationssearchtags_old_ibfk_1")
-
-  @@id([id, type, string])
 }
 
 model publicationssubtypes {
-  objectid     Int          @id
+  objectid     Int
   string       String       @db.VarChar(255)
   publications publications @relation(fields: [objectid], references: [objectid], onDelete: Cascade, onUpdate: NoAction, map: "publicationssubtypes_ibfk_1")
 
+  @@id([objectid, string])
   @@index([objectid], map: "objectid")
-}
-
-model publicationssubtypes_old {
-  id               Int
-  type             String           @db.VarChar(255)
-  string           String           @db.VarChar(255)
-  publications_old publications_old @relation(fields: [id, type], references: [id, type], onDelete: Cascade, onUpdate: NoAction, map: "publicationssubtypes_old_ibfk_1")
-
-  @@id([id, type, string])
 }
 
 model quirks {
   id    Int    @unique(map: "id") @default(autoincrement())
   quirk String @db.VarChar(255)
-}
-
-model races {
-  id             Int            @id @default(autoincrement())
-  userid         Int
-  game           String         @db.VarChar(255)
-  nameType       String?        @default("human") @db.VarChar(255)
-  object         Json
-  created        DateTime?      @default(now()) @db.DateTime(0)
-  lastedited     DateTime?      @default(now()) @db.DateTime(0)
-  folderid       Int?
-  trashed        Boolean?       @default(false)
-  originalid     Int?
-  originaluserid Int?
-  folders        folders?       @relation(fields: [folderid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "races_ibfk_1")
-  users          users          @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "races_ibfk_2")
-  racevariants   racevariants[]
-
-  @@index([folderid], map: "folderid")
-  @@index([userid], map: "userid")
-}
-
-model racevariants {
-  id         Int       @id @default(autoincrement())
-  name       String    @db.VarChar(255)
-  raceid     Int
-  object     Json
-  created    DateTime? @default(now()) @db.DateTime(0)
-  lastedited DateTime? @default(now()) @db.DateTime(0)
-  races      races     @relation(fields: [raceid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "racevariants_ibfk_1")
-
-  @@index([raceid], map: "raceid")
 }
 
 model reports {
@@ -401,36 +235,10 @@ model reports {
   @@index([userid], map: "userid")
 }
 
-model reports_old {
-  reportid     Int       @id @default(autoincrement())
-  id           Int
-  type         String    @db.VarChar(255)
-  userid       Int
-  reason       String    @db.VarChar(255)
-  report       String?   @db.Text
-  datereported DateTime? @default(now()) @db.DateTime(0)
-  dateaction   DateTime? @db.DateTime(0)
-  moderator    Int?
-  action       String?   @db.Text
-  users        users     @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "reports_old_ibfk_1")
-
-  @@index([userid], map: "userid")
-}
-
 model skills {
   id   Int    @unique(map: "id") @default(autoincrement())
   game String @db.VarChar(255)
   name String @db.VarChar(255)
-}
-
-model spells {
-  id     Int    @id @default(autoincrement())
-  userid Int
-  name   String @db.VarChar(255)
-  object Json
-  users  users  @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "spells_ibfk_1")
-
-  @@index([userid], map: "userid")
 }
 
 model surnames {
@@ -439,24 +247,6 @@ model surnames {
   surname String @db.VarChar(255)
 
   @@unique([surname, gender, race], map: "id")
-}
-
-model templates {
-  id             Int       @id @default(autoincrement())
-  userid         Int
-  game           String    @db.VarChar(255)
-  object         Json
-  created        DateTime? @default(now()) @db.DateTime(0)
-  lastedited     DateTime? @default(now()) @db.DateTime(0)
-  folderid       Int?
-  trashed        Boolean?  @default(false)
-  originalid     Int?
-  originaluserid Int?
-  folders        folders?  @relation(fields: [folderid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "templates_ibfk_1")
-  users          users     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "templates_ibfk_2")
-
-  @@index([folderid], map: "folderid")
-  @@index([userid], map: "userid")
 }
 
 model traits {
@@ -469,61 +259,40 @@ model traits {
 }
 
 model users {
-  id                               Int                       @id @default(autoincrement())
-  email                            String                    @unique(map: "email") @db.VarChar(255)
-  username                         String                    @db.VarChar(32)
-  password                         String                    @db.VarChar(255)
-  token                            String?                   @db.VarChar(255)
-  tokenpwd                         String?                   @db.VarChar(255)
-  verified                         Int?                      @default(0) @db.TinyInt
-  premium                          DateTime?                 @db.DateTime(0)
-  level                            Int?                      @default(0) @db.TinyInt
-  created                          DateTime?                 @default(now()) @db.DateTime(0)
-  publishsuspension                DateTime?                 @db.DateTime(0)
-  sessiontoken                     String?                   @db.VarChar(255)
-  name                             String?                   @db.VarChar(255)
-  country                          String?                   @db.VarChar(255)
-  street                           String?                   @db.VarChar(255)
-  city                             String?                   @db.VarChar(255)
-  zipcode                          String?                   @db.VarChar(255)
-  phone                            String?                   @db.VarChar(255)
-  subscriptionstatus               String?                   @db.VarChar(255)
-  subscriptionmethod               String?                   @db.VarChar(255)
-  customerid                       String?                   @db.VarChar(255)
-  subscriptionid                   String?                   @db.VarChar(255)
-  avatar                           String?                   @db.VarChar(255)
-  actions                          actions[]
-  armor                            armor[]
-  characters                       characters[]
-  classes                          classes[]
+  id                               Int                   @id @default(autoincrement())
+  email                            String                @unique(map: "email") @db.VarChar(255)
+  username                         String                @db.VarChar(32)
+  password                         String                @db.VarChar(255)
+  token                            String?               @db.VarChar(255)
+  tokenpwd                         String?               @db.VarChar(255)
+  verified                         Int?                  @default(0) @db.TinyInt
+  premium                          DateTime?             @db.DateTime(0)
+  level                            Int?                  @default(0) @db.TinyInt
+  created                          DateTime?             @default(now()) @db.DateTime(0)
+  publishsuspension                DateTime?             @db.DateTime(0)
+  sessiontoken                     String?               @db.VarChar(255)
+  name                             String?               @db.VarChar(255)
+  country                          String?               @db.VarChar(255)
+  street                           String?               @db.VarChar(255)
+  city                             String?               @db.VarChar(255)
+  zipcode                          String?               @db.VarChar(255)
+  phone                            String?               @db.VarChar(255)
+  subscriptionstatus               String?               @db.VarChar(255)
+  subscriptionmethod               String?               @db.VarChar(255)
+  customerid                       String?               @db.VarChar(255)
+  subscriptionid                   String?               @db.VarChar(255)
+  avatar                           String?               @db.VarChar(255)
   damagetypes                      damagetypes[]
   folders                          folders[]
   languages                        languages[]
   objects                          objects[]
-  professions                      professions[]
   publicationsratings              publicationsratings[]
-  publicationsratings_old          publicationsratings_old[]
-  races                            races[]
-  reports_reports_useridTousers    reports[]                 @relation("reports_useridTousers")
-  reports_reports_moderatorTousers reports[]                 @relation("reports_moderatorTousers")
-  reports_old                      reports_old[]
-  spells                           spells[]
-  templates                        templates[]
-  weapons                          weapons[]
+  reports_reports_useridTousers    reports[]             @relation("reports_useridTousers")
+  reports_reports_moderatorTousers reports[]             @relation("reports_moderatorTousers")
 
   @@unique([id, email], map: "idemail")
 }
 
 model voices {
   voice String @id @db.VarChar(255)
-}
-
-model weapons {
-  id     Int    @id @default(autoincrement())
-  userid Int
-  name   String @db.VarChar(255)
-  object Json
-  users  users  @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "weapons_ibfk_1")
-
-  @@index([userid], map: "userid")
 }

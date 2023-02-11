@@ -10,6 +10,10 @@ INSERT INTO `objecttypes` (type, name) VALUES
 (3, 'class'),
 (4, 'template'),
 (5, 'profession'),
+(101, 'action'),
+(102, 'spell'),
+(1001, 'weapon'),
+(1002, 'armor'),
 (10002, 'racevariant'),
 (10003, 'classvariant');
 
@@ -62,6 +66,18 @@ INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, or
 SELECT 5, IFNULL(JSON_EXTRACT(object, "$.name"),'professsion') as name, 1, userid, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, object, NULL, NULL, NULL, 0, NULL, id FROM `professions`;
 
 INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, variantof, oldid)
+SELECT 101, name, 1, userid, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, object, NULL, NULL, NULL, 0, NULL, id FROM `actions`; 
+
+INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, variantof, oldid)
+SELECT 102, name, 1, userid, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, object, NULL, NULL, NULL, 0, NULL, id FROM `spells`;
+
+INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, variantof, oldid)
+SELECT 1001, name, 1, userid, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, object, NULL, NULL, NULL, 0, NULL, id FROM `weapons`;
+
+INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, variantof, oldid)
+SELECT 1002, name, 1, userid, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, object, NULL, NULL, NULL, 0, NULL, id FROM `armor`;
+
+INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, variantof, oldid)
 SELECT 10002, a.name, 1, b.userid, a.created, a.lastedited, a.object, NULL, NULL, NULL, 0, c.id, a.id
 FROM `racevariants` a 
   LEFT JOIN `races` b ON a.raceid = b.id 
@@ -98,16 +114,47 @@ FROM `characters` a
 
 CREATE TABLE `professionsdetails` ( 
   `objectid` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `femalename` varchar(255) NOT NULL,
   `age` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (objectid),
   FOREIGN KEY (objectid) REFERENCES objects(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `professionsdetails` (objectid, age, description)
-SELECT b.id, a.age, a.description
+INSERT INTO `professionsdetails` (objectid, age, description, name, femalename)
+SELECT b.id, a.age, a.description,
+  JSON_EXTRACT(a.object, "$.name"),
+  JSON_EXTRACT(a.object, "$.femaleName")
 FROM `professions` a
   LEFT JOIN `objects` b ON a.id = b.oldid AND b.type = 5;
+
+CREATE TABLE `actionsdetails` (
+  `objectid` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `subtype` varchar(255),
+  `source` varchar(255) NOT NULL,
+  PRIMARY KEY (objectid),
+  FOREIGN KEY (objectid) REFERENCES objects(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `actionsdetails` (objectid, name, type, subtype, source)
+SELECT b.id, a.name, a.type, a.subtype, a.source
+FROM `actions` a
+  LEFT JOIN `objects` b ON a.id = b.oldid AND b.type = 101;
+
+CREATE TABLE `actionstags` (
+  `objectid` int(11) NOT NULL,
+  `tag` varchar(255) NOT NULL,
+  PRIMARY KEY (objectid, tag),
+  FOREIGN KEY (objectid) REFERENCES objects(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `actionstags` (objectid, tag)
+SELECT b.id, a.tag
+FROM `actiontags` a
+  LEFT JOIN `objects` b ON a.actionid = b.oldid AND b.type = 101;
 
 RENAME TABLE `publications` TO `publications_old`;
 RENAME TABLE `publicationsenvironments` TO `publicationsenvironments_old`;
@@ -144,7 +191,7 @@ RIGHT JOIN `publications_old` b ON a.oldid = b.id
 CREATE TABLE `publicationsenvironments` (
   `objectid` int(11) NOT NULL,
   `string` varchar(255) NOT NULL,
-  PRIMARY KEY (objectid),
+  PRIMARY KEY (objectid, string),
   FOREIGN KEY (objectid) REFERENCES publications(objectid) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -171,7 +218,7 @@ FROM `publications` a
 CREATE TABLE `publicationssearchtags` (
   `objectid` int(11) NOT NULL,
   `string` varchar(255) NOT NULL,
-  PRIMARY KEY (objectid),
+  PRIMARY KEY (objectid, string),
   FOREIGN KEY (objectid) REFERENCES publications(objectid) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -184,7 +231,7 @@ FROM `publications` a
 CREATE TABLE `publicationssubtypes` (
   `objectid` int(11) NOT NULL,
   `string` varchar(255) NOT NULL,
-  PRIMARY KEY (objectid),
+  PRIMARY KEY (objectid, string),
   FOREIGN KEY (objectid) REFERENCES publications(objectid) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -228,16 +275,21 @@ CREATE INDEX objectid on `publicationsratings` (objectid);
 CREATE INDEX objectid on `publicationssearchtags` (objectid);
 CREATE INDEX objectid on `publicationssubtypes` (objectid);
 
--- DROP TABLE `publicationssubtypes_old`;
--- DROP TABLE `publicationssearchtags_old`;
--- DROP TABLE `publicationsratings_old`;
--- DROP TABLE `publicationsenvironments_old`;
--- DROP TABLE `publications_old`;
--- DROP TABLE `reports_old`;
--- DROP TABLE `classvariants`;
--- DROP TABLE `racevariants`;
--- DROP TABLE `professions`;
--- DROP TABLE `templates`;
--- DROP TABLE `classes`;
--- DROP TABLE `races`;
--- DROP TABLE `characters`;
+DROP TABLE `publicationssubtypes_old`;
+DROP TABLE `publicationssearchtags_old`;
+DROP TABLE `publicationsratings_old`;
+DROP TABLE `publicationsenvironments_old`;
+DROP TABLE `publications_old`;
+DROP TABLE `reports_old`;
+DROP TABLE `classvariants`;
+DROP TABLE `racevariants`;
+DROP TABLE `professions`;
+DROP TABLE `templates`;
+DROP TABLE `classes`;
+DROP TABLE `races`;
+DROP TABLE `characters`;
+DROP TABLE `actiontags`;
+DROP TABLE `actions`;
+DROP TABLE `spells` ;
+DROP TABLE `weapons` ;
+DROP TABLE `armor` ;
