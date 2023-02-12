@@ -41,6 +41,7 @@ export const classObject = z.object({
 
 const id = z.number();
 const userid = z.number();
+const game = z.number();
 const name = z.string().min(2);
 
 
@@ -61,15 +62,22 @@ const getClassResponseSchema = z.object({
 
 
 const createClassSchema = z.object({
+  game,
+  object: classObject,
+});
+
+const updateClassSchema = z.object({
   object: classObject,
 });
 
 
 export type createClassInput = z.infer<typeof createClassSchema>;
+export type updateClassInput = z.infer<typeof updateClassSchema>;
 export type Class = z.infer<typeof classObject>;
 
 
 export const { schemas: classSchemas, $ref } = buildJsonSchemas({
+  updateClassSchema,
   createClassSchema,
   getClassListResponseSchema,
   getClassResponseSchema,

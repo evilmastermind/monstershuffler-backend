@@ -1,20 +1,22 @@
 import prisma from '@/utils/prisma';
-import { createClassInput, Class } from './class.schema';
+import { createClassInput, Class, updateClassInput } from './class.schema';
 
 export async function createClass(userid: number, input: createClassInput) {
-  const { object } = input;
+  const { object, game } = input;
 
-  return await prisma.classes.create({
+  return await prisma.objects.create({
     data: {
+      game,
+      type: 3,
       userid,
+      name: object.name,
       object,
-      game: '5e',
     }
   });
 }
 
 export async function getClass(userid: number, id: number) {
-  return await prisma.classes.findMany({
+  return await prisma.objects.findMany({
     select: {
       object: true,
     },
@@ -33,11 +35,11 @@ export async function getClass(userid: number, id: number) {
 }
 
 export async function getClassList(userid: number) {
-  const classes = await prisma.classes.findMany({
+  return await prisma.objects.findMany({
     select: {
       id: true,
       userid: true,
-      object: true,
+      name: true,
     },
     where: {
       OR: [
@@ -58,33 +60,26 @@ export async function getClassList(userid: number) {
       }
     ]
   });
-
-  return classes.map( item => {
-    return {
-      id: item.id,
-      userid: item.userid,
-      name: (item.object as Class).name,
-    };
-  });
 }
 
 // TODO: I am not updating lastedited, originaluserid, etc... Find the missing columns and update all the other services
-export async function updateClass(userid: number, id: number, input: createClassInput) {
+export async function updateClass(userid: number, id: number, input: updateClassInput) {
   const { object } = input;
 
-  return await prisma.classes.updateMany({
+  return await prisma.objects.updateMany({
     where: {
       id,
       userid,
     },
     data: {
       object,
+      name: object.name,
     }
   });
 }
 
 export async function deleteClass(userid: number, id: number) {
-  return await prisma.classes.deleteMany({
+  return await prisma.objects.deleteMany({
     where: {
       id,
       userid,

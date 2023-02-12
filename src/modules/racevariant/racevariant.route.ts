@@ -66,7 +66,7 @@ async function racevariantRoutes(server: FastifyInstance) {
       schema: {
         summary: '[MS ONLY] Updates the race variant corresponding to the given id.',
         description: '[MS ONLY] Updates the race variant corresponding to the given id.',
-        body: $ref('createRacevariantSchema'),
+        body: $ref('updateRacevariantSchema'),
         tags: ['race variants'],
         headers: jwtHeaderRequired,
         response: {

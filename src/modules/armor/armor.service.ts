@@ -1,12 +1,14 @@
 import prisma from '@/utils/prisma';
-import { createArmorInput } from './armor.schema';
+import { createArmorInput, updateArmorInput } from './armor.schema';
 
 export async function createArmor(userid: number, input: createArmorInput) {
-  const { object } = input;
+  const { object, game } = input;
 
-  return await prisma.armor.create({
+  return await prisma.objects.create({
     data: {
+      type: 1002,
       userid,
+      game,
       name: object.name,
       object
     }
@@ -15,7 +17,10 @@ export async function createArmor(userid: number, input: createArmorInput) {
 
 export async function getArmor(userid: number, id: number) {
 
-  return await prisma.armor.findMany({
+  return await prisma.objects.findMany({
+    select: {
+      object: true,
+    },
     where: {
       id,
       OR: [
@@ -31,7 +36,12 @@ export async function getArmor(userid: number, id: number) {
 }
 
 export async function getArmorList(userid: number) {
-  return await prisma.armor.findMany({
+  return await prisma.objects.findMany({
+    select: {
+      id: true,
+      userid: true,
+      name: true,
+    },
     where: {
       OR: [
         {
@@ -53,10 +63,10 @@ export async function getArmorList(userid: number) {
   });
 }
 
-export async function updateArmor(userid: number, id: number, input: createArmorInput) {
+export async function updateArmor(userid: number, id: number, input: updateArmorInput) {
   const { object } = input;
 
-  await prisma.armor.updateMany({
+  await prisma.objects.updateMany({
     where: {
       id,
       userid
@@ -71,7 +81,7 @@ export async function updateArmor(userid: number, id: number, input: createArmor
 }
 
 export async function deleteArmor(userid: number, id: number) {
-  return await prisma.armor.deleteMany({
+  return await prisma.objects.deleteMany({
     where: {
       id,
       userid

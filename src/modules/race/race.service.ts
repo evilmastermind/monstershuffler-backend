@@ -1,20 +1,22 @@
 import prisma from '@/utils/prisma';
-import { Race, createRaceInput } from './race.schema';
+import { Race, createRaceInput, updateRaceInput } from './race.schema';
 
 export async function createRace(userid: number, input: createRaceInput) {
-  const { object } = input;
+  const { object, game } = input;
 
-  return await prisma.races.create({
+  return await prisma.objects.create({
     data: {
       userid,
+      type: 2,
+      game,
+      name: object.name,
       object,
-      game: '5e',
     }
   });
 }
 
 export async function getRace(userid: number, id: number) {
-  return await prisma.races.findMany({
+  return await prisma.objects.findMany({
     select: {
       object: true,
     },
@@ -33,11 +35,11 @@ export async function getRace(userid: number, id: number) {
 }
 
 export async function getRaceList(userid: number) {
-  const races = await prisma.races.findMany({
+  return await prisma.objects.findMany({
     select: {
       id: true,
       userid: true,
-      object: true,
+      name: true,
     },
     where: {
       OR: [
@@ -58,32 +60,25 @@ export async function getRaceList(userid: number) {
       }
     ]
   });
-
-  return races.map( item => {
-    return {
-      id: item.id,
-      userid: item.userid,
-      name: (item.object as Race).name,
-    };
-  });
 }
 
-export async function updateRace(userid: number, id: number, input: createRaceInput) {
+export async function updateRace(userid: number, id: number, input: updateRaceInput) {
   const { object } = input;
 
-  return await prisma.races.updateMany({
+  return await prisma.objects.updateMany({
     where: {
       id,
       userid,
     },
     data: {
       object,
+      name: object.name,
     }
   });
 }
 
 export async function deleteRace(userid: number, id: number) {
-  return await prisma.races.deleteMany({
+  return await prisma.objects.deleteMany({
     where: {
       id,
       userid,

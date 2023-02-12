@@ -40,6 +40,7 @@ export const classvariantObject = z.object({
 
 const id = z.number();
 const userid = z.number();
+const game = z.number();
 const name = z.string().min(2);
 const classId = z.number();
 
@@ -55,24 +56,29 @@ const getClassvariantListResponseSchema = z.object({
 });
 
 const getClassvariantResponseSchema = z.object({
-  id,
-  name,
   object: classvariantObject,
 });
 
 
 const createClassvariantSchema = z.object({
+  game,
   classId,
   object: classvariantObject,
 });
 
+const updateClassvariantSchema = z.object({
+  id,
+  object: classvariantObject,
+});
 
 export type createClassvariantInput = z.infer<typeof createClassvariantSchema>;
+export type updateClassvariantInput = z.infer<typeof updateClassvariantSchema>;
 export type Classvariant = z.infer<typeof classvariantObject>;
 
 
 export const { schemas: classvariantSchemas, $ref } = buildJsonSchemas({
   createClassvariantSchema,
+  updateClassvariantSchema,
   getClassvariantListResponseSchema,
   getClassvariantResponseSchema,
 }, { $id: 'classvariantSchemas' });

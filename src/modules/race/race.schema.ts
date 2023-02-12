@@ -60,13 +60,16 @@ export const raceObject = z.object({
 
 const id = z.number();
 const userid = z.number();
+const game = z.number();
 const name = z.string().min(2);
 
+//TODO: add game type to every get*ListSchema
 const getRaceListResponseSchema = z.object({
   list: z.array(
     z.object({
       id,
       userid,
+      game,
       name,
     }),
   ),
@@ -77,14 +80,21 @@ const getRaceResponseSchema = z.object({
 });
 
 const createRaceSchema = z.object({
+  game,
+  object: raceObject,
+});
+
+const updateRaceSchema = z.object({
   object: raceObject,
 });
 
 export type createRaceInput = z.infer<typeof createRaceSchema>;
+export type updateRaceInput = z.infer<typeof updateRaceSchema>;
 export type Race = z.infer<typeof raceObject>;
 
 export const { schemas: raceSchemas, $ref } = buildJsonSchemas({
   createRaceSchema,
+  updateRaceSchema,
   getRaceListResponseSchema,
   getRaceResponseSchema,
 }, { $id: 'raceSchemas' });

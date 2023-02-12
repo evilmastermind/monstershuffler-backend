@@ -132,14 +132,14 @@ FROM `professions` a
 CREATE TABLE `actionsdetails` (
   `objectid` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `type` varchar(255) NOT NULL,
+  `actiontype` varchar(255) NOT NULL,
   `subtype` varchar(255),
   `source` varchar(255) NOT NULL,
   PRIMARY KEY (objectid),
   FOREIGN KEY (objectid) REFERENCES objects(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `actionsdetails` (objectid, name, type, subtype, source)
+INSERT INTO `actionsdetails` (objectid, name, actiontype, subtype, source)
 SELECT b.id, a.name, a.type, a.subtype, a.source
 FROM `actions` a
   LEFT JOIN `objects` b ON a.id = b.oldid AND b.type = 101;

@@ -3,10 +3,11 @@ import { createRacevariantInput } from './racevariant.schema';
 
 
 export async function createRacevariant(userid: number, input: createRacevariantInput) {
-  const { object, raceId } = input;
+  const { object, game, raceId } = input;
 
   // check if race exists and belongs to user
-  const raceResult = await prisma.races.findFirst({
+  // TODO: allow users to create race variants for other users' races
+  const raceResult = await prisma.objects.findFirst({
     select: {
       id: true,
     },
@@ -20,30 +21,25 @@ export async function createRacevariant(userid: number, input: createRacevariant
     throw new Error('Race not found');
   }
 
-  return await prisma.racevariants.create({
+  return await prisma.objects.create({
     data: {
-      raceid: raceId,
+      game,
+      type: 10002,
+      userid,
       name: object.name,
-      object
+      object,
+      variantof: raceId,
     }
   });
 }
 
 export async function getRacevariant(userid: number, id: number) {
-  const raceResult = await prisma.races.findMany({
+  const raceResult = await prisma.objects.findMany({
     select: {
-      racevariants: {
-        select: {
-          id: true,
-          name: true,
-          object: true,
-        },
-        where: {
-          id,
-        }
-      }
+      object: true,
     },
     where: {
+      id,
       OR: [
         {
           userid: 0,
@@ -54,22 +50,18 @@ export async function getRacevariant(userid: number, id: number) {
       ]
     }
   });
-  return raceResult[0].racevariants[0];
+  return raceResult[0];
 }
 
-export async function getRacevariantList(userid: number, raceid: number) {
-  const raceResult = await prisma.races.findMany({
+export async function getRacevariantList(userid: number, variantof: number) {
+  return await prisma.objects.findMany({
     select: {
       id: true,
       userid: true,
-      racevariants: {
-        select: {
-          id: true,
-          name: true,
-        }
-      }
+      name: true,
     },
     where: {
+      variantof,
       OR: [
         {
           userid: 0,
@@ -78,7 +70,6 @@ export async function getRacevariantList(userid: number, raceid: number) {
           userid,
         },
       ],
-      id: raceid,
     },
     orderBy: [
       {
@@ -89,67 +80,29 @@ export async function getRacevariantList(userid: number, raceid: number) {
       }
     ]
   });
-
-  return raceResult[0].racevariants.map( item => {
-    return {
-      id: item.id,
-      raceid,
-      userid,
-      name: item.name,
-    };
-  });
 }
 
-function getRaceidFromRacevariantid(userid: number, racevariantid: number) {
-  return prisma.racevariants.findUnique({
-    select: {
-      raceid: true,
-    },
-    where: {
-      id: racevariantid,
-    }
-  });
-}
-
-async function doesItBelongToUser(userid: number, racevariantid: number) {
-  const { raceid } = await getRaceidFromRacevariantid(userid, racevariantid) || {};
-  if (!raceid) { throw new Error('Race not found'); }
-
-  const raceArray = await prisma.races.findMany({
-    select: {
-      id: true,
-    },
-    where: {
-      id: raceid,
-      userid,
-    }
-  });
-
-  return !!raceArray.length;
-}
 
 export async function updateRacevariant(userid: number, id: number, input: createRacevariantInput) {
   const { object } = input;
-  const doesItBelong = await doesItBelongToUser(userid, id);
-  if(!doesItBelong) { throw new Error('Race not found'); }
 
-  return await prisma.racevariants.updateMany({
+  return await prisma.objects.updateMany({
     where: {
       id,
+      userid,
     },
     data: {
       object,
+      name: object.name
     }
   });
 }
 
 export async function deleteRacevariant(userid: number, id: number) {
-  const doesItBelong = await doesItBelongToUser(userid, id);
-  if(!doesItBelong) { throw new Error('Race not found'); }
-
-  return await prisma.racevariants.deleteMany({
+  return await prisma.objects.deleteMany({
     where: {
       id,
+      userid,
     }
   });
 }

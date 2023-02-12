@@ -66,7 +66,7 @@ async function actionRoutes(server: FastifyInstance) {
       schema: {
         summary: '[MS ONLY] Updates the action corresponding to the given id.',
         description: '[MS ONLY] Updates the action corresponding to the given id.',
-        body: $ref('createActionSchema'),
+        body: $ref('updateActionSchema'),
         tags: ['actions'],
         headers: jwtHeaderRequired,
         response: {

@@ -64,7 +64,7 @@ async function classRoutes(server: FastifyInstance) {
       schema: {
         summary: '[MS ONLY] Updates the class corresponding to the given id.',
         description: '[MS ONLY] Updates the class corresponding to the given id.',
-        body: $ref('createClassSchema'),
+        body: $ref('updateClassSchema'),
         tags: ['classes'],
         headers: jwtHeaderRequired,
         response: {

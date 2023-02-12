@@ -1,51 +1,68 @@
 import prisma from '@/utils/prisma';
-import { createActionInput, getActionListInput } from './action.schema';
+import { createActionInput, getActionListInput, updateActionInput } from './action.schema';
 
 export async function createAction(userid: number, input: createActionInput) {
-  const { object, name, type, subtype, source, actiontags } = input;
+  const { object, game, name, type, subtype, source, tags } = input;
 
-  const newAction = await prisma.actions.create({
+  const newObject = await prisma.objects.create({
     data: {
+      game,
+      type: 101,
       userid,
-      name: name,
-      type: type,
-      subtype: subtype,
-      source: source,
+      name,
       object,
     }
   });
 
-  const actionId = newAction.id;
+  const newActionDetails = await prisma.actionsdetails.create({
+    data: {
+      objectid: newObject.id,
+      name,
+      actiontype: type,
+      subtype,
+      source,
+    }
+  });
 
-  if (actiontags) {
-    await prisma.actiontags.createMany({
-      data: actiontags.map((tag) => ({
-        actionid: actionId,
+  if (tags) {
+    await prisma.actionstags.createMany({
+      data: tags.map((tag) => ({
+        objectid: newObject.id,
         tag,
       })),
     });
   }
 
-  return actionId;
+  return {...newActionDetails, object: newObject.object } ;
 }
 
 export async function getActionList(userid: number, filters: getActionListInput) {
-  const actionList = await prisma.actions.findMany({
+  
+  const actionList = await prisma.objects.findMany({
     select: {
       id: true,
       userid: true,
-      name: true,
-      type: true,
-      subtype: true,
-      source: true,
-      actiontags: true,
+      actionsdetails: true,
+      actionstags: true,
     },
     where: {
-      name: filters.name,
-      type: filters.type,
-      subtype: filters.subtype,
-      source: filters.source,
-      actiontags: {
+      game: filters.game,
+      type: 101,
+      actionsdetails: {
+        name: {
+          contains: filters.name,
+        },
+        actiontype: {
+          contains: filters.type,
+        },
+        subtype: {
+          contains: filters.subtype,
+        },
+        source: {
+          contains: filters.source,
+        },
+      },
+      actionstags: {
         some: {
           tag: filters.tag,
         },
@@ -65,50 +82,63 @@ export async function getActionList(userid: number, filters: getActionListInput)
 }
 
 export async function getAction(userid: number, id: number) {
-  const action = await prisma.actions.findUnique({
-    where: {
-      id,
-    },
+  const action = await prisma.objects.findUnique({
     select: {
       id: true,
       userid: true,
-      name: true,
-      type: true,
-      subtype: true,
-      source: true,
       object: true,
+      actionsdetails: {
+        select: {
+          name: true,
+          actiontype: true,
+          subtype: true,
+          source: true,
+        },
+      }
+    },
+    where: {
+      id,
     },
   });
 
   return action;
 }
 
-export async function updateAction(userid: number, id: number, input: createActionInput) {
-  const { object, name, type, subtype, source, actiontags } = input;
-  const result = await prisma.actions.updateMany({
+export async function updateAction(userid: number, id: number, input: updateActionInput) {
+  const { object, name, type, subtype, source, tags } = input;
+  const result = await prisma.objects.updateMany({
     where: {
       id,
       userid,
     },
     data: {
       name: name,
-      type: type,
-      subtype: subtype,
-      source: source,
       object,
     },
   });
 
-  await prisma.actiontags.deleteMany({
+  await prisma.actionsdetails.updateMany({
     where: {
-      actionid: id,
+      objectid: id,
+    },
+    data: {
+      name,
+      actiontype: type,
+      subtype,
+      source,
     },
   });
 
-  if (actiontags) {
-    await prisma.actiontags.createMany({
-      data: actiontags.map((tag) => ({
-        actionid: id,
+  await prisma.actionstags.deleteMany({
+    where: {
+      objectid: id,
+    },
+  });
+
+  if (tags) {
+    await prisma.actionstags.createMany({
+      data: tags.map((tag) => ({
+        objectid: id,
         tag,
       })),
     });
@@ -118,7 +148,7 @@ export async function updateAction(userid: number, id: number, input: createActi
 }
 
 export async function deleteAction(userid: number, id: number) {
-  return await prisma.actions.deleteMany({
+  return await prisma.objects.deleteMany({
     where: {
       id,
       userid,

@@ -64,7 +64,7 @@ async function weaponRoutes(server: FastifyInstance) {
       schema: {
         summary: '[MS ONLY] Updates the weapon corresponding to the given id.',
         description: '[MS ONLY] Updates the weapon corresponding to the given id.',
-        body: $ref('createWeaponSchema'),
+        body: $ref('updateWeaponSchema'),
         tags: ['weapons'],
         headers: jwtHeaderRequired,
         // params: $ref('getWeaponParamsSchema'),

@@ -65,7 +65,7 @@ async function armorRoutes(server: FastifyInstance) {
       schema: {
         summary: '[MS ONLY] Updates the armor corresponding to the given id.',
         description: '[MS ONLY] Updates the armor corresponding to the given id.',
-        body: $ref('createArmorSchema'),
+        body: $ref('updateArmorSchema'),
         tags: ['armor'],
         headers: jwtHeaderRequired,
         // params: $ref('getArmorParamsSchema'),

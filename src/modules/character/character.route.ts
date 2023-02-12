@@ -64,7 +64,7 @@ async function characterRoutes(server: FastifyInstance) {
       schema: {
         summary: '[MS ONLY] Updates the character corresponding to the given id.',
         description: '[MS ONLY] Updates the character corresponding to the given id.',
-        body: $ref('createCharacterSchema'),
+        body: $ref('updateCharacterSchema'),
         tags: ['characters'],
         headers: jwtHeaderRequired,
         response: {

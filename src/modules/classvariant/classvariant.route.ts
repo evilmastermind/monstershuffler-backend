@@ -66,7 +66,7 @@ async function classvariantRoutes(server: FastifyInstance) {
       schema: {
         summary: '[MS ONLY] Updates the class variant corresponding to the given id.',
         description: '[MS ONLY] Updates the class variant corresponding to the given id.',
-        body: $ref('createClassvariantSchema'),
+        body: $ref('updateClassvariantSchema'),
         tags: ['class variants'],
         headers: jwtHeaderRequired,
         response: {

@@ -1,20 +1,37 @@
 import prisma from '@/utils/prisma';
-import { Character, createCharacterInput } from './character.schema';
+import { createCharacterInput, updateCharacterInput } from './character.schema';
 
 export async function createCharacter(userid: number, input: createCharacterInput) {
-  const { object } = input;
+  const { object, game, name } = input;
 
-  return await prisma.characters.create({
+  const character = await prisma.objects.create({
     data: {
+      game,
+      type: 1,
       userid,
+      name,
       object,
-      game: '5e',
     }
   });
+
+  // TODO: define characters' stats object
+  await prisma.charactersdetails.create({
+    data: {
+      objectid: character.id,
+      name,
+      monstertype: character.stats.type.value,
+      cr: character.stats.cr.value,
+      alignment: character.stats.alignment.value,
+      size: character.stats.size.value,
+      meta: character.stats.meta.value,
+    }
+  });
+
+  return character;
 }
 
 export async function getCharacter(userid: number, id: number) {
-  return await prisma.characters.findMany({
+  return await prisma.objects.findMany({
     select: {
       object: true,
     },
@@ -33,11 +50,11 @@ export async function getCharacter(userid: number, id: number) {
 }
 
 export async function getCharacterList(userid: number) {
-  const characters = await prisma.characters.findMany({
+  return await prisma.objects.findMany({
     select: {
       id: true,
       userid: true,
-      object: true,
+      name: true,
     },
     where: {
       OR: [
@@ -58,35 +75,42 @@ export async function getCharacterList(userid: number) {
       }
     ]
   });
-
-  return characters.map( item => {
-    return {
-      id: item.id,
-      userid: item.userid,
-      // TODO: define Statistics (they are necessary in order to pass a parsable Character to other websites)
-      //       you might want to consider creating a field specifically for the string that is used to describe
-      //       the character inside folders (e.g. "Large Aberration, CR 10")
-      name: (item.object as Character).statistics?.FullName || 'Unnamed Character',
-    };
-  });
 }
 
-export async function updateCharacter(userid: number, id: number, input: createCharacterInput) {
-  const { object } = input;
+export async function updateCharacter(userid: number, id: number, input: updateCharacterInput) {
+  const { object, name } = input;
 
-  return await prisma.characters.updateMany({
+  const result = await prisma.objects.updateMany({
     where: {
       id,
       userid,
     },
     data: {
       object,
+      name,
     }
   });
+
+  // TODO: define characters' stats object
+  await prisma.charactersdetails.updateMany({
+    where: {
+      objectid: id,
+    },
+    data: {
+      name,
+      monstertype: object.stats.type.value,
+      cr: object.stats.cr.value,
+      alignment: object.stats.alignment.value,
+      size: object.stats.size.value,
+      meta: object.stats.meta.value,
+    },
+  });
+
+  return result;
 }
 
 export async function deleteCharacter(userid: number, id: number) {
-  return await prisma.characters.deleteMany({
+  return await prisma.objects.deleteMany({
     where: {
       id,
       userid,
