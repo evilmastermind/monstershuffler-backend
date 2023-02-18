@@ -67,7 +67,6 @@ const createClassvariantSchema = z.object({
 });
 
 const updateClassvariantSchema = z.object({
-  id,
   object: classvariantObject,
 });
 

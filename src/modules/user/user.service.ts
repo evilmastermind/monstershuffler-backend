@@ -62,3 +62,13 @@ export async function getUserLevel(id: number) {
     }
   });
 }
+
+export async function isAdmin(id: number) {
+  const { level } = await getUserLevel(id) || { level: 0 };
+  return level && level >= 2;
+}
+
+export async function isSuperAdmin(id: number) {
+  const { level } = await getUserLevel(id) || { level: 0 };
+  return level && level >= 4;
+}

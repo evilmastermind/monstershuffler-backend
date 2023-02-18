@@ -61,6 +61,7 @@ const createCharacterSchema = z.object({
 
 const updateCharacterSchema = z.object({
   name,
+  game,
   object: characterObject,
 });
 

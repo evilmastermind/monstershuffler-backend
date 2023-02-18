@@ -63,7 +63,7 @@ export async function getRaceList(userid: number) {
 }
 
 export async function updateRace(userid: number, id: number, input: updateRaceInput) {
-  const { object } = input;
+  const { object, game } = input;
 
   return await prisma.objects.updateMany({
     where: {
@@ -72,6 +72,7 @@ export async function updateRace(userid: number, id: number, input: updateRaceIn
     },
     data: {
       object,
+      game,
       name: object.name,
     }
   });

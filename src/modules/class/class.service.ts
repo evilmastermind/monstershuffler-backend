@@ -64,7 +64,7 @@ export async function getClassList(userid: number) {
 
 // TODO: I am not updating lastedited, originaluserid, etc... Find the missing columns and update all the other services
 export async function updateClass(userid: number, id: number, input: updateClassInput) {
-  const { object } = input;
+  const { object, game } = input;
 
   return await prisma.objects.updateMany({
     where: {
@@ -73,6 +73,7 @@ export async function updateClass(userid: number, id: number, input: updateClass
     },
     data: {
       object,
+      game,
       name: object.name,
     }
   });

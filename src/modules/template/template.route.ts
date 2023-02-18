@@ -64,7 +64,7 @@ async function templateRoutes(server: FastifyInstance) {
       schema: {
         summary: '[MS ONLY] Updates the template corresponding to the given id.',
         description: '[MS ONLY] Updates the template corresponding to the given id.',
-        body: $ref('createTemplateSchema'),
+        body: $ref('updateTemplateSchema'),
         tags: ['templates'],
         headers: jwtHeaderRequired,
         response: {

@@ -1,5 +1,5 @@
 import prisma from '@/utils/prisma';
-import { createRacevariantInput } from './racevariant.schema';
+import { createRacevariantInput, updateRacevariantInput } from './racevariant.schema';
 
 
 export async function createRacevariant(userid: number, input: createRacevariantInput) {
@@ -83,7 +83,7 @@ export async function getRacevariantList(userid: number, variantof: number) {
 }
 
 
-export async function updateRacevariant(userid: number, id: number, input: createRacevariantInput) {
+export async function updateRacevariant(userid: number, id: number, input: updateRacevariantInput) {
   const { object } = input;
 
   return await prisma.objects.updateMany({

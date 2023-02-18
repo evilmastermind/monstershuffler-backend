@@ -68,6 +68,7 @@ const createClassSchema = z.object({
 
 const updateClassSchema = z.object({
   object: classObject,
+  game,
 });
 
 

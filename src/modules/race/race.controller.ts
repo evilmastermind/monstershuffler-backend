@@ -1,4 +1,4 @@
-import { createRaceInput } from './race.schema';
+import { createRaceInput, updateRaceInput } from './race.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createRace, getRace, getRaceList, updateRace, deleteRace } from './race.service';
 import { handleError } from '@/utils/errors';
@@ -56,7 +56,7 @@ export async function updateRaceHandler (
     Params: {
       raceId: string;
     },
-    Body: createRaceInput
+    Body: updateRaceInput
   }>,
   reply: FastifyReply
 ) {

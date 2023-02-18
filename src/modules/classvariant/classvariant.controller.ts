@@ -1,4 +1,4 @@
-import { createClassvariantInput } from './classvariant.schema';
+import { createClassvariantInput, updateClassvariantInput } from './classvariant.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createClassvariant, getClassvariant, getClassvariantList, updateClassvariant, deleteClassvariant } from './classvariant.service';
 import { handleError } from '@/utils/errors';
@@ -61,7 +61,7 @@ export async function updateClassvariantHandler (
     Params: {
       classvariantId: string;
     },
-    Body: createClassvariantInput
+    Body: updateClassvariantInput
   }>,
   reply: FastifyReply
 ) {

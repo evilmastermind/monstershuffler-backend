@@ -78,7 +78,7 @@ export async function getCharacterList(userid: number) {
 }
 
 export async function updateCharacter(userid: number, id: number, input: updateCharacterInput) {
-  const { object, name } = input;
+  const { object, game, name } = input;
 
   const result = await prisma.objects.updateMany({
     where: {
@@ -88,6 +88,7 @@ export async function updateCharacter(userid: number, id: number, input: updateC
     data: {
       object,
       name,
+      game,
     }
   });
 

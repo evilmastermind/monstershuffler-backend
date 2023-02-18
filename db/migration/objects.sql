@@ -275,6 +275,13 @@ CREATE INDEX objectid on `publicationsratings` (objectid);
 CREATE INDEX objectid on `publicationssearchtags` (objectid);
 CREATE INDEX objectid on `publicationssubtypes` (objectid);
 
+
+-- SKILLS TABLE FIX
+alter table skills drop column game ;
+alter table skills create column game INT not null;
+update skills set game = 1;
+ALTER TABLE skills ADD FOREIGN KEY (game) REFERENCES game(game);
+
 DROP TABLE `publicationssubtypes_old`;
 DROP TABLE `publicationssearchtags_old`;
 DROP TABLE `publicationsratings_old`;

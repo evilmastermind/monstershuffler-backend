@@ -86,6 +86,7 @@ const createRaceSchema = z.object({
 
 const updateRaceSchema = z.object({
   object: raceObject,
+  game,
 });
 
 export type createRaceInput = z.infer<typeof createRaceSchema>;

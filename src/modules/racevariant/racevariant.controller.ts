@@ -1,4 +1,4 @@
-import { createRacevariantInput } from './racevariant.schema';
+import { createRacevariantInput, updateRacevariantInput } from './racevariant.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createRacevariant, getRacevariant, getRacevariantList, updateRacevariant, deleteRacevariant } from './racevariant.service';
 import { handleError } from '@/utils/errors';
@@ -61,7 +61,7 @@ export async function updateRacevariantHandler (
     Params: {
       racevariantId: string;
     },
-    Body: createRacevariantInput
+    Body: updateRacevariantInput
   }>,
   reply: FastifyReply
 ) {

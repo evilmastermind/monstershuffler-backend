@@ -19,3 +19,5 @@ async function quirkRoutes(server: FastifyInstance) {
     getRandomQuirkHandler
   );
 }
+
+export default quirkRoutes;

@@ -1,4 +1,4 @@
-import { createClassInput } from './class.schema';
+import { createClassInput, updateClassInput } from './class.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createClass, getClass, getClassList, updateClass, deleteClass } from './class.service';
 import { handleError } from '@/utils/errors';
@@ -56,7 +56,7 @@ export async function updateClassHandler (
     Params: {
       classId: string;
     },
-    Body: createClassInput
+    Body: updateClassInput
   }>,
   reply: FastifyReply
 ) {
