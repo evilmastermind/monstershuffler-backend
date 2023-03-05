@@ -23,6 +23,7 @@ export async function getWeapon(userid: number, id: number) {
     },
     where: {
       id,
+      type: 1001,
       OR: [
         {
           userid: 0,
@@ -43,6 +44,7 @@ export async function getWeaponList(userid: number) {
       name: true,
     },
     where: {
+      type: 1001,
       OR: [
         {
           userid: 0,
@@ -69,7 +71,8 @@ export async function updateWeapon(userid: number, id: number, input: createWeap
   return await prisma.objects.updateMany({
     where: {
       id,
-      userid
+      userid,
+      type: 1001,
     },
     data: {
       name: object.name,
@@ -82,7 +85,8 @@ export async function deleteWeapon(userid: number, id: number) {
   return await prisma.objects.deleteMany({
     where: {
       id,
-      userid
+      userid,
+      type: 1001,
     }
   });
 }

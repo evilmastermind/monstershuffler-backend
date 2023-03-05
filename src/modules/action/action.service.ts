@@ -82,7 +82,7 @@ export async function getActionList(userid: number, filters: getActionListInput)
 }
 
 export async function getAction(userid: number, id: number) {
-  const action = await prisma.objects.findUnique({
+  const action = await prisma.objects.findMany({
     select: {
       id: true,
       userid: true,
@@ -98,6 +98,8 @@ export async function getAction(userid: number, id: number) {
     },
     where: {
       id,
+      userid,
+      type: 101,
     },
   });
 
@@ -110,6 +112,7 @@ export async function updateAction(userid: number, id: number, input: updateActi
     where: {
       id,
       userid,
+      type: 101,
     },
     data: {
       name: name,
@@ -152,6 +155,7 @@ export async function deleteAction(userid: number, id: number) {
     where: {
       id,
       userid,
+      type: 101,
     },
   });
 }

@@ -6,7 +6,6 @@ import { classObject } from '../class/class.schema';
 import { templateObject } from '../template/template.schema';
 
 
-// TODO: add racevariant, classvariant, and profession to objects
 export const characterObject = z.object({
   character: z.object({
     // naming

@@ -14,6 +14,7 @@ export async function createRacevariant(userid: number, input: createRacevariant
     where: {
       id: raceId,
       userid,
+      type: 2,
     }
   });
 
@@ -40,6 +41,7 @@ export async function getRacevariant(userid: number, id: number) {
     },
     where: {
       id,
+      type: 10002,
       OR: [
         {
           userid: 0,
@@ -62,6 +64,7 @@ export async function getRacevariantList(userid: number, variantof: number) {
     },
     where: {
       variantof,
+      type: 10002,
       OR: [
         {
           userid: 0,
@@ -90,6 +93,7 @@ export async function updateRacevariant(userid: number, id: number, input: updat
     where: {
       id,
       userid,
+      type: 10002,
     },
     data: {
       object,
@@ -103,6 +107,7 @@ export async function deleteRacevariant(userid: number, id: number) {
     where: {
       id,
       userid,
+      type: 10002,
     }
   });
 }

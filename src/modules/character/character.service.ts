@@ -37,6 +37,7 @@ export async function getCharacter(userid: number, id: number) {
     },
     where: {
       id,
+      type: 1,
       OR: [
         {
           userid: 0,
@@ -57,6 +58,7 @@ export async function getCharacterList(userid: number) {
       name: true,
     },
     where: {
+      type: 1,
       OR: [
         {
           userid: 0,
@@ -84,6 +86,7 @@ export async function updateCharacter(userid: number, id: number, input: updateC
     where: {
       id,
       userid,
+      type: 1,
     },
     data: {
       object,
@@ -115,6 +118,7 @@ export async function deleteCharacter(userid: number, id: number) {
     where: {
       id,
       userid,
+      type: 1,
     }
   });
 }

@@ -22,6 +22,7 @@ export async function getTemplate(userid: number, id: number) {
     },
     where: {
       id,
+      type: 4,
       OR: [
         {
           userid: 0,
@@ -42,6 +43,7 @@ export async function getTemplateList(userid: number) {
       name: true,
     },
     where: {
+      type: 4,
       OR: [
         {
           userid: 0,
@@ -69,6 +71,7 @@ export async function updateTemplate(userid: number, id: number, input: createTe
     where: {
       id,
       userid,
+      type: 4,
     },
     data: {
       object,
@@ -83,6 +86,7 @@ export async function deleteTemplate(userid: number, id: number) {
     where: {
       id,
       userid,
+      type: 4,
     }
   });
 }

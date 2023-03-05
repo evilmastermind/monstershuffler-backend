@@ -23,6 +23,7 @@ export async function getArmor(userid: number, id: number) {
     },
     where: {
       id,
+      type: 1002,
       OR: [
         {
           userid: 0,
@@ -43,6 +44,7 @@ export async function getArmorList(userid: number) {
       name: true,
     },
     where: {
+      type: 1002,
       OR: [
         {
           userid: 0,
@@ -69,7 +71,8 @@ export async function updateArmor(userid: number, id: number, input: updateArmor
   await prisma.objects.updateMany({
     where: {
       id,
-      userid
+      userid,
+      type: 1002,
     },
     data: {
       name: object.name,
@@ -84,7 +87,8 @@ export async function deleteArmor(userid: number, id: number) {
   return await prisma.objects.deleteMany({
     where: {
       id,
-      userid
+      userid,
+      type: 1002,
     }
   });
 }

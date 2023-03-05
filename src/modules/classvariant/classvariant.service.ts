@@ -14,6 +14,7 @@ export async function createClassvariant(userid: number, input: createClassvaria
     where: {
       id: classId,
       userid,
+      type: 3,
     }
   });
 
@@ -40,6 +41,7 @@ export async function getClassvariant(userid: number, id: number) {
     },
     where: {
       id,
+      type: 10003,
       OR: [
         {
           userid: 0,
@@ -62,6 +64,7 @@ export async function getClassvariantList(userid: number, variantof: number) {
     },
     where: {
       variantof,
+      type: 10003,
       OR: [
         {
           userid: 0,
@@ -89,6 +92,7 @@ export async function updateClassvariant(userid: number, id: number, input: upda
     where: {
       id,
       userid,
+      type: 10003,
     },
     data: {
       object,
@@ -103,6 +107,7 @@ export async function deleteClassvariant(userid: number, id: number) {
     where: {
       id,
       userid,
+      type: 10003,
     }
   });
 }

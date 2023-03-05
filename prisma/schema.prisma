@@ -133,6 +133,26 @@ model objects {
   @@index([variantof])
 }
 
+///////////////////////////////////
+// O B J E C T   T Y P E S
+///////////////////////////////////
+//
+//  type  |     name
+// -------+------------------------
+//      1 | character
+//      2 | race
+//      3 | class
+//      4 | template
+//      5 | profession
+//    101 | action
+//    102 | spell
+//   1001 | weapon
+//   1002 | armor
+//  10002 | racevariant
+//  10003 | classvariant
+//
+///////////////////////////////////
+
 model objecttypes {
   type         Int            @id
   name         String         @db.VarChar(255)

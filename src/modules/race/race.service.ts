@@ -22,6 +22,7 @@ export async function getRace(userid: number, id: number) {
     },
     where: {
       id,
+      type: 2,
       OR: [
         {
           userid: 0,
@@ -42,6 +43,7 @@ export async function getRaceList(userid: number) {
       name: true,
     },
     where: {
+      type: 2,
       OR: [
         {
           userid: 0,
@@ -69,6 +71,7 @@ export async function updateRace(userid: number, id: number, input: updateRaceIn
     where: {
       id,
       userid,
+      type: 2,
     },
     data: {
       object,
@@ -83,6 +86,7 @@ export async function deleteRace(userid: number, id: number) {
     where: {
       id,
       userid,
+      type: 2,
     }
   });
 }

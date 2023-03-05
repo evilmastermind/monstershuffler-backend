@@ -22,6 +22,7 @@ export async function getClass(userid: number, id: number) {
     },
     where: {
       id,
+      type: 3,
       OR: [
         {
           userid: 0,
@@ -42,6 +43,7 @@ export async function getClassList(userid: number) {
       name: true,
     },
     where: {
+      type: 3,
       OR: [
         {
           userid: 0,
@@ -70,6 +72,7 @@ export async function updateClass(userid: number, id: number, input: updateClass
     where: {
       id,
       userid,
+      type: 3,
     },
     data: {
       object,
@@ -84,6 +87,7 @@ export async function deleteClass(userid: number, id: number) {
     where: {
       id,
       userid,
+      type: 3,
     }
   });
 }

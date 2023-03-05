@@ -1,23 +1,21 @@
 import { FastifyInstance } from 'fastify';
-import { converterHandler } from './converter.controller';
-import { jwtHeaderRequired } from '../schemas';
+import { convertObjectsHandler } from './converter.controller';
+import { jwtHeaderRequired } from '@/modules/schemas';
 
 async function converterRoutes(server: FastifyInstance) {
   server.get(
-    '/',
+    '/converter',
     {
       preHandler: [server.authenticate],
       schema: {
-        summary: 'Converts all objects of the db into the new version.',
-        description: 'Converts all objects of the db into the new version.',
+        summary: 'Converts objects from the old monstershuffler format to the new one.',
+        description: 'Converts objects from the old monstershuffler format to the new one.',
         headers: jwtHeaderRequired,
         tags: ['converter'],
-        response: {
-          200: {},
-        },
+        response: 200,
       }
     },
-    converterHandler
+    convertObjectsHandler
   );
 }
 
