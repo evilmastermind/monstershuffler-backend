@@ -36,11 +36,36 @@ export async function getClass(userid: number, id: number) {
 }
 
 export async function getClassList(userid: number) {
-  return await prisma.objects.findMany({
+  const result = prisma.objects.findMany({
     select: {
       id: true,
       userid: true,
       name: true,
+      other_objects: {
+        select: {
+          id: true,
+          userid: true,
+          name: true,
+        },
+        where: {
+          OR: [
+            {
+              userid: 0,
+            },
+            {
+              userid,
+            },
+          ]
+        },
+        orderBy: [
+          {
+            userid: 'asc',
+          },
+          {
+            name: 'asc',
+          }
+        ]
+      }
     },
     where: {
       type: 3,
@@ -58,10 +83,12 @@ export async function getClassList(userid: number) {
         userid: 'asc',
       },
       {
-        id: 'asc',
+        name: 'asc',
       }
     ]
   });
+  console.log(result);
+  return result;
 }
 
 // TODO: I am not updating lastedited, originaluserid, etc... Find the missing columns and update all the other services

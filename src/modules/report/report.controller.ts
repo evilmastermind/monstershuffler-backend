@@ -10,7 +10,6 @@ export async function getReportListHandler (
   const { id } = request.user;
   try {
     const reportList = await getReportList(id);
-    console.log(reportList);
     return reply.code(200).send({
       list: reportList
     });

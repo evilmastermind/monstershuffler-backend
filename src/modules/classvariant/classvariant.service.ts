@@ -55,7 +55,46 @@ export async function getClassvariant(userid: number, id: number) {
   return classResult[0];
 }
 
-export async function getClassvariantList(userid: number, variantof: number) {
+
+export async function getClassvariantList(userid: number) {
+  return await prisma.objects.findMany({
+    select: {
+      id: true,
+      userid: true,
+      name: true,
+      objects: {
+        select: {
+          id: true,
+          name: true,
+        }
+      },
+    },
+    where: {
+      type: 10003,
+      NOT: {
+        variantof: null,
+      },
+      OR: [
+        {
+          userid: 0,
+        },
+        {
+          userid,
+        },
+      ],
+    },
+    orderBy: [
+      {
+        userid: 'asc',
+      },
+      {
+        id: 'asc',
+      }
+    ]
+  });
+}
+
+export async function getClassvariantClassList(userid: number, variantof: number) {
   return await prisma.objects.findMany({
     select: {
       id: true,

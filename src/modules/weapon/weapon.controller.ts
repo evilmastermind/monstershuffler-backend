@@ -10,7 +10,6 @@ export async function getWeaponListHandler (
   const { id } = request.user  || { id: 0 };
   try {
     const weaponList = await getWeaponList(id);
-    console.log(weaponList);
     return reply.code(200).send({
       list: weaponList
     });

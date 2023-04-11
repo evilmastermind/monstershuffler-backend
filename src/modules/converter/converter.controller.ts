@@ -1,6 +1,6 @@
 // @ts-nocheck 
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { countObjects, getFirstObjectId, getObjectsWithPagination, saveObject,getSpellIdFromName } from './converter.service';
+import { countObjects, getFirstObjectId, getObjectsWithPagination, saveObject,getSpellIdFromName, getActionDetails } from './converter.service';
 import { handleError } from '@/utils/errors';
 import { objects } from '@prisma/client';
 import { z } from 'zod';
@@ -212,7 +212,7 @@ function convertCharacterObject(object, id) {
   }
 }
 
-function addIdsToSpells(spellSlots) {
+async function addIdsToSpells(spellSlots) {
   spellSlots?.forEach(spellSlot => {
     if(Object.hasOwn(spellSlot, 'spells') && Array.isArray(spellSlot.spells)) {
       const newArray = [];
@@ -319,7 +319,7 @@ function convertStatToStatObject(string) {
 }
 
 
-function convertAction(object, id) {
+async function convertAction(object, id) {
   // if the object has been converted already, skip it
   if( Object.hasOwn(object, 'variants')) { 
     return object; 

@@ -51,6 +51,21 @@ const getClassvariantListResponseSchema = z.object({
       id,
       userid,
       name,
+      objects:
+        z.object({
+          id,
+          name,
+        })
+    }),
+  ),
+});
+
+const getClassvariantClassListResponseSchema = z.object({
+  list: z.array(
+    z.object({
+      id,
+      userid,
+      name,
     }),
   ),
 });
@@ -79,5 +94,6 @@ export const { schemas: classvariantSchemas, $ref } = buildJsonSchemas({
   createClassvariantSchema,
   updateClassvariantSchema,
   getClassvariantListResponseSchema,
+  getClassvariantClassListResponseSchema,
   getClassvariantResponseSchema,
 }, { $id: 'classvariantSchemas' });

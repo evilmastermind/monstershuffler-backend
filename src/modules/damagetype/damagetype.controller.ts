@@ -10,7 +10,6 @@ export async function getDamageTypeListHandler (
   const { id } = request.user  || { id: 0 };
   try {
     const damageTypeList = await getDamageTypeList(id);
-    console.log(damageTypeList);
     return reply.code(200).send({
       list: damageTypeList
     });

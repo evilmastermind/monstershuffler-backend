@@ -1,9 +1,26 @@
 import { FastifyInstance } from 'fastify';
-import { createClassvariantHandler, getClassvariantHandler, getClassvariantListHandler, updateClassvariantHandler, deleteClassvariantHandler  } from './classvariant.controller';
+import { createClassvariantHandler, getClassvariantHandler, getClassvariantListHandler, getClassvariantClassListHandler, updateClassvariantHandler, deleteClassvariantHandler  } from './classvariant.controller';
 import { $ref } from './classvariant.schema';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/modules/schemas';
 
 async function classvariantRoutes(server: FastifyInstance) {
+  server.get(
+    '/',
+    {
+      preHandler: [server.authenticateOptional],
+      schema: {
+        summary: 'Returns a list of all available class variants.',
+        description: 'Returns a list of all available class variants. The original class must be public or owned by the user (if authenticated).',
+        headers: jwtHeaderOptional,
+        tags: ['class variants'],
+        // params: $ref('getClassvariantParamsSchema'),
+        response: {
+          200: $ref('getClassvariantListResponseSchema')
+        },
+      },
+    },
+    getClassvariantListHandler
+  );
   server.get(
     '/class/:classId',
     {
@@ -15,11 +32,11 @@ async function classvariantRoutes(server: FastifyInstance) {
         tags: ['class variants'],
         // params: $ref('getClassvariantParamsSchema'),
         response: {
-          200: $ref('getClassvariantListResponseSchema')
+          200: $ref('getClassvariantClassListResponseSchema')
         },
       }
     },
-    getClassvariantListHandler
+    getClassvariantClassListHandler
   );
 
   server.get(

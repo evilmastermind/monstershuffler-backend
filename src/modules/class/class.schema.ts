@@ -51,6 +51,13 @@ const getClassListResponseSchema = z.object({
       id,
       userid,
       name,
+      other_objects: z.array(
+        z.object({
+          id,
+          name,
+          userid,
+        })
+      ),
     }),
   ),
 });

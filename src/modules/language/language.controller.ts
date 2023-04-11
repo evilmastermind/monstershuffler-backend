@@ -10,7 +10,6 @@ export async function getLanguageListHandler (
   const { id } = request.user  || { id: 0 };
   try {
     const languageList = await getLanguageList(id);
-    console.log(languageList);
     return reply.code(200).send({
       list: languageList
     });
