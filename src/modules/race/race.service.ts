@@ -64,6 +64,62 @@ export async function getRaceList(userid: number) {
   });
 }
 
+export async function getRaceWithVariantsList(userid: number) {
+  const result = prisma.objects.findMany({
+    select: {
+      id: true,
+      userid: true,
+      name: true,
+      other_objects: {
+        select: {
+          id: true,
+          userid: true,
+          name: true,
+        },
+        where: {
+          OR: [
+            {
+              userid: 0,
+            },
+            {
+              userid,
+            },
+          ]
+        },
+        orderBy: [
+          {
+            userid: 'asc',
+          },
+          {
+            name: 'asc',
+          }
+        ]
+      }
+    },
+    where: {
+      type: 2,
+      OR: [
+        {
+          userid: 0,
+        },
+        {
+          userid,
+        },
+      ]
+    },
+    orderBy: [
+      {
+        userid: 'asc',
+      },
+      {
+        name: 'asc',
+      }
+    ]
+  });
+  return result;
+}
+
+
 export async function updateRace(userid: number, id: number, input: updateRaceInput) {
   const { object, game } = input;
 

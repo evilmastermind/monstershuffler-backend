@@ -1,6 +1,6 @@
 import { createClassInput, updateClassInput } from './class.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { createClass, getClass, getClassList, updateClass, deleteClass } from './class.service';
+import { createClass, getClass, getClassList, getClassWithVariantsList, updateClass, deleteClass } from './class.service';
 import { handleError } from '@/utils/errors';
 
 export async function getClassListHandler (
@@ -17,6 +17,22 @@ export async function getClassListHandler (
     return handleError(error, reply);
   }
 }
+
+export async function getClassWithVariantsListHandler (
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const { id } = request.user  || { id: 0 };
+  try {
+    const classList = await getClassWithVariantsList(id);
+    return reply.code(200).send({
+      list: classList
+    });
+  } catch (error) {
+    return handleError(error, reply);
+  }
+}
+
 
 export async function getClassHandler (
   request: FastifyRequest<{

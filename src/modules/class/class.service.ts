@@ -1,6 +1,26 @@
 import prisma from '@/utils/prisma';
 import { createClassInput, Class, updateClassInput } from './class.schema';
 
+///////////////////////////////////
+// O B J E C T   T Y P E S
+///////////////////////////////////
+//
+//  type  |     name
+// -------+------------------------
+//      1 | character
+//      2 | race
+//      3 | class
+//      4 | template
+//      5 | profession
+//    101 | action
+//    102 | spell
+//   1001 | weapon
+//   1002 | armor
+//  10002 | racevariant
+//  10003 | classvariant
+//
+///////////////////////////////////
+
 export async function createClass(userid: number, input: createClassInput) {
   const { object, game } = input;
 
@@ -35,7 +55,7 @@ export async function getClass(userid: number, id: number) {
   });
 }
 
-export async function getClassList(userid: number) {
+export async function getClassWithVariantsList(userid: number) {
   const result = prisma.objects.findMany({
     select: {
       id: true,
@@ -87,7 +107,36 @@ export async function getClassList(userid: number) {
       }
     ]
   });
-  console.log(result);
+  return result;
+}
+
+export async function getClassList(userid: number) {
+  const result = prisma.objects.findMany({
+    select: {
+      id: true,
+      userid: true,
+      name: true,
+    },
+    where: {
+      type: 3,
+      OR: [
+        {
+          userid: 0,
+        },
+        {
+          userid,
+        },
+      ]
+    },
+    orderBy: [
+      {
+        userid: 'asc',
+      },
+      {
+        name: 'asc',
+      }
+    ]
+  });
   return result;
 }
 

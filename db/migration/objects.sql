@@ -45,25 +45,25 @@ CREATE TABLE `objects` (
 	FOREIGN KEY (type) REFERENCES objecttypes(type),
 	FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (folderid) REFERENCES folders(id)ON DELETE SET NULL,
-  -- FOREIGN KEY (originalid) REFERENCES objects(id) ON DELETE SET NULL,
+  -- FOREIGN KEY (originalid) REFERENCES objects(id) ON DELETE SET NULL,  
   -- FOREIGN KEY (originaluserid) REFERENCES users(id)ON DELETE SET NULL,
   FOREIGN KEY (variantof) REFERENCES objects(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, variantof, oldid) 
-SELECT 1, IFNULL(JSON_EXTRACT(object, "$.statistics.FullName"),'character') as name, 1, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, NULL, id FROM `characters`;
+SELECT 1, IFNULL(JSON_UNQUOTE(JSON_EXTRACT(object, "$.statistics.FullName")),'character') as name, 1, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, NULL, id FROM `characters`;
 
 INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, variantof, oldid) 
-SELECT 2, IFNULL(JSON_EXTRACT(object, "$.name"),'race') as name, 1, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, NULL, id FROM `races`;
+SELECT 2, IFNULL(JSON_UNQUOTE(JSON_EXTRACT(object, "$.name"),'race')) as name, 1, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, NULL, id FROM `races`;
 
 INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, variantof, oldid) 
-SELECT 3, IFNULL(JSON_EXTRACT(object, "$.name"),'class') as name, 1, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, NULL, id FROM `classes`;
+SELECT 3, IFNULL(JSON_UNQUOTE(JSON_EXTRACT(object, "$.name"),'class')) as name, 1, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, NULL, id FROM `classes`;
 
 INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, variantof, oldid) 
-SELECT 4, IFNULL(JSON_EXTRACT(object, "$.name"),'template') as name, 1, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, NULL, id FROM `templates`;
+SELECT 4, IFNULL(JSON_UNQUOTE(JSON_EXTRACT(object, "$.name"),'template')) as name, 1, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, NULL, id FROM `templates`;
 
 INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, variantof, oldid) 
-SELECT 5, IFNULL(JSON_EXTRACT(object, "$.name"),'professsion') as name, 1, userid, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, object, NULL, NULL, NULL, 0, NULL, id FROM `professions`;
+SELECT 5, IFNULL(JSON_UNQUOTE(JSON_EXTRACT(object, "$.name"),'professsion')) as name, 1, userid, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, object, NULL, NULL, NULL, 0, NULL, id FROM `professions`;
 
 INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, variantof, oldid)
 SELECT 101, name, 1, userid, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, object, NULL, NULL, NULL, 0, NULL, id FROM `actions`; 
@@ -103,12 +103,12 @@ CREATE TABLE `charactersdetails` (
 
 INSERT INTO `charactersdetails` (objectid, name, monstertype, cr, alignment, size, meta)
 SELECT b.id, 
-  JSON_EXTRACT(a.object, "$.statistics.FullName"),
-  JSON_EXTRACT(a.object, "$.statistics.TypeNumber"), 
-  JSON_EXTRACT(a.object, "$.statistics.CR"), 
-  JSON_EXTRACT(a.object, "$.statistics.AlignmentNumber"), 
-  JSON_EXTRACT(a.object, "$.statistics.Size"), 
-  JSON_EXTRACT(a.object, "$.statistics.Meta")
+  JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.statistics.FullName")),
+  JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.statistics.TypeNumber"),) 
+  JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.statistics.CR"),) 
+  JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.statistics.AlignmentNumber"),) 
+  JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.statistics.Size"),) 
+  JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.statistics.Meta"))
 FROM `characters` a
   LEFT JOIN `objects` b ON a.id = b.oldid AND b.type = 1;
 
@@ -124,8 +124,8 @@ CREATE TABLE `professionsdetails` (
 
 INSERT INTO `professionsdetails` (objectid, age, description, name, femalename)
 SELECT b.id, a.age, a.description,
-  JSON_EXTRACT(a.object, "$.name"),
-  JSON_EXTRACT(a.object, "$.femaleName")
+  JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.name")),
+  JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.femaleName"))
 FROM `professions` a
   LEFT JOIN `objects` b ON a.id = b.oldid AND b.type = 5;
 

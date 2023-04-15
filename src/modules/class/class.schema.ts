@@ -51,6 +51,17 @@ const getClassListResponseSchema = z.object({
       id,
       userid,
       name,
+    }),
+  ),
+});
+
+
+const getClassWithVariantsListResponseSchema = z.object({
+  list: z.array(
+    z.object({
+      id,
+      userid,
+      name,
       other_objects: z.array(
         z.object({
           id,
@@ -87,6 +98,7 @@ export type Class = z.infer<typeof classObject>;
 export const { schemas: classSchemas, $ref } = buildJsonSchemas({
   updateClassSchema,
   createClassSchema,
+  getClassWithVariantsListResponseSchema,
   getClassListResponseSchema,
   getClassResponseSchema,
 }, { $id: 'classSchemas' });

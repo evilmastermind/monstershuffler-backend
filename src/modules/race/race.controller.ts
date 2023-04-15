@@ -1,6 +1,6 @@
-import { createRaceInput, updateRaceInput } from './race.schema';
+import { createRaceInput, updateRaceInput, } from './race.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { createRace, getRace, getRaceList, updateRace, deleteRace } from './race.service';
+import { createRace, getRace, getRaceList, getRaceWithVariantsList, updateRace, deleteRace } from './race.service';
 import { handleError } from '@/utils/errors';
 
 export async function getRaceListHandler (
@@ -17,6 +17,22 @@ export async function getRaceListHandler (
     return handleError(error, reply);
   }
 }
+
+export async function getRaceWithVariantsListHandler (
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const { id } = request.user  || { id: 0 };
+  try {
+    const classList = await getRaceWithVariantsList(id);
+    return reply.code(200).send({
+      list: classList
+    });
+  } catch (error) {
+    return handleError(error, reply);
+  }
+}
+
 
 export async function getRaceHandler (
   request: FastifyRequest<{

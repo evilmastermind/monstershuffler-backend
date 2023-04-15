@@ -69,11 +69,28 @@ const getRaceListResponseSchema = z.object({
     z.object({
       id,
       userid,
-      game,
       name,
     }),
   ),
 });
+
+const getRaceWithVariantsListResponseSchema = z.object({
+  list: z.array(
+    z.object({
+      id,
+      userid,
+      name,
+      other_objects: z.array(
+        z.object({
+          id,
+          name,
+          userid,
+        })
+      ),
+    }),
+  ),
+});
+
 
 const getRaceResponseSchema = z.object({
   object: raceObject,
@@ -96,6 +113,7 @@ export type Race = z.infer<typeof raceObject>;
 export const { schemas: raceSchemas, $ref } = buildJsonSchemas({
   createRaceSchema,
   updateRaceSchema,
+  getRaceWithVariantsListResponseSchema,
   getRaceListResponseSchema,
   getRaceResponseSchema,
 }, { $id: 'raceSchemas' });

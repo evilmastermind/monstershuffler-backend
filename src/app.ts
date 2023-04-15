@@ -8,20 +8,21 @@ import Sensible from '@fastify/sensible';
 import fjwt from '@fastify/jwt';
 import cors from '@fastify/cors';
 import { version } from '../package.json';
+import fs from 'fs';
 // schemas
 // import { actionSchemas } from '@/modules/action/action.schema';
 // import { armorSchemas } from '@/modules/armor/armor.schema';
 // import { backgroundSchemas } from '@/modules/background/background.schema';
 // import { characterSchemas } from '@/modules/character/character.schema';
 import { classSchemas } from '@/modules/class/class.schema';
-import { classvariantSchemas } from '@/modules/classvariant/classvariant.schema';
+// import { classvariantSchemas } from '@/modules/classvariant/classvariant.schema';
 // import { damageTypeSchemas } from '@/modules/damagetype/damagetype.schema';
 // import { folderSchemas } from '@/modules/folder/folder.schema';
 // import { languageSchemas } from '@/modules/language/language.schema';
 // import { nameSchemas } from '@/modules/name/name.schema';
-// import { professionSchemas } from '@/modules/profession/profession.schema';
+import { professionSchemas } from '@/modules/profession/profession.schema';
 // import { quirkSchemas } from '@/modules/quirk/quirk.schema';
-// import { raceSchemas } from '@/modules/race/race.schema';
+import { raceSchemas } from '@/modules/race/race.schema';
 // import { racevariantSchemas } from '@/modules/racevariant/racevariant.schema';
 // import { reportSchemas } from '@/modules/report/report.schema';
 // import { skillSchemas } from '@/modules/skill/skill.schema';
@@ -37,14 +38,14 @@ import { classvariantSchemas } from '@/modules/classvariant/classvariant.schema'
 // import backgroundRoutes from '@/modules/background/background.route';
 // import characterRoutes from '@/modules/character/character.route';
 import classRoutes from '@/modules/class/class.route';
-import classvariantRoutes from '@/modules/classvariant/classvariant.route';
+// import classvariantRoutes from '@/modules/classvariant/classvariant.route';
 // import damageTypeRoutes from '@/modules/damagetype/damagetype.route';
 // import folderRoutes from '@/modules/folder/folder.route';
 // import languageRoutes from '@/modules/language/language.route';
 // import nameRoutes from '@/modules/name/name.route';
-// import professionRoutes from '@/modules/profession/profession.route';
+import professionRoutes from '@/modules/profession/profession.route';
 // import quirkRoutes from '@/modules/quirk/quirk.route';
-// import raceRoutes from '@/modules/race/race.route';
+import raceRoutes from '@/modules/race/race.route';
 // import racevariantRoutes from '@/modules/racevariant/racevariant.route';
 // import reportRoutes from '@/modules/report/report.route';
 // import skillRoutes from '@/modules/skill/skill.route';
@@ -56,7 +57,7 @@ import classvariantRoutes from '@/modules/classvariant/classvariant.route';
 // import weaponRoutes from '@/modules/weapon/weapon.route';
 // import { hashPassword } from '@/utils/hash';
 // utility routes
-import converterRoutes from '@/modules/converter/converter.route';
+// import converterRoutes from '@/modules/converter/converter.route';
 
 dotenv.config();
 export const server = Fastify({ logger: true});
@@ -124,14 +125,14 @@ async function main() {
       // ...backgroundSchemas,
       // ...characterSchemas,
       ...classSchemas,
-      ...classvariantSchemas,
+      // ...classvariantSchemas,
       // ...damageTypeSchemas,
       // ...folderSchemas,
       // ...languageSchemas,
       // ...nameSchemas,
-      // ...professionSchemas,
+      ...professionSchemas,
       // ...quirkSchemas,
-      // ...raceSchemas,
+      ...raceSchemas,
       // ...racevariantSchemas,
       // ...reportSchemas,
       // ...skillSchemas,
@@ -164,14 +165,14 @@ async function main() {
             // { name: 'backgrounds', description: 'Tiny snippets of lore to add to your characters for roleplay purposes.' },
             // { name: 'characters', description: 'Any type of Dungeons & Dragons creature, like Monsters, NPCs, Player Characters, etc.' },
             { name: 'classes', description: 'Classes are the main way to define a character\'s role in the game. They define what abilities the character has and how they can use them.' },
-            { name: 'class variants', description: 'Class variants can be subclasses, archetypes, variants or customizations that add new features on top of their base class.' },
+            // { name: 'class variants', description: 'Class variants can be subclasses, archetypes, variants or customizations that add new features on top of their base class.' },
             // { name: 'damage types', description: 'Damage types are the different types of damage that can be dealt by weapons, spells, and other effects.' },
             // { name: 'folders', description: 'Folders are a way to organize your characters, actions, etc. into groups.' },
             // { name: 'languages', description: 'Languages are the different ways that characters can communicate with each other.' },
             // { name: 'names', description: 'A collection of names for your characters, divided into different categories.' },
-            // { name: 'professions', description: 'Professions are a way to define a character\'s occupation, like a soldier, a merchant, a priest, etc. and give them minor abilities related to that occupation. They are usually given to NPCs in place of classes.' },
+            { name: 'professions', description: 'Professions are a way to define a character\'s occupation, like a soldier, a merchant, a priest, etc. and give them minor abilities related to that occupation. They are usually given to NPCs in place of classes.' },
             // { name: 'quirks', description: 'Quirks are small, random snippets of lore that can be added to your characters for roleplay purposes.' },
-            // { name: 'races', description: 'A race defines the innate abilities derived from a character\'s fantasy ancestry.' },
+            { name: 'races', description: 'A race defines the innate abilities derived from a character\'s fantasy ancestry.' },
             // { name: 'race variants', description: 'Race variants, or subraces, further define a character\'s ancestry by adding new features on top of their base race.' },
             // { name: 'reports', description: 'Suggestions, complaints or bug reports made by users.' },
             // { name: 'skills', description: 'Skills are abilities that characters can use to perform certain tasks.' },
@@ -194,14 +195,14 @@ async function main() {
     // server.register(backgroundRoutes, { prefix: 'api/backgrounds' });
     // server.register(characterRoutes, { prefix: 'api/characters' });
     server.register(classRoutes, { prefix: 'api/classes' });
-    server.register(classvariantRoutes, { prefix: 'api/classvariants' });
+    // server.register(classvariantRoutes, { prefix: 'api/classvariants' });
     // server.register(damageTypeRoutes, { prefix: 'api/damagetypes' });
     // server.register(folderRoutes, { prefix: 'api/folders' });
     // server.register(languageRoutes, { prefix: 'api/languages' });
     // server.register(nameRoutes, { prefix: 'api/names' });
-    // server.register(professionRoutes, { prefix: 'api/professions' });
+    server.register(professionRoutes, { prefix: 'api/professions' });
     // server.register(quirkRoutes, { prefix: 'api/quirks' });
-    // server.register(raceRoutes, { prefix: 'api/races' });
+    server.register(raceRoutes, { prefix: 'api/races' });
     // server.register(racevariantRoutes, { prefix: 'api/racevariants' });
     // server.register(reportRoutes, { prefix: 'api/reports' });
     // server.register(skillRoutes, { prefix: 'api/skills' });
@@ -212,11 +213,17 @@ async function main() {
     // server.register(userRoutes, { prefix: 'api/users' });
     // server.register(weaponRoutes, { prefix: 'api/weapons' });
     // utility routes
-    server.register(converterRoutes, { prefix: 'api/converter' });
+    // server.register(converterRoutes, { prefix: 'api/converter' });
     
     await server.listen({ port: 3000, host: '0.0.0.0' });
+    console.info('////////////////////////////////////////');
+    console.info('// M O N S T E R S H U F F L E R   A P I');
+    console.info('// server ready at http://localhost:3000');
+    const swaggerYAML = server.swagger({ yaml: true });
+    fs.writeFileSync('./swagger.yaml', swaggerYAML);
+    console.info('// swagger.yaml written');
+    console.info('////////////////////////////////////////');
 
-    console.info('server ready at http://localhost:3000');
   } catch (error) {
     console.info(error);
     process.exit(1);
