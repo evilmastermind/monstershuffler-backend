@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { createRaceHandler, getRaceHandler, getRaceListHandler, updateRaceHandler, deleteRaceHandler  } from './race.controller';
+import { createRaceHandler, getRaceHandler, getRandomRaceHandler, getRaceListHandler, getRaceWithVariantsListHandler, updateRaceHandler, deleteRaceHandler  } from './race.controller';
 import { $ref } from './race.schema';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/modules/schemas';
 
@@ -35,26 +35,44 @@ async function raceRoutes(server: FastifyInstance) {
         },
       }
     },
-    getRaceListHandler
+    getRaceWithVariantsListHandler
   );
 
-  //   server.get(
-  //     '/:raceId',
-  //     {
-  //       preHandler: [server.authenticateOptional],
-  //       schema: {
-  //         summary: 'Returns the details of the race corresponding to the given id.',
-  //         description: 'Returns the details of the race corresponding to the given id.',
-  //         headers: jwtHeaderOptional,
-  //         tags: ['races'],
-  //         // params: $ref('getRaceParamsSchema'),
-  //         response: {
-  //           200: $ref('getRaceResponseSchema')
-  //         }
-  //       }
-  //     },
-  //     getRaceHandler
-  //   );
+  server.get(
+    '/:raceId',
+    {
+      preHandler: [server.authenticateOptional],
+      schema: {
+        summary: 'Returns the details of the race corresponding to the given id.',
+        description: 'Returns the details of the race corresponding to the given id.',
+        headers: jwtHeaderOptional,
+        tags: ['races'],
+        // params: $ref('getRaceParamsSchema'),
+        response: {
+          200: $ref('getRaceResponseSchema')
+        }
+      }
+    },
+    getRaceHandler
+  );
+
+  server.get(
+    '/random',
+    {
+      preHandler: [server.authenticateOptional],
+      schema: {
+        summary: 'Returns the details of a random race from the database.',
+        description: 'Returns the details of a random race from list of races available to the user in the database.',
+        headers: jwtHeaderOptional,
+        tags: ['races'],
+        // params: $ref('getRaceParamsSchema'),
+        response: {
+          200: $ref('getRaceResponseSchema')
+        }
+      }
+    },
+    getRandomRaceHandler
+  );
 
   //   server.post(
   //     '/',

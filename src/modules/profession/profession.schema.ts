@@ -19,8 +19,8 @@ export const professionObject = z.object({
   vulnerabilities: z.array(statObject).optional(),
   conditionImmunities: z.array(statObject).optional(),
   senses: sensesObject.optional(),
-  blind: z.enum(['1','0']).optional(),
-  canspeak: z.enum(['1','0']).optional(),
+  blind: z.boolean().optional(),
+  canspeak: z.boolean().optional(),
   telepathy: z.string().optional(),
   languages: z.union([z.array(statObject), choiceRandomObject, choiceListObject]).optional(),
   actions: z.array(z.union([actionObject, choiceRandomObject])).optional(),
@@ -28,7 +28,7 @@ export const professionObject = z.object({
   spellCasting: abilitiesEnum.optional(),
   spellSlots: z.array(spellGroupObject).optional(),
   // generator keys
-  enableGenerator: z.enum(['1','0']).optional()
+  enableGenerator: z.boolean().optional()
 }).strict();
 
 const id = z.number();

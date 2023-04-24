@@ -137,7 +137,7 @@ function convertCharacter(object, id) {
 
 function convertCharacterObject(object, id) {
   addStatObjects(object);
-  fixEnums(object, ['swarm','blind','canspeak']);
+  fixEnums(object, ['swarm','blind','canspeak', 'enableGenerator']);
   // gender => pronouns
   if (Object.hasOwn(object, 'gender')) {
     object.pronouns = object.gender;

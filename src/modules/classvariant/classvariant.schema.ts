@@ -18,8 +18,8 @@ export const classvariantObject = z.object({
   vulnerabilities: z.array(statObject).optional(),
   conditionImmunities: z.array(statObject).optional(),
   senses: sensesObject.optional(),
-  blind: z.enum(['1','0']).optional(),
-  canspeak: z.enum(['1','0']).optional(),
+  blind: z.boolean().optional(),
+  canspeak: z.boolean().optional(),
   telepathy: z.string().optional(),
   languages: z.union([z.array(statObject), choiceRandomObject, choiceListObject]).optional(),
   actions: z.array(actionObject).optional(),
@@ -27,9 +27,9 @@ export const classvariantObject = z.object({
   spellCasting: abilitiesEnum.optional(),
   spellSlots: z.array(spellGroupObject).optional(),
   // generator keys
-  enableGenerator: z.enum(['1','0']).optional(),
+  enableGenerator: z.boolean().optional(),
   // publication keys
-  //published: z.enum(['1','0']).optional(),
+  //published: z.boolean().optional(),
   image: imageObject,
   searchTags: z.array(z.string()).optional(),
   environments: z.array(z.string()).optional(),

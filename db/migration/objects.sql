@@ -54,16 +54,16 @@ INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, or
 SELECT 1, IFNULL(JSON_UNQUOTE(JSON_EXTRACT(object, "$.statistics.FullName")),'character') as name, 1, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, NULL, id FROM `characters`;
 
 INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, variantof, oldid) 
-SELECT 2, IFNULL(JSON_UNQUOTE(JSON_EXTRACT(object, "$.name"),'race')) as name, 1, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, NULL, id FROM `races`;
+SELECT 2, IFNULL(JSON_UNQUOTE(JSON_EXTRACT(object, "$.name")),'race') as name, 1, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, NULL, id FROM `races`;
 
 INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, variantof, oldid) 
-SELECT 3, IFNULL(JSON_UNQUOTE(JSON_EXTRACT(object, "$.name"),'class')) as name, 1, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, NULL, id FROM `classes`;
+SELECT 3, IFNULL(JSON_UNQUOTE(JSON_EXTRACT(object, "$.name")),'class') as name, 1, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, NULL, id FROM `classes`;
 
 INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, variantof, oldid) 
-SELECT 4, IFNULL(JSON_UNQUOTE(JSON_EXTRACT(object, "$.name"),'template')) as name, 1, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, NULL, id FROM `templates`;
+SELECT 4, IFNULL(JSON_UNQUOTE(JSON_EXTRACT(object, "$.name")),'template') as name, 1, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, NULL, id FROM `templates`;
 
 INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, variantof, oldid) 
-SELECT 5, IFNULL(JSON_UNQUOTE(JSON_EXTRACT(object, "$.name"),'professsion')) as name, 1, userid, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, object, NULL, NULL, NULL, 0, NULL, id FROM `professions`;
+SELECT 5, IFNULL(JSON_UNQUOTE(JSON_EXTRACT(object, "$.name")),'professsion') as name, 1, userid, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, object, NULL, NULL, NULL, 0, NULL, id FROM `professions`;
 
 INSERT INTO `objects` (type, name, game, userid, created, lastedited, object, originalid, originaluserid, folderid, trashed, variantof, oldid)
 SELECT 101, name, 1, userid, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, object, NULL, NULL, NULL, 0, NULL, id FROM `actions`; 
@@ -89,6 +89,12 @@ FROM `classvariants` a
   LEFT JOIN `classes` b ON a.classid = b.id 
   LEFT JOIN `objects` c ON b.id = c.oldid AND type = 3;
 
+CREATE TABLE `npcgeneratorblacklist` (
+  `objectid` int(11) NOT NULL,
+  PRIMARY KEY (objectid),
+  FOREIGN KEY (objectid) REFERENCES objects(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `charactersdetails` (
   `objectid` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -104,15 +110,45 @@ CREATE TABLE `charactersdetails` (
 INSERT INTO `charactersdetails` (objectid, name, monstertype, cr, alignment, size, meta)
 SELECT b.id, 
   JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.statistics.FullName")),
-  JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.statistics.TypeNumber"),) 
-  JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.statistics.CR"),) 
-  JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.statistics.AlignmentNumber"),) 
-  JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.statistics.Size"),) 
+  JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.statistics.TypeNumber")), 
+  JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.statistics.CR")),
+  JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.statistics.AlignmentNumber")), 
+  JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.statistics.Size")), 
   JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.statistics.Meta"))
 FROM `characters` a
   LEFT JOIN `objects` b ON a.id = b.oldid AND b.type = 1;
 
 CREATE TABLE `professionsdetails` ( 
+  `objectid` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `femalename` varchar(255) NOT NULL,
+  `age` varchar(255) NOT NULL,
+  `description` text,
+  PRIMARY KEY (objectid),
+  FOREIGN KEY (objectid) REFERENCES objects(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `racesdetails` (
+  `objectid` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `femalename` varchar(255) NOT NULL,
+  `age` varchar(255) NOT NULL,
+  `description` text,
+  PRIMARY KEY (objectid),
+  FOREIGN KEY (objectid) REFERENCES objects(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `classesdetails` (
+  `objectid` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `femalename` varchar(255) NOT NULL,
+  `age` varchar(255) NOT NULL,
+  `description` text,
+  PRIMARY KEY (objectid),
+  FOREIGN KEY (objectid) REFERENCES objects(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `templatesdetails` (
   `objectid` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `femalename` varchar(255) NOT NULL,
@@ -277,8 +313,8 @@ CREATE INDEX objectid on `publicationssubtypes` (objectid);
 
 
 -- SKILLS TABLE FIX
-alter table skills drop column game ;
-alter table skills create column game INT not null;
+alter table skills DROP column game ;
+alter table skills ADD column game INT not null;
 update skills set game = 1;
 ALTER TABLE skills ADD FOREIGN KEY (game) REFERENCES game(game);
 

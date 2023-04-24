@@ -12,7 +12,7 @@ export const characterObject = z.object({
     name: z.string(),
     prename: z.string().optional(),
     surname: z.string().optional(),
-    generic: z.enum(['1','0']).optional(),
+    generic: z.boolean().optional(),
     // objects
     race: raceObject.optional(),
     class: classObject.optional(),
