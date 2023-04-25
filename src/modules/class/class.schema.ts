@@ -76,6 +76,7 @@ const getClassWithVariantsListResponseSchema = z.object({
 
 const getClassResponseSchema = z.object({
   object: classObject,
+  id,
 });
 
 

@@ -10,7 +10,7 @@ import { bonusesObject, choiceRandomObject, statObject, speedsObject, choiceList
 export const templateObject = z.object({
   name: z.string(),
   // TODO: gender => pronouns
-  gender: z.enum(['male','female','neutral','thing']).optional(),
+  pronouns: z.enum(['male','female','neutral','thing']).optional(),
   size: z.string().optional(),
   type: z.string().optional(),
   swarm: z.boolean().optional(),

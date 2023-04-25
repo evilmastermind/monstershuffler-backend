@@ -12,5 +12,5 @@ export async function getRandomName(input: getRandomNameInput) {
     },
   });
 
-  return name[0];
+  return name[0].name;
 }

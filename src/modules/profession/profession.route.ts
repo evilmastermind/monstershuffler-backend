@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { createProfessionHandler, getProfessionHandler, getProfessionListHandler, updateProfessionHandler, deleteProfessionHandler  } from './profession.controller';
+import { createProfessionHandler, getProfessionHandler, getRandomProfessionHandler, getProfessionListHandler, updateProfessionHandler, deleteProfessionHandler  } from './profession.controller';
 import { $ref } from './profession.schema';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/modules/schemas';
 
@@ -21,23 +21,41 @@ async function professionRoutes(server: FastifyInstance) {
     getProfessionListHandler
   );
 
-  // server.get(
-  //   '/:professionId',
-  //   {
-  //     preHandler: [server.authenticateOptional],
-  //     schema: {
-  //       summary: 'Returns the details of the profession corresponding to the given id.',
-  //       description: 'Returns the details of the profession corresponding to the given id.',
-  //       headers: jwtHeaderOptional,
-  //       tags: ['professions'],
-  //       // params: $ref('getProfessionParamsSchema'),
-  //       response: {
-  //         200: $ref('getProfessionResponseSchema')
-  //       }
-  //     }
-  //   },
-  //   getProfessionHandler
-  // );
+  server.get(
+    '/:professionId',
+    {
+      preHandler: [server.authenticateOptional],
+      schema: {
+        summary: 'Returns the details of the profession corresponding to the given id.',
+        description: 'Returns the details of the profession corresponding to the given id.',
+        headers: jwtHeaderOptional,
+        tags: ['professions'],
+        // params: $ref('getProfessionParamsSchema'),
+        response: {
+          200: $ref('getProfessionResponseSchema')
+        }
+      }
+    },
+    getProfessionHandler
+  );
+
+  server.get(
+    '/random',
+    {
+      preHandler: [server.authenticateOptional],
+      schema: {
+        summary: 'Returns the details of a random profession from the database.',
+        description: 'Returns the details of a random profession from list of professions available to the user in the database.',
+        headers: jwtHeaderOptional,
+        tags: ['professions'],
+        // params: $ref('getProfessionParamsSchema'),
+        response: {
+          200: $ref('getProfessionResponseSchema')
+        }
+      }
+    },
+    getRandomProfessionHandler
+  );
 
   // server.post(
   //   '/',

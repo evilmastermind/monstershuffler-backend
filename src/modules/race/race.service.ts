@@ -19,6 +19,7 @@ export async function getRace(userid: number, id: number) {
   return (await prisma.objects.findMany({
     select: {
       object: true,
+      id: true,
     },
     where: {
       id,
@@ -67,6 +68,10 @@ export async function getRandomRace(userid: number) {
   const race = await prisma.objects.findMany({
     skip: Math.floor(Math.random() * raceCount),
     take: 1,
+    select: {
+      object: true,
+      id: true,
+    },
     where: {
       type: 2,
       OR: [

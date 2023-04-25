@@ -38,6 +38,7 @@ export async function getRacevariant(userid: number, id: number) {
   const raceResult = await prisma.objects.findMany({
     select: {
       object: true,
+      id: true,
     },
     where: {
       id,
@@ -53,6 +54,45 @@ export async function getRacevariant(userid: number, id: number) {
     }
   });
   return raceResult[0];
+}
+
+
+export async function getRandomRacevariant(userid: number, variantof: number) {
+  const raceCount = await prisma.objects.count({
+    where: {
+      type: 10002,
+      variantof,
+      OR: [
+        {
+          userid: 0,
+        },
+        {
+          userid,
+        },
+      ]
+    }
+  });
+  const race = await prisma.objects.findMany({
+    skip: Math.floor(Math.random() * raceCount),
+    take: 1,
+    select: {
+      object: true,
+      id: true,
+    },
+    where: {
+      type: 10002,
+      variantof,
+      OR: [
+        {
+          userid: 0,
+        },
+        {
+          userid,
+        },
+      ]
+    },
+  });
+  return race[0];
 }
 
 export async function getRacevariantList(userid: number, variantof: number) {

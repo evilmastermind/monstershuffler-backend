@@ -12,7 +12,7 @@ const description = z.string();
 const getRandomTraitSchema = z.object({
   type: type.optional(),
   subtitle: subtitle.optional(),
-  category: subtitle.optional(),
+  category: category.optional(),
   feeling: feeling.optional(),
 });
 

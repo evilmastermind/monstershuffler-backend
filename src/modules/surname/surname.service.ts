@@ -12,5 +12,5 @@ export async function getRandomSurname(input: getRandomSurnameInput) {
     },
   });
 
-  return surname[0];
+  return surname[0].surname;
 }

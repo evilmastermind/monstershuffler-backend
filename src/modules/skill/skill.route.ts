@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { getSkillListHandler} from './skill.controller';
+import { getSkillListHandler, getRandomSkillHandler } from './skill.controller';
 import { $ref } from './skill.schema';
 import { jwtHeaderOptional } from '@/modules/schemas';
 
@@ -20,6 +20,24 @@ async function skillRoutes(server: FastifyInstance) {
     },
     getSkillListHandler
   );
+
+  server.get(
+    '/random',
+    {
+      preHandler: [server.authenticateOptional],
+      schema: {
+        summary: 'Get a random skill from the game.',
+        description: 'Get a random skill from the game.',
+        headers: jwtHeaderOptional,
+        tags: ['skills'],
+        response: {
+          200: $ref('getSkillResponseSchema'),
+        },
+      },
+    },
+    getRandomSkillHandler
+  );
 }
+
 
 export default skillRoutes;

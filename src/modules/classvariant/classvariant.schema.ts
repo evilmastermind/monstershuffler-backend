@@ -72,6 +72,7 @@ const getClassvariantClassListResponseSchema = z.object({
 
 const getClassvariantResponseSchema = z.object({
   object: classvariantObject,
+  id,
 });
 
 

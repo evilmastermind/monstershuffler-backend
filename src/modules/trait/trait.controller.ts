@@ -1,13 +1,17 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { getRandomTrait, getTraitDescription } from './trait.service';
 import { handleError } from '@/utils/errors';
+import { getRandomTraitInput } from './trait.schema';
 
 export async function getRandomTraitHandler (
-  request: FastifyRequest,
+  request: FastifyRequest<{
+    Body: getRandomTraitInput
+  }>,
   reply: FastifyReply
 ) {
   try {
-    const trait = await getRandomTrait();
+    const { body } = request;
+    const trait = await getRandomTrait(body);
     return reply.code(200).send(trait);
   } catch (error) {
     return handleError(error, reply);

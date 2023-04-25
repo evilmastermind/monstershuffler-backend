@@ -55,6 +55,44 @@ export async function getClassvariant(userid: number, id: number) {
   return classResult[0];
 }
 
+export async function getRandomClassvariant(userid: number, variantof: number) {
+  const classCount = await prisma.objects.count({
+    where: {
+      type: 10003,
+      variantof,
+      OR: [
+        {
+          userid: 0,
+        },
+        {
+          userid,
+        },
+      ]
+    }
+  });
+  const classChosen = await prisma.objects.findMany({
+    skip: Math.floor(Math.random() * classCount),
+    take: 1,
+    select: {
+      object: true,
+      id: true,
+    },
+    where: {
+      type: 10002,
+      variantof,
+      OR: [
+        {
+          userid: 0,
+        },
+        {
+          userid,
+        },
+      ]
+    },
+  });
+  return classChosen[0];
+}
+
 
 export async function getClassvariantList(userid: number) {
   return await prisma.objects.findMany({

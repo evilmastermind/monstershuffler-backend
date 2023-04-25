@@ -1,6 +1,6 @@
 import { createRacevariantInput, updateRacevariantInput } from './racevariant.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { createRacevariant, getRacevariant, getRacevariantList, updateRacevariant, deleteRacevariant } from './racevariant.service';
+import { createRacevariant, getRacevariant, getRandomRacevariant, getRacevariantList, updateRacevariant, deleteRacevariant } from './racevariant.service';
 import { handleError } from '@/utils/errors';
 
 export async function getRacevariantListHandler (
@@ -35,6 +35,24 @@ export async function getRacevariantHandler (
   const racevariantId = request.params.racevariantId;
   try {
     const racevariantObject = await getRacevariant(id, parseInt(racevariantId));
+    return reply.code(200).send(racevariantObject);
+  } catch (error) {
+    return handleError(error, reply);
+  }
+}
+
+export async function getRandomRacevariantHandler (
+  request: FastifyRequest<{
+    Params: {
+      raceId: string;
+    } 
+  }>,
+  reply: FastifyReply
+) {
+  const { id } = request.user || { id: 0 };
+  const raceId = request.params.raceId;
+  try {
+    const racevariantObject = await getRandomRacevariant(id, parseInt(raceId));
     return reply.code(200).send(racevariantObject);
   } catch (error) {
     return handleError(error, reply);

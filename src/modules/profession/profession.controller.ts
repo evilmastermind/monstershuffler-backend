@@ -1,6 +1,6 @@
 import { createProfessionInput } from './profession.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { createProfession, getProfession, getProfessionList, updateProfession, deleteProfession } from './profession.service';
+import { createProfession, getProfession, getRandomProfession, getProfessionList, updateProfession, deleteProfession } from './profession.service';
 import { handleError } from '@/utils/errors';
 
 export async function getProfessionListHandler (
@@ -30,7 +30,20 @@ export async function getProfessionHandler (
   const professionId = request.params.professionId;
   try {
     const professionObject = await getProfession(id, parseInt(professionId));
-    return reply.code(200).send(professionObject[0]);
+    return reply.code(200).send(professionObject);
+  } catch (error) {
+    return handleError(error, reply);
+  }
+}
+
+export async function getRandomProfessionHandler (
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  const { id } = request.user || { id: 0 };
+  try {
+    const professionObject = await getRandomProfession(id);
+    return reply.code(200).send(professionObject);
   } catch (error) {
     return handleError(error, reply);
   }

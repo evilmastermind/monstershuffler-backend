@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { createClassHandler, getClassHandler, getClassListHandler, getClassWithVariantsListHandler, updateClassHandler, deleteClassHandler  } from './class.controller';
+import { createClassHandler, getClassHandler, getRandomClassHandler, getClassListHandler, getClassWithVariantsListHandler, updateClassHandler, deleteClassHandler  } from './class.controller';
 import { $ref } from './class.schema';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/modules/schemas';
 
@@ -22,6 +22,23 @@ async function classRoutes(server: FastifyInstance) {
   );
 
   server.get(
+    '/random',
+    {
+      preHandler: [server.authenticateOptional],
+      schema: {
+        summary: 'Returns the details of a random class in the database.',
+        description: 'Returns the details of a random class from list of classes available to the user in the database.',
+        headers: jwtHeaderOptional,
+        tags: ['classes'],
+        response: {
+          200: $ref('getClassResponseSchema')
+        },
+      }
+    },
+    getRandomClassHandler
+  );
+
+  server.get(
     '/withvariants',
     {
       preHandler: [server.authenticateOptional],
@@ -38,23 +55,23 @@ async function classRoutes(server: FastifyInstance) {
     getClassWithVariantsListHandler
   );
 
-  // server.get(
-  //   '/:classId',
-  //   {
-  //     preHandler: [server.authenticateOptional],
-  //     schema: {
-  //       summary: 'Returns the details of the class corresponding to the given id.',
-  //       description: 'Returns the details of the class corresponding to the given id.',
-  //       headers: jwtHeaderOptional,
-  //       tags: ['classes'],
-  //       // params: $ref('getClassParamsSchema'),
-  //       response: {
-  //         200: $ref('getClassResponseSchema')
-  //       }
-  //     }
-  //   },
-  //   getClassHandler
-  // );
+  server.get(
+    '/:classId',
+    {
+      preHandler: [server.authenticateOptional],
+      schema: {
+        summary: 'Returns the details of the class corresponding to the given id.',
+        description: 'Returns the details of the class corresponding to the given id.',
+        headers: jwtHeaderOptional,
+        tags: ['classes'],
+        // params: $ref('getClassParamsSchema'),
+        response: {
+          200: $ref('getClassResponseSchema')
+        }
+      }
+    },
+    getClassHandler
+  );
 
   // server.post(
   //   '/',

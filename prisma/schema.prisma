@@ -50,6 +50,17 @@ model charactersdetails {
   @@index([objectid])
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model classesdetails {
+  objectid    Int?
+  name        String? @db.VarChar(255)
+  femalename  String? @db.VarChar(255)
+  age         String? @db.VarChar(255)
+  description String?
+
+  @@ignore
+}
+
 model damagetypes {
   id          Int     @id @default(autoincrement())
   userid      Int
@@ -58,6 +69,14 @@ model damagetypes {
   users       users   @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([userid])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model data_pool_monstershufflermonstershuffler {
+  id       BigInt  @default(autoincrement())
+  metadata String?
+
+  @@ignore
 }
 
 model folders {
@@ -100,6 +119,13 @@ model names {
   @@unique([name, gender, race], map: "names_name_gender_race_idx")
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model npcgeneratorblacklist {
+  objectid Int?
+
+  @@ignore
+}
+
 model objects {
   id                 Int                 @id @default(autoincrement())
   type               Int
@@ -132,26 +158,6 @@ model objects {
   @@index([userid])
   @@index([variantof])
 }
-
-///////////////////////////////////
-// O B J E C T   T Y P E S
-///////////////////////////////////
-//
-//  type  |     name
-// -------+------------------------
-//      1 | character
-//      2 | race
-//      3 | class
-//      4 | template
-//      5 | profession
-//    101 | action
-//    102 | spell
-//   1001 | weapon
-//   1002 | armor
-//  10002 | racevariant
-//  10003 | classvariant
-//
-///////////////////////////////////
 
 model objecttypes {
   type         Int            @id
@@ -236,6 +242,17 @@ model quirks {
   quirk String @db.VarChar(255)
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model racesdetails {
+  objectid    Int?
+  name        String? @db.VarChar(255)
+  femalename  String? @db.VarChar(255)
+  age         String? @db.VarChar(255)
+  description String?
+
+  @@ignore
+}
+
 model reports {
   id                             Int          @id @default(autoincrement())
   objectid                       Int
@@ -261,12 +278,33 @@ model skills {
   name String @db.VarChar(255)
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model state_logs_monstershufflermonstershuffler {
+  tables_loaded                Boolean?
+  per_table_constraints_loaded Boolean?
+  foreign_keys_loaded          Boolean?
+  views_loaded                 Boolean?
+
+  @@ignore
+}
+
 model surnames {
   race    String @db.VarChar(255)
   gender  String @db.VarChar(255)
   surname String @db.VarChar(255)
 
   @@unique([surname, gender, race], map: "surnames_surname_gender_race_idx")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model templatesdetails {
+  objectid    Int?
+  name        String? @db.VarChar(255)
+  femalename  String? @db.VarChar(255)
+  age         String? @db.VarChar(255)
+  description String?
+
+  @@ignore
 }
 
 model traits {

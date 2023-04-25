@@ -6,6 +6,7 @@ import { spellGroupObject, bonusesObject, choiceRandomObject, statObject, speeds
 // TODO: these are the keys of racevariant, edit them for racevariant
 export const racevariantObject = z.object({
   name: z.string(),
+  pronouns: z.enum(['male','female','neutral','thing']).optional(),
   armor: z.array(
     z.union([armorObject, choiceRandomObject])
   ).optional(),
@@ -57,7 +58,6 @@ const getRacevariantListResponseSchema = z.object({
 
 const getRacevariantResponseSchema = z.object({
   id,
-  name,
   object: racevariantObject,
 });
 

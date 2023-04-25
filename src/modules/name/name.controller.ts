@@ -10,7 +10,7 @@ export async function getRandomNameHandler (
   try {
     const { body } = request;
     const name = await getRandomName(body);
-    return reply.code(200).send(name);
+    return reply.code(200).send({ name });
   } catch (error) {
     return handleError(error, reply);
   }

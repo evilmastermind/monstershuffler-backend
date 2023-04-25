@@ -36,7 +36,7 @@ export async function createClass(userid: number, input: createClassInput) {
 }
 
 export async function getClass(userid: number, id: number) {
-  return await prisma.objects.findMany({
+  return (await prisma.objects.findMany({
     select: {
       object: true,
     },
@@ -52,7 +52,44 @@ export async function getClass(userid: number, id: number) {
         },
       ]
     }
+  }))[0];
+}
+
+
+export async function getRandomClass(userid: number) {
+  const raceCount = await prisma.objects.count({
+    where: {
+      type: 3,
+      OR: [
+        {
+          userid: 0,
+        },
+        {
+          userid,
+        },
+      ]
+    }
   });
+  const race = await prisma.objects.findMany({
+    skip: Math.floor(Math.random() * raceCount),
+    take: 1,
+    select: {
+      object: true,
+      id: true,
+    },
+    where: {
+      type: 3,
+      OR: [
+        {
+          userid: 0,
+        },
+        {
+          userid,
+        },
+      ]
+    },
+  });
+  return race[0];
 }
 
 export async function getClassWithVariantsList(userid: number) {

@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { createRacevariantHandler, getRacevariantHandler, getRacevariantListHandler, updateRacevariantHandler, deleteRacevariantHandler  } from './racevariant.controller';
+import { createRacevariantHandler, getRacevariantHandler, getRandomRacevariantHandler, getRacevariantListHandler, updateRacevariantHandler, deleteRacevariantHandler  } from './racevariant.controller';
 import { $ref } from './racevariant.schema';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/modules/schemas';
 
@@ -20,6 +20,24 @@ async function racevariantRoutes(server: FastifyInstance) {
       }
     },
     getRacevariantListHandler
+  );
+
+  server.get(
+    '/race/:raceId/random',
+    {
+      preHandler: [server.authenticateOptional],
+      schema: {
+        summary: 'Returns the details of a random variant of the race corresponding to the given id.',
+        description: 'Returns the details of a random variant of the race corresponding to the given id',
+        headers: jwtHeaderOptional,
+        tags: ['race variants'],
+        // params: $ref('getRacevariantParamsSchema'),
+        response: {
+          200: $ref('getRacevariantResponseSchema')
+        },
+      }
+    },
+    getRandomRacevariantHandler
   );
 
   server.get(
