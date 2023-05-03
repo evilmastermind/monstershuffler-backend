@@ -96,12 +96,37 @@ export async function createRandomNpcHandler (
     const surname = await calculateSurname(pronouns, race);
     const favouriteSkill = (await getRandomSkill()).name;
     const traitObject = await getRandomTrait({ feeling: 0 });
+    const alignment = calculateAlignment(traitObject.category);
 
     return reply.code(200).send({
       // npc
     });
   } catch (error) {
     return handleError(error, reply);
+  }
+}
+
+function calculateAlignment(traitCategory: string) {
+  let goodness = 0;
+  let lawfulness = 0;
+  const neutralness = 0;
+
+  switch (traitCategory) {
+  case 'bad':         goodness   = goodness   - 0.5;    break;
+  case 'weird':                                           break;
+  case 'evil':       goodness   = goodness   - 1.0;    break;
+  case 'submissive':  lawfulness = lawfulness + 0.5;    break;
+  case 'successful':                                      break;
+  case 'strong':                                          break;
+  case 'weak':                                            break;
+  case 'good':        goodness   = goodness   + 1.0;    break;
+  case 'traumatized': goodness   = goodness   + 0.5;    break;
+  case 'intelligent':                                     break;
+  case 'stupid':                                          break;
+  case 'seductive':   lawfulness = lawfulness - 0.5;    break;
+  case 'lawful':      lawfulness = lawfulness + 1.0;    break;
+  case 'chaotic':     lawfulness = lawfulness - 1.0;    break;
+  default:                                                break; 
   }
 }
 
