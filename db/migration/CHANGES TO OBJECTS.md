@@ -36,6 +36,9 @@ TO:
 [{id: 15125, name: "Mage Hand"}, {...}, ...]
 
 
+- alignment (npcs, races?, ???) should now be a tuple of 3 numbers instead of two, to include 'neutralness'
+
+
 - everything that can't be expanded in the future (like things that aren't objects, I can't add keys to them)
 
 
@@ -43,7 +46,6 @@ TO:
 
 
 - think about how you're going to add automatic CR calculations and which keys you should add to the objects
-
 
 
 

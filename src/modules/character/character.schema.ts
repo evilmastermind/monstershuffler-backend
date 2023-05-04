@@ -4,6 +4,9 @@ import { userObject, CREstimatedObject, CRTwoPointsObject, CRNPCObject, abilitie
 import { raceObject } from '../race/race.schema';
 import { classObject } from '../class/class.schema';
 import { templateObject } from '../template/template.schema';
+import { racevariantObject } from '../racevariant/racevariant.schema';
+import { classvariantObject } from '../classvariant/classvariant.schema';
+import { professionObject } from '../profession/profession.schema';
 
 
 export const characterObject = z.object({
@@ -16,21 +19,26 @@ export const characterObject = z.object({
     pronouns: z.enum(['male','female','neutral','thing']).optional(),
     // objects
     race: raceObject.optional(),
+    racevariant: racevariantObject.optional(),
     class: classObject.optional(),
+    classvariant: classvariantObject.optional(),
+    profession: professionObject.optional(),
     template: templateObject.optional(),
     user: userObject.optional(),
     // other stats
     abilitiesBase: abilitiesBaseObject.optional(),
+    alignment: z.tuple([z.number(), z.number(), z.number()]).optional(),
     alignmentMoral: z.enum(['Good','Neutral','Evil','Any','Unaligned']).optional(),
     alignmentEthical: z.enum(['Lawful','Neutral','Chaotic','Any']).optional(),
     // roleplaying helpers
     smallbackground: z.string().optional(),
     trait: z.string().optional(),
+    feeling: z.string().optional(),
     // CR
     CRCalculation: z.union([CRTwoPointsObject, CRNPCObject, CREstimatedObject]).optional(),
   }).strict(),
   // TODO: define the 'statistics' object (processed statistics from all other objects combined)
-  statistics: z.object({}).passthrough(),
+  statistics: z.object({}).passthrough().optional(),
 }).strict();
 
 

@@ -2,6 +2,7 @@ import { createRandomNpcInput } from './npc.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { getRace, getRandomRace } from '@/modules/race/race.service';
 import { getRacevariant, getRandomRacevariant } from '@/modules/racevariant/racevariant.service';
+import { Character } from '@/modules/character/character.schema';
 import { Race } from '@/modules/race/race.schema';
 import { Racevariant } from '@/modules/racevariant/racevariant.schema';
 import { Class } from '@/modules/class/class.schema';
@@ -14,6 +15,7 @@ import { getRandomSkill } from '@/modules/skill/skill.service';
 import { getRandomName } from '@/modules/name/name.service';
 import { getRandomSurname } from '@/modules/surname/surname.service';
 import { getRandomTrait } from '@/modules/trait/trait.service';
+import { getRandomBackground } from '@/modules/background/background.service';
 import { handleError } from '@/utils/errors';
 import { random } from '@/utils/functions';
 
@@ -96,17 +98,74 @@ export async function createRandomNpcHandler (
     const surname = await calculateSurname(pronouns, race);
     const favouriteSkill = (await getRandomSkill()).name;
     const traitObject = await getRandomTrait({ feeling: 0 });
+    const feelingObject = await getRandomTrait({ feeling: 1 });
     const alignment = calculateAlignment(traitObject.category);
+    const smallbackground = await calculateBackground(pronouns);
 
-    return reply.code(200).send({
-      // npc
-    });
+    const result: Character = { 
+      character: {
+        name,
+        surname,
+        pronouns,
+        trait: traitObject.name,
+        feeling: feelingObject.name,
+        alignment: alignment,
+        smallbackground,
+      }
+    };
+
+    const character = result.character;
+
+    if (race) {
+      character['race'] = race;
+    }
+    if (race && racevariant) {
+      character['racevariant'] = racevariant;
+    }
+    if (classChosen) {
+      character['class'] = classChosen;
+    }
+    if (classChosen && classvariant) {
+      character['classvariant'] = classvariant;
+    }
+    if (profession) {
+      character['profession'] = profession;
+    }
+
+    return reply.code(200).send(character);
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-function calculateAlignment(traitCategory: string) {
+function fixPronouns(text: string, pronouns: string) {
+  let result = text;
+  if (pronouns === 'male') {
+    result = result.replaceAll('§','he' );
+    result = result.replaceAll('@','his');
+    result = result.replaceAll('#','him');
+  } else if (pronouns === 'female') {
+    result = result.replaceAll('§','she' );
+    result = result.replaceAll('@','her');
+    result = result.replaceAll('#','her');
+  } else if (pronouns === 'neutral') {
+    result = result.replaceAll('§','they' );
+    result = result.replaceAll('@','their');
+    result = result.replaceAll('#','them');
+  } else {
+    result = result.replaceAll('§','it' );
+    result = result.replaceAll('@','its');
+    result = result.replaceAll('#','it');
+  }
+  return result;
+}
+
+async function calculateBackground(pronouns: string) {
+  const background = (await getRandomBackground()).background;
+  return fixPronouns(background, pronouns);
+}
+
+function calculateAlignment(traitCategory: string): [number,number,number] {
   let goodness = 0;
   let lawfulness = 0;
   const neutralness = 0;
@@ -128,6 +187,8 @@ function calculateAlignment(traitCategory: string) {
   case 'chaotic':     lawfulness = lawfulness - 1.0;    break;
   default:                                                break; 
   }
+
+  return [goodness, lawfulness, neutralness];
 }
 
 function calculateName(pronouns: string, race: Race | null) {
@@ -145,7 +206,6 @@ function calculateName(pronouns: string, race: Race | null) {
 
 function calculateSurname(pronouns: string, race: Race | null) {
   let surnameType = 'human';
-  const hasSurname = false;
   if (!race || !race.addSurname || random(1,100) >= race.addSurname) {
     return '';
   }

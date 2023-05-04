@@ -10,6 +10,7 @@ export const professionObject = z.object({
   armor: z.array(
     z.union([armorObject, choiceRandomObject])
   ).optional(),
+  alignment: z.tuple([z.number(), z.number(), z.number()]).optional(),
   subtypes: z.array(statObject).optional(),
   speeds: speedsObject.optional(),
   savingThrows: z.array(statObject).optional(),
@@ -28,7 +29,7 @@ export const professionObject = z.object({
   spellCasting: abilitiesEnum.optional(),
   spellSlots: z.array(spellGroupObject).optional(),
   // generator keys
-  enableGenerator: z.boolean().optional()
+  enableGenerator: z.boolean().optional(),
 }).strict();
 
 const id = z.number();

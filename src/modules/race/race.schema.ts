@@ -18,7 +18,7 @@ export const raceObject = z.object({
   // it's not possible to define races whose alignment lean towards neutral
   // also: there were other types of alignment that I didn't handle
   // any Good/Neutral/Evil alignment (See Lich)
-  alignment: z.tuple([z.string(), z.string()]).optional(),
+  alignment: z.tuple([z.number(), z.number(), z.number()]).optional(),
   armor: z.array(
     z.union([armorObject, choiceRandomObject])
   ).optional(),
