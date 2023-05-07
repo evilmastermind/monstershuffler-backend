@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
 import { armorObject } from '@/modules/armor/armor.schema';
-import { bonusesObject, choiceRandomObject, statObject, speedsObject, choiceListObject, sensesObject, actionObject, imageObject, spellGroupObject, abilitiesBaseObject, abilitiesEnum } from '@/modules/schemas';
+import { bonusesObject, choiceRandomObject, statObject, speedsObject, choiceListObject, sensesObject, actionObject, imageObject, spellGroupObject, abilitiesBaseObject, abilitiesEnum, spellsObject } from '@/modules/schemas';
 
 
 
@@ -13,7 +13,7 @@ export const templateObject = z.object({
   pronouns: z.enum(['male','female','neutral','thing']).optional(),
   size: z.string().optional(),
   type: z.string().optional(),
-  swarm: z.boolean().optional(),
+  isSwarm: z.boolean().optional(),
   swarmSize: z.string().optional(),
   subtypes: z.array(statObject).optional(),
   // TODO: this method of defining the alignment doesn' work:
@@ -21,9 +21,7 @@ export const templateObject = z.object({
   // also: there were other types of alignment that I didn't handle
   // any Good/Neutral/Evil alignment (See Lich)
   alignment: z.tuple([z.number(), z.number(), z.number()]).optional(),
-  armor: z.array(
-    z.union([armorObject, choiceRandomObject])
-  ).optional(),
+  armor: z.union([armorObject, choiceRandomObject]).optional(),
   HD: z.number().optional(),
   speeds: speedsObject.optional(),
   abilitiesBase: abilitiesBaseObject.optional(),
@@ -34,16 +32,15 @@ export const templateObject = z.object({
   vulnerabilities: z.array(statObject).optional(),
   conditionImmunities: z.array(statObject).optional(),
   senses: sensesObject.optional(),
-  blind: z.boolean().optional(),
-  canspeak: z.boolean().optional(),
+  isBlind: z.boolean().optional(),
+  canSpeak: z.boolean().optional(),
   telepathy: z.string().optional(),
   languages: z.union([z.array(statObject), choiceRandomObject, choiceListObject]).optional(),
   actions: z.array(actionObject).optional(),
   bonuses: bonusesObject.optional(),
   spellCasting: abilitiesEnum.optional(),
-  spellSlots: z.array(spellGroupObject).optional(),
+  spells: spellsObject.optional(),
   // publication keys
-  //published: z.boolean().optional(),
   image: imageObject,
   searchTags: z.array(z.string()).optional(),
   environments: z.array(z.string()).optional(),

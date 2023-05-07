@@ -1,14 +1,12 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
 import { armorObject } from '@/modules/armor/armor.schema';
-import { spellGroupObject, bonusesObject, choiceRandomObject, statObject, speedsObject, choiceListObject, sensesObject, actionObject, imageObject, abilitiesEnum, } from '@/modules/schemas';
+import { spellGroupObject, bonusesObject, choiceRandomObject, statObject, speedsObject, choiceListObject, sensesObject, actionObject, imageObject, abilitiesEnum, spellsObject, } from '@/modules/schemas';
 
 
 export const classvariantObject = z.object({
   name: z.string(),
-  armor: z.array(
-    z.union([armorObject, choiceRandomObject])
-  ).optional(),
+  armor: z.union([armorObject, choiceRandomObject]).optional(),
   subtypes: z.array(statObject).optional(),
   speeds: speedsObject.optional(),
   savingThrows: z.array(statObject).optional(),
@@ -18,18 +16,16 @@ export const classvariantObject = z.object({
   vulnerabilities: z.array(statObject).optional(),
   conditionImmunities: z.array(statObject).optional(),
   senses: sensesObject.optional(),
-  blind: z.boolean().optional(),
-  canspeak: z.boolean().optional(),
+  isBlind: z.boolean().optional(),
+  canSpeak: z.boolean().optional(),
   telepathy: z.string().optional(),
   languages: z.union([z.array(statObject), choiceRandomObject, choiceListObject]).optional(),
   actions: z.array(actionObject).optional(),
   bonuses: bonusesObject.optional(),
-  spellCasting: abilitiesEnum.optional(),
-  spellSlots: z.array(spellGroupObject).optional(),
+  spells: spellsObject.optional(),
   // generator keys
   enableGenerator: z.boolean().optional(),
   // publication keys
-  //published: z.boolean().optional(),
   image: imageObject,
   searchTags: z.array(z.string()).optional(),
   environments: z.array(z.string()).optional(),

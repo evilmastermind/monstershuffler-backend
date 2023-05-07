@@ -24,28 +24,41 @@ export const BatchPayload = {
 };
 
 
+export const abilitiesEnum = z.enum(['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']);
+
+// lists of choices, and the chosenAlready array
+// will now be a list of objects with name and/or id
+// id is optional so that lists with custom entries can still be created
+export const choice = z.object({
+  id: z.number().optional(),
+  name: z.string(),
+});
+export type Choice = z.infer<typeof choice>;
 
 // object schemas
 export const choiceRandomObject = z.object({
   choice: z.object({
-    type: z.string(),
+    type: z.enum(['list', 'random']),
     field: z.string(),
     number: z.number(),
     result: z.string(),
-    source: z.enum(['actions','armor','backgrounds','bases','damagetypes','languages','names','professions','skills','spells','traits','voices','weapons']).optional(),
-    filtersObject: z.array(z.object({
+    source: z.enum(['objects','backgrounds','bases','damagetypes','languages','names','skills','traits','voices']),
+    objectType: z.number().optional(),
+    filters: z.array(z.object({
       keyName: z.string(),
       keyValues: z.array(z.string()),
-    })).optional(), 
+    })).optional(),
+    chosenAlready: z.array(choice).optional(),
   }),
 });
 export const choiceListObject = z.object({
   choice: z.object({
-    type: z.string(),
+    type: z.enum(['list', 'random']),
     number: z.number(),
-    list: z.array(z.string()),
-    repeatable: z.boolean().optional(),
-    chosenAlready: z.array(z.string()).optional(),
+    source: z.enum(['objects','backgrounds','bases','damagetypes','languages','names','skills','traits','voices']),
+    objectType: z.number().optional(),
+    list: z.array(choice),
+    isRepeatable: z.boolean().optional(),
   }),
 });
 
@@ -117,6 +130,12 @@ export const spellGroupObject = z.object({
   spells: z.union([z.array(spellIdNameObject), choiceRandomObject, choiceListObject]),
 }).strict();
 
+export const spellsObject = z.object({
+  hasSlots: z.boolean().optional(),
+  ability: abilitiesEnum.optional(),
+  groups: z.array(spellGroupObject).optional(),
+});
+
 export const spellObject = z.object({
   name: z.string().min(2),
   level: z.number(),
@@ -132,7 +151,6 @@ export const spellObject = z.object({
 }).strict();
 
 
-export const abilitiesEnum = z.enum(['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']);
 
 export const abilitiesBaseObject = z.object({
   STR: z.string().optional(),
@@ -272,12 +290,10 @@ export const userObject = z.object({
   gender: z.enum(['male','female','neutral','thing']).optional(),
   size: z.string().optional(),
   type: z.string().optional(),
-  swarm: z.boolean().optional(),
+  isSwarm: z.boolean().optional(),
   swarmSize: z.string().optional(),
   subtypes: z.array(statObject).optional(),
-  armor: z.array(
-    z.union([armorObject, choiceRandomObject])
-  ).optional(),
+  armor: z.union([armorObject, choiceRandomObject]).optional(),
   HD: z.number().optional(),
   speeds: speedsObject.optional(),
   abilitiesBase: abilitiesBaseObject.optional(),
@@ -288,16 +304,14 @@ export const userObject = z.object({
   vulnerabilities: z.array(statObject).optional(),
   conditionImmunities: z.array(statObject).optional(),
   senses: sensesObject.optional(),
-  blind: z.boolean().optional(),
-  canspeak: z.boolean().optional(),
+  isBlind: z.boolean().optional(),
+  canSpeak: z.boolean().optional(),
   telepathy: z.string().optional(),
   languages: z.union([z.array(statObject), choiceRandomObject, choiceListObject]).optional(),
   actions: z.array(actionObject).optional(),
   bonuses: bonusesObject.optional(),
-  spellCasting: abilitiesEnum.optional(),
-  spellSlots: z.array(spellGroupObject).optional(),
+  spells: spellsObject.optional(),
   // publication keys
-  //published: z.enum(['1','0']).optional(),
   image: imageObject,
   searchTags: z.array(z.string()).optional(),
   environments: z.array(z.string()).optional(),

@@ -2,6 +2,7 @@ import prisma from '@/utils/prisma';
 import { actionsdetails, Prisma } from '@prisma/client';
 import { isAdmin } from '@/modules/user/user.service';
 import { objects } from '@prisma/client';
+import { type Choice } from '@/modules/schemas';
 
 export async function countObjects() {
   const objectCount = await prisma.objects.count();
@@ -110,16 +111,15 @@ export async function getActionDetails(actionId: number) {
 ///////////////////////////////////
 
 // ["actions","armor","backgrounds","bases","damagetypes","languages","names","professions","skills","spells","traits","voices","weapons"]
-export async function getIdsFromNames(chosenAlready: string[], type: string) {
+export async function getIdsFromNames(chosenAlready: string[], type: string, objectType) {
   
   let table = 'objects';
-  let objecttype = 1;
   switch (type) {
   case 'actions':
-    objecttype = 101;
+    objectType = 101;
     break;
   case 'armor':
-    objecttype = 1002;
+    objectType = 1002;
     break;
   case 'languages':
     table = 'languages';
@@ -128,38 +128,51 @@ export async function getIdsFromNames(chosenAlready: string[], type: string) {
     table = 'skills';
     break;
   case 'weapons':
-    objecttype = 1001;
+    objectType = 1001;
     break;
   case 'spells':
-    objecttype = 102;
+    objectType = 102;
+    break;
+  case 'objects':
     break;
   default:
+    console.log('UNDEFINED TYPE DETECTED: ' + type);
     table = 'somethingwrongtomakethisfail';
     break;
   }
+
+
   
-  const newChosenAlready: number[] = [];
-  chosenAlready.forEach(async (name) => {
+  const newChosenAlready: Choice[] = [];
+  for(const name of chosenAlready) {
     if(table === 'objects') {
       const ids = await prisma.objects.findMany({
         select: {
           id: true,
         },
         where: {
-          name,
-          type: objecttype,
+          name: {
+            equals: name.trim(),
+            mode: 'insensitive',
+          },
+          type: objectType,
           userid: 0,
         }
       });
+      // console.log('ids:' + ids);
       if(ids.length > 0) {
-        newChosenAlready.push(ids[0].id);
+        newChosenAlready.push({ id: ids[0].id, name: name});
+      } else {
+        newChosenAlready.push({ name: name});
       }
     } else {
-      const ids = await prisma.$queryRaw`SELECT id FROM ${table} WHERE userid = 0 AND name = ${name}`;
-      if(ids?.length > 0) {
-        newChosenAlready.push(ids[0].id);
+      const ids = await prisma.$queryRawUnsafe(`SELECT id FROM monstershuffler.${table} WHERE LOWER(name) = LOWER('${name.trim()}')`);
+      if(ids.length > 0) {
+        newChosenAlready.push({ id: ids[0].id, name: name});
+      } else {
+        newChosenAlready.push({ name: name});
       }
     }
-  });
+  }
   return newChosenAlready;
 }

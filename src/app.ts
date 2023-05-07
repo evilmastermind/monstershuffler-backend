@@ -30,7 +30,7 @@ import { raceSchemas } from '@/modules/race/race.schema';
 // import { surnameSchemas } from '@/modules/surname/surname.schema';
 // import { templateSchemas } from '@/modules/template/template.schema';
 // import { traitSchemas } from '@/modules/trait/trait.schema';
-// import { userSchemas } from '@/modules/user/user.schema';
+import { userSchemas } from '@/modules/user/user.schema';
 // import { weaponSchemas } from '@/modules/weapon/weapon.schema';
 // routes
 // import actionRoutes from '@/modules/action/action.route';
@@ -53,11 +53,11 @@ import raceRoutes from '@/modules/race/race.route';
 // import surnameRoutes from '@/modules/surname/surname.route';
 // import templateRoutes from '@/modules/template/template.route';
 // import traitRoutes from '@/modules/trait/trait.route';
-// import userRoutes from '@/modules/user/user.route';
+import userRoutes from '@/modules/user/user.route';
 // import weaponRoutes from '@/modules/weapon/weapon.route';
 // import { hashPassword } from '@/utils/hash';
 // utility routes
-// import converterRoutes from '@/modules/converter/converter.route';
+import converterRoutes from '@/modules/converter/converter.route';
 
 dotenv.config();
 export const server = Fastify({ logger: true});
@@ -140,7 +140,7 @@ async function main() {
       // ...surnameSchemas,
       // ...templateSchemas,
       // ...traitSchemas,
-      // ...userSchemas,
+      ...userSchemas,
       // ...weaponSchemas
     ];
 
@@ -159,7 +159,7 @@ async function main() {
             version,
           },
           tags: [
-            // { name: 'users', description: 'The users\' account. ' },
+            { name: 'users', description: 'The users\' account. ' },
             // { name: 'actions', description: 'Retrieve the official actions of srd monsters, classes and races to build your creatures faster. Save your custom actions and share them with other users.' },
             // { name: 'armor', description: 'The different types of armor that can be worn by characters.' },
             // { name: 'backgrounds', description: 'Tiny snippets of lore to add to your characters for roleplay purposes.' },
@@ -210,10 +210,10 @@ async function main() {
     // server.register(surnameRoutes, { prefix: 'api/surnames' });
     // server.register(templateRoutes, { prefix: 'api/templates' });
     // server.register(traitRoutes, { prefix: 'api/traits' });
-    // server.register(userRoutes, { prefix: 'api/users' });
+    server.register(userRoutes, { prefix: 'api/users' });
     // server.register(weaponRoutes, { prefix: 'api/weapons' });
     // utility routes
-    // server.register(converterRoutes, { prefix: 'api/converter' });
+    server.register(converterRoutes, { prefix: 'api/converter' });
     
     await server.listen({ port: 3000, host: '0.0.0.0' });
     console.info('////////////////////////////////////////');

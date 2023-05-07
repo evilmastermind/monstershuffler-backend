@@ -1,6 +1,6 @@
 // @ts-nocheck 
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { countObjects, getFirstObjectId, getObjectsWithPagination, saveObject,getSpellIdFromName, getActionDetails } from './converter.service';
+import { countObjects, getFirstObjectId, getObjectsWithPagination, saveObject,getSpellIdFromName, getIdsFromNames, getActionDetails } from './converter.service';
 import { handleError } from '@/utils/errors';
 import { objects } from '@prisma/client';
 import { z } from 'zod';
@@ -28,7 +28,12 @@ import { z } from 'zod';
 /* TODO 2023/03/05: 
 - race, racevariant, class, etc. (including weapons, spells, armor, etc.) must
   be converted to the new format (enums, numbers, etc) inside their schema.ts
-- check in schemas.ts if all fields have been fixed
+    V conver enums to numbers
+    V convert strings to numbers
+    V rename gender to pronouns
+    V add a levelMin to (skills, savingThrows, bonuses, languages, etc.)
+
+V check in schemas.ts if all fields have been fixed
 - continue filling convertObject(...) with all missing types
 - test
 - ???
@@ -46,12 +51,12 @@ export async function convertObjectsHandler(request, reply) {
     while (objectsProcessed < (totalObjects - 1)) {
       const objects = await getObjectsWithPagination(id, cursor, pageSize );
       objectsProcessed += objects.length;
-      console.log(`${objectsProcessed} of ${totalObjects} objects processed.}`);
+      // console.log(`${objectsProcessed} of ${totalObjects} objects processed.}`);
       cursor = objects[objects.length - 1]?.id;
-      objects.forEach( object => {
-        convertObject(object);
-        // TODO: saveObject(object);
-      });
+      for (const object of objects) {
+        await convertObject(object);
+        await saveObject(object);
+      }
     }
     return reply.code(200).send('OK');
   } catch (error) {
@@ -59,7 +64,7 @@ export async function convertObjectsHandler(request, reply) {
   }
 }
 
-function convertObject(object) {
+async function convertObject(object) {
   const objectJSON = object.object;
 
   if (!objectJSON || typeof objectJSON !== 'object')
@@ -69,7 +74,7 @@ function convertObject(object) {
 
   switch (object.type) {
   case 1:
-    object.object = convertCharacter(objectJSON);
+    convertCharacter(objectJSON, object.id);
     break;
   case 2:
     convertNonCharacter(objectJSON, object.id);
@@ -84,7 +89,7 @@ function convertObject(object) {
     convertNonCharacter(objectJSON, object.id);
     break;
   case 101:
-    object.object = convertAction(objectJSON, object.id);
+    object.object = await convertAction(objectJSON, object.id);
     break;
   case 102:
     // convertSpell(object);
@@ -96,10 +101,10 @@ function convertObject(object) {
     // convertArmor(object);
     break;
   case 10002:
-    // convertRaceVariant(object);
+    convertNonCharacter(objectJSON, object.id);
     break;
   case 10003:
-    // convertClassVariant(object);
+    convertNonCharacter(objectJSON, object.id);
     break;
   default:
     break;
@@ -132,12 +137,31 @@ function convertCharacter(object, id) {
   if (Object.hasOwn(object, 'profession')) {
     convertCharacterObject(object.profession, id);
   }
-  return object;
 }
 
-function convertCharacterObject(object, id) {
+async function convertCharacterObject(object, id) {
   addStatObjects(object);
-  fixEnums(object, ['swarm','blind','canspeak', 'enableGenerator']);
+  // enums
+  if (Object.hasOwn(object, 'swarm')) {
+    object.isSwarm = booleanEnumToBoolean(object['swarm'] || '0');
+    delete object.swarm;
+  }
+  if (Object.hasOwn(object, 'blind')) {
+    object.isBlind = booleanEnumToBoolean(object['blind'] || '0');
+    delete object.blind;
+  }
+  if (Object.hasOwn(object, 'canspeak')) {
+    object.canSpeak = booleanEnumToBoolean(object['canspeak'] || '0');
+    delete object.canspeak;
+  }
+  if (Object.hasOwn(object, 'enableGenerator')) {
+    object.enableGenerator = booleanEnumToBoolean(object['enableGenerator'] || '0');
+  }
+  // deleting unused fields
+  if (Object.hasOwn(object, 'published')) {
+    delete object.published;
+  }
+
   // gender => pronouns
   if (Object.hasOwn(object, 'gender')) {
     object.pronouns = object.gender;
@@ -172,13 +196,14 @@ function convertCharacterObject(object, id) {
   // armor random choice fix
   if (Object.hasOwn(object, 'armor') && Array.isArray(object.armor)) {
     const newArray = [];
-    object.armor?.forEach(armor => {
+    for(const armor of object.armor) {
       if (Object.hasOwn(armor, 'choice')) {
-        convertChoiceRandom(armor.choice, 'armor');
+        await convertChoiceRandom(armor, 'armor');
       }
       newArray.push(armor);
-    });
-    object.armor = newArray;
+    }
+    // armor is now an object
+    object.armor = newArray[0];
   }
 
   // skills random choice fix
@@ -187,7 +212,7 @@ function convertCharacterObject(object, id) {
       typeof object.languages === 'object' &&  
       Object.hasOwn(object.skills, 'choice')
   ) {
-    convertChoiceRandom(object.skills.choice, 'skills');
+    await convertChoiceRandom(object.skills, 'skills');
   }
 
   // languages random choice fix
@@ -196,32 +221,56 @@ function convertCharacterObject(object, id) {
     typeof object.languages === 'object' &&  
     Object.hasOwn(object.languages, 'choice')
   ) {
-    convertChoiceRandom(object.languages.choice, 'languages');
+    await convertChoiceRandom(object.languages, 'languages');
   }
   // actions
   if (Object.hasOwn(object, 'actions')) {
     const newArray = [];
-    object.actions?.forEach(action => {
-      newArray.push(convertAction(action, id));
-    });
+    for(const action of object.actions) {
+      newArray.push( await convertAction(action, id));
+    }
     object.actions = newArray;
   }
-  // spells
+  // spells ids
   if (Object.hasOwn(object, 'spellSlots')) {
-    object.spellSlots = addIdsToSpells(object.spellSlots );
+    object.spellSlots = await addIdsToSpells(object.spellSlots );
+    // spells object
+    object.spells = {
+      hasSlots: false,
+      ability: object.spellCasting || 'CHA',
+      groups: object.spellSlots
+    };
+    delete object.spellSlots;
+    delete object.spellCasting;
+  }
+  // alignment
+  if (Object.hasOwn(object, 'alignment')) {
+    object.alignment = convertAlignment(object.alignment);
+  }
+
+  //nameType (for races)
+  if (Object.hasOwn(object, 'nameType')) {
+    object.nameType = [object.nameType];
   }
 }
 
+function convertAlignment(alignment) {
+  const alignmentInt = alignment.map(string => parseFloat(string));
+  alignmentInt.push(0);
+  return alignmentInt;
+}
+
 async function addIdsToSpells(spellSlots) {
-  spellSlots?.forEach(spellSlot => {
+  for (const spellSlot of spellSlots) {
     if(Object.hasOwn(spellSlot, 'spells') && Array.isArray(spellSlot.spells)) {
       const newArray = [];
-      spellSlot.spell.forEach(spell => {
+      for( const spell of spellSlot.spells) {
+        const id = await getSpellIdFromName(spell);
         newArray.push({
-          id: await getSpellIdFromName(spell),
+          id,
           name: spell
         });
-      });
+      }
     } else if (
       Object.hasOwn(spellSlot, 'spells') &&
       typeof spellSlot.spells === 'object' &&  
@@ -229,11 +278,10 @@ async function addIdsToSpells(spellSlots) {
     ) {
       // replace chosenAlready
       // fix random choice
-      spellSlot.spells.forEach(spell => {
-        spell.id = await getSpellIdFromName(spell.name);
-      });
+      await convertChoiceRandom(spellSlot.spells, 'spells');
     }
-  });
+  }
+  return spellSlots;
 }
 
 function addStatObjects(object) {
@@ -303,14 +351,6 @@ function addStatObjects(object) {
   }
 }
 
-function fixEnums(object, enums) {
-  enums.forEach(enumName => {
-    if (Object.hasOwn(object, enumName)) {
-      object[enumName] = booleanEnumToBoolean(object[enumName] || '0');
-    }
-  });
-}
-
 function convertStatToStatObject(string) {
   return {
     value: string,
@@ -343,36 +383,22 @@ async function convertAction(object, id) {
 
   // (random actions)
   if (Object.hasOwn(action.variants[0], 'choice')) {
-    // replacing filters with filtersObject (now actions are inside Objects)
-    if (Object.hasOwn(action.variants[0].choice, 'filters')) {
-      action.variants[0].choice.filtersObject = action.variants[0].choice.filters;
-      deleteaction.variants[0].choice.filters;
-    }
-    convertChoiceRandom(attack.attributes.choice, 'actions');
+    await convertChoiceRandom(action.variants[0], 'actions');
   }
-  
-  action.variants[0].attacks?.forEach(attack => {
-    // (attacks in actions) replaceName conversion to boolean for Attacks
-    attack.replaceName = booleanEnumToBoolean(attack?.replaceName || '0');
-    // (attacks in actions) conversion of choiceRandomObject if present
-    if (Object.hasOwn(attack.attributes, 'choice')) {
-      convertChoiceRandom(attack.attributes.choice, 'weapons');
+  if (Object.hasOwn(action.variants[0], 'attacks')) {
+    for (const attack of action.variants[0].attacks) {
+      // (attacks in actions) replaceName conversion to boolean for Attacks
+      attack.replaceName = booleanEnumToBoolean(attack?.replaceName || '0');
+      // (attacks in actions) conversion of choiceRandomObject if present
+      if (Object.hasOwn(attack.attributes, 'choice')) {
+        await convertChoiceRandom(attack.attributes, 'weapons');
+      }
     }
-  });
-
-  // retrieving the details of the action
-  const actionDetails = await getActionDetails(id);
-  action.name = actionDetails.name;
-  action.type = actionDetails.actiontype;
-  action.subtype = actionDetails.subtype;
-  action.source = actionDetails.source;
-  action.tags = actionDetails.tags;
-
-  console.log(action);
+  }
   return action;
 }
 
-function convertChoiceRandom(object,type) {
+async function convertChoiceRandom(object,type) {
   // filters conversion (keyName, keyValues)
   if (Object.hasOwn(object.choice, 'filtersObject')) {
     const filters = object.choice.filtersObject;
@@ -387,8 +413,10 @@ function convertChoiceRandom(object,type) {
       }
       newFilters.push(newFilter);
     }
-    object.choice.filtersObject = newFilters;
-    console.log(object);
+    // renaming filtersObject to filters,
+    // since each table will now have its own choice solver
+    object.choice.filters = newFilters;
+    delete object.choice.filtersObject;
   } else if (Object.hasOwn(object.choice, 'filters')) {
     const filters = object.choice.filters;
     const newFilters = [];
@@ -403,39 +431,46 @@ function convertChoiceRandom(object,type) {
       newFilters.push(newFilter);
     }
     object.choice.filters = newFilters;
-    console.log(object);
   }
 
+  switch (type) {
+  case 'actions':
+    object.choice.source = 'objects';
+    object.choice.objectType = 101;
+    break;
+  case 'armor':
+    object.choice.source = 'objects';
+    object.choice.objectType = 1002;
+    break;
+  case 'weapons':
+    object.choice.source = 'objects';
+    object.choice.objectType = 1001;
+    break;
+  case 'spells':
+    object.choice.source = 'objects';
+    object.choice.objectType = 102;
+    break;
+  case 'skills':
+  case 'languages':
+    object.choice.source = type;
+    break;
+  }
 
   // replacing 'chosenAlready' if present
   if (Object.hasOwn(object.choice, 'chosenAlready')) {
-    object.choice.chosenAlready = getIdsFromNames(object.choice.chosenAlready, type);
+    object.choice.chosenAlready = await getIdsFromNames(object.choice.chosenAlready, object.choice.source, object.choice?.objectType);
   }
 
-  // adding objecttype if type is object
-  if (object.choice.type === 'random') {
-    switch (type) {
-    case 'actions':
-      object.choice.source = 'objects';
-      object.choice.objectType = 101;
-      break;
-    case 'armor':
-      object.choice.source = 'objects';
-      object.choice.objectType = 1002;
-      break;
-    case 'weapons':
-      object.choice.source = 'objects';
-      object.choice.objectType = 1001;
-      break;
-    case 'spells':
-      object.choice.source = 'objects';
-      object.choice.objectType = 102;
-      break;
-    }
+  // replacing 'list' if present
+  if (Object.hasOwn(object.choice, 'list')) {
+    object.choice.list = await getIdsFromNames(object.choice.list, object.choice.source, object.choice?.objectType);
   }
+
+
   // repeatable conversion to boolean
   if (Object.hasOwn(object.choice, 'repeatable')) {
-    object.choice.repeatable = booleanEnumToBoolean(object.choice.repeatable);
+    object.choice.isRepeatable = booleanEnumToBoolean(object.choice.repeatable);
+    delete object.choice.repeatable;
   }
   // some fields in choicceRandomObject and choiceListObject must be converted from string to number
   if (Object.hasOwn(object.choice, 'number')) {

@@ -1,6 +1,11 @@
 import prisma from '@/utils/prisma';
 import { createSpellInput, getSpellListInput, updateSpellInput } from './spell.schema';
 
+// TODO: spells will be stored with their id and name inside objects
+// this means that if the spell's name changes, it will have to be updated in every object that uses it
+// I need to create an "update spell names" button in the editor, and maybe retrieve the new spell names from the database
+// when an object is loaded... and maybe allow users to use shared spells only if they copy them into their own folders
+
 export async function createSpell(userid: number, input: createSpellInput) {
   const { object, game, name }  = input;
 

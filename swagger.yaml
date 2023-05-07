@@ -17,92 +17,104 @@ components:
                 name:
                   type: string
                 armor:
-                  type: array
-                  items:
-                    anyOf:
-                      - type: object
-                        properties:
-                          AC:
-                            type: string
-                          name:
-                            type: string
-                            minLength: 2
-                          cost:
-                            type: string
-                          type:
-                            type: string
-                            enum:
-                              - light
-                              - medium
-                              - heavy
-                          maxDex:
-                            type: string
-                          minStr:
-                            type: string
-                          weight:
-                            type: string
-                          stealthDis:
-                            type: string
-                            enum:
-                              - "0"
-                              - "1"
-                        required:
-                          - AC
-                          - name
-                        additionalProperties: false
-                      - type: object
-                        properties:
-                          choice:
-                            type: object
-                            properties:
-                              type:
-                                type: string
-                              field:
-                                type: string
-                              number:
-                                type: number
-                              result:
-                                type: string
-                              source:
-                                type: string
-                                enum:
-                                  - actions
-                                  - armor
-                                  - backgrounds
-                                  - bases
-                                  - damagetypes
-                                  - languages
-                                  - names
-                                  - professions
-                                  - skills
-                                  - spells
-                                  - traits
-                                  - voices
-                                  - weapons
-                              filtersObject:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    keyName:
+                  anyOf:
+                    - type: object
+                      properties:
+                        AC:
+                          type: string
+                        name:
+                          type: string
+                          minLength: 2
+                        cost:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                            - light
+                            - medium
+                            - heavy
+                        maxDex:
+                          type: string
+                        minStr:
+                          type: string
+                        weight:
+                          type: string
+                        stealthDis:
+                          type: string
+                          enum:
+                            - "0"
+                            - "1"
+                      required:
+                        - AC
+                        - name
+                      additionalProperties: false
+                    - type: object
+                      properties:
+                        choice:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                                - list
+                                - random
+                            field:
+                              type: string
+                            number:
+                              type: number
+                            result:
+                              type: string
+                            source:
+                              type: string
+                              enum:
+                                - objects
+                                - backgrounds
+                                - bases
+                                - damagetypes
+                                - languages
+                                - names
+                                - skills
+                                - traits
+                                - voices
+                            objectType:
+                              type: number
+                            filters:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  keyName:
+                                    type: string
+                                  keyValues:
+                                    type: array
+                                    items:
                                       type: string
-                                    keyValues:
-                                      type: array
-                                      items:
-                                        type: string
-                                  required:
-                                    - keyName
-                                    - keyValues
-                                  additionalProperties: false
-                            required:
-                              - type
-                              - field
-                              - number
-                              - result
-                            additionalProperties: false
-                        required:
-                          - choice
-                        additionalProperties: false
+                                required:
+                                  - keyName
+                                  - keyValues
+                                additionalProperties: false
+                            chosenAlready:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: number
+                                  name:
+                                    type: string
+                                required:
+                                  - name
+                                additionalProperties: false
+                          required:
+                            - type
+                            - field
+                            - number
+                            - result
+                            - source
+                          additionalProperties: false
+                      required:
+                        - choice
+                      additionalProperties: false
                 subtypes:
                   type: array
                   items:
@@ -143,7 +155,7 @@ components:
                         $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
                           s/object/properties/subtypes/items"
                     - $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
-                        s/object/properties/armor/items/anyOf/1"
+                        s/object/properties/armor/anyOf/1"
                     - type: object
                       properties:
                         choice:
@@ -151,21 +163,37 @@ components:
                           properties:
                             type:
                               type: string
+                              enum:
+                                - list
+                                - random
                             number:
+                              type: number
+                            source:
+                              type: string
+                              enum:
+                                - objects
+                                - backgrounds
+                                - bases
+                                - damagetypes
+                                - languages
+                                - names
+                                - skills
+                                - traits
+                                - voices
+                            objectType:
                               type: number
                             list:
                               type: array
                               items:
-                                type: string
-                            repeatable:
+                                $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
+                                  s/object/properties/armor/anyOf/1/properties/\
+                                  choice/properties/chosenAlready/items"
+                            isRepeatable:
                               type: boolean
-                            chosenAlready:
-                              type: array
-                              items:
-                                type: string
                           required:
                             - type
                             - number
+                            - source
                             - list
                           additionalProperties: false
                       required:
@@ -203,16 +231,10 @@ components:
                     truesight:
                       type: string
                   additionalProperties: false
-                blind:
-                  type: string
-                  enum:
-                    - "1"
-                    - "0"
-                canspeak:
-                  type: string
-                  enum:
-                    - "1"
-                    - "0"
+                isBlind:
+                  type: boolean
+                canSpeak:
+                  type: boolean
                 telepathy:
                   type: string
                 languages:
@@ -222,7 +244,7 @@ components:
                         $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
                           s/object/properties/subtypes/items"
                     - $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
-                        s/object/properties/armor/items/anyOf/1"
+                        s/object/properties/armor/anyOf/1"
                     - $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
                         s/object/properties/skills/anyOf/2"
                 actions:
@@ -391,8 +413,7 @@ components:
                                           - properties
                                         additionalProperties: false
                                       - $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
-                                          s/object/properties/armor/items/anyOf\
-                                          /1"
+                                          s/object/properties/armor/anyOf/1"
                                   enchantment:
                                     type: object
                                     properties:
@@ -587,53 +608,56 @@ components:
                       $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
                         s/object/properties/bonuses/properties/HPBonus"
                   additionalProperties: false
-                spellCasting:
-                  $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
-                    s/object/properties/actions/items/properties/variants/items\
-                    /properties/ability"
-                spellSlots:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      tag:
-                        type: string
-                      levelMin:
-                        type: string
-                      timesDay:
-                        type: string
-                      timesDayMax:
-                        type: string
-                      spells:
-                        anyOf:
-                          - type: array
-                            items:
-                              type: object
-                              properties:
-                                id:
-                                  type: string
-                                name:
-                                  type: string
-                              required:
-                                - id
-                                - name
-                              additionalProperties: false
-                          - $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
-                              s/object/properties/armor/items/anyOf/1"
-                          - $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
-                              s/object/properties/skills/anyOf/2"
-                    required:
-                      - tag
-                      - levelMin
-                      - timesDay
-                      - timesDayMax
-                      - spells
-                    additionalProperties: false
+                spells:
+                  type: object
+                  properties:
+                    hasSlots:
+                      type: boolean
+                    ability:
+                      $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
+                        s/object/properties/actions/items/properties/variants/i\
+                        tems/properties/ability"
+                    groups:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          tag:
+                            type: string
+                          levelMin:
+                            type: string
+                          timesDay:
+                            type: string
+                          timesDayMax:
+                            type: string
+                          spells:
+                            anyOf:
+                              - type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: string
+                                    name:
+                                      type: string
+                                  required:
+                                    - id
+                                    - name
+                                  additionalProperties: false
+                              - $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
+                                  s/object/properties/armor/anyOf/1"
+                              - $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
+                                  s/object/properties/skills/anyOf/2"
+                        required:
+                          - tag
+                          - levelMin
+                          - timesDay
+                          - timesDayMax
+                          - spells
+                        additionalProperties: false
+                  additionalProperties: false
                 enableGenerator:
-                  type: string
-                  enum:
-                    - "1"
-                    - "0"
+                  type: boolean
                 image:
                   type: object
                   properties:
@@ -757,8 +781,12 @@ components:
             object:
               $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
                 s/object"
+            id:
+              $ref: "#/components/schemas/classSchemas/properties/getClassWithVariantsListRes\
+                ponseSchema/properties/list/items/properties/id"
           required:
             - object
+            - id
           additionalProperties: false
       required:
         - updateClassSchema
@@ -783,92 +811,112 @@ components:
                 workplace:
                   type: string
                 armor:
-                  type: array
-                  items:
-                    anyOf:
-                      - type: object
-                        properties:
-                          AC:
-                            type: string
-                          name:
-                            type: string
-                            minLength: 2
-                          cost:
-                            type: string
-                          type:
-                            type: string
-                            enum:
-                              - light
-                              - medium
-                              - heavy
-                          maxDex:
-                            type: string
-                          minStr:
-                            type: string
-                          weight:
-                            type: string
-                          stealthDis:
-                            type: string
-                            enum:
-                              - "0"
-                              - "1"
-                        required:
-                          - AC
-                          - name
-                        additionalProperties: false
-                      - type: object
-                        properties:
-                          choice:
-                            type: object
-                            properties:
-                              type:
-                                type: string
-                              field:
-                                type: string
-                              number:
-                                type: number
-                              result:
-                                type: string
-                              source:
-                                type: string
-                                enum:
-                                  - actions
-                                  - armor
-                                  - backgrounds
-                                  - bases
-                                  - damagetypes
-                                  - languages
-                                  - names
-                                  - professions
-                                  - skills
-                                  - spells
-                                  - traits
-                                  - voices
-                                  - weapons
-                              filtersObject:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    keyName:
+                  anyOf:
+                    - type: object
+                      properties:
+                        AC:
+                          type: string
+                        name:
+                          type: string
+                          minLength: 2
+                        cost:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                            - light
+                            - medium
+                            - heavy
+                        maxDex:
+                          type: string
+                        minStr:
+                          type: string
+                        weight:
+                          type: string
+                        stealthDis:
+                          type: string
+                          enum:
+                            - "0"
+                            - "1"
+                      required:
+                        - AC
+                        - name
+                      additionalProperties: false
+                    - type: object
+                      properties:
+                        choice:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                                - list
+                                - random
+                            field:
+                              type: string
+                            number:
+                              type: number
+                            result:
+                              type: string
+                            source:
+                              type: string
+                              enum:
+                                - objects
+                                - backgrounds
+                                - bases
+                                - damagetypes
+                                - languages
+                                - names
+                                - skills
+                                - traits
+                                - voices
+                            objectType:
+                              type: number
+                            filters:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  keyName:
+                                    type: string
+                                  keyValues:
+                                    type: array
+                                    items:
                                       type: string
-                                    keyValues:
-                                      type: array
-                                      items:
-                                        type: string
-                                  required:
-                                    - keyName
-                                    - keyValues
-                                  additionalProperties: false
-                            required:
-                              - type
-                              - field
-                              - number
-                              - result
-                            additionalProperties: false
-                        required:
-                          - choice
-                        additionalProperties: false
+                                required:
+                                  - keyName
+                                  - keyValues
+                                additionalProperties: false
+                            chosenAlready:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: number
+                                  name:
+                                    type: string
+                                required:
+                                  - name
+                                additionalProperties: false
+                          required:
+                            - type
+                            - field
+                            - number
+                            - result
+                            - source
+                          additionalProperties: false
+                      required:
+                        - choice
+                      additionalProperties: false
+                alignment:
+                  type: array
+                  minItems: 3
+                  maxItems: 3
+                  items:
+                    - type: number
+                    - type: number
+                    - type: number
                 subtypes:
                   type: array
                   items:
@@ -909,7 +957,7 @@ components:
                         $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
                           /properties/object/properties/subtypes/items"
                     - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                        /properties/object/properties/armor/items/anyOf/1"
+                        /properties/object/properties/armor/anyOf/1"
                     - type: object
                       properties:
                         choice:
@@ -917,21 +965,38 @@ components:
                           properties:
                             type:
                               type: string
+                              enum:
+                                - list
+                                - random
                             number:
+                              type: number
+                            source:
+                              type: string
+                              enum:
+                                - objects
+                                - backgrounds
+                                - bases
+                                - damagetypes
+                                - languages
+                                - names
+                                - skills
+                                - traits
+                                - voices
+                            objectType:
                               type: number
                             list:
                               type: array
                               items:
-                                type: string
-                            repeatable:
+                                $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
+                                  /properties/object/properties/armor/anyOf/1/p\
+                                  roperties/choice/properties/chosenAlready/ite\
+                                  ms"
+                            isRepeatable:
                               type: boolean
-                            chosenAlready:
-                              type: array
-                              items:
-                                type: string
                           required:
                             - type
                             - number
+                            - source
                             - list
                           additionalProperties: false
                       required:
@@ -969,16 +1034,10 @@ components:
                     truesight:
                       type: string
                   additionalProperties: false
-                blind:
-                  type: string
-                  enum:
-                    - "1"
-                    - "0"
-                canspeak:
-                  type: string
-                  enum:
-                    - "1"
-                    - "0"
+                isBlind:
+                  type: boolean
+                canSpeak:
+                  type: boolean
                 telepathy:
                   type: string
                 languages:
@@ -988,7 +1047,7 @@ components:
                         $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
                           /properties/object/properties/subtypes/items"
                     - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                        /properties/object/properties/armor/items/anyOf/1"
+                        /properties/object/properties/armor/anyOf/1"
                     - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
                         /properties/object/properties/skills/anyOf/2"
                 actions:
@@ -1159,7 +1218,7 @@ components:
                                             additionalProperties: false
                                           - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
                                               /properties/object/properties/arm\
-                                              or/items/anyOf/1"
+                                              or/anyOf/1"
                                       enchantment:
                                         type: object
                                         properties:
@@ -1191,7 +1250,7 @@ components:
                           - variants
                         additionalProperties: false
                       - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                          /properties/object/properties/armor/items/anyOf/1"
+                          /properties/object/properties/armor/anyOf/1"
                 bonuses:
                   type: object
                   properties:
@@ -1407,53 +1466,56 @@ components:
                         /properties/object/properties/bonuses/properties/HPBonu\
                         s"
                   additionalProperties: false
-                spellCasting:
-                  $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                    /properties/object/properties/actions/items/anyOf/0/propert\
-                    ies/variants/items/properties/ability"
-                spellSlots:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      tag:
-                        type: string
-                      levelMin:
-                        type: string
-                      timesDay:
-                        type: string
-                      timesDayMax:
-                        type: string
-                      spells:
-                        anyOf:
-                          - type: array
-                            items:
-                              type: object
-                              properties:
-                                id:
-                                  type: string
-                                name:
-                                  type: string
-                              required:
-                                - id
-                                - name
-                              additionalProperties: false
-                          - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                              /properties/object/properties/armor/items/anyOf/1"
-                          - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                              /properties/object/properties/skills/anyOf/2"
-                    required:
-                      - tag
-                      - levelMin
-                      - timesDay
-                      - timesDayMax
-                      - spells
-                    additionalProperties: false
+                spells:
+                  type: object
+                  properties:
+                    hasSlots:
+                      type: boolean
+                    ability:
+                      $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
+                        /properties/object/properties/actions/items/anyOf/0/pro\
+                        perties/variants/items/properties/ability"
+                    groups:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          tag:
+                            type: string
+                          levelMin:
+                            type: string
+                          timesDay:
+                            type: string
+                          timesDayMax:
+                            type: string
+                          spells:
+                            anyOf:
+                              - type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: string
+                                    name:
+                                      type: string
+                                  required:
+                                    - id
+                                    - name
+                                  additionalProperties: false
+                              - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
+                                  /properties/object/properties/armor/anyOf/1"
+                              - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
+                                  /properties/object/properties/skills/anyOf/2"
+                        required:
+                          - tag
+                          - levelMin
+                          - timesDay
+                          - timesDayMax
+                          - spells
+                        additionalProperties: false
+                  additionalProperties: false
                 enableGenerator:
-                  type: string
-                  enum:
-                    - "1"
-                    - "0"
+                  type: boolean
               required:
                 - name
                 - femaleName
@@ -1471,10 +1533,13 @@ components:
                 - other
             description:
               type: string
+            game:
+              type: number
           required:
             - object
             - age
             - description
+            - game
           additionalProperties: false
         getProfessionListResponseSchema:
           type: object
@@ -1505,8 +1570,12 @@ components:
             object:
               $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
                 /properties/object"
+            id:
+              $ref: "#/components/schemas/professionSchemas/properties/getProfessionListRespo\
+                nseSchema/properties/list/items/properties/id"
           required:
             - object
+            - id
           additionalProperties: false
       required:
         - createProfessionSchema
@@ -1526,7 +1595,7 @@ components:
               properties:
                 name:
                   type: string
-                gender:
+                pronouns:
                   type: string
                   enum:
                     - male
@@ -1537,11 +1606,8 @@ components:
                   type: string
                 type:
                   type: string
-                swarm:
-                  type: string
-                  enum:
-                    - "1"
-                    - "0"
+                isSwarm:
+                  type: boolean
                 swarmSize:
                   type: string
                 subtypes:
@@ -1558,98 +1624,111 @@ components:
                     additionalProperties: false
                 alignment:
                   type: array
-                  minItems: 2
-                  maxItems: 2
+                  minItems: 3
+                  maxItems: 3
                   items:
-                    - type: string
-                    - type: string
+                    - type: number
+                    - type: number
+                    - type: number
                 armor:
-                  type: array
-                  items:
-                    anyOf:
-                      - type: object
-                        properties:
-                          AC:
-                            type: string
-                          name:
-                            type: string
-                            minLength: 2
-                          cost:
-                            type: string
-                          type:
-                            type: string
-                            enum:
-                              - light
-                              - medium
-                              - heavy
-                          maxDex:
-                            type: string
-                          minStr:
-                            type: string
-                          weight:
-                            type: string
-                          stealthDis:
-                            type: string
-                            enum:
-                              - "0"
-                              - "1"
-                        required:
-                          - AC
-                          - name
-                        additionalProperties: false
-                      - type: object
-                        properties:
-                          choice:
-                            type: object
-                            properties:
-                              type:
-                                type: string
-                              field:
-                                type: string
-                              number:
-                                type: number
-                              result:
-                                type: string
-                              source:
-                                type: string
-                                enum:
-                                  - actions
-                                  - armor
-                                  - backgrounds
-                                  - bases
-                                  - damagetypes
-                                  - languages
-                                  - names
-                                  - professions
-                                  - skills
-                                  - spells
-                                  - traits
-                                  - voices
-                                  - weapons
-                              filtersObject:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    keyName:
+                  anyOf:
+                    - type: object
+                      properties:
+                        AC:
+                          type: string
+                        name:
+                          type: string
+                          minLength: 2
+                        cost:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                            - light
+                            - medium
+                            - heavy
+                        maxDex:
+                          type: string
+                        minStr:
+                          type: string
+                        weight:
+                          type: string
+                        stealthDis:
+                          type: string
+                          enum:
+                            - "0"
+                            - "1"
+                      required:
+                        - AC
+                        - name
+                      additionalProperties: false
+                    - type: object
+                      properties:
+                        choice:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                                - list
+                                - random
+                            field:
+                              type: string
+                            number:
+                              type: number
+                            result:
+                              type: string
+                            source:
+                              type: string
+                              enum:
+                                - objects
+                                - backgrounds
+                                - bases
+                                - damagetypes
+                                - languages
+                                - names
+                                - skills
+                                - traits
+                                - voices
+                            objectType:
+                              type: number
+                            filters:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  keyName:
+                                    type: string
+                                  keyValues:
+                                    type: array
+                                    items:
                                       type: string
-                                    keyValues:
-                                      type: array
-                                      items:
-                                        type: string
-                                  required:
-                                    - keyName
-                                    - keyValues
-                                  additionalProperties: false
-                            required:
-                              - type
-                              - field
-                              - number
-                              - result
-                            additionalProperties: false
-                        required:
-                          - choice
-                        additionalProperties: false
+                                required:
+                                  - keyName
+                                  - keyValues
+                                additionalProperties: false
+                            chosenAlready:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: number
+                                  name:
+                                    type: string
+                                required:
+                                  - name
+                                additionalProperties: false
+                          required:
+                            - type
+                            - field
+                            - number
+                            - result
+                            - source
+                          additionalProperties: false
+                      required:
+                        - choice
+                      additionalProperties: false
                 HD:
                   type: number
                 abilitiesLimit:
@@ -1682,7 +1761,7 @@ components:
                         $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
                           object/properties/subtypes/items"
                     - $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
-                        object/properties/armor/items/anyOf/1"
+                        object/properties/armor/anyOf/1"
                     - type: object
                       properties:
                         choice:
@@ -1690,21 +1769,37 @@ components:
                           properties:
                             type:
                               type: string
+                              enum:
+                                - list
+                                - random
                             number:
+                              type: number
+                            source:
+                              type: string
+                              enum:
+                                - objects
+                                - backgrounds
+                                - bases
+                                - damagetypes
+                                - languages
+                                - names
+                                - skills
+                                - traits
+                                - voices
+                            objectType:
                               type: number
                             list:
                               type: array
                               items:
-                                type: string
-                            repeatable:
+                                $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
+                                  object/properties/armor/anyOf/1/properties/ch\
+                                  oice/properties/chosenAlready/items"
+                            isRepeatable:
                               type: boolean
-                            chosenAlready:
-                              type: array
-                              items:
-                                type: string
                           required:
                             - type
                             - number
+                            - source
                             - list
                           additionalProperties: false
                       required:
@@ -1742,16 +1837,10 @@ components:
                     truesight:
                       type: string
                   additionalProperties: false
-                blind:
-                  type: string
-                  enum:
-                    - "1"
-                    - "0"
-                canspeak:
-                  type: string
-                  enum:
-                    - "1"
-                    - "0"
+                isBlind:
+                  type: boolean
+                canSpeak:
+                  type: boolean
                 telepathy:
                   type: string
                 languages:
@@ -1761,7 +1850,7 @@ components:
                         $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
                           object/properties/subtypes/items"
                     - $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
-                        object/properties/armor/items/anyOf/1"
+                        object/properties/armor/anyOf/1"
                     - $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
                         object/properties/skills/anyOf/2"
                 actions:
@@ -1930,7 +2019,7 @@ components:
                                           - properties
                                         additionalProperties: false
                                       - $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
-                                          object/properties/armor/items/anyOf/1"
+                                          object/properties/armor/anyOf/1"
                                   enchantment:
                                     type: object
                                     properties:
@@ -2125,53 +2214,56 @@ components:
                       $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
                         object/properties/bonuses/properties/HPBonus"
                   additionalProperties: false
-                spellCasting:
-                  $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
-                    object/properties/actions/items/properties/variants/items/p\
-                    roperties/ability"
-                spellSlots:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      tag:
-                        type: string
-                      levelMin:
-                        type: string
-                      timesDay:
-                        type: string
-                      timesDayMax:
-                        type: string
-                      spells:
-                        anyOf:
-                          - type: array
-                            items:
-                              type: object
-                              properties:
-                                id:
-                                  type: string
-                                name:
-                                  type: string
-                              required:
-                                - id
-                                - name
-                              additionalProperties: false
-                          - $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
-                              object/properties/armor/items/anyOf/1"
-                          - $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
-                              object/properties/skills/anyOf/2"
-                    required:
-                      - tag
-                      - levelMin
-                      - timesDay
-                      - timesDayMax
-                      - spells
-                    additionalProperties: false
+                spells:
+                  type: object
+                  properties:
+                    hasSlots:
+                      type: boolean
+                    ability:
+                      $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
+                        object/properties/actions/items/properties/variants/ite\
+                        ms/properties/ability"
+                    groups:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          tag:
+                            type: string
+                          levelMin:
+                            type: string
+                          timesDay:
+                            type: string
+                          timesDayMax:
+                            type: string
+                          spells:
+                            anyOf:
+                              - type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: string
+                                    name:
+                                      type: string
+                                  required:
+                                    - id
+                                    - name
+                                  additionalProperties: false
+                              - $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
+                                  object/properties/armor/anyOf/1"
+                              - $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
+                                  object/properties/skills/anyOf/2"
+                        required:
+                          - tag
+                          - levelMin
+                          - timesDay
+                          - timesDayMax
+                          - spells
+                        additionalProperties: false
+                  additionalProperties: false
                 enableGenerator:
-                  type: string
-                  enum:
-                    - "1"
-                    - "0"
+                  type: boolean
                 ageAdult:
                   type: string
                 ageMax:
@@ -2307,8 +2399,12 @@ components:
             object:
               $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
                 object"
+            id:
+              $ref: "#/components/schemas/raceSchemas/properties/getRaceWithVariantsListRespo\
+                nseSchema/properties/list/items/properties/id"
           required:
             - object
+            - id
           additionalProperties: false
       required:
         - createRaceSchema
@@ -2316,6 +2412,114 @@ components:
         - getRaceWithVariantsListResponseSchema
         - getRaceListResponseSchema
         - getRaceResponseSchema
+      additionalProperties: false
+    userSchemas:
+      type: object
+      properties:
+        createUserSchema:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+            username:
+              type: string
+              minLength: 2
+              maxLength: 21
+            password:
+              type: string
+              minLength: 8
+          required:
+            - email
+            - username
+            - password
+          additionalProperties: false
+        createUserResponseSchema:
+          type: object
+          properties:
+            email:
+              $ref: "#/components/schemas/userSchemas/properties/createUserSchema/properties/\
+                email"
+            username:
+              $ref: "#/components/schemas/userSchemas/properties/createUserSchema/properties/\
+                username"
+            id:
+              type: number
+          required:
+            - email
+            - username
+            - id
+          additionalProperties: false
+        loginSchema:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+            password:
+              type: string
+          required:
+            - email
+            - password
+          additionalProperties: false
+        loginResponseSchema:
+          type: object
+          properties:
+            accessToken:
+              type: string
+          required:
+            - accessToken
+          additionalProperties: false
+        getUserResponseSchema:
+          type: object
+          properties:
+            id:
+              type: number
+            email:
+              $ref: "#/components/schemas/userSchemas/properties/createUserSchema/properties/\
+                email"
+            username:
+              $ref: "#/components/schemas/userSchemas/properties/createUserSchema/properties/\
+                username"
+            level:
+              type: number
+            created:
+              type: string
+              format: date-time
+            publishsuspension:
+              type: string
+              format: date-time
+            avatar:
+              type: string
+          required:
+            - id
+            - email
+            - username
+            - level
+            - created
+            - publishsuspension
+            - avatar
+          additionalProperties: false
+        updateUserSchema:
+          type: object
+          properties:
+            username:
+              type: string
+              minLength: 2
+              maxLength: 21
+            avatar:
+              type: string
+          required:
+            - username
+            - avatar
+          additionalProperties: false
+      required:
+        - createUserSchema
+        - createUserResponseSchema
+        - loginSchema
+        - loginResponseSchema
+        - getUserResponseSchema
+        - updateUserSchema
       additionalProperties: false
 paths:
   /api/classes/:
@@ -2326,11 +2530,11 @@ paths:
       description: Returns a list of all available classes in the db. If
         authenticated, also returns the classes created by the user.
       parameters:
-        - schema:
-            type: string
-          in: header
+        - in: header
           name: authorization
           required: false
+          schema:
+            type: string
       responses:
         "200":
           description: Default Response
@@ -2338,6 +2542,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/classSchemas/properties/getClassListResponseSchema"
+  /api/classes/random:
+    get:
+      summary: Returns the details of a random class in the database.
+      tags:
+        - classes
+      description: Returns the details of a random class from list of classes
+        available to the user in the database.
+      parameters:
+        - in: header
+          name: authorization
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/classSchemas/properties/getClassResponseSchema"
   /api/classes/withvariants:
     get:
       summary: Returns a list of all available combinations of classes and variants in
@@ -2348,11 +2572,11 @@ paths:
         variants in the db. If authenticated, also returns the classes created
         by the user.
       parameters:
-        - schema:
-            type: string
-          in: header
+        - in: header
           name: authorization
           required: false
+          schema:
+            type: string
       responses:
         "200":
           description: Default Response
@@ -2361,6 +2585,25 @@ paths:
               schema:
                 $ref: "#/components/schemas/classSchemas/properties/getClassWithVariantsListRes\
                   ponseSchema"
+  "/api/classes/{classId}":
+    get:
+      summary: Returns the details of the class corresponding to the given id.
+      tags:
+        - classes
+      description: Returns the details of the class corresponding to the given id.
+      parameters:
+        - in: header
+          name: authorization
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/classSchemas/properties/getClassResponseSchema"
   /api/professions/:
     get:
       summary: Returns a list of all available professions in the db.
@@ -2369,11 +2612,11 @@ paths:
       description: Returns a list of all available professions in the db. If
         authenticated, also returns the list of professions created by the user.
       parameters:
-        - schema:
-            type: string
-          in: header
+        - in: header
           name: authorization
           required: false
+          schema:
+            type: string
       responses:
         "200":
           description: Default Response
@@ -2382,6 +2625,47 @@ paths:
               schema:
                 $ref: "#/components/schemas/professionSchemas/properties/getProfessionListRespo\
                   nseSchema"
+  "/api/professions/{professionId}":
+    get:
+      summary: Returns the details of the profession corresponding to the given id.
+      tags:
+        - professions
+      description: Returns the details of the profession corresponding to the given id.
+      parameters:
+        - in: header
+          name: authorization
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/professionSchemas/properties/getProfessionResponseS\
+                  chema"
+  /api/professions/random:
+    get:
+      summary: Returns the details of a random profession from the database.
+      tags:
+        - professions
+      description: Returns the details of a random profession from list of professions
+        available to the user in the database.
+      parameters:
+        - in: header
+          name: authorization
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/professionSchemas/properties/getProfessionResponseS\
+                  chema"
   /api/races/:
     get:
       summary: Returns a list of all available races in the db.
@@ -2390,11 +2674,11 @@ paths:
       description: Returns a list of all available races in the db. If authenticated,
         also returns the races created by the user.
       parameters:
-        - schema:
-            type: string
-          in: header
+        - in: header
           name: authorization
           required: false
+          schema:
+            type: string
       responses:
         "200":
           description: Default Response
@@ -2411,11 +2695,11 @@ paths:
       description: Returns a list of all available combinations of races and variants
         in the db. If authenticated, also returns the races created by the user.
       parameters:
-        - schema:
-            type: string
-          in: header
+        - in: header
           name: authorization
           required: false
+          schema:
+            type: string
       responses:
         "200":
           description: Default Response
@@ -2424,7 +2708,81 @@ paths:
               schema:
                 $ref: "#/components/schemas/raceSchemas/properties/getRaceWithVariantsListRespo\
                   nseSchema"
+  "/api/races/{raceId}":
+    get:
+      summary: Returns the details of the race corresponding to the given id.
+      tags:
+        - races
+      description: Returns the details of the race corresponding to the given id.
+      parameters:
+        - in: header
+          name: authorization
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/raceSchemas/properties/getRaceResponseSchema"
+  /api/races/random:
+    get:
+      summary: Returns the details of a random race from the database.
+      tags:
+        - races
+      description: Returns the details of a random race from list of races available
+        to the user in the database.
+      parameters:
+        - in: header
+          name: authorization
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/raceSchemas/properties/getRaceResponseSchema"
+  /api/users/login:
+    post:
+      summary: Logs in a user and returns an access token.
+      tags:
+        - users
+      description: Logs in a user and returns an access token. Logged users can then
+        receive their creations through other routes, and access other protected
+        routes.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/userSchemas/properties/loginSchema"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/userSchemas/properties/loginResponseSchema"
+  /api/converter/converter:
+    get:
+      summary: Converts objects from the old monstershuffler format to the new one.
+      tags:
+        - converter
+      description: Converts objects from the old monstershuffler format to the new one.
+      parameters:
+        - in: header
+          name: authorization
+          required: true
+          schema:
+            type: string
+      responses: {}
 tags:
+  - name: users
+    description: "The users' account. "
   - name: classes
     description: Classes are the main way to define a character's role in the game.
       They define what abilities the character has and how they can use them.
