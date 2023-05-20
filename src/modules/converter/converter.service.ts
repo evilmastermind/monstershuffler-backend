@@ -111,10 +111,11 @@ export async function getActionDetails(actionId: number) {
 ///////////////////////////////////
 
 // ["actions","armor","backgrounds","bases","damagetypes","languages","names","professions","skills","spells","traits","voices","weapons"]
-export async function getIdsFromNames(chosenAlready: string[], type: string, objectType: number) {
+export async function getIdsFromNames(chosenAlready: string[], source: string) {
   
   let table = 'objects';
-  switch (type) {
+  let objectType = 0;
+  switch (source) {
   case 'actions':
     objectType = 101;
     break;
@@ -136,7 +137,7 @@ export async function getIdsFromNames(chosenAlready: string[], type: string, obj
   case 'objects':
     break;
   default:
-    console.log('UNDEFINED TYPE DETECTED: ' + type);
+    console.log('UNDEFINED TYPE DETECTED: ' + source);
     table = 'somethingwrongtomakethisfail';
     break;
   }

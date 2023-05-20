@@ -134,17 +134,13 @@ export async function createRandomNpcHandler (
       character['profession'] = profession;
     }
 
-    console.log(character);
-    // TODO: delete this
-    fs.writeFileSync('./character.yaml', JSON.stringify(character, null, 2));
-
     return reply.code(200).send({ 
       npc: {
         character: character
       }
     });
   } catch (error) {
-    console.log(error);
+    console.warn(error);
     return handleError(error, reply);
   }
 }
