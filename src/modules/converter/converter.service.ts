@@ -111,7 +111,7 @@ export async function getActionDetails(actionId: number) {
 ///////////////////////////////////
 
 // ["actions","armor","backgrounds","bases","damagetypes","languages","names","professions","skills","spells","traits","voices","weapons"]
-export async function getIdsFromNames(chosenAlready: string[], type: string, objectType) {
+export async function getIdsFromNames(chosenAlready: string[], type: string, objectType: number) {
   
   let table = 'objects';
   switch (type) {

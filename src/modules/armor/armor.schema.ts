@@ -3,7 +3,7 @@ import { buildJsonSchemas } from 'fastify-zod';
 
 export const armorObject = z.object({
   AC: z.string(),
-  name: z.string().min(2),
+  name: z.string(),
   cost: z.string().optional(),
   type: z.enum(['light', 'medium','heavy']).optional(),
   maxDex: z.string().optional(),

@@ -51,7 +51,6 @@ export async function convertObjectsHandler(request, reply) {
     while (objectsProcessed < (totalObjects - 1)) {
       const objects = await getObjectsWithPagination(id, cursor, pageSize );
       objectsProcessed += objects.length;
-      // console.log(`${objectsProcessed} of ${totalObjects} objects processed.}`);
       cursor = objects[objects.length - 1]?.id;
       for (const object of objects) {
         await convertObject(object);
@@ -60,6 +59,7 @@ export async function convertObjectsHandler(request, reply) {
     }
     return reply.code(200).send('OK');
   } catch (error) {
+    console.warn(error);
     return handleError(error, reply);
   }
 }
@@ -74,19 +74,15 @@ async function convertObject(object) {
 
   switch (object.type) {
   case 1:
-    convertCharacter(objectJSON, object.id);
+    await convertCharacter(objectJSON, object.id);
     break;
   case 2:
-    convertNonCharacter(objectJSON, object.id);
-    break;
   case 3:
-    convertNonCharacter(objectJSON, object.id);
-    break;
   case 4:
-    convertNonCharacter(objectJSON, object.id);
-    break;
   case 5:
-    convertNonCharacter(objectJSON, object.id);
+  case 10002:
+  case 10003:
+    await convertNonCharacter(objectJSON, object.id);
     break;
   case 101:
     object.object = await convertAction(objectJSON, object.id);
@@ -100,42 +96,36 @@ async function convertObject(object) {
   case 1002:
     // convertArmor(object);
     break;
-  case 10002:
-    convertNonCharacter(objectJSON, object.id);
-    break;
-  case 10003:
-    convertNonCharacter(objectJSON, object.id);
-    break;
   default:
     break;
   }
 }
 
-function convertNonCharacter(object, id) {
-  convertCharacterObject(object, id);
+async function convertNonCharacter(object, id) {
+  await convertCharacterObject(object, id);
 }
 
-function convertCharacter(object, id) {
+async function convertCharacter(object, id) {
   if (Object.hasOwn(object, 'user')) {
-    convertCharacterObject(object.user, id);
+    await convertCharacterObject(object.user, id);
   }
   if (Object.hasOwn(object, 'race')) {
-    convertCharacterObject(object.race, id);
+    await convertCharacterObject(object.race, id);
   }
   if (Object.hasOwn(object, 'racevariant')) {
-    convertCharacterObject(object.racevariant, id);
+    await convertCharacterObject(object.racevariant, id);
   }
   if (Object.hasOwn(object, 'class')) {
-    convertCharacterObject(object.class, id);
+    await convertCharacterObject(object.class, id);
   }
   if (Object.hasOwn(object, 'classvariant')) {
-    convertCharacterObject(object.classvariant, id);
+    await convertCharacterObject(object.classvariant, id);
   }
   if (Object.hasOwn(object, 'template')) {
-    convertCharacterObject(object.template, id);
+    await convertCharacterObject(object.template, id);
   }
   if (Object.hasOwn(object, 'profession')) {
-    convertCharacterObject(object.profession, id);
+    await convertCharacterObject(object.profession, id);
   }
 }
 
@@ -209,7 +199,7 @@ async function convertCharacterObject(object, id) {
   // skills random choice fix
   if (
     Object.hasOwn(object, 'skills') && 
-      typeof object.languages === 'object' &&  
+      typeof object.skills === 'object' &&  
       Object.hasOwn(object.skills, 'choice')
   ) {
     await convertChoiceRandom(object.skills, 'skills');
@@ -237,11 +227,13 @@ async function convertCharacterObject(object, id) {
     // spells object
     object.spells = {
       hasSlots: false,
-      ability: object.spellCasting || 'CHA',
+      ability: object?.spellcasting || 'CHA',
       groups: object.spellSlots
     };
     delete object.spellSlots;
-    delete object.spellCasting;
+  }
+  if (Object.hasOwn(object, 'spellcasting')) {
+    delete object.spellcasting;
   }
   // alignment
   if (Object.hasOwn(object, 'alignment')) {
@@ -250,7 +242,25 @@ async function convertCharacterObject(object, id) {
 
   //nameType (for races)
   if (Object.hasOwn(object, 'nameType')) {
-    object.nameType = [object.nameType];
+    const nameType = object.nameType;
+    delete object.nameType;
+    object.nameType = [typeof nameType === 'string' ? nameType : nameType.toString()];
+  }
+  // bonuses (all values must be strings)
+  if (Object.hasOwn(object, 'bonuses')) {
+    const bonuses = {};
+    for (const [key, value] of Object.entries(object.bonuses)) {
+      const bonus = {};
+      if (Object.hasOwn(value, 'value')) {
+        bonus.value = value.value.toString();
+      }
+      if (Object.hasOwn(value, 'name')) {
+        bonus.name = value.name.toString();
+      }
+      bonuses[key] = bonus;
+    }
+    delete object.bonuses;
+    object.bonuses = bonuses;
   }
 }
 
@@ -271,6 +281,7 @@ async function addIdsToSpells(spellSlots) {
           name: spell
         });
       }
+      spellSlot.spells = newArray;
     } else if (
       Object.hasOwn(spellSlot, 'spells') &&
       typeof spellSlot.spells === 'object' &&  
@@ -304,10 +315,10 @@ function addStatObjects(object) {
   // skills
   if (Object.hasOwn(object, 'skills') && Array.isArray(object.skills)) {
     const newArray = [];
-    object.savingThrows?.forEach(string => {
+    object.skills?.forEach(string => {
       newArray.push(convertStatToStatObject(string));
     });
-    object.savingThrows = newArray;
+    object.skills = newArray;
   }
   // resistances
   if (Object.hasOwn(object, 'resistances')) {
@@ -354,7 +365,7 @@ function addStatObjects(object) {
 function convertStatToStatObject(string) {
   return {
     value: string,
-    levelMin: 1,
+    levelMin: '1',
   };
 }
 
@@ -398,7 +409,7 @@ async function convertAction(object, id) {
   return action;
 }
 
-async function convertChoiceRandom(object,type) {
+async function convertChoiceRandom(object,source) {
   // filters conversion (keyName, keyValues)
   if (Object.hasOwn(object.choice, 'filtersObject')) {
     const filters = object.choice.filtersObject;
@@ -433,37 +444,50 @@ async function convertChoiceRandom(object,type) {
     object.choice.filters = newFilters;
   }
 
-  switch (type) {
-  case 'actions':
-    object.choice.source = 'objects';
-    object.choice.objectType = 101;
-    break;
-  case 'armor':
-    object.choice.source = 'objects';
-    object.choice.objectType = 1002;
-    break;
-  case 'weapons':
-    object.choice.source = 'objects';
-    object.choice.objectType = 1001;
-    break;
-  case 'spells':
-    object.choice.source = 'objects';
-    object.choice.objectType = 102;
-    break;
-  case 'skills':
-  case 'languages':
-    object.choice.source = type;
-    break;
+  if (object.choice.type === 'random') {
+    switch (source) {
+    case 'actions':
+      object.choice.source = 'objects';
+      object.choice.objectType = 101;
+      break;
+    case 'armor':
+      object.choice.source = 'objects';
+      object.choice.objectType = 1002;
+      break;
+    case 'weapons':
+      object.choice.source = 'objects';
+      object.choice.objectType = 1001;
+      break;
+    case 'spells':
+      object.choice.source = 'objects';
+      object.choice.objectType = 102;
+      break;
+    case 'skills':
+    case 'languages':
+      object.choice.source = source;
+      break;
+    }
+  } else {
+    if (Object.hasOwn(object.choice, 'source')) {
+      delete object.choice.source;
+    }
+    if (Object.hasOwn(object.choice, 'objectType')) {
+      delete object.choice.objectType;
+    }
   }
 
   // replacing 'chosenAlready' if present
   if (Object.hasOwn(object.choice, 'chosenAlready')) {
-    object.choice.chosenAlready = await getIdsFromNames(object.choice.chosenAlready, object.choice.source, object.choice?.objectType);
+    const newChosenAlready = await getIdsFromNames(object.choice.chosenAlready,source);
+    delete object.choice.chosenAlready;
+    object.choice.chosenAlready = newChosenAlready;
   }
 
   // replacing 'list' if present
   if (Object.hasOwn(object.choice, 'list')) {
-    object.choice.list = await getIdsFromNames(object.choice.list, object.choice.source, object.choice?.objectType);
+    const newList = await getIdsFromNames(object.choice.list, source);
+    delete object.choice.list;
+    object.choice.list = newList;
   }
 
 

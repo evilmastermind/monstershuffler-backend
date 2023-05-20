@@ -19,6 +19,9 @@ import { getRandomBackground } from '@/modules/background/background.service';
 import { handleError } from '@/utils/errors';
 import { random } from '@/utils/functions';
 
+//TODO: delete this
+import fs from 'fs';
+
 export async function createRandomNpcHandler (
   request: FastifyRequest<{Body: createRandomNpcInput }>,
   reply: FastifyReply
@@ -54,7 +57,7 @@ export async function createRandomNpcHandler (
     } else if (primaryRacePercentage && secondaryRacePercentage) {
       const result = await getRandomRace(id);
       race = result.object as Race;
-      racevariant = (await getRandomRacevariant(id, result.id)).object as Racevariant;
+      racevariant = (await getRandomRacevariant(id, result.id))?.object as Racevariant || null;
     }
     ///////////////////////////////////////
     // C L A S S   &   P R O F E S S I O N
@@ -68,7 +71,7 @@ export async function createRandomNpcHandler (
     } else if (classType === 'randomClass' || classType === 'randomClassProfession') {
       const result = await getRandomClass(id);
       classChosen = result.object as Class;
-      classvariant = (await getRandomClassvariant(id, result.id)).object as Classvariant;
+      classvariant = (await getRandomClassvariant(id, result.id))?.object as Classvariant || null;
       if (classType === 'randomClassProfession') {
         profession = (await getRandomProfession(id)).object as Profession;
       }
@@ -77,7 +80,7 @@ export async function createRandomNpcHandler (
       if (random20 === 1) {
         const result = await getRandomClass(id);
         classChosen = result.object as Class;
-        classvariant = (await getRandomClassvariant(id, result.id)).object as Classvariant;
+        classvariant = (await getRandomClassvariant(id, result.id))?.object as Classvariant || null;
       } else {
         profession = (await getRandomProfession(id)).object as Profession;
       }
@@ -101,11 +104,10 @@ export async function createRandomNpcHandler (
     const feelingObject = await getRandomTrait({ feeling: 1 });
     const alignment = calculateAlignment(traitObject.category);
     const smallbackground = await calculateBackground(pronouns);
-
     const result: Character = { 
       character: {
         name,
-        surname,
+        ...(surname !== undefined && { surname }),
         pronouns,
         trait: traitObject.name,
         feeling: feelingObject.name,
@@ -132,8 +134,17 @@ export async function createRandomNpcHandler (
       character['profession'] = profession;
     }
 
-    return reply.code(200).send(character);
+    console.log(character);
+    // TODO: delete this
+    fs.writeFileSync('./character.yaml', JSON.stringify(character, null, 2));
+
+    return reply.code(200).send({ 
+      npc: {
+        character: character
+      }
+    });
   } catch (error) {
+    console.log(error);
     return handleError(error, reply);
   }
 }
@@ -207,7 +218,7 @@ function calculateName(pronouns: string, race: Race | null) {
 function calculateSurname(pronouns: string, race: Race | null) {
   let surnameType = 'human';
   if (!race || !race.addSurname || random(1,100) >= race.addSurname) {
-    return '';
+    return undefined;
   }
   if (race && race.nameType && race.nameType.length) {
     const randomIndex = random(0, race.nameType.length - 1);

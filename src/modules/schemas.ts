@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { armorObject } from '@/modules/armor/armor.schema';
+import { weaponObject } from '@/modules/weapon/weapon.schema';
 
 export const jwtHeaderRequired = {
   type: 'object',
@@ -55,8 +56,6 @@ export const choiceListObject = z.object({
   choice: z.object({
     type: z.enum(['list', 'random']),
     number: z.number(),
-    source: z.enum(['objects','backgrounds','bases','damagetypes','languages','names','skills','traits','voices']),
-    objectType: z.number().optional(),
     list: z.array(choice),
     isRepeatable: z.boolean().optional(),
   }),
@@ -79,54 +78,51 @@ export const enchantmentObject = z.object({
   expression: z.string().optional(),
 });
 export const attackAttributesObject = z.object({
-  die: z.string(),
-  diceNumber: z.string(),
-  reach: z.string(),
-  targets: z.string(),
-  damageType: z.string(),
-  properties: z.array(z.string()),
+  reach: z.string().optional(),
+  targets: z.string().optional(),
 });
 export const attackObject = z.object({
   name: z.string(),
   replaceName: z.boolean().optional(),
-  attributes: z.union([attackAttributesObject, choiceRandomObject]),
+  attributes: z.union([attackAttributesObject.merge(weaponObject), choiceRandomObject]),
   enchantment: enchantmentObject.optional(),
 });
 
 
 export const valueExpressionObject = z.object({
   name: z.string(),
-  type: z.string(),
-  expression: z.string().optional(),
+  type: z.string().optional(),
+  expression: z.string(),
 });
 export const valueDiceObject = z.object({
   name: z.string(),
-  type: z.string(),
+  type: z.string().optional(),
   expression: z.string().optional(),
-  dice: diceObject.optional(),
+  dice: diceObject,
 });
+
 export const valueIncrProgressionObject = z.object({
   name: z.string(),
-  type: z.string(),
+  type: z.string().optional(),
   incrProgression: z.object({
     levelInterval: z.string(),
     levelIncrement: z.string(),
     levelMin: z.string(),
     base: z.string(),
     increment: z.string(),
-  }).optional(),
+  }),
 });
 
 export const spellIdNameObject = z.object({
-  id: z.string(),
+  id: z.number().optional(),
   name: z.string(),
 });
 
 export const spellGroupObject = z.object({
   tag: z.string(),
-  levelMin: z.string(),
-  timesDay: z.string(),
-  timesDayMax: z.string(),
+  levelMin: z.string().optional(),
+  timesDay: z.string().optional(),
+  timesDayMax: z.string().optional(),
   spells: z.union([z.array(spellIdNameObject), choiceRandomObject, choiceListObject]),
 }).strict();
 
@@ -167,7 +163,7 @@ export const actionVariantObject = z.object({
   type: z.enum(['trait', 'legendary', 'action', 'reaction', 'bonus', 'attack', 'multiattack', 'mythic', 'lair']),
   levelMin: z.number().optional(),
   levelMax: z.number().optional(),
-  ability: abilitiesEnum,
+  ability: abilitiesEnum.optional(),
   charges: z.string().optional(),
   recharge: z.string().optional(),
   cost: z.string().optional(),
@@ -205,7 +201,7 @@ export const sensesObject = z.object({
 
 
 const bonusObject = z.object({
-  name: z.string(),
+  name: z.string().optional(),
   value: z.string(),
 });
 export const bonusesObject = z.object({
@@ -312,11 +308,11 @@ export const userObject = z.object({
   bonuses: bonusesObject.optional(),
   spells: spellsObject.optional(),
   // publication keys
-  image: imageObject,
+  image: imageObject.optional(),
   searchTags: z.array(z.string()).optional(),
   environments: z.array(z.string()).optional(),
   backgroundImage: z.string().optional(),
-  background: z.object({}).passthrough(),
+  background: z.object({}).passthrough().optional(),
   // roleplaying helpers
   smallbackground: z.string().optional(),
   trait: z.string().optional(),

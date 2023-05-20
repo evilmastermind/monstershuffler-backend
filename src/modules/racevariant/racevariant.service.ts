@@ -72,6 +72,9 @@ export async function getRandomRacevariant(userid: number, variantof: number) {
       ]
     }
   });
+  if (raceCount === 0) {
+    return null;
+  }
   const race = await prisma.objects.findMany({
     skip: Math.floor(Math.random() * raceCount),
     take: 1,

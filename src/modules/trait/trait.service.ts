@@ -2,7 +2,14 @@ import prisma from '@/utils/prisma';
 import { getRandomTraitInput } from './trait.schema';
 
 export async function getRandomTrait(input: getRandomTraitInput) {
-  const traitCount = await prisma.traits.count();
+  const traitCount = await prisma.traits.count({
+    where: {
+      type: input.type,
+      subtitle: input.subtitle,
+      category: input.category,
+      feeling: input.feeling,
+    },
+  });
   const trait = await prisma.traits.findMany({
     skip: Math.floor(Math.random() * traitCount),
     take: 1,

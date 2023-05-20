@@ -2,7 +2,12 @@ import prisma from '@/utils/prisma';
 import { getRandomNameInput } from './name.schema';
 
 export async function getRandomName(input: getRandomNameInput) {
-  const nameCount = await prisma.names.count();
+  const nameCount = await prisma.names.count({
+    where: {
+      race: input.race,
+      gender: input.gender,
+    },
+  });
   const name = await prisma.names.findMany({
     skip: Math.floor(Math.random() * nameCount),
     take: 1,
@@ -10,7 +15,6 @@ export async function getRandomName(input: getRandomNameInput) {
       race: input.race,
       gender: input.gender,
     },
-  });
-
+  }); 
   return name[0].name;
 }

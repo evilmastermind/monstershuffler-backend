@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
 
-const weaponObject = z.object({
-  name: z.string().min(2),
+export const weaponObject = z.object({
+  name: z.string().optional(),
   cost: z.string().optional(),
   weight: z.string().optional(),
   damageType: z.string(),

@@ -13,7 +13,7 @@ async function npcRoutes(server: FastifyInstance) {
         summary: 'Creates a new random npc using the settings provided.',
         description: 'Creates a new random npc using the settings provided.',
         headers: jwtHeaderOptional,
-        tags: ['npc'],
+        tags: ['npcs'],
         body: $ref('createRandomNpcInputSchema'),
         response: {
           200: $ref('createRandomNpcResponseSchema')

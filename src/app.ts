@@ -20,6 +20,7 @@ import { classSchemas } from '@/modules/class/class.schema';
 // import { folderSchemas } from '@/modules/folder/folder.schema';
 // import { languageSchemas } from '@/modules/language/language.schema';
 // import { nameSchemas } from '@/modules/name/name.schema';
+import { npcSchemas } from '@/modules/npc/npc.schema';
 import { professionSchemas } from '@/modules/profession/profession.schema';
 // import { quirkSchemas } from '@/modules/quirk/quirk.schema';
 import { raceSchemas } from '@/modules/race/race.schema';
@@ -43,6 +44,7 @@ import classRoutes from '@/modules/class/class.route';
 // import folderRoutes from '@/modules/folder/folder.route';
 // import languageRoutes from '@/modules/language/language.route';
 // import nameRoutes from '@/modules/name/name.route';
+import npcRoutes from '@/modules/npc/npc.route';
 import professionRoutes from '@/modules/profession/profession.route';
 // import quirkRoutes from '@/modules/quirk/quirk.route';
 import raceRoutes from '@/modules/race/race.route';
@@ -130,6 +132,7 @@ async function main() {
       // ...folderSchemas,
       // ...languageSchemas,
       // ...nameSchemas,
+      ...npcSchemas,
       ...professionSchemas,
       // ...quirkSchemas,
       ...raceSchemas,
@@ -170,6 +173,7 @@ async function main() {
             // { name: 'folders', description: 'Folders are a way to organize your characters, actions, etc. into groups.' },
             // { name: 'languages', description: 'Languages are the different ways that characters can communicate with each other.' },
             // { name: 'names', description: 'A collection of names for your characters, divided into different categories.' },
+            { name: 'npcs', description: 'Tools to generate non-player-characters (NPCs).' },
             { name: 'professions', description: 'Professions are a way to define a character\'s occupation, like a soldier, a merchant, a priest, etc. and give them minor abilities related to that occupation. They are usually given to NPCs in place of classes.' },
             // { name: 'quirks', description: 'Quirks are small, random snippets of lore that can be added to your characters for roleplay purposes.' },
             { name: 'races', description: 'A race defines the innate abilities derived from a character\'s fantasy ancestry.' },
@@ -200,6 +204,7 @@ async function main() {
     // server.register(folderRoutes, { prefix: 'api/folders' });
     // server.register(languageRoutes, { prefix: 'api/languages' });
     // server.register(nameRoutes, { prefix: 'api/names' });
+    server.register(npcRoutes, { prefix: 'api/npcs' });
     server.register(professionRoutes, { prefix: 'api/professions' });
     // server.register(quirkRoutes, { prefix: 'api/quirks' });
     server.register(raceRoutes, { prefix: 'api/races' });
@@ -216,13 +221,14 @@ async function main() {
     server.register(converterRoutes, { prefix: 'api/converter' });
     
     await server.listen({ port: 3000, host: '0.0.0.0' });
-    console.info('////////////////////////////////////////');
+    console.info('///////////////////////////////////////////');
     console.info('// M O N S T E R S H U F F L E R   A P I');
-    console.info('// server ready at http://localhost:3000');
+    console.info('// ✓ Server ready at http://localhost:3000');
+    console.info('// ✓ Docs at http://localhost:3000/api/docs');
     const swaggerYAML = server.swagger({ yaml: true });
     fs.writeFileSync('./swagger.yaml', swaggerYAML);
-    console.info('// swagger.yaml written');
-    console.info('////////////////////////////////////////');
+    console.info('// ✓ swagger.yaml written!');
+    console.info('///////////////////////////////////////////');
 
   } catch (error) {
     console.info(error);

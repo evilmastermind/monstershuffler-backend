@@ -1,0 +1,783 @@
+{
+  "name": "Nisk",
+  "pronouns": "male",
+  "trait": "Emotionally stable",
+  "feeling": "Dedicated",
+  "alignment": [
+    0,
+    1,
+    0
+  ],
+  "smallbackground": "with a deadly allergy",
+  "race": {
+    "name": "Dragonborn",
+    "ageMax": "80",
+    "speeds": {
+      "base": "30"
+    },
+    "ageAdult": "15",
+    "alignment": [
+      0,
+      0,
+      0
+    ],
+    "heightMax": "7",
+    "heightMin": "6",
+    "languages": [
+      {
+        "value": "Common",
+        "levelMin": "1"
+      },
+      {
+        "value": "Draconic",
+        "levelMin": "1"
+      }
+    ],
+    "addSurname": "20",
+    "background": {
+      "time": 1654025632944,
+      "blocks": [
+        {
+          "id": "CKLKOUyvo4",
+          "data": {
+            "text": "Base race from the player's handbook."
+          },
+          "type": "paragraph"
+        },
+        {
+          "id": "U097pE3zUK",
+          "data": {
+            "text": "Some variants use the same actions and abilities that player characters have, others were just inspired by them or were completely created by us."
+          },
+          "type": "paragraph"
+        },
+        {
+          "id": "Gju1IHPiio",
+          "data": {
+            "text": "-Ismael"
+          },
+          "type": "paragraph"
+        }
+      ],
+      "version": "2.23.2"
+    },
+    "searchTags": [
+      "Fantasy"
+    ],
+    "abilitiesLimit": "20",
+    "enableGenerator": true,
+    "nameType": [
+      "monstrous"
+    ],
+    "bonuses": {
+      "INTBonus": {
+        "value": "1"
+      },
+      "STRBonus": {
+        "value": "2"
+      }
+    }
+  },
+  "racevariant": {
+    "name": "Black Dragonborn",
+    "actions": [
+      {
+        "tag": "action0",
+        "priority": 10,
+        "variants": [
+          {
+            "name": "Acid Breath",
+            "type": "action",
+            "values": [
+              {
+                "name": "value1",
+                "type": "DC Dexterity",
+                "expression": "8+PROF+CON"
+              },
+              {
+                "dice": {
+                  "die": "6",
+                  "levelMax": "",
+                  "levelMin": "1",
+                  "diceNumber": "2",
+                  "diceIncrement": "1",
+                  "levelInterval": "5"
+                },
+                "name": "value2",
+                "type": "acid damage",
+                "expression": ""
+              }
+            ],
+            "charges": "1",
+            "recharge": "short",
+            "description": "[Name] exales acid in a 30-foot line that is 5 feet wide. Each creature in that line must make a {value1} saving throw, taking {value2} on a failed save, or half as much damage on a successful one."
+          }
+        ]
+      }
+    ],
+    "subtypes": [
+      {
+        "value": "Black Dragonborn",
+        "levelMin": "1"
+      }
+    ],
+    "alignment": [
+      0,
+      0,
+      0
+    ],
+    "addSurname": "20",
+    "resistances": [
+      {
+        "value": "acid",
+        "levelMin": "1"
+      }
+    ],
+    "nameType": [
+      "monstrous"
+    ]
+  },
+  "class": {
+    "name": "Wizard",
+    "skills": {
+      "choice": {
+        "type": "list",
+        "number": 2,
+        "list": [
+          {
+            "id": 5,
+            "name": "Arcana"
+          },
+          {
+            "id": 6,
+            "name": "History"
+          },
+          {
+            "id": 11,
+            "name": "Insight"
+          },
+          {
+            "id": 7,
+            "name": "Investigation"
+          },
+          {
+            "id": 12,
+            "name": "Medicine"
+          },
+          {
+            "id": 9,
+            "name": "Religion"
+          }
+        ]
+      }
+    },
+    "actions": [
+      {
+        "tag": "legendary0",
+        "priority": 20,
+        "variants": [
+          {
+            "cost": "2",
+            "name": "Quickened Spell",
+            "type": "legendary",
+            "values": [
+              {
+                "name": "value1",
+                "type": "-st-nd-rd",
+                "expression": "(LVL<20)*(LVL/6) + (LVL>19)*3"
+              }
+            ],
+            "ability": "STR",
+            "levelMin": 17,
+            "description": "[Name] casts a {value1} level spell from [their] list of spells."
+          }
+        ]
+      },
+      {
+        "tag": "legendary1",
+        "priority": 20,
+        "variants": [
+          {
+            "name": "Reposition",
+            "type": "legendary",
+            "ability": "STR",
+            "levelMin": 17,
+            "description": "[Name] moves 10 feet without provoking Opportunity Attacks."
+          }
+        ]
+      },
+      {
+        "tag": "trait0",
+        "priority": 5,
+        "variants": [
+          {
+            "name": "Legendary Resistance",
+            "type": "trait",
+            "charges": "LVL\\15",
+            "levelMin": 17,
+            "recharge": "day",
+            "description": "If [name] fails a saving throw, [they] can choose to succeed instead."
+          }
+        ]
+      }
+    ],
+    "background": {
+      "time": 1654025598578,
+      "blocks": [
+        {
+          "id": "fL4zIWZeh4",
+          "data": {
+            "text": "Base class from the player's handbook."
+          },
+          "type": "paragraph"
+        },
+        {
+          "id": "a_BX0BRmR0",
+          "data": {
+            "text": "Some variants use the same actions and abilities that player characters have, others were just inspired by them or were completely created by us."
+          },
+          "type": "paragraph"
+        },
+        {
+          "id": "z90U5f6t5l",
+          "data": {
+            "text": "-Ismael&nbsp;"
+          },
+          "type": "paragraph"
+        }
+      ],
+      "version": "2.23.2"
+    },
+    "searchTags": [
+      "Fantasy",
+      "Magical",
+      "Controller"
+    ],
+    "savingThrows": [
+      {
+        "value": "INT",
+        "levelMin": "1"
+      },
+      {
+        "value": "WIS",
+        "levelMin": "1"
+      }
+    ],
+    "enableGenerator": true,
+    "bonuses": {
+      "CONBonus": {
+        "value": "(LVL/4)*1",
+        "name": ""
+      },
+      "INTBonus": {
+        "value": "(LVL/4)*2+2",
+        "name": ""
+      }
+    }
+  },
+  "classvariant": {
+    "name": "Conjurer",
+    "actions": [
+      {
+        "tag": "legendary0",
+        "priority": 20,
+        "variants": [
+          {
+            "cost": "2",
+            "name": "Twin Portals",
+            "type": "legendary",
+            "values": [
+              {
+                "name": "value1",
+                "type": "feet",
+                "expression": "5 + 5*(LVL\\2)"
+              }
+            ],
+            "ability": "INT",
+            "levelMin": 17,
+            "description": "[Name] creates two magical portals on two unoccupied spaces on the ground that [they] can see. The two points can be up to {value1} apart, and the portals can be independently created vertically or horizontally. Creatures can walk through one of the portals, reappear 5 feet next to the other and continue their remaining movement. [Name] can choose which creatures are allowed to pass through the portals and which aren't if [they] can see them attempting to enter a portal. Those who aren't will end their movement outside it. [Name] must maintain [their] concentration to keep the portals active."
+          }
+        ]
+      },
+      {
+        "tag": "trait0",
+        "priority": 20,
+        "variants": [
+          {
+            "name": "Focused Conjuration",
+            "type": "trait",
+            "levelMin": 10,
+            "description": "While [name] is concentrating on a conjuration spell, [their] concentration can't be broken as a result of taking damage."
+          }
+        ]
+      },
+      {
+        "tag": "reaction0",
+        "priority": 20,
+        "variants": [
+          {
+            "name": "Quickened Misty Step",
+            "type": "reaction",
+            "values": [
+              {
+                "name": "value1",
+                "type": "feet",
+                "expression": "5 + 5*(LVL\\2)"
+              }
+            ],
+            "charges": "(INT>0)*INT + (INT<1)",
+            "recharge": "short",
+            "description": "When a creature attacks [name] with a melee or ranged attack, [they] can teleport up to {value1} to an unoccupied space that [they] can see. The creature's attack automatically misses."
+          }
+        ]
+      },
+      {
+        "tag": "action0",
+        "priority": 25,
+        "variants": [
+          {
+            "name": "Benign Transposition",
+            "type": "action",
+            "values": [
+              {
+                "name": "value1",
+                "type": "feet",
+                "expression": "15 + 5*(LVL\\2)"
+              }
+            ],
+            "levelMax": 6,
+            "levelMin": 2,
+            "description": "[Name] chooses two spaces within {value1} that are occupied by two [size] or smaller creatures, including [them]self. If both creatures are willing, they teleport swapping places."
+          }
+        ]
+      },
+      {
+        "tag": "action1",
+        "priority": 25,
+        "variants": [
+          {
+            "name": "Baleful Transposition",
+            "type": "action",
+            "values": [
+              {
+                "name": "value1",
+                "type": "feet",
+                "expression": "15 + 5*(LVL\\2)"
+              },
+              {
+                "name": "value2",
+                "type": "DC Wisdom",
+                "expression": "8+PROF+INT"
+              }
+            ],
+            "levelMin": 7,
+            "description": "[name] can choose two spaces within {value1} that are occupied by two [size] or smaller creatures. The creatures must make a {value2} saving throw if they are not willing to be teleported by [name]. If both creatures fail the saving throw or are willing, they teleport swapping places. If either creature succeeds on its Wisdom save, the spell is negated."
+          }
+        ]
+      },
+      {
+        "tag": "bonus0",
+        "priority": 20,
+        "variants": [
+          {
+            "name": "Summon Close Ally",
+            "type": "bonus",
+            "values": [
+              {
+                "name": "value1",
+                "type": "feet",
+                "expression": "5 + 5*(LVL\\2)"
+              }
+            ],
+            "levelMin": 5,
+            "description": "[name] teleports a willing creature up to {value1} away to an unoccupied space next to [them]."
+          }
+        ]
+      },
+      {
+        "tag": "action2",
+        "priority": 20,
+        "variants": [
+          {
+            "name": "Random Conjuration",
+            "type": "action",
+            "values": [
+              {
+                "dice": {
+                  "die": "10",
+                  "levelMax": "",
+                  "levelMin": "1",
+                  "diceNumber": "2",
+                  "diceIncrement": "1",
+                  "levelInterval": "2"
+                },
+                "name": "value1",
+                "type": "slashing damage",
+                "expression": ""
+              },
+              {
+                "name": "value2",
+                "type": "DC Dexterity",
+                "expression": "8+PROF+INT"
+              },
+              {
+                "name": "value3",
+                "type": "feet",
+                "expression": "5 + 5*(LVL\\2)"
+              },
+              {
+                "name": "value4",
+                "type": "-feet",
+                "expression": "5 + (LVL>4)*5 + (LVL>16)*5"
+              }
+            ],
+            "description": "[Name] conjures up an inanimate random object up to {value3} away from [them]. The object occupies a {value4} square, its exact size and weight depends on [name]'s power and it could be anything from a mug at lower levels to a piano at higher levels. If the object is conjured in space occupied by another creature, the creature must make a {value2} saving throw. On a failed save the creature takes {value1} as the object is shunted through the creature's body to the closest unoccupied space. On a successful save the creature takes half damage. The object might temporarily block paths or create difficult terrain in the space it occupies."
+          }
+        ]
+      }
+    ],
+    "abilitiesLimit": "20",
+    "spells": {
+      "hasSlots": false,
+      "ability": "INT",
+      "groups": [
+        {
+          "tag": "Conjurer cantrips",
+          "spells": {
+            "choice": {
+              "type": "list",
+              "number": 3,
+              "list": [
+                {
+                  "id": 10848,
+                  "name": "Create Bonfire"
+                },
+                {
+                  "id": 10751,
+                  "name": "Acid Splash"
+                },
+                {
+                  "id": 11048,
+                  "name": "Mage Hand"
+                },
+                {
+                  "id": 11012,
+                  "name": "Infestation"
+                },
+                {
+                  "id": 11107,
+                  "name": "Poison Spray"
+                },
+                {
+                  "id": 11201,
+                  "name": "Sword Burst (SCAG)"
+                }
+              ]
+            }
+          },
+          "levelMin": "1"
+        },
+        {
+          "tag": "Conjurer 1st",
+          "spells": {
+            "choice": {
+              "type": "list",
+              "number": 4,
+              "list": [
+                {
+                  "id": 10942,
+                  "name": "Floating Disk"
+                },
+                {
+                  "id": 10926,
+                  "name": "Find Familiar"
+                },
+                {
+                  "id": 10945,
+                  "name": "Fog Cloud"
+                },
+                {
+                  "id": 10967,
+                  "name": "Grease"
+                },
+                {
+                  "id": 11211,
+                  "name": "Tenser's Floating Disk"
+                },
+                {
+                  "id": 11235,
+                  "name": "Unseen Servant"
+                }
+              ]
+            }
+          },
+          "levelMin": "1",
+          "timesDay": "LVL+1",
+          "timesDayMax": "4"
+        },
+        {
+          "tag": "Conjurer 2nd",
+          "spells": {
+            "choice": {
+              "type": "list",
+              "number": 3,
+              "list": [
+                {
+                  "id": 10817,
+                  "name": "Cloud of Daggers"
+                },
+                {
+                  "id": 10891,
+                  "name": "Dust devil"
+                },
+                {
+                  "id": 10940,
+                  "name": "Flaming Sphere"
+                },
+                {
+                  "id": 10943,
+                  "name": "Flock of Familiars"
+                },
+                {
+                  "id": 11257,
+                  "name": "Web"
+                }
+              ]
+            }
+          },
+          "levelMin": "3",
+          "timesDay": "LVL-1",
+          "timesDayMax": "3"
+        },
+        {
+          "tag": "Conjurer 3rd",
+          "spells": {
+            "choice": {
+              "type": "list",
+              "number": 3,
+              "list": [
+                {
+                  "id": 10955,
+                  "name": "Galder's Tower"
+                },
+                {
+                  "id": 11173,
+                  "name": "Sleet Storm"
+                },
+                {
+                  "id": 11189,
+                  "name": "Stinking Cloud"
+                },
+                {
+                  "id": 11197,
+                  "name": "Summon Lesser Demons"
+                },
+                {
+                  "id": 11215,
+                  "name": "Thunder Step"
+                },
+                {
+                  "id": 11220,
+                  "name": "Tidal Wave"
+                }
+              ]
+            }
+          },
+          "levelMin": "5",
+          "timesDay": "LVL-3",
+          "timesDayMax": "3"
+        },
+        {
+          "tag": "Conjurer 4th",
+          "spells": {
+            "choice": {
+              "type": "list",
+              "number": 2,
+              "list": [
+                {
+                  "id": 10786,
+                  "name": "Black Tentacles"
+                },
+                {
+                  "id": 10833,
+                  "name": "Conjure Minor Elementals"
+                },
+                {
+                  "id": 10873,
+                  "name": "Dimension Door"
+                },
+                {
+                  "id": 10918,
+                  "name": "Faithful Hound"
+                },
+                {
+                  "id": 10954,
+                  "name": "Galder's Speedy Courier"
+                },
+                {
+                  "id": 11031,
+                  "name": "Leomund's Secret Chest"
+                },
+                {
+                  "id": 11255,
+                  "name": "Watery sphere"
+                }
+              ]
+            }
+          },
+          "levelMin": "7",
+          "timesDay": "LVL-6",
+          "timesDayMax": "3"
+        },
+        {
+          "tag": "Conjurer 5th",
+          "spells": {
+            "choice": {
+              "type": "list",
+              "number": 2,
+              "list": [
+                {
+                  "id": 10818,
+                  "name": "Cloudkill"
+                },
+                {
+                  "id": 10831,
+                  "name": "Conjure Elemental"
+                },
+                {
+                  "id": 11011,
+                  "name": "Infernal Calling"
+                },
+                {
+                  "id": 11188,
+                  "name": "Steel Wind Strike"
+                },
+                {
+                  "id": 11196,
+                  "name": "Summon Greater Demon"
+                },
+                {
+                  "id": 11209,
+                  "name": "Teleportation Circle"
+                }
+              ]
+            }
+          },
+          "levelMin": "9",
+          "timesDay": "LVL\\9",
+          "timesDayMax": "3"
+        },
+        {
+          "tag": "Conjurer 6th",
+          "spells": {
+            "choice": {
+              "type": "list",
+              "number": 1,
+              "list": [
+                {
+                  "id": 10766,
+                  "name": "Arcane Gate"
+                },
+                {
+                  "id": 11015,
+                  "name": "Instant Summons"
+                },
+                {
+                  "id": 11147,
+                  "name": "Scatter"
+                }
+              ]
+            }
+          },
+          "levelMin": "11",
+          "timesDay": "LVL\\18",
+          "timesDayMax": "3"
+        },
+        {
+          "tag": "Conjurer 7th",
+          "spells": {
+            "choice": {
+              "type": "list",
+              "number": 1,
+              "list": [
+                {
+                  "id": 11056,
+                  "name": "Magnificent Mansion"
+                },
+                {
+                  "id": 11105,
+                  "name": "Plane Shift"
+                },
+                {
+                  "id": 11208,
+                  "name": "Teleport"
+                }
+              ]
+            }
+          },
+          "levelMin": "13",
+          "timesDay": "LVL\\19",
+          "timesDayMax": "3"
+        },
+        {
+          "tag": "Conjurer 8th",
+          "spells": {
+            "choice": {
+              "type": "list",
+              "number": 1,
+              "list": [
+                {
+                  "id": 10867,
+                  "name": "Demiplane"
+                },
+                {
+                  "id": 11009,
+                  "name": "Incendiary Cloud"
+                },
+                {
+                  "id": 11065,
+                  "name": "Maze"
+                },
+                {
+                  "id": 11074,
+                  "name": "Mighty Fortress"
+                }
+              ]
+            }
+          },
+          "levelMin": "15",
+          "timesDay": "LVL\\20",
+          "timesDayMax": "3"
+        },
+        {
+          "tag": "Conjurer 9th",
+          "spells": {
+            "choice": {
+              "type": "list",
+              "number": 1,
+              "list": [
+                {
+                  "id": 10957,
+                  "name": "Gate"
+                },
+                {
+                  "id": 11263,
+                  "name": "Wish"
+                }
+              ]
+            }
+          },
+          "levelMin": "17",
+          "timesDay": "LVL\\21",
+          "timesDayMax": "3"
+        }
+      ]
+    },
+    "bonuses": {
+      "CHABonus": {
+        "value": "(LVL/4)*1 + 3",
+        "name": ""
+      }
+    }
+  }
+}

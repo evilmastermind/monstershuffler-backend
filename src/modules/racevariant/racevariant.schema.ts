@@ -26,11 +26,11 @@ export const racevariantObject = z.object({
   // generator keys
   enableGenerator: z.boolean().optional(),
   // publication keys
-  image: imageObject,
+  image: imageObject.optional(),
   searchTags: z.array(z.string()).optional(),
   environments: z.array(z.string()).optional(),
   backgroundImage: z.string().optional(),
-  background: z.object({}).passthrough(),
+  background: z.object({}).passthrough().optional(),
 }).strict();
 
 

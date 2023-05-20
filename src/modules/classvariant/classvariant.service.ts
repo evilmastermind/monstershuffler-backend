@@ -56,7 +56,7 @@ export async function getClassvariant(userid: number, id: number) {
 }
 
 export async function getRandomClassvariant(userid: number, variantof: number) {
-  const classCount = await prisma.objects.count({
+  const variantCount = await prisma.objects.count({
     where: {
       type: 10003,
       variantof,
@@ -70,15 +70,18 @@ export async function getRandomClassvariant(userid: number, variantof: number) {
       ]
     }
   });
+  if (variantCount === 0) {
+    return null;
+  }
   const classChosen = await prisma.objects.findMany({
-    skip: Math.floor(Math.random() * classCount),
+    skip: Math.floor(Math.random() * variantCount),
     take: 1,
     select: {
       object: true,
       id: true,
     },
     where: {
-      type: 10002,
+      type: 10003,
       variantof,
       OR: [
         {
