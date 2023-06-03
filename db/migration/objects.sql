@@ -180,6 +180,11 @@ SELECT b.id, a.name, a.type, a.subtype, a.source
 FROM `actions` a
   LEFT JOIN `objects` b ON a.id = b.oldid AND b.type = 101;
 
+UPDATE objects o
+JOIN actionsdetails ad ON o.id = ad.objectid
+SET o.object = JSON_SET(o.object, '$.tag', ad.name, '$.actionType', ad.actiontype, '$.subType', ad.subtype, '$.source', ad.source)
+WHERE o.type = 101;
+
 CREATE TABLE `actionstags` (
   `objectid` int(11) NOT NULL,
   `tag` varchar(255) NOT NULL,
@@ -191,6 +196,15 @@ INSERT INTO `actionstags` (objectid, tag)
 SELECT b.id, a.tag
 FROM `actiontags` a
   LEFT JOIN `objects` b ON a.actionid = b.oldid AND b.type = 101;
+
+UPDATE objects o
+JOIN (
+  SELECT objectid, JSON_ARRAYAGG(tag) AS tags
+  FROM actionstags
+  GROUP BY objectid
+) at ON o.id = at.objectid
+SET o.object = JSON_SET(o.object, '$.tags', at.tags);
+
 
 RENAME TABLE `publications` TO `publications_old`;
 RENAME TABLE `publicationsenvironments` TO `publicationsenvironments_old`;

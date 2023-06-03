@@ -41,7 +41,7 @@ export const choiceRandomObject = z.object({
   choice: z.object({
     type: z.enum(['list', 'random']),
     field: z.string(),
-    number: z.number(),
+    number: z.number().optional(),
     result: z.string(),
     source: z.enum(['objects','backgrounds','bases','damagetypes','languages','names','skills','traits','voices']),
     objectType: z.number().optional(),
@@ -175,8 +175,12 @@ export const actionVariantObject = z.object({
 });
 export const actionObject = z.object({
   tag: z.string(),
+  actionType: z.enum(['trait', 'legendary', 'action', 'reaction', 'bonus', 'attack', 'multiattack', 'mythic', 'lair']).optional(),
+  subType: z.string().optional(),
+  source: z.string().optional(),
+  tags: z.array(z.string()).optional(),
   priority: z.number().optional(),
-  variants: z.array(actionVariantObject),
+  variants: z.array(z.union([actionVariantObject, choiceRandomObject, choiceListObject])),
 });
 
 

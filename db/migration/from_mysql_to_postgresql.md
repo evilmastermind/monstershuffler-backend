@@ -33,3 +33,7 @@ Example of config.json file (nmig)
     },
     [...]
 ```
+
+-4 link the backend to the new db
+
+-5 request the conversion of all the objects in the DB with the HTTP call converter/converter, to update the JSON objects to the new version

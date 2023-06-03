@@ -18,6 +18,7 @@ import { getRandomTrait } from '@/modules/trait/trait.service';
 import { getRandomBackground } from '@/modules/background/background.service';
 import { handleError } from '@/utils/errors';
 import { random } from '@/utils/functions';
+import { findChoices } from '@/modules/choiceSolver';
 
 //TODO: delete this
 import fs from 'fs';
@@ -126,6 +127,7 @@ export async function createRandomNpcHandler (
     }
     if (classChosen) {
       character['class'] = classChosen;
+      findChoices(character.class, character.class, 0);
     }
     if (classChosen && classvariant) {
       character['classvariant'] = classvariant;
