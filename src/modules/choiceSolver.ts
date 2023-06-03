@@ -22,8 +22,6 @@ function resolveChoice(object: any, father: object, fathersKey: string | number)
 
 /* missing in action (lol)
 - tag
-- check the converted profession actions inside psql, they don't seem to have
-  all the fields yet
-- also, for those actions, you need to convert filters with filtersObject
-- also, check if the randomChoice format is correct
+- the tag is not being added yet
+- keyName values neet to be changed to camelCase
 */

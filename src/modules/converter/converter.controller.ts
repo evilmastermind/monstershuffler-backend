@@ -375,14 +375,35 @@ async function convertAction(object, id) {
   if( Object.hasOwn(object, 'variants')) { 
     return object; 
   }
+
   const action = {
-    tag: object.tag,
-    priority: parseInt(object.priority),
-    variants: [{ ...object }]
+    tag: object?.tag || object?.name || 'action',
   };
 
-  delete action.variants[0].tag;
-  delete action.variants[0].priority;
+  delete object.tag;
+
+  if (Object.hasOwn(object, 'priority')) {
+    action.priority = parseInt(object.priority);
+    delete object.priority;
+  }
+  if (Object.hasOwn(object, 'actionType')) {
+    action.actionType = object.actionType;
+    delete object.actionType;
+  }
+  if (Object.hasOwn(object, 'subType')) {
+    action.subType = object.subType;
+    delete object.subType;
+  }
+  if (Object.hasOwn(object, 'source')) {
+    action.source = object.source;
+    delete object.source;
+  }
+  if (Object.hasOwn(object, 'tags')) {
+    action.tags = object.tags;
+    delete object.tags;
+  }
+
+  action.variants = [{ ...object }];
 
   // levelMin, levelMax conversion to int
   if (Object.hasOwn(action.variants[0], 'levelMin')) {
@@ -390,6 +411,11 @@ async function convertAction(object, id) {
   }
   if (Object.hasOwn(action.variants[0], 'levelMax')) {
     action.variants[0].levelMax = parseInt(action.variants[0].levelMax);
+  }
+
+  // profession actions had replaceName erroneously inside the root object instead of the attack object
+  if (Object.hasOwn(action.variants[0], 'replaceName')) {
+    delete action.variants[0].replaceName;
   }
 
   // (random actions)
