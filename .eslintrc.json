@@ -32,7 +32,8 @@
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "@typescript-eslint/ban-ts-comment": "allow-with-description"
     },
     "settings": {
         "import/resolver": {

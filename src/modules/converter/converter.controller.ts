@@ -470,6 +470,13 @@ async function convertChoiceRandom(object,source) {
     object.choice.filters = newFilters;
   }
 
+  if (Object.hasOwn(object.choice, 'result')) {
+    object.choice.resultType = object.choice.result === 'object' ? 'object' : 'nameId';
+    delete object.choice.result;
+  }
+
+  delete object.choice.field;
+
   if (object.choice.type === 'random') {
     switch (source) {
     case 'actions':

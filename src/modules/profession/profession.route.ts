@@ -3,6 +3,10 @@ import { createProfessionHandler, getProfessionHandler, getRandomProfessionHandl
 import { $ref } from './profession.schema';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/modules/schemas';
 
+// TODO: professions have some random choices that choose a weapon based
+// on the weapon's name. This might cause issues if there are multiple
+// weapons with the same name.
+
 async function professionRoutes(server: FastifyInstance) {
   server.get(
     '/',

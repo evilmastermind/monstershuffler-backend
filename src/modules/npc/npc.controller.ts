@@ -127,10 +127,10 @@ export async function createRandomNpcHandler (
     }
     if (classChosen) {
       character['class'] = classChosen;
-      findChoices(character.class, character.class, 0);
     }
     if (classChosen && classvariant) {
       character['classvariant'] = classvariant;
+      findChoices(character.classvariant, character.classvariant, 0);
     }
     if (profession) {
       character['profession'] = profession;

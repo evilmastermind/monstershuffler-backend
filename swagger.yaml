@@ -55,14 +55,14 @@ components:
                             type:
                               type: string
                               enum:
-                                - list
                                 - random
-                            field:
-                              type: string
                             number:
                               type: number
-                            result:
+                            resultType:
                               type: string
+                              enum:
+                                - object
+                                - nameId
                             source:
                               type: string
                               enum:
@@ -102,12 +102,12 @@ components:
                                   name:
                                     type: string
                                 required:
+                                  - id
                                   - name
                                 additionalProperties: false
                           required:
                             - type
-                            - field
-                            - result
+                            - resultType
                             - source
                           additionalProperties: false
                       required:
@@ -163,15 +163,20 @@ components:
                               type: string
                               enum:
                                 - list
-                                - random
                             number:
                               type: number
                             list:
                               type: array
                               items:
-                                $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
-                                  s/object/properties/armor/anyOf/1/properties/\
-                                  choice/properties/chosenAlready/items"
+                                type: object
+                                properties:
+                                  id:
+                                    type: number
+                                  name:
+                                    type: string
+                                required:
+                                  - name
+                                additionalProperties: false
                             isRepeatable:
                               type: boolean
                           required:
@@ -267,6 +272,8 @@ components:
                               properties:
                                 name:
                                   type: string
+                                description:
+                                  type: string
                                 type:
                                   type: string
                                   enum:
@@ -297,8 +304,6 @@ components:
                                 recharge:
                                   type: string
                                 cost:
-                                  type: string
-                                description:
                                   type: string
                                 values:
                                   type: array
@@ -452,8 +457,8 @@ components:
                                     additionalProperties: false
                               required:
                                 - name
-                                - type
                                 - description
+                                - type
                               additionalProperties: false
                             - $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
                                 s/object/properties/armor/anyOf/1"
@@ -960,14 +965,14 @@ components:
                                     type:
                                       type: string
                                       enum:
-                                        - list
                                         - random
-                                    field:
-                                      type: string
                                     number:
                                       type: number
-                                    result:
+                                    resultType:
                                       type: string
+                                      enum:
+                                        - object
+                                        - nameId
                                     source:
                                       type: string
                                       enum:
@@ -1007,12 +1012,12 @@ components:
                                           name:
                                             type: string
                                         required:
+                                          - id
                                           - name
                                         additionalProperties: false
                                   required:
                                     - type
-                                    - field
-                                    - result
+                                    - resultType
                                     - source
                                   additionalProperties: false
                               required:
@@ -1063,17 +1068,20 @@ components:
                                       type: string
                                       enum:
                                         - list
-                                        - random
                                     number:
                                       type: number
                                     list:
                                       type: array
                                       items:
-                                        $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                          /properties/npc/properties/character/\
-                                          properties/race/properties/armor/anyO\
-                                          f/1/properties/choice/properties/chos\
-                                          enAlready/items"
+                                        type: object
+                                        properties:
+                                          id:
+                                            type: number
+                                          name:
+                                            type: string
+                                        required:
+                                          - name
+                                        additionalProperties: false
                                     isRepeatable:
                                       type: boolean
                                   required:
@@ -1176,6 +1184,8 @@ components:
                                       properties:
                                         name:
                                           type: string
+                                        description:
+                                          type: string
                                         type:
                                           type: string
                                           enum:
@@ -1206,8 +1216,6 @@ components:
                                         recharge:
                                           type: string
                                         cost:
-                                          type: string
-                                        description:
                                           type: string
                                         values:
                                           type: array
@@ -1367,8 +1375,8 @@ components:
                                             additionalProperties: false
                                       required:
                                         - name
-                                        - type
                                         - description
+                                        - type
                                       additionalProperties: false
                                     - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                                         /properties/npc/properties/character/pr\
@@ -2658,14 +2666,14 @@ components:
                             type:
                               type: string
                               enum:
-                                - list
                                 - random
-                            field:
-                              type: string
                             number:
                               type: number
-                            result:
+                            resultType:
                               type: string
+                              enum:
+                                - object
+                                - nameId
                             source:
                               type: string
                               enum:
@@ -2705,12 +2713,12 @@ components:
                                   name:
                                     type: string
                                 required:
+                                  - id
                                   - name
                                 additionalProperties: false
                           required:
                             - type
-                            - field
-                            - result
+                            - resultType
                             - source
                           additionalProperties: false
                       required:
@@ -2774,16 +2782,20 @@ components:
                               type: string
                               enum:
                                 - list
-                                - random
                             number:
                               type: number
                             list:
                               type: array
                               items:
-                                $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                                  /properties/object/properties/armor/anyOf/1/p\
-                                  roperties/choice/properties/chosenAlready/ite\
-                                  ms"
+                                type: object
+                                properties:
+                                  id:
+                                    type: number
+                                  name:
+                                    type: string
+                                required:
+                                  - name
+                                additionalProperties: false
                             isRepeatable:
                               type: boolean
                           required:
@@ -2880,6 +2892,8 @@ components:
                                   properties:
                                     name:
                                       type: string
+                                    description:
+                                      type: string
                                     type:
                                       type: string
                                       enum:
@@ -2910,8 +2924,6 @@ components:
                                     recharge:
                                       type: string
                                     cost:
-                                      type: string
-                                    description:
                                       type: string
                                     values:
                                       type: array
@@ -3067,8 +3079,8 @@ components:
                                         additionalProperties: false
                                   required:
                                     - name
-                                    - type
                                     - description
+                                    - type
                                   additionalProperties: false
                                 - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
                                     /properties/object/properties/armor/anyOf/1"
@@ -3494,14 +3506,14 @@ components:
                             type:
                               type: string
                               enum:
-                                - list
                                 - random
-                            field:
-                              type: string
                             number:
                               type: number
-                            result:
+                            resultType:
                               type: string
+                              enum:
+                                - object
+                                - nameId
                             source:
                               type: string
                               enum:
@@ -3541,12 +3553,12 @@ components:
                                   name:
                                     type: string
                                 required:
+                                  - id
                                   - name
                                 additionalProperties: false
                           required:
                             - type
-                            - field
-                            - result
+                            - resultType
                             - source
                           additionalProperties: false
                       required:
@@ -3594,15 +3606,20 @@ components:
                               type: string
                               enum:
                                 - list
-                                - random
                             number:
                               type: number
                             list:
                               type: array
                               items:
-                                $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
-                                  object/properties/armor/anyOf/1/properties/ch\
-                                  oice/properties/chosenAlready/items"
+                                type: object
+                                properties:
+                                  id:
+                                    type: number
+                                  name:
+                                    type: string
+                                required:
+                                  - name
+                                additionalProperties: false
                             isRepeatable:
                               type: boolean
                           required:
@@ -3698,6 +3715,8 @@ components:
                               properties:
                                 name:
                                   type: string
+                                description:
+                                  type: string
                                 type:
                                   type: string
                                   enum:
@@ -3728,8 +3747,6 @@ components:
                                 recharge:
                                   type: string
                                 cost:
-                                  type: string
-                                description:
                                   type: string
                                 values:
                                   type: array
@@ -3883,8 +3900,8 @@ components:
                                     additionalProperties: false
                               required:
                                 - name
-                                - type
                                 - description
+                                - type
                               additionalProperties: false
                             - $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
                                 object/properties/armor/anyOf/1"

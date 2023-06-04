@@ -24,6 +24,10 @@ export const BatchPayload = {
   }
 };
 
+export type AnyObject = {
+  [key: string]: any;
+};
+
 
 export const abilitiesEnum = z.enum(['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']);
 
@@ -34,27 +38,30 @@ export const choice = z.object({
   id: z.number().optional(),
   name: z.string(),
 });
+export const chosenAlready = z.object({
+  id: z.number(),
+  name: z.string(),
+});
 export type Choice = z.infer<typeof choice>;
 
 // object schemas
 export const choiceRandomObject = z.object({
   choice: z.object({
-    type: z.enum(['list', 'random']),
-    field: z.string(),
+    type: z.literal('random'),
     number: z.number().optional(),
-    result: z.string(),
+    resultType: z.enum(['object', 'nameId']),
     source: z.enum(['objects','backgrounds','bases','damagetypes','languages','names','skills','traits','voices']),
     objectType: z.number().optional(),
     filters: z.array(z.object({
       keyName: z.string(),
       keyValues: z.array(z.string()),
     })).optional(),
-    chosenAlready: z.array(choice).optional(),
+    chosenAlready: z.array(chosenAlready).optional(),
   }),
 });
 export const choiceListObject = z.object({
   choice: z.object({
-    type: z.enum(['list', 'random']),
+    type: z.literal('list'),
     number: z.number(),
     list: z.array(choice),
     isRepeatable: z.boolean().optional(),
@@ -160,6 +167,7 @@ export const abilitiesBaseObject = z.object({
 
 export const actionVariantObject = z.object({
   name: z.string(),
+  description: z.string(),
   type: z.enum(['trait', 'legendary', 'action', 'reaction', 'bonus', 'attack', 'multiattack', 'mythic', 'lair']),
   levelMin: z.number().optional(),
   levelMax: z.number().optional(),
@@ -167,7 +175,6 @@ export const actionVariantObject = z.object({
   charges: z.string().optional(),
   recharge: z.string().optional(),
   cost: z.string().optional(),
-  description: z.string(),
   values: z.array(
     z.union([valueExpressionObject, valueDiceObject, valueIncrProgressionObject])
   ).optional(),

@@ -62,7 +62,8 @@ import userRoutes from '@/modules/user/user.route';
 import converterRoutes from '@/modules/converter/converter.route';
 
 dotenv.config();
-export const server = Fastify({ logger: true});
+// export const server = Fastify({ logger: true});
+export const server = Fastify();
 
 const secret = process.env.JWT_SECRET;
 if( secret === undefined) {
