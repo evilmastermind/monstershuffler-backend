@@ -8,7 +8,7 @@ export function handleError(error: unknown, reply: FastifyReply) {
   } else if (error instanceof PrismaClientKnownRequestError) {
     return reply.code(400).send(createErrorJSON(400, handlePrismaErrors(error.code)));
   } else if (error instanceof Error) {
-    console.log(error);
+    console.warn(error);
     return reply.code(400).send(createErrorJSON(400, error.name));
   } 
 }

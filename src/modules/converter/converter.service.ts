@@ -137,7 +137,7 @@ export async function getIdsFromNames(chosenAlready: string[], source: string) {
   case 'objects':
     break;
   default:
-    console.log('UNDEFINED TYPE DETECTED: ' + source);
+    console.warn('UNDEFINED TYPE DETECTED: ' + source);
     table = 'somethingwrongtomakethisfail';
     break;
   }
@@ -154,7 +154,7 @@ export async function getIdsFromNames(chosenAlready: string[], source: string) {
         where: {
           name: {
             equals: name.trim(),
-            mode: 'insensitive',
+            // mode: 'insensitive', -- for PostgreSQL only
           },
           type: objectType,
           userid: 0,
@@ -162,16 +162,16 @@ export async function getIdsFromNames(chosenAlready: string[], source: string) {
       });
       // console.log('ids:' + ids);
       if(ids.length > 0) {
-        newChosenAlready.push({ id: ids[0].id, name: name});
+        newChosenAlready.push({ id: ids[0].id, value: name});
       } else {
-        newChosenAlready.push({ name: name});
+        newChosenAlready.push({ value: name});
       }
     } else {
-      const ids = await prisma.$queryRawUnsafe(`SELECT id FROM monstershuffler.${table} WHERE LOWER(name) = LOWER('${name.trim()}')`);
+      const ids = await prisma.$queryRawUnsafe<{id: number}[]>(`SELECT id FROM ${table} WHERE LOWER(name) = LOWER('${name.trim()}')`);
       if(ids.length > 0) {
-        newChosenAlready.push({ id: ids[0].id, name: name});
+        newChosenAlready.push({ id: ids[0].id, value: name});
       } else {
-        newChosenAlready.push({ name: name});
+        newChosenAlready.push({ value: name});
       }
     }
   }

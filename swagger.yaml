@@ -67,14 +67,8 @@ components:
                               type: string
                               enum:
                                 - objects
-                                - backgrounds
-                                - bases
-                                - damagetypes
                                 - languages
-                                - names
                                 - skills
-                                - traits
-                                - voices
                             objectType:
                               type: number
                             filters:
@@ -99,11 +93,12 @@ components:
                                 properties:
                                   id:
                                     type: number
-                                  name:
+                                  value:
+                                    type: string
+                                  levelMin:
                                     type: string
                                 required:
-                                  - id
-                                  - name
+                                  - value
                                 additionalProperties: false
                           required:
                             - type
@@ -116,15 +111,9 @@ components:
                 subtypes:
                   type: array
                   items:
-                    type: object
-                    properties:
-                      value:
-                        type: string
-                      levelMin:
-                        type: string
-                    required:
-                      - value
-                    additionalProperties: false
+                    $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
+                      s/object/properties/armor/anyOf/1/properties/choice/prope\
+                      rties/chosenAlready/items"
                 speeds:
                   type: object
                   properties:
@@ -145,13 +134,15 @@ components:
                   type: array
                   items:
                     $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
-                      s/object/properties/subtypes/items"
+                      s/object/properties/armor/anyOf/1/properties/choice/prope\
+                      rties/chosenAlready/items"
                 skills:
                   anyOf:
                     - type: array
                       items:
                         $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
-                          s/object/properties/subtypes/items"
+                          s/object/properties/armor/anyOf/1/properties/choice/p\
+                          roperties/chosenAlready/items"
                     - $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
                         s/object/properties/armor/anyOf/1"
                     - type: object
@@ -168,15 +159,9 @@ components:
                             list:
                               type: array
                               items:
-                                type: object
-                                properties:
-                                  id:
-                                    type: number
-                                  name:
-                                    type: string
-                                required:
-                                  - name
-                                additionalProperties: false
+                                $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
+                                  s/object/properties/armor/anyOf/1/properties/\
+                                  choice/properties/chosenAlready/items"
                             isRepeatable:
                               type: boolean
                           required:
@@ -191,22 +176,26 @@ components:
                   type: array
                   items:
                     $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
-                      s/object/properties/subtypes/items"
+                      s/object/properties/armor/anyOf/1/properties/choice/prope\
+                      rties/chosenAlready/items"
                 immunities:
                   type: array
                   items:
                     $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
-                      s/object/properties/subtypes/items"
+                      s/object/properties/armor/anyOf/1/properties/choice/prope\
+                      rties/chosenAlready/items"
                 vulnerabilities:
                   type: array
                   items:
                     $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
-                      s/object/properties/subtypes/items"
+                      s/object/properties/armor/anyOf/1/properties/choice/prope\
+                      rties/chosenAlready/items"
                 conditionImmunities:
                   type: array
                   items:
                     $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
-                      s/object/properties/subtypes/items"
+                      s/object/properties/armor/anyOf/1/properties/choice/prope\
+                      rties/chosenAlready/items"
                 senses:
                   type: object
                   properties:
@@ -230,7 +219,8 @@ components:
                     - type: array
                       items:
                         $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
-                          s/object/properties/subtypes/items"
+                          s/object/properties/armor/anyOf/1/properties/choice/p\
+                          roperties/chosenAlready/items"
                     - $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
                         s/object/properties/armor/anyOf/1"
                     - $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
@@ -658,15 +648,9 @@ components:
                             anyOf:
                               - type: array
                                 items:
-                                  type: object
-                                  properties:
-                                    id:
-                                      type: number
-                                    name:
-                                      type: string
-                                  required:
-                                    - name
-                                  additionalProperties: false
+                                  $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
+                                    s/object/properties/armor/anyOf/1/propertie\
+                                    s/choice/properties/chosenAlready/items"
                               - $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
                                   s/object/properties/armor/anyOf/1"
                               - $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
@@ -911,6 +895,8 @@ components:
                           items:
                             type: object
                             properties:
+                              id:
+                                type: number
                               value:
                                 type: string
                               levelMin:
@@ -977,14 +963,8 @@ components:
                                       type: string
                                       enum:
                                         - objects
-                                        - backgrounds
-                                        - bases
-                                        - damagetypes
                                         - languages
-                                        - names
                                         - skills
-                                        - traits
-                                        - voices
                                     objectType:
                                       type: number
                                     filters:
@@ -1005,16 +985,10 @@ components:
                                     chosenAlready:
                                       type: array
                                       items:
-                                        type: object
-                                        properties:
-                                          id:
-                                            type: number
-                                          name:
-                                            type: string
-                                        required:
-                                          - id
-                                          - name
-                                        additionalProperties: false
+                                        $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                                          /properties/npc/properties/character/\
+                                          properties/race/properties/subtypes/i\
+                                          tems"
                                   required:
                                     - type
                                     - resultType
@@ -1073,15 +1047,10 @@ components:
                                     list:
                                       type: array
                                       items:
-                                        type: object
-                                        properties:
-                                          id:
-                                            type: number
-                                          name:
-                                            type: string
-                                        required:
-                                          - name
-                                        additionalProperties: false
+                                        $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                                          /properties/npc/properties/character/\
+                                          properties/race/properties/subtypes/i\
+                                          tems"
                                     isRepeatable:
                                       type: boolean
                                   required:
@@ -1629,15 +1598,10 @@ components:
                                     anyOf:
                                       - type: array
                                         items:
-                                          type: object
-                                          properties:
-                                            id:
-                                              type: number
-                                            name:
-                                              type: string
-                                          required:
-                                            - name
-                                          additionalProperties: false
+                                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                                            /properties/npc/properties/characte\
+                                            r/properties/race/properties/subtyp\
+                                            es/items"
                                       - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                                           /properties/npc/properties/character/\
                                           properties/race/properties/armor/anyO\
@@ -2678,14 +2642,8 @@ components:
                               type: string
                               enum:
                                 - objects
-                                - backgrounds
-                                - bases
-                                - damagetypes
                                 - languages
-                                - names
                                 - skills
-                                - traits
-                                - voices
                             objectType:
                               type: number
                             filters:
@@ -2710,11 +2668,12 @@ components:
                                 properties:
                                   id:
                                     type: number
-                                  name:
+                                  value:
+                                    type: string
+                                  levelMin:
                                     type: string
                                 required:
-                                  - id
-                                  - name
+                                  - value
                                 additionalProperties: false
                           required:
                             - type
@@ -2735,15 +2694,9 @@ components:
                 subtypes:
                   type: array
                   items:
-                    type: object
-                    properties:
-                      value:
-                        type: string
-                      levelMin:
-                        type: string
-                    required:
-                      - value
-                    additionalProperties: false
+                    $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
+                      /properties/object/properties/armor/anyOf/1/properties/ch\
+                      oice/properties/chosenAlready/items"
                 speeds:
                   type: object
                   properties:
@@ -2764,13 +2717,15 @@ components:
                   type: array
                   items:
                     $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                      /properties/object/properties/subtypes/items"
+                      /properties/object/properties/armor/anyOf/1/properties/ch\
+                      oice/properties/chosenAlready/items"
                 skills:
                   anyOf:
                     - type: array
                       items:
                         $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                          /properties/object/properties/subtypes/items"
+                          /properties/object/properties/armor/anyOf/1/propertie\
+                          s/choice/properties/chosenAlready/items"
                     - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
                         /properties/object/properties/armor/anyOf/1"
                     - type: object
@@ -2787,15 +2742,10 @@ components:
                             list:
                               type: array
                               items:
-                                type: object
-                                properties:
-                                  id:
-                                    type: number
-                                  name:
-                                    type: string
-                                required:
-                                  - name
-                                additionalProperties: false
+                                $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
+                                  /properties/object/properties/armor/anyOf/1/p\
+                                  roperties/choice/properties/chosenAlready/ite\
+                                  ms"
                             isRepeatable:
                               type: boolean
                           required:
@@ -2810,22 +2760,26 @@ components:
                   type: array
                   items:
                     $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                      /properties/object/properties/subtypes/items"
+                      /properties/object/properties/armor/anyOf/1/properties/ch\
+                      oice/properties/chosenAlready/items"
                 immunities:
                   type: array
                   items:
                     $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                      /properties/object/properties/subtypes/items"
+                      /properties/object/properties/armor/anyOf/1/properties/ch\
+                      oice/properties/chosenAlready/items"
                 vulnerabilities:
                   type: array
                   items:
                     $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                      /properties/object/properties/subtypes/items"
+                      /properties/object/properties/armor/anyOf/1/properties/ch\
+                      oice/properties/chosenAlready/items"
                 conditionImmunities:
                   type: array
                   items:
                     $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                      /properties/object/properties/subtypes/items"
+                      /properties/object/properties/armor/anyOf/1/properties/ch\
+                      oice/properties/chosenAlready/items"
                 senses:
                   type: object
                   properties:
@@ -2849,7 +2803,8 @@ components:
                     - type: array
                       items:
                         $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                          /properties/object/properties/subtypes/items"
+                          /properties/object/properties/armor/anyOf/1/propertie\
+                          s/choice/properties/chosenAlready/items"
                     - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
                         /properties/object/properties/armor/anyOf/1"
                     - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
@@ -3333,15 +3288,10 @@ components:
                             anyOf:
                               - type: array
                                 items:
-                                  type: object
-                                  properties:
-                                    id:
-                                      type: number
-                                    name:
-                                      type: string
-                                  required:
-                                    - name
-                                  additionalProperties: false
+                                  $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
+                                    /properties/object/properties/armor/anyOf/1\
+                                    /properties/choice/properties/chosenAlready\
+                                    /items"
                               - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
                                   /properties/object/properties/armor/anyOf/1"
                               - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
@@ -3452,6 +3402,8 @@ components:
                   items:
                     type: object
                     properties:
+                      id:
+                        type: number
                       value:
                         type: string
                       levelMin:
@@ -3518,14 +3470,8 @@ components:
                               type: string
                               enum:
                                 - objects
-                                - backgrounds
-                                - bases
-                                - damagetypes
                                 - languages
-                                - names
                                 - skills
-                                - traits
-                                - voices
                             objectType:
                               type: number
                             filters:
@@ -3546,16 +3492,8 @@ components:
                             chosenAlready:
                               type: array
                               items:
-                                type: object
-                                properties:
-                                  id:
-                                    type: number
-                                  name:
-                                    type: string
-                                required:
-                                  - id
-                                  - name
-                                additionalProperties: false
+                                $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
+                                  object/properties/subtypes/items"
                           required:
                             - type
                             - resultType
@@ -3611,15 +3549,8 @@ components:
                             list:
                               type: array
                               items:
-                                type: object
-                                properties:
-                                  id:
-                                    type: number
-                                  name:
-                                    type: string
-                                required:
-                                  - name
-                                additionalProperties: false
+                                $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
+                                  object/properties/subtypes/items"
                             isRepeatable:
                               type: boolean
                           required:
@@ -4101,15 +4032,8 @@ components:
                             anyOf:
                               - type: array
                                 items:
-                                  type: object
-                                  properties:
-                                    id:
-                                      type: number
-                                    name:
-                                      type: string
-                                  required:
-                                    - name
-                                  additionalProperties: false
+                                  $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
+                                    object/properties/subtypes/items"
                               - $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
                                   object/properties/armor/anyOf/1"
                               - $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\

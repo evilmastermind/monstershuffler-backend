@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -14,24 +14,24 @@ model actionsdetails {
   actiontype String  @db.VarChar(255)
   subtype    String? @db.VarChar(255)
   source     String  @db.VarChar(255)
-  objects    objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  objects    objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "actionsdetails_ibfk_1")
 }
 
 model actionstags {
   objectid Int
   tag      String  @db.VarChar(255)
-  objects  objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  objects  objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "actionstags_ibfk_1")
 
   @@id([objectid, tag])
 }
 
 model backgrounds {
-  id         Int    @unique(map: "backgrounds_id_idx") @default(autoincrement())
+  id         Int    @unique(map: "id") @default(autoincrement())
   background String @db.VarChar(255)
 }
 
 model bases {
-  id    Int    @unique(map: "bases_id_idx") @default(autoincrement())
+  id    Int    @unique(map: "id") @default(autoincrement())
   age   String @db.VarChar(255)
   part  String @db.VarChar(255)
   value String @db.VarChar(255)
@@ -41,13 +41,13 @@ model charactersdetails {
   objectid    Int     @id
   name        String  @db.VarChar(255)
   monstertype Int
-  cr          Float   @db.Real
+  cr          Float   @db.Float
   alignment   Int
   size        Int
-  meta        String
-  objects     objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  meta        String  @db.Text
+  objects     objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "charactersdetails_ibfk_1")
 
-  @@index([objectid])
+  @@index([objectid], map: "objectid")
 }
 
 model classesdetails {
@@ -55,35 +55,35 @@ model classesdetails {
   name        String  @db.VarChar(255)
   femalename  String  @db.VarChar(255)
   age         String  @db.VarChar(255)
-  description String?
-  objects     objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  description String? @db.Text
+  objects     objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "classesdetails_ibfk_1")
 }
 
 model damagetypes {
   id          Int     @id @default(autoincrement())
   userid      Int
   name        String  @db.VarChar(255)
-  description String?
-  users       users   @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  description String? @db.Text
+  users       users   @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "damagetypes_ibfk_1")
 
-  @@index([userid])
+  @@index([userid], map: "userid")
 }
 
 model folders {
   id            Int       @id @default(autoincrement())
   userid        Int
-  created       DateTime? @default(now()) @db.Timestamp(6)
-  lastedited    DateTime? @default(now()) @db.Timestamp(6)
+  created       DateTime? @default(now()) @db.DateTime(0)
+  lastedited    DateTime? @default(now()) @db.DateTime(0)
   folderid      Int?
   name          String    @db.VarChar(255)
-  trashed       Int?      @default(0) @db.SmallInt
-  folders       folders?  @relation("foldersTofolders", fields: [folderid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  trashed       Boolean?  @default(false)
+  folders       folders?  @relation("foldersTofolders", fields: [folderid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "folders_ibfk_1")
   other_folders folders[] @relation("foldersTofolders")
-  users         users     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users         users     @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "folders_ibfk_2")
   objects       objects[]
 
-  @@index([folderid])
-  @@index([userid])
+  @@index([folderid], map: "folderid")
+  @@index([userid], map: "userid")
 }
 
 model game {
@@ -97,9 +97,9 @@ model languages {
   userid Int
   name   String  @db.VarChar(255)
   script String? @db.VarChar(255)
-  users  users   @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users  users   @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "languages_ibfk_1")
 
-  @@index([userid])
+  @@index([userid], map: "userid")
 }
 
 model names {
@@ -107,12 +107,12 @@ model names {
   gender String @db.VarChar(255)
   name   String @db.VarChar(255)
 
-  @@unique([name, gender, race], map: "names_name_gender_race_idx")
+  @@unique([name, gender, race], map: "id")
 }
 
 model npcgeneratorblacklist {
   objectid Int     @id
-  objects  objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  objects  objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "npcgeneratorblacklist_ibfk_1")
 }
 
 model objects {
@@ -121,13 +121,13 @@ model objects {
   name                  String                 @db.VarChar(255)
   game                  Int
   userid                Int
-  created               DateTime?              @default(now()) @db.Timestamp(6)
-  lastedited            DateTime?              @default(now()) @db.Timestamp(6)
-  object                Json                   @db.Json
+  created               DateTime?              @default(now()) @db.DateTime(0)
+  lastedited            DateTime?              @default(now()) @db.DateTime(0)
+  object                Json
   originalid            Int?
   originaluserid        Int?
   folderid              Int?
-  trashed               Int?                   @default(0) @db.SmallInt
+  trashed               Boolean?               @default(false)
   variantof             Int?
   oldid                 Int?
   actionsdetails        actionsdetails?
@@ -135,21 +135,21 @@ model objects {
   charactersdetails     charactersdetails?
   classesdetails        classesdetails?
   npcgeneratorblacklist npcgeneratorblacklist?
-  folders               folders?               @relation(fields: [folderid], references: [id], onUpdate: NoAction)
-  objecttypes           objecttypes            @relation(fields: [type], references: [type], onDelete: NoAction, onUpdate: NoAction)
-  users                 users                  @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  objects               objects?               @relation("objectsToobjects", fields: [variantof], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  objecttypes           objecttypes            @relation(fields: [type], references: [type], onDelete: NoAction, onUpdate: NoAction, map: "objects_ibfk_1")
+  users                 users                  @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "objects_ibfk_2")
+  folders               folders?               @relation(fields: [folderid], references: [id], onUpdate: NoAction, map: "objects_ibfk_3")
+  objects               objects?               @relation("objectsToobjects", fields: [variantof], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "objects_ibfk_4")
   other_objects         objects[]              @relation("objectsToobjects")
   professionsdetails    professionsdetails?
   publications          publications?
   racesdetails          racesdetails?
   templatesdetails      templatesdetails?
 
-  @@index([folderid])
-  @@index([id])
-  @@index([type])
-  @@index([userid])
-  @@index([variantof])
+  @@index([folderid], map: "folderid")
+  @@index([id], map: "id")
+  @@index([type], map: "type")
+  @@index([userid], map: "userid")
+  @@index([variantof], map: "variantof")
 }
 
 model objecttypes {
@@ -164,10 +164,10 @@ model professionsdetails {
   name        String  @db.VarChar(255)
   femalename  String  @db.VarChar(255)
   age         String  @db.VarChar(255)
-  description String?
-  objects     objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  description String? @db.Text
+  objects     objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "professionsdetails_ibfk_1")
 
-  @@index([objectid])
+  @@index([objectid], map: "objectid")
 }
 
 model publications {
@@ -175,63 +175,63 @@ model publications {
   type                     Int
   oldid                    Int
   oldtype                  String                     @db.VarChar(255)
-  datepublished            DateTime?                  @default(now()) @db.Timestamp(6)
-  datemodified             DateTime?                  @default(now()) @db.Timestamp(6)
+  datepublished            DateTime?                  @default(now()) @db.DateTime(0)
+  datemodified             DateTime?                  @default(now()) @db.DateTime(0)
   adds                     Int?                       @default(0)
   url                      String                     @db.VarChar(255)
-  objects                  objects                    @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  objecttypes              objecttypes                @relation(fields: [type], references: [type], onDelete: NoAction, onUpdate: NoAction)
+  objects                  objects                    @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "publications_ibfk_1")
+  objecttypes              objecttypes                @relation(fields: [type], references: [type], onDelete: NoAction, onUpdate: NoAction, map: "publications_ibfk_2")
   publicationsenvironments publicationsenvironments[]
   publicationsratings      publicationsratings[]
   publicationssearchtags   publicationssearchtags[]
   publicationssubtypes     publicationssubtypes[]
   reports                  reports[]
 
-  @@index([objectid])
-  @@index([type])
+  @@index([objectid], map: "objectid")
+  @@index([type], map: "type")
 }
 
 model publicationsenvironments {
   objectid     Int
   string       String       @db.VarChar(255)
-  publications publications @relation(fields: [objectid], references: [objectid], onDelete: Cascade, onUpdate: NoAction)
+  publications publications @relation(fields: [objectid], references: [objectid], onDelete: Cascade, onUpdate: NoAction, map: "publicationsenvironments_ibfk_1")
 
   @@id([objectid, string])
-  @@index([objectid])
+  @@index([objectid], map: "objectid")
 }
 
 model publicationsratings {
   objectid     Int
   userid       Int
   value        Int
-  publications publications @relation(fields: [objectid], references: [objectid], onDelete: Cascade, onUpdate: NoAction)
-  users        users        @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  publications publications @relation(fields: [objectid], references: [objectid], onDelete: Cascade, onUpdate: NoAction, map: "publicationsratings_ibfk_1")
+  users        users        @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "publicationsratings_ibfk_2")
 
   @@id([objectid, userid])
-  @@index([objectid])
-  @@index([userid])
+  @@index([objectid], map: "objectid")
+  @@index([userid], map: "userid")
 }
 
 model publicationssearchtags {
   objectid     Int
   string       String       @db.VarChar(255)
-  publications publications @relation(fields: [objectid], references: [objectid], onDelete: Cascade, onUpdate: NoAction)
+  publications publications @relation(fields: [objectid], references: [objectid], onDelete: Cascade, onUpdate: NoAction, map: "publicationssearchtags_ibfk_1")
 
   @@id([objectid, string])
-  @@index([objectid])
+  @@index([objectid], map: "objectid")
 }
 
 model publicationssubtypes {
   objectid     Int
   string       String       @db.VarChar(255)
-  publications publications @relation(fields: [objectid], references: [objectid], onDelete: Cascade, onUpdate: NoAction)
+  publications publications @relation(fields: [objectid], references: [objectid], onDelete: Cascade, onUpdate: NoAction, map: "publicationssubtypes_ibfk_1")
 
   @@id([objectid, string])
-  @@index([objectid])
+  @@index([objectid], map: "objectid")
 }
 
 model quirks {
-  id    Int    @unique(map: "quirks_id_idx") @default(autoincrement())
+  id    Int    @unique(map: "id") @default(autoincrement())
   quirk String @db.VarChar(255)
 }
 
@@ -240,8 +240,8 @@ model racesdetails {
   name        String  @db.VarChar(255)
   femalename  String  @db.VarChar(255)
   age         String  @db.VarChar(255)
-  description String?
-  objects     objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  description String? @db.Text
+  objects     objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "racesdetails_ibfk_1")
 }
 
 model reports {
@@ -249,27 +249,27 @@ model reports {
   objectid                       Int
   userid                         Int
   reason                         String       @db.VarChar(255)
-  report                         String?
-  datereported                   DateTime?    @default(now()) @db.Timestamp(6)
-  dateaction                     DateTime?    @db.Timestamp(6)
+  report                         String?      @db.Text
+  datereported                   DateTime?    @default(now()) @db.DateTime(0)
+  dateaction                     DateTime?    @db.DateTime(0)
   moderator                      Int?
-  action                         String?
-  users_reports_moderatorTousers users?       @relation("reports_moderatorTousers", fields: [moderator], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  publications                   publications @relation(fields: [objectid], references: [objectid], onDelete: Cascade, onUpdate: NoAction)
-  users_reports_useridTousers    users        @relation("reports_useridTousers", fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  action                         String?      @db.Text
+  publications                   publications @relation(fields: [objectid], references: [objectid], onDelete: Cascade, onUpdate: NoAction, map: "reports_ibfk_1")
+  users_reports_useridTousers    users        @relation("reports_useridTousers", fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "reports_ibfk_2")
+  users_reports_moderatorTousers users?       @relation("reports_moderatorTousers", fields: [moderator], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "reports_ibfk_3")
 
-  @@index([moderator])
-  @@index([objectid])
-  @@index([userid])
+  @@index([moderator], map: "moderator")
+  @@index([objectid], map: "objectid")
+  @@index([userid], map: "userid")
 }
 
 model skills {
-  id                     Int    @unique(map: "skills_id_idx") @default(autoincrement())
+  id                     Int    @unique(map: "id") @default(autoincrement())
   name                   String @db.VarChar(255)
   game                   Int
-  game_skills_gameTogame game   @relation("skills_gameTogame", fields: [game], references: [game], onDelete: NoAction, onUpdate: NoAction)
+  game_skills_gameTogame game   @relation("skills_gameTogame", fields: [game], references: [game], onDelete: NoAction, onUpdate: NoAction, map: "skills_ibfk_1")
 
-  @@index([game])
+  @@index([game], map: "game")
 }
 
 model surnames {
@@ -277,7 +277,7 @@ model surnames {
   gender  String @db.VarChar(255)
   surname String @db.VarChar(255)
 
-  @@unique([surname, gender, race], map: "surnames_surname_gender_race_idx")
+  @@unique([surname, gender, race], map: "id")
 }
 
 model templatesdetails {
@@ -285,31 +285,31 @@ model templatesdetails {
   name        String  @db.VarChar(255)
   femalename  String  @db.VarChar(255)
   age         String  @db.VarChar(255)
-  description String?
-  objects     objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  description String? @db.Text
+  objects     objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "templatesdetails_ibfk_1")
 }
 
 model traits {
-  name        String  @id @db.VarChar(255)
-  type        String  @db.VarChar(255)
-  subtitle    Int?    @default(0) @db.SmallInt
-  category    String  @db.VarChar(255)
-  feeling     Int?    @default(0) @db.SmallInt
-  description String?
+  name        String   @id @db.VarChar(255)
+  type        String   @db.VarChar(255)
+  subtitle    Boolean? @default(false)
+  category    String   @db.VarChar(255)
+  feeling     Boolean? @default(false)
+  description String?  @db.Text
 }
 
 model users {
   id                               Int                   @id @default(autoincrement())
-  email                            String                @unique(map: "users_email_idx") @db.VarChar(255)
+  email                            String                @unique(map: "email") @db.VarChar(255)
   username                         String                @db.VarChar(32)
   password                         String                @db.VarChar(255)
   token                            String?               @db.VarChar(255)
   tokenpwd                         String?               @db.VarChar(255)
-  verified                         Int?                  @default(0) @db.SmallInt
-  premium                          DateTime?             @db.Timestamp(6)
-  level                            Int?                  @default(0) @db.SmallInt
-  created                          DateTime?             @default(now()) @db.Timestamp(6)
-  publishsuspension                DateTime?             @db.Timestamp(6)
+  verified                         Int?                  @default(0) @db.TinyInt
+  premium                          DateTime?             @db.DateTime(0)
+  level                            Int?                  @default(0) @db.TinyInt
+  created                          DateTime?             @default(now()) @db.DateTime(0)
+  publishsuspension                DateTime?             @db.DateTime(0)
   sessiontoken                     String?               @db.VarChar(255)
   name                             String?               @db.VarChar(255)
   country                          String?               @db.VarChar(255)
@@ -327,10 +327,10 @@ model users {
   languages                        languages[]
   objects                          objects[]
   publicationsratings              publicationsratings[]
-  reports_reports_moderatorTousers reports[]             @relation("reports_moderatorTousers")
   reports_reports_useridTousers    reports[]             @relation("reports_useridTousers")
+  reports_reports_moderatorTousers reports[]             @relation("reports_moderatorTousers")
 
-  @@unique([id, email], map: "users_id_email_idx")
+  @@unique([id, email], map: "idemail")
 }
 
 model voices {

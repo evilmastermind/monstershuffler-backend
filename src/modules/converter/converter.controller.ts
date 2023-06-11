@@ -278,7 +278,7 @@ async function addIdsToSpells(spellSlots) {
         const id = await getSpellIdFromName(spell);
         newArray.push({
           id,
-          name: spell
+          value: spell
         });
       }
       spellSlot.spells = newArray;
@@ -471,7 +471,7 @@ async function convertChoiceRandom(object,source) {
   }
 
   if (Object.hasOwn(object.choice, 'result')) {
-    object.choice.resultType = object.choice.result === 'object' ? 'object' : 'nameId';
+    object.choice.resultType = object.choice.result === 'object' || object.choice?.field === 'object' ? 'object' : 'nameId';
     delete object.choice.result;
   }
 

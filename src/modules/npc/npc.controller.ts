@@ -101,8 +101,8 @@ export async function createRandomNpcHandler (
     const name  = await calculateName(pronouns, race);
     const surname = await calculateSurname(pronouns, race);
     const favouriteSkill = (await getRandomSkill()).name;
-    const traitObject = await getRandomTrait({ feeling: 0 });
-    const feelingObject = await getRandomTrait({ feeling: 1 });
+    const traitObject = await getRandomTrait({ feeling: false });
+    const feelingObject = await getRandomTrait({ feeling: true });
     const alignment = calculateAlignment(traitObject.category);
     const smallbackground = await calculateBackground(pronouns);
     const result: Character = { 
@@ -121,19 +121,23 @@ export async function createRandomNpcHandler (
 
     if (race) {
       character['race'] = race;
+      await findChoices(character.race, character.race, 0, id);
     }
     if (race && racevariant) {
       character['racevariant'] = racevariant;
+      await findChoices(character.racevariant, character.racevariant, 0, id);
     }
     if (classChosen) {
       character['class'] = classChosen;
+      await findChoices(character.class, character.class, 0, id);
     }
     if (classChosen && classvariant) {
       character['classvariant'] = classvariant;
-      findChoices(character.classvariant, character.classvariant, 0);
+      await findChoices(character.classvariant, character.classvariant, 0, id);
     }
     if (profession) {
       character['profession'] = profession;
+      await findChoices(character.profession, character.profession, 0, id);
     }
 
     return reply.code(200).send({ 

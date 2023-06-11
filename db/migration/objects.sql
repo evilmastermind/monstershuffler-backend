@@ -91,7 +91,7 @@ FROM `classvariants` a
 
 CREATE TABLE `npcgeneratorblacklist` (
   `objectid` int(11) NOT NULL,
-  'userid' int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
   PRIMARY KEY (objectid, userid),
   FOREIGN KEY (objectid) REFERENCES objects(id) ON DELETE CASCADE,
   FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
@@ -334,6 +334,10 @@ alter table skills DROP column game ;
 alter table skills ADD column game INT not null;
 update skills set game = 1;
 ALTER TABLE skills ADD FOREIGN KEY (game) REFERENCES game(game);
+alter table skills ADD column userid INT not null;
+update skills set userid = 0;
+ALTER TABLE skills ADD FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE;
+
 
 
 DROP TABLE `publicationssubtypes_old`;
