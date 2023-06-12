@@ -101,8 +101,8 @@ export async function createRandomNpcHandler (
     const name  = await calculateName(pronouns, race);
     const surname = await calculateSurname(pronouns, race);
     const favouriteSkill = (await getRandomSkill()).name;
-    const traitObject = await getRandomTrait({ feeling: false });
-    const feelingObject = await getRandomTrait({ feeling: true });
+    const traitObject = await getRandomTrait({ feeling: 0 });
+    const feelingObject = await getRandomTrait({ feeling: 1 });
     const alignment = calculateAlignment(traitObject.category);
     const smallbackground = await calculateBackground(pronouns);
     const result: Character = { 

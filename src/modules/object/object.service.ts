@@ -23,19 +23,22 @@ export async function getChoiceObject(userId: number, choice: ChoiceRandomObject
         additionalFilters += `,`;
       }
       parameters.push(id);
-      additionalFilters += `?`;
+      additionalFilters += `$${parameters.length}`;
     });
     additionalFilters += `) `;
   }
 
   choice?.filters?.forEach((filter) => {
-    if (filter.keyValues.length > 1) {
-      parameters.push(JSON.stringify(filter.keyValues), `$."${filter.keyName}"`);
-      additionalFilters += ` AND JSON_CONTAINS(object, ?, ?) `
-    } else {
-      parameters.push(`${JSON.stringify(filter.keyValues[0])}`, `$."${filter.keyName}"`);
-      additionalFilters +=  ` AND JSON_CONTAINS(object, ?, ?) `
-    }
+    parameters.push(filter.keyName);
+    additionalFilters += ` AND object -> $${parameters.length} ?& ARRAY[`;
+    filter.keyValues.forEach((value, index) => {
+      parameters.push(value);
+      if (index > 0) {
+        additionalFilters += `,`;
+      }
+      additionalFilters += `$${parameters.length}`;
+    });
+    additionalFilters += `] `;
   });
 
   parameters.push(choice?.number || 1);
@@ -52,10 +55,10 @@ export async function getChoiceObject(userId: number, choice: ChoiceRandomObject
   const result = await prisma.$queryRawUnsafe(`
     SELECT ${fields}
     FROM objects
-    WHERE type = ?
-      AND userid IN (0, ?)
+    WHERE type = $1
+      AND userid IN (0, $2)
       ${additionalFilters}
-    ORDER BY RAND() LIMIT ?;
+    ORDER BY RANDOM() LIMIT $${parameters.length};
   `, ...parameters);
 
   // console.log("result:", result);

@@ -76,7 +76,7 @@ export async function getChoiceLanguage(userId: number, choice: ChoiceRandomObje
         additionalFilters += `,`;
       }
       parameters.push(id);
-      additionalFilters += `?`;
+      additionalFilters += `$${parameters.length}`;
     });
     additionalFilters += `) `;
   }
@@ -91,9 +91,9 @@ export async function getChoiceLanguage(userId: number, choice: ChoiceRandomObje
   const result = await prisma.$queryRawUnsafe(`
     SELECT id, name
     FROM languages
-    WHERE userid IN (0, ?)
+    WHERE userid IN (0, $1)
       ${additionalFilters}
-    ORDER BY RAND() LIMIT ?;
+    ORDER BY RANDOM() LIMIT $${parameters.length};
   `, ...parameters);
 
   const fullResult: Choice[] = (result as ResultNameId[])?.map((value) => {

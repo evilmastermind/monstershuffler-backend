@@ -154,7 +154,7 @@ export async function getIdsFromNames(chosenAlready: string[], source: string) {
         where: {
           name: {
             equals: name.trim(),
-            // mode: 'insensitive', -- for PostgreSQL only
+            mode: 'insensitive' // -- for PostgreSQL only
           },
           type: objectType,
           userid: 0,

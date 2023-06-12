@@ -3,9 +3,9 @@ import { buildJsonSchemas } from 'fastify-zod';
 
 const name = z.string().min(2);
 const type = z.string().min(2);
-const subtitle = z.boolean();
-const category = z.string();
-const feeling = z.boolean();
+const subtitle = z.number();
+const category = z.string();  
+const feeling = z.number();
 const description = z.string();
 
 
