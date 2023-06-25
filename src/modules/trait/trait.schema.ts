@@ -1,13 +1,12 @@
-import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
+import { z } from "zod";
+import { buildJsonSchemas } from "fastify-zod";
 
 const name = z.string().min(2);
 const type = z.string().min(2);
 const subtitle = z.number();
-const category = z.string();  
+const category = z.string();
 const feeling = z.number();
 const description = z.string();
-
 
 const getRandomTraitSchema = z.object({
   type: type.optional(),
@@ -30,11 +29,18 @@ const getTraitDescriptionResponseSchema = z.object({
 });
 
 export type getRandomTraitInput = z.infer<typeof getRandomTraitSchema>;
-export type getRandomTraitResponse = z.infer<typeof getRandomTraitResponseSchema>;
-export type getTraitDescriptionResponse = z.infer<typeof getTraitDescriptionResponseSchema>;
+export type getRandomTraitResponse = z.infer<
+  typeof getRandomTraitResponseSchema
+>;
+export type getTraitDescriptionResponse = z.infer<
+  typeof getTraitDescriptionResponseSchema
+>;
 
-export const {schemas: traitSchemas, $ref} = buildJsonSchemas({
-  getRandomTraitSchema,
-  getRandomTraitResponseSchema,
-  getTraitDescriptionResponseSchema
-}, { $id: 'traitSchemas' });
+export const { schemas: traitSchemas, $ref } = buildJsonSchemas(
+  {
+    getRandomTraitSchema,
+    getRandomTraitResponseSchema,
+    getTraitDescriptionResponseSchema,
+  },
+  { $id: "traitSchemas" }
+);

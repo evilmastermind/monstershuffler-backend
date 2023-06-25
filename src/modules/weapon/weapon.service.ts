@@ -1,5 +1,5 @@
-import prisma from '@/utils/prisma';
-import { createWeaponInput } from './weapon.schema';
+import prisma from "@/utils/prisma";
+import { createWeaponInput } from "./weapon.schema";
 
 export async function createWeapon(userid: number, input: createWeaponInput) {
   const { object, game } = input;
@@ -10,13 +10,12 @@ export async function createWeapon(userid: number, input: createWeaponInput) {
       type: 1001,
       userid,
       name: object.name,
-      object
-    }
+      object,
+    },
   });
 }
 
 export async function getWeapon(userid: number, id: number) {
-
   return await prisma.objects.findMany({
     select: {
       object: true,
@@ -31,8 +30,8 @@ export async function getWeapon(userid: number, id: number) {
         {
           userid,
         },
-      ]
-    }
+      ],
+    },
   });
 }
 
@@ -52,20 +51,24 @@ export async function getWeaponList(userid: number) {
         {
           userid,
         },
-      ]
+      ],
     },
     orderBy: [
       {
-        userid: 'asc',
+        userid: "asc",
       },
       {
-        id: 'asc',
-      }
-    ]
+        id: "asc",
+      },
+    ],
   });
 }
 
-export async function updateWeapon(userid: number, id: number, input: createWeaponInput) {
+export async function updateWeapon(
+  userid: number,
+  id: number,
+  input: createWeaponInput
+) {
   const { object } = input;
 
   return await prisma.objects.updateMany({
@@ -76,8 +79,8 @@ export async function updateWeapon(userid: number, id: number, input: createWeap
     },
     data: {
       name: object.name,
-      object
-    }
+      object,
+    },
   });
 }
 
@@ -87,6 +90,6 @@ export async function deleteWeapon(userid: number, id: number) {
       id,
       userid,
       type: 1001,
-    }
+    },
   });
 }

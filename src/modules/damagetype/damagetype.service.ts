@@ -1,15 +1,18 @@
-import prisma from '@/utils/prisma';
-import { createDamageTypeInput } from './damagetype.schema';
+import prisma from "@/utils/prisma";
+import { createDamageTypeInput } from "./damagetype.schema";
 
-export async function createDamageType(userid: number, input: createDamageTypeInput) {
+export async function createDamageType(
+  userid: number,
+  input: createDamageTypeInput
+) {
   const { name, description } = input;
 
   return await prisma.damagetypes.create({
     data: {
       userid,
       name,
-      description
-    }
+      description,
+    },
   });
 }
 
@@ -23,20 +26,24 @@ export async function getDamageTypeList(userid: number) {
         {
           userid,
         },
-      ]
+      ],
     },
     orderBy: [
       {
-        userid: 'asc',
+        userid: "asc",
       },
       {
-        id: 'asc',
-      }
-    ]
+        id: "asc",
+      },
+    ],
   });
 }
 
-export async function updateDamageType(userid: number, id: number, input: createDamageTypeInput) {
+export async function updateDamageType(
+  userid: number,
+  id: number,
+  input: createDamageTypeInput
+) {
   const { name, description } = input;
 
   return await prisma.damagetypes.updateMany({
@@ -46,8 +53,8 @@ export async function updateDamageType(userid: number, id: number, input: create
     },
     data: {
       name,
-      description
-    }
+      description,
+    },
   });
 }
 
@@ -56,6 +63,6 @@ export async function deleteDamageType(userid: number, id: number) {
     where: {
       id,
       userid,
-    }
+    },
   });
 }

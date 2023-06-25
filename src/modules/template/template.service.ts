@@ -1,7 +1,10 @@
-import prisma from '@/utils/prisma';
-import { Template, createTemplateInput } from './template.schema';
+import prisma from "@/utils/prisma";
+import { Template, createTemplateInput } from "./template.schema";
 
-export async function createTemplate(userid: number, input: createTemplateInput) {
+export async function createTemplate(
+  userid: number,
+  input: createTemplateInput
+) {
   const { object, game } = input;
 
   return await prisma.objects.create({
@@ -11,7 +14,7 @@ export async function createTemplate(userid: number, input: createTemplateInput)
       game,
       name: object.name,
       object,
-    }
+    },
   });
 }
 
@@ -30,8 +33,8 @@ export async function getTemplate(userid: number, id: number) {
         {
           userid,
         },
-      ]
-    }
+      ],
+    },
   });
 }
 
@@ -51,20 +54,24 @@ export async function getTemplateList(userid: number) {
         {
           userid,
         },
-      ]
+      ],
     },
     orderBy: [
       {
-        userid: 'asc',
+        userid: "asc",
       },
       {
-        id: 'asc',
-      }
-    ]
+        id: "asc",
+      },
+    ],
   });
 }
 
-export async function updateTemplate(userid: number, id: number, input: createTemplateInput) {
+export async function updateTemplate(
+  userid: number,
+  id: number,
+  input: createTemplateInput
+) {
   const { object, game } = input;
 
   return await prisma.objects.updateMany({
@@ -77,7 +84,7 @@ export async function updateTemplate(userid: number, id: number, input: createTe
       object,
       game,
       name: object.name,
-    }
+    },
   });
 }
 
@@ -87,6 +94,6 @@ export async function deleteTemplate(userid: number, id: number) {
       id,
       userid,
       type: 4,
-    }
+    },
   });
 }

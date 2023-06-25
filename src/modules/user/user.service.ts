@@ -1,25 +1,40 @@
-import prisma from '@/utils/prisma';
-import { CreateUserInput, UpdateUserInput } from './user.schema';
-import { hashPassword } from '@/utils/hash';
+import prisma from "@/utils/prisma";
+import { CreateUserInput, UpdateUserInput } from "./user.schema";
+import { hashPassword, generateToken } from "@/utils/hash";
 
 export async function createUser(input: CreateUserInput) {
   const { password, ...rest } = input;
 
   const hashedPassword = await hashPassword(password);
-  
-  const user = await prisma.users.create({
-    data: { ...rest, password: hashedPassword },
-  });
 
-  return user;
+  return await prisma.users.create({
+    data: { ...rest, password: hashedPassword, token: await generateToken(32) },
+  });
 }
 
+export async function getUserByToken(token: string) {
+  return prisma.users.findMany({
+    where: {
+      token,
+    },
+  });
+}
+export async function activateUser(id: number) {
+  return prisma.users.update({
+    where: {
+      id,
+    },
+    data: {
+      verified: 1,
+    },
+  });
+}
 
 export async function findUserByEmail(email: string) {
   return prisma.users.findUnique({
     where: {
-      email
-    }
+      email,
+    },
   });
 }
 
@@ -30,24 +45,24 @@ export async function getUsers() {
       username: true,
       email: true,
       created: true,
-    }
+    },
   });
 }
 
 export async function getUser(id: number) {
   return prisma.users.findUnique({
     where: {
-      id
-    }
+      id,
+    },
   });
 }
 
 export async function updateUser(id: number, input: UpdateUserInput) {
   await prisma.users.update({
     where: {
-      id
+      id,
     },
-    data: input
+    data: input,
   });
   return await getUser(id);
 }
@@ -58,17 +73,17 @@ export async function getUserLevel(id: number) {
       level: true,
     },
     where: {
-      id
-    }
+      id,
+    },
   });
 }
 
 export async function isAdmin(id: number) {
-  const { level } = await getUserLevel(id) || { level: 0 };
+  const { level } = (await getUserLevel(id)) || { level: 0 };
   return level && level >= 2;
 }
 
 export async function isSuperAdmin(id: number) {
-  const { level } = await getUserLevel(id) || { level: 0 };
+  const { level } = (await getUserLevel(id)) || { level: 0 };
   return level && level >= 4;
 }

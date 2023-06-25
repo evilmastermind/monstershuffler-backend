@@ -1,8 +1,8 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { getRandomQuirk } from './quirk.service';
-import { handleError } from '@/utils/errors';
+import { FastifyReply, FastifyRequest } from "fastify";
+import { getRandomQuirk } from "./quirk.service";
+import { handleError } from "@/utils/errors";
 
-export async function getRandomQuirkHandler (
+export async function getRandomQuirkHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {

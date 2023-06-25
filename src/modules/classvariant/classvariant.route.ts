@@ -1,76 +1,95 @@
-import { FastifyInstance } from 'fastify';
-import { createClassvariantHandler, getClassvariantHandler, getRandomClassvariantHandler, getClassvariantListHandler, getClassvariantClassListHandler, updateClassvariantHandler, deleteClassvariantHandler  } from './classvariant.controller';
-import { $ref } from './classvariant.schema';
-import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/modules/schemas';
+import { FastifyInstance } from "fastify";
+import {
+  createClassvariantHandler,
+  getClassvariantHandler,
+  getRandomClassvariantHandler,
+  getClassvariantListHandler,
+  getClassvariantClassListHandler,
+  updateClassvariantHandler,
+  deleteClassvariantHandler,
+} from "./classvariant.controller";
+import { $ref } from "./classvariant.schema";
+import {
+  jwtHeaderOptional,
+  jwtHeaderRequired,
+  BatchPayload,
+} from "@/modules/schemas";
 
 async function classvariantRoutes(server: FastifyInstance) {
   server.get(
-    '/',
+    "/",
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: 'Returns a list of all available class variants.',
-        description: 'Returns a list of all available class variants. The original class must be public or owned by the user (if authenticated).',
+        summary: "Returns a list of all available class variants.",
+        description:
+          "Returns a list of all available class variants. The original class must be public or owned by the user (if authenticated).",
         headers: jwtHeaderOptional,
-        tags: ['class variants'],
+        tags: ["class variants"],
         // params: $ref('getClassvariantParamsSchema'),
         response: {
-          200: $ref('getClassvariantListResponseSchema')
+          200: $ref("getClassvariantListResponseSchema"),
         },
       },
     },
     getClassvariantListHandler
   );
   server.get(
-    '/class/:classId',
+    "/class/:classId",
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: 'Returns a list of all available class variants for a specific class.',
-        description: 'Returns a list of all available class variants for a specific class. The class must be public or owned by the user (if authenticated).',
+        summary:
+          "Returns a list of all available class variants for a specific class.",
+        description:
+          "Returns a list of all available class variants for a specific class. The class must be public or owned by the user (if authenticated).",
         headers: jwtHeaderOptional,
-        tags: ['class variants'],
+        tags: ["class variants"],
         // params: $ref('getClassvariantParamsSchema'),
         response: {
-          200: $ref('getClassvariantClassListResponseSchema')
+          200: $ref("getClassvariantClassListResponseSchema"),
         },
-      }
+      },
     },
     getClassvariantClassListHandler
   );
 
   server.get(
-    '/class:classId/random',
+    "/class:classId/random",
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: 'Returns the details of a random variant of the class corresponding to the given id.',
-        description: 'Returns the details of a random variant of the class corresponding to the given id',
+        summary:
+          "Returns the details of a random variant of the class corresponding to the given id.",
+        description:
+          "Returns the details of a random variant of the class corresponding to the given id",
         headers: jwtHeaderOptional,
-        tags: ['class variants'],
+        tags: ["class variants"],
         // params: $ref('getClassvariantParamsSchema'),
         response: {
-          200: $ref('getClassvariantResponseSchema')
-        }
-      }
+          200: $ref("getClassvariantResponseSchema"),
+        },
+      },
     },
     getRandomClassvariantHandler
   );
 
   server.get(
-    '/:classvariantId',
+    "/:classvariantId",
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: 'Returns the details of the class variant corresponding to the given id.',
-        description: 'Returns the details of the class variant corresponding to the given id.',
+        summary:
+          "Returns the details of the class variant corresponding to the given id.",
+        description:
+          "Returns the details of the class variant corresponding to the given id.",
         headers: jwtHeaderOptional,
-        tags: ['class variants'],
+        tags: ["class variants"],
         // params: $ref('getClassvariantParamsSchema'),
         response: {
-          200: $ref('getClassvariantResponseSchema')
-        }
-      }
+          200: $ref("getClassvariantResponseSchema"),
+        },
+      },
     },
     getClassvariantHandler
   );
@@ -112,22 +131,22 @@ async function classvariantRoutes(server: FastifyInstance) {
   //     updateClassvariantHandler
   //   );
 
-//   server.delete(
-//     '/:classvariantId',
-//     {
-//       preHandler: [server.authenticate],
-//       schema: {
-//         summary: '[MS ONLY] Deletes the class variant corresponding to the given id.',
-//         description: '[MS ONLY] Deletes the class variant corresponding to the given id.',
-//         tags: ['class variants'],
-//         headers: jwtHeaderRequired,
-//         response: {
-//           200: BatchPayload
-//         },
-//       }
-//     },
-//     deleteClassvariantHandler
-//   );
+  //   server.delete(
+  //     '/:classvariantId',
+  //     {
+  //       preHandler: [server.authenticate],
+  //       schema: {
+  //         summary: '[MS ONLY] Deletes the class variant corresponding to the given id.',
+  //         description: '[MS ONLY] Deletes the class variant corresponding to the given id.',
+  //         tags: ['class variants'],
+  //         headers: jwtHeaderRequired,
+  //         response: {
+  //           200: BatchPayload
+  //         },
+  //       }
+  //     },
+  //     deleteClassvariantHandler
+  //   );
 }
 
 export default classvariantRoutes;

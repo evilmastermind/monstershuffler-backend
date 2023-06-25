@@ -1,44 +1,51 @@
-import { createClassInput, updateClassInput } from './class.schema';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { createClass, getClass, getRandomClass, getClassList, getClassWithVariantsList, updateClass, deleteClass } from './class.service';
-import { handleError } from '@/utils/errors';
+import { createClassInput, updateClassInput } from "./class.schema";
+import { FastifyReply, FastifyRequest } from "fastify";
+import {
+  createClass,
+  getClass,
+  getRandomClass,
+  getClassList,
+  getClassWithVariantsList,
+  updateClass,
+  deleteClass,
+} from "./class.service";
+import { handleError } from "@/utils/errors";
 
-export async function getClassListHandler (
+export async function getClassListHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id } = request.user  || { id: 0 };
+  const { id } = request.user || { id: 0 };
   try {
     const classList = await getClassList(id);
     return reply.code(200).send({
-      list: classList
+      list: classList,
     });
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-export async function getClassWithVariantsListHandler (
+export async function getClassWithVariantsListHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id } = request.user  || { id: 0 };
+  const { id } = request.user || { id: 0 };
   try {
     const classList = await getClassWithVariantsList(id);
     return reply.code(200).send({
-      list: classList
+      list: classList,
     });
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-
-export async function getClassHandler (
+export async function getClassHandler(
   request: FastifyRequest<{
     Params: {
       classId: string;
-    } 
+    };
   }>,
   reply: FastifyReply
 ) {
@@ -52,7 +59,7 @@ export async function getClassHandler (
   }
 }
 
-export async function getRandomClassHandler (
+export async function getRandomClassHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
@@ -65,9 +72,8 @@ export async function getRandomClassHandler (
   }
 }
 
-
-export async function createClassHandler (
-  request: FastifyRequest<{Body: createClassInput }>,
+export async function createClassHandler(
+  request: FastifyRequest<{ Body: createClassInput }>,
   reply: FastifyReply
 ) {
   try {
@@ -80,12 +86,12 @@ export async function createClassHandler (
   }
 }
 
-export async function updateClassHandler (
+export async function updateClassHandler(
   request: FastifyRequest<{
     Params: {
       classId: string;
-    },
-    Body: updateClassInput
+    };
+    Body: updateClassInput;
   }>,
   reply: FastifyReply
 ) {
@@ -100,11 +106,11 @@ export async function updateClassHandler (
   }
 }
 
-export async function deleteClassHandler (
+export async function deleteClassHandler(
   request: FastifyRequest<{
     Params: {
       classId: string;
-    }
+    };
   }>,
   reply: FastifyReply
 ) {

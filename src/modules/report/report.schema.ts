@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
+import { z } from "zod";
+import { buildJsonSchemas } from "fastify-zod";
 
 const id = z.number();
 const objectid = z.number();
@@ -33,8 +33,11 @@ export type createReportInput = z.infer<typeof createReportSchema>;
 export type createReportResponse = z.infer<typeof createReportResponseSchema>;
 export type getReportListResponse = z.infer<typeof getReportListResponseSchema>;
 
-export const {schemas: reportSchemas, $ref} = buildJsonSchemas({
-  createReportSchema,
-  createReportResponseSchema,
-  getReportListResponseSchema,
-}, { $id: 'reportSchemas' });
+export const { schemas: reportSchemas, $ref } = buildJsonSchemas(
+  {
+    createReportSchema,
+    createReportResponseSchema,
+    getReportListResponseSchema,
+  },
+  { $id: "reportSchemas" }
+);

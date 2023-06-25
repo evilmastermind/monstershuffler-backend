@@ -1,9 +1,9 @@
-import { createReportInput } from './report.schema';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { createReport, getReportList } from './report.service';
-import { handleError } from '@/utils/errors';
+import { createReportInput } from "./report.schema";
+import { FastifyReply, FastifyRequest } from "fastify";
+import { createReport, getReportList } from "./report.service";
+import { handleError } from "@/utils/errors";
 
-export async function getReportListHandler (
+export async function getReportListHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
@@ -11,15 +11,15 @@ export async function getReportListHandler (
   try {
     const reportList = await getReportList(id);
     return reply.code(200).send({
-      list: reportList
+      list: reportList,
     });
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-export async function createReportHandler (
-  request: FastifyRequest<{Body: createReportInput }>,
+export async function createReportHandler(
+  request: FastifyRequest<{ Body: createReportInput }>,
   reply: FastifyReply
 ) {
   try {

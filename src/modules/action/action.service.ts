@@ -1,5 +1,9 @@
-import prisma from '@/utils/prisma';
-import { createActionInput, getActionListInput, updateActionInput } from './action.schema';
+import prisma from "@/utils/prisma";
+import {
+  createActionInput,
+  getActionListInput,
+  updateActionInput,
+} from "./action.schema";
 
 export async function createAction(userid: number, input: createActionInput) {
   const { object, game, name, type, subtype, source, tags } = input;
@@ -11,7 +15,7 @@ export async function createAction(userid: number, input: createActionInput) {
       userid,
       name,
       object,
-    }
+    },
   });
 
   const newActionDetails = await prisma.actionsdetails.create({
@@ -21,7 +25,7 @@ export async function createAction(userid: number, input: createActionInput) {
       actiontype: type,
       subtype,
       source,
-    }
+    },
   });
 
   if (tags) {
@@ -33,11 +37,13 @@ export async function createAction(userid: number, input: createActionInput) {
     });
   }
 
-  return {...newActionDetails, object: newObject.object } ;
+  return { ...newActionDetails, object: newObject.object };
 }
 
-export async function getActionList(userid: number, filters: getActionListInput) {
-  
+export async function getActionList(
+  userid: number,
+  filters: getActionListInput
+) {
   const actionList = await prisma.objects.findMany({
     select: {
       id: true,
@@ -94,7 +100,7 @@ export async function getAction(userid: number, id: number) {
           subtype: true,
           source: true,
         },
-      }
+      },
     },
     where: {
       id,
@@ -106,7 +112,11 @@ export async function getAction(userid: number, id: number) {
   return action;
 }
 
-export async function updateAction(userid: number, id: number, input: updateActionInput) {
+export async function updateAction(
+  userid: number,
+  id: number,
+  input: updateActionInput
+) {
   const { object, name, type, subtype, source, tags } = input;
   const result = await prisma.objects.updateMany({
     where: {

@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
+import { z } from "zod";
+import { buildJsonSchemas } from "fastify-zod";
 
 const getRandomSurnameSchema = z.object({
   race: z.string().optional(),
@@ -12,7 +12,10 @@ const getRandomSurnameResponseSchema = z.object({
 
 export type getRandomSurnameInput = z.infer<typeof getRandomSurnameSchema>;
 
-export const {schemas: surnameSchemas, $ref} = buildJsonSchemas({
-  getRandomSurnameSchema,
-  getRandomSurnameResponseSchema,
-}, { $id: 'surnameSchemas' });
+export const { schemas: surnameSchemas, $ref } = buildJsonSchemas(
+  {
+    getRandomSurnameSchema,
+    getRandomSurnameResponseSchema,
+  },
+  { $id: "surnameSchemas" }
+);

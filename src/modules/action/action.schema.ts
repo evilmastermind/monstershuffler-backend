@@ -1,7 +1,6 @@
-import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
-import { actionObject } from '@/modules/schemas';
-
+import { z } from "zod";
+import { buildJsonSchemas } from "fastify-zod";
+import { actionObject } from "@/modules/schemas";
 
 const id = z.number();
 const userid = z.number();
@@ -34,7 +33,7 @@ const getActionListResponseSchema = z.object({
       userid,
       actionsdetails,
       actionstags,
-    }),
+    })
   ),
 });
 
@@ -69,10 +68,13 @@ export type createActionInput = z.infer<typeof createActionSchema>;
 export type updateActionInput = z.infer<typeof updateActionSchema>;
 export type Action = z.infer<typeof actionObject>;
 
-export const { schemas: actionSchemas, $ref } = buildJsonSchemas({
-  getActionListSchema,
-  createActionSchema,
-  updateActionSchema,
-  getActionListResponseSchema,
-  getActionResponseSchema,
-}, { $id: 'actionSchemas' });
+export const { schemas: actionSchemas, $ref } = buildJsonSchemas(
+  {
+    getActionListSchema,
+    createActionSchema,
+    updateActionSchema,
+    getActionListResponseSchema,
+    getActionResponseSchema,
+  },
+  { $id: "actionSchemas" }
+);

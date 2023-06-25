@@ -1,28 +1,34 @@
-import { createArmorInput } from './armor.schema';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { createArmor, getArmor, getArmorList, updateArmor, deleteArmor } from './armor.service';
-import { handleError } from '@/utils/errors';
+import { createArmorInput } from "./armor.schema";
+import { FastifyReply, FastifyRequest } from "fastify";
+import {
+  createArmor,
+  getArmor,
+  getArmorList,
+  updateArmor,
+  deleteArmor,
+} from "./armor.service";
+import { handleError } from "@/utils/errors";
 
-export async function getArmorListHandler (
+export async function getArmorListHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id } = request.user  || { id: 0 };
+  const { id } = request.user || { id: 0 };
   try {
     const armorList = await getArmorList(id);
     return reply.code(200).send({
-      list: armorList
+      list: armorList,
     });
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-export async function getArmorHandler (
+export async function getArmorHandler(
   request: FastifyRequest<{
     Params: {
       armorId: string;
-    } 
+    };
   }>,
   reply: FastifyReply
 ) {
@@ -36,9 +42,8 @@ export async function getArmorHandler (
   }
 }
 
-
-export async function createArmorHandler (
-  request: FastifyRequest<{Body: createArmorInput }>,
+export async function createArmorHandler(
+  request: FastifyRequest<{ Body: createArmorInput }>,
   reply: FastifyReply
 ) {
   try {
@@ -51,12 +56,12 @@ export async function createArmorHandler (
   }
 }
 
-export async function updateArmorHandler (
+export async function updateArmorHandler(
   request: FastifyRequest<{
     Params: {
       armorId: string;
-    },
-    Body: createArmorInput
+    };
+    Body: createArmorInput;
   }>,
   reply: FastifyReply
 ) {
@@ -71,11 +76,11 @@ export async function updateArmorHandler (
   }
 }
 
-export async function deleteArmorHandler (
+export async function deleteArmorHandler(
   request: FastifyRequest<{
     Params: {
       armorId: string;
-    }
+    };
   }>,
   reply: FastifyReply
 ) {

@@ -1,25 +1,30 @@
-import { createDamageTypeInput } from './damagetype.schema';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { createDamageType, getDamageTypeList, updateDamageType, deleteDamageType } from './damagetype.service';
-import { handleError } from '@/utils/errors';
+import { createDamageTypeInput } from "./damagetype.schema";
+import { FastifyReply, FastifyRequest } from "fastify";
+import {
+  createDamageType,
+  getDamageTypeList,
+  updateDamageType,
+  deleteDamageType,
+} from "./damagetype.service";
+import { handleError } from "@/utils/errors";
 
-export async function getDamageTypeListHandler (
+export async function getDamageTypeListHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id } = request.user  || { id: 0 };
+  const { id } = request.user || { id: 0 };
   try {
     const damageTypeList = await getDamageTypeList(id);
     return reply.code(200).send({
-      list: damageTypeList
+      list: damageTypeList,
     });
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-export async function createDamageTypeHandler (
-  request: FastifyRequest<{Body: createDamageTypeInput }>,
+export async function createDamageTypeHandler(
+  request: FastifyRequest<{ Body: createDamageTypeInput }>,
   reply: FastifyReply
 ) {
   try {
@@ -32,12 +37,12 @@ export async function createDamageTypeHandler (
   }
 }
 
-export async function updateDamageTypeHandler (
+export async function updateDamageTypeHandler(
   request: FastifyRequest<{
     Params: {
       damageTypeId: string;
-    },
-    Body: createDamageTypeInput
+    };
+    Body: createDamageTypeInput;
   }>,
   reply: FastifyReply
 ) {
@@ -52,11 +57,11 @@ export async function updateDamageTypeHandler (
   }
 }
 
-export async function deleteDamageTypeHandler (
+export async function deleteDamageTypeHandler(
   request: FastifyRequest<{
     Params: {
       damageTypeId: string;
-    }
+    };
   }>,
   reply: FastifyReply
 ) {

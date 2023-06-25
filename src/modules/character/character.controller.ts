@@ -1,28 +1,34 @@
-import { createCharacterInput } from './character.schema';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { createCharacter, getCharacter, getCharacterList, updateCharacter, deleteCharacter } from './character.service';
-import { handleError } from '@/utils/errors';
+import { createCharacterInput } from "./character.schema";
+import { FastifyReply, FastifyRequest } from "fastify";
+import {
+  createCharacter,
+  getCharacter,
+  getCharacterList,
+  updateCharacter,
+  deleteCharacter,
+} from "./character.service";
+import { handleError } from "@/utils/errors";
 
-export async function getCharacterListHandler (
+export async function getCharacterListHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id } = request.user  || { id: 0 };
+  const { id } = request.user || { id: 0 };
   try {
     const characterList = await getCharacterList(id);
     return reply.code(200).send({
-      list: characterList
+      list: characterList,
     });
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-export async function getCharacterHandler (
+export async function getCharacterHandler(
   request: FastifyRequest<{
     Params: {
       characterId: string;
-    } 
+    };
   }>,
   reply: FastifyReply
 ) {
@@ -36,9 +42,8 @@ export async function getCharacterHandler (
   }
 }
 
-
-export async function createCharacterHandler (
-  request: FastifyRequest<{Body: createCharacterInput }>,
+export async function createCharacterHandler(
+  request: FastifyRequest<{ Body: createCharacterInput }>,
   reply: FastifyReply
 ) {
   try {
@@ -51,12 +56,12 @@ export async function createCharacterHandler (
   }
 }
 
-export async function updateCharacterHandler (
+export async function updateCharacterHandler(
   request: FastifyRequest<{
     Params: {
       characterId: string;
-    },
-    Body: createCharacterInput
+    };
+    Body: createCharacterInput;
   }>,
   reply: FastifyReply
 ) {
@@ -64,18 +69,22 @@ export async function updateCharacterHandler (
     const { id } = request.user;
     const { body } = request;
     const characterId = request.params.characterId;
-    const characterObject = await updateCharacter(id, parseInt(characterId), body);
+    const characterObject = await updateCharacter(
+      id,
+      parseInt(characterId),
+      body
+    );
     return reply.code(200).send(characterObject);
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-export async function deleteCharacterHandler (
+export async function deleteCharacterHandler(
   request: FastifyRequest<{
     Params: {
       characterId: string;
-    }
+    };
   }>,
   reply: FastifyReply
 ) {

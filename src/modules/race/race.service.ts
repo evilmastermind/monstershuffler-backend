@@ -1,5 +1,5 @@
-import prisma from '@/utils/prisma';
-import { Race, createRaceInput, updateRaceInput } from './race.schema';
+import prisma from "@/utils/prisma";
+import { Race, createRaceInput, updateRaceInput } from "./race.schema";
 
 export async function createRace(userid: number, input: createRaceInput) {
   const { object, game } = input;
@@ -11,29 +11,31 @@ export async function createRace(userid: number, input: createRaceInput) {
       game,
       name: object.name,
       object,
-    }
+    },
   });
 }
 
 export async function getRace(userid: number, id: number) {
-  return (await prisma.objects.findMany({
-    select: {
-      object: true,
-      id: true,
-    },
-    where: {
-      id,
-      type: 2,
-      OR: [
-        {
-          userid: 0,
-        },
-        {
-          userid,
-        },
-      ]
-    }
-  }))[0];
+  return (
+    await prisma.objects.findMany({
+      select: {
+        object: true,
+        id: true,
+      },
+      where: {
+        id,
+        type: 2,
+        OR: [
+          {
+            userid: 0,
+          },
+          {
+            userid,
+          },
+        ],
+      },
+    })
+  )[0];
 }
 
 export async function getRandomRace(userid: number) {
@@ -47,8 +49,8 @@ export async function getRandomRace(userid: number) {
         {
           userid,
         },
-      ]
-    }
+      ],
+    },
   });
   const race = await prisma.objects.findMany({
     skip: Math.floor(Math.random() * raceCount),
@@ -66,7 +68,7 @@ export async function getRandomRace(userid: number) {
         {
           userid,
         },
-      ]
+      ],
     },
   });
   return race[0];
@@ -88,16 +90,16 @@ export async function getRaceList(userid: number) {
         {
           userid,
         },
-      ]
+      ],
     },
     orderBy: [
       {
-        userid: 'asc',
+        userid: "asc",
       },
       {
-        id: 'asc',
-      }
-    ]
+        id: "asc",
+      },
+    ],
   });
 }
 
@@ -121,17 +123,17 @@ export async function getRaceWithVariantsList(userid: number) {
             {
               userid,
             },
-          ]
+          ],
         },
         orderBy: [
           {
-            userid: 'asc',
+            userid: "asc",
           },
           {
-            name: 'asc',
-          }
-        ]
-      }
+            name: "asc",
+          },
+        ],
+      },
     },
     where: {
       type: 2,
@@ -142,22 +144,25 @@ export async function getRaceWithVariantsList(userid: number) {
         {
           userid,
         },
-      ]
+      ],
     },
     orderBy: [
       {
-        userid: 'asc',
+        userid: "asc",
       },
       {
-        name: 'asc',
-      }
-    ]
+        name: "asc",
+      },
+    ],
   });
   return result;
 }
 
-
-export async function updateRace(userid: number, id: number, input: updateRaceInput) {
+export async function updateRace(
+  userid: number,
+  id: number,
+  input: updateRaceInput
+) {
   const { object, game } = input;
 
   return await prisma.objects.updateMany({
@@ -170,7 +175,7 @@ export async function updateRace(userid: number, id: number, input: updateRaceIn
       object,
       game,
       name: object.name,
-    }
+    },
   });
 }
 
@@ -180,6 +185,6 @@ export async function deleteRace(userid: number, id: number) {
       id,
       userid,
       type: 2,
-    }
+    },
   });
 }

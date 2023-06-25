@@ -1,20 +1,25 @@
-import { z } from 'zod';
+import { z } from "zod";
 import prisma from "@/utils/prisma";
-import { AnyObject, ChoiceRandomObject, Choice } from '@/modules/schemas';
+import { AnyObject, ChoiceRandomObject, Choice } from "@/modules/schemas";
 
-export async function getChoiceObject(userId: number, choice: ChoiceRandomObject['choice']) {
-
+export async function getChoiceObject(
+  userId: number,
+  choice: ChoiceRandomObject["choice"]
+) {
   if (!choice?.objectType) {
     return null;
   }
 
-  const fields = choice?.resultType === 'nameId' ? 'id, name' : 'object';
+  const fields = choice?.resultType === "nameId" ? "id, name" : "object";
 
   const parameters: Array<any> = [choice.objectType, userId || 0];
 
-  const chosenAlreadyIds = choice.chosenAlready?.filter((value) => value?.id).map((value) => value?.id) || [];
+  const chosenAlreadyIds =
+    choice.chosenAlready
+      ?.filter((value) => value?.id)
+      .map((value) => value?.id) || [];
 
-  let additionalFilters = '';
+  let additionalFilters = "";
 
   if (chosenAlreadyIds.length > 0) {
     additionalFilters += ` AND id NOT IN (`;
@@ -52,18 +57,21 @@ export async function getChoiceObject(userId: number, choice: ChoiceRandomObject
     object: AnyObject;
   };
 
-  const result = await prisma.$queryRawUnsafe(`
+  const result = await prisma.$queryRawUnsafe(
+    `
     SELECT ${fields}
     FROM objects
     WHERE type = $1
       AND userid IN (0, $2)
       ${additionalFilters}
     ORDER BY RANDOM() LIMIT $${parameters.length};
-  `, ...parameters);
+  `,
+    ...parameters
+  );
 
   // console.log("result:", result);
 
-  if (choice?.resultType === 'nameId') {
+  if (choice?.resultType === "nameId") {
     const fullResult: Choice[] = (result as ResultNameId[])?.map((value) => {
       return {
         id: value.id,
@@ -71,9 +79,9 @@ export async function getChoiceObject(userId: number, choice: ChoiceRandomObject
       };
     });
     return fullResult.concat(choice.chosenAlready || []);
-  } else if (choice?.resultType === 'object') {
+  } else if (choice?.resultType === "object") {
     return (result as ResultObject[])[0]?.object;
   }
 
-  return result as AnyObject ;
+  return result as AnyObject;
 }

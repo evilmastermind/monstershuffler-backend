@@ -1,8 +1,8 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { getRandomBackground } from './background.service';
-import { handleError } from '@/utils/errors';
+import { FastifyReply, FastifyRequest } from "fastify";
+import { getRandomBackground } from "./background.service";
+import { handleError } from "@/utils/errors";
 
-export async function getRandomBackgroundHandler (
+export async function getRandomBackgroundHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {

@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
+import { z } from "zod";
+import { buildJsonSchemas } from "fastify-zod";
 
 const id = z.number();
 const userid = z.number();
@@ -35,11 +35,16 @@ const getDamageTypeListResponseSchema = z.object({
 });
 
 export type createDamageTypeInput = z.infer<typeof createDamageTypeSchema>;
-export type getDamageTypeListResponse = z.infer<typeof getDamageTypeListResponseSchema>;
+export type getDamageTypeListResponse = z.infer<
+  typeof getDamageTypeListResponseSchema
+>;
 
-export const {schemas: damageTypeSchemas, $ref} = buildJsonSchemas({
-  createDamageTypeSchema,
-  updateDamageTypeSchema,
-  getDamageTypeResponseSchema,
-  getDamageTypeListResponseSchema
-}, { $id: 'damageTypeSchemas' });
+export const { schemas: damageTypeSchemas, $ref } = buildJsonSchemas(
+  {
+    createDamageTypeSchema,
+    updateDamageTypeSchema,
+    getDamageTypeResponseSchema,
+    getDamageTypeListResponseSchema,
+  },
+  { $id: "damageTypeSchemas" }
+);

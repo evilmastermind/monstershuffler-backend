@@ -1,7 +1,10 @@
-import prisma from '@/utils/prisma';
-import { createCharacterInput, updateCharacterInput } from './character.schema';
+import prisma from "@/utils/prisma";
+import { createCharacterInput, updateCharacterInput } from "./character.schema";
 
-export async function createCharacter(userid: number, input: createCharacterInput) {
+export async function createCharacter(
+  userid: number,
+  input: createCharacterInput
+) {
   const { object, game, name } = input;
 
   const character = await prisma.objects.create({
@@ -11,7 +14,7 @@ export async function createCharacter(userid: number, input: createCharacterInpu
       userid,
       name,
       object,
-    }
+    },
   });
 
   // TODO: define characters' stats object
@@ -24,7 +27,7 @@ export async function createCharacter(userid: number, input: createCharacterInpu
       alignment: character.stats.alignment.value,
       size: character.stats.size.value,
       meta: character.stats.meta.value,
-    }
+    },
   });
 
   return character;
@@ -45,8 +48,8 @@ export async function getCharacter(userid: number, id: number) {
         {
           userid,
         },
-      ]
-    }
+      ],
+    },
   });
 }
 
@@ -66,20 +69,24 @@ export async function getCharacterList(userid: number) {
         {
           userid,
         },
-      ]
+      ],
     },
     orderBy: [
       {
-        userid: 'asc',
+        userid: "asc",
       },
       {
-        id: 'asc',
-      }
-    ]
+        id: "asc",
+      },
+    ],
   });
 }
 
-export async function updateCharacter(userid: number, id: number, input: updateCharacterInput) {
+export async function updateCharacter(
+  userid: number,
+  id: number,
+  input: updateCharacterInput
+) {
   const { object, game, name } = input;
 
   const result = await prisma.objects.updateMany({
@@ -92,7 +99,7 @@ export async function updateCharacter(userid: number, id: number, input: updateC
       object,
       name,
       game,
-    }
+    },
   });
 
   // TODO: define characters' stats object
@@ -119,6 +126,6 @@ export async function deleteCharacter(userid: number, id: number) {
       id,
       userid,
       type: 1,
-    }
+    },
   });
 }

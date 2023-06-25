@@ -1,28 +1,34 @@
-import { createWeaponInput } from './weapon.schema';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { createWeapon, getWeapon, getWeaponList, updateWeapon, deleteWeapon } from './weapon.service';
-import { handleError } from '@/utils/errors';
+import { createWeaponInput } from "./weapon.schema";
+import { FastifyReply, FastifyRequest } from "fastify";
+import {
+  createWeapon,
+  getWeapon,
+  getWeaponList,
+  updateWeapon,
+  deleteWeapon,
+} from "./weapon.service";
+import { handleError } from "@/utils/errors";
 
-export async function getWeaponListHandler (
+export async function getWeaponListHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id } = request.user  || { id: 0 };
+  const { id } = request.user || { id: 0 };
   try {
     const weaponList = await getWeaponList(id);
     return reply.code(200).send({
-      list: weaponList
+      list: weaponList,
     });
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-export async function getWeaponHandler (
+export async function getWeaponHandler(
   request: FastifyRequest<{
     Params: {
       weaponId: string;
-    } 
+    };
   }>,
   reply: FastifyReply
 ) {
@@ -36,9 +42,8 @@ export async function getWeaponHandler (
   }
 }
 
-
-export async function createWeaponHandler (
-  request: FastifyRequest<{Body: createWeaponInput }>,
+export async function createWeaponHandler(
+  request: FastifyRequest<{ Body: createWeaponInput }>,
   reply: FastifyReply
 ) {
   try {
@@ -51,12 +56,12 @@ export async function createWeaponHandler (
   }
 }
 
-export async function updateWeaponHandler (
+export async function updateWeaponHandler(
   request: FastifyRequest<{
     Params: {
       weaponId: string;
-    },
-    Body: createWeaponInput
+    };
+    Body: createWeaponInput;
   }>,
   reply: FastifyReply
 ) {
@@ -71,11 +76,11 @@ export async function updateWeaponHandler (
   }
 }
 
-export async function deleteWeaponHandler (
+export async function deleteWeaponHandler(
   request: FastifyRequest<{
     Params: {
       weaponId: string;
-    }
+    };
   }>,
   reply: FastifyReply
 ) {

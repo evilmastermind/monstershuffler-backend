@@ -1,28 +1,35 @@
-import { createProfessionInput } from './profession.schema';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { createProfession, getProfession, getRandomProfession, getProfessionList, updateProfession, deleteProfession } from './profession.service';
-import { handleError } from '@/utils/errors';
+import { createProfessionInput } from "./profession.schema";
+import { FastifyReply, FastifyRequest } from "fastify";
+import {
+  createProfession,
+  getProfession,
+  getRandomProfession,
+  getProfessionList,
+  updateProfession,
+  deleteProfession,
+} from "./profession.service";
+import { handleError } from "@/utils/errors";
 
-export async function getProfessionListHandler (
+export async function getProfessionListHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id } = request.user  || { id: 0 };
+  const { id } = request.user || { id: 0 };
   try {
     const professionList = await getProfessionList(id);
     return reply.code(200).send({
-      list: professionList
+      list: professionList,
     });
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-export async function getProfessionHandler (
+export async function getProfessionHandler(
   request: FastifyRequest<{
     Params: {
       professionId: string;
-    } 
+    };
   }>,
   reply: FastifyReply
 ) {
@@ -36,7 +43,7 @@ export async function getProfessionHandler (
   }
 }
 
-export async function getRandomProfessionHandler (
+export async function getRandomProfessionHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
@@ -49,8 +56,8 @@ export async function getRandomProfessionHandler (
   }
 }
 
-export async function createProfessionHandler (
-  request: FastifyRequest<{Body: createProfessionInput }>,
+export async function createProfessionHandler(
+  request: FastifyRequest<{ Body: createProfessionInput }>,
   reply: FastifyReply
 ) {
   try {
@@ -63,12 +70,12 @@ export async function createProfessionHandler (
   }
 }
 
-export async function updateProfessionHandler (
+export async function updateProfessionHandler(
   request: FastifyRequest<{
     Params: {
       professionId: string;
-    },
-    Body: createProfessionInput
+    };
+    Body: createProfessionInput;
   }>,
   reply: FastifyReply
 ) {
@@ -83,11 +90,11 @@ export async function updateProfessionHandler (
   }
 }
 
-export async function deleteProfessionHandler (
+export async function deleteProfessionHandler(
   request: FastifyRequest<{
     Params: {
       professionId: string;
-    }
+    };
   }>,
   reply: FastifyReply
 ) {

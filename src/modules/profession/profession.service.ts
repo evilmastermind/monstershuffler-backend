@@ -1,7 +1,10 @@
-import prisma from '@/utils/prisma';
-import { createProfessionInput, Profession } from './profession.schema';
+import prisma from "@/utils/prisma";
+import { createProfessionInput, Profession } from "./profession.schema";
 
-export async function createProfession(userid: number, input: createProfessionInput) {
+export async function createProfession(
+  userid: number,
+  input: createProfessionInput
+) {
   const { object, description, age, game } = input;
 
   const response = await prisma.objects.create({
@@ -11,7 +14,7 @@ export async function createProfession(userid: number, input: createProfessionIn
       type: 5,
       name: object.name,
       game,
-    }
+    },
   });
   await prisma.professionsdetails.create({
     data: {
@@ -20,30 +23,32 @@ export async function createProfession(userid: number, input: createProfessionIn
       femalename: object.femaleName,
       description,
       age,
-    }
+    },
   });
   return response;
 }
 
 export async function getProfession(userid: number, id: number) {
-  return (await prisma.objects.findMany({
-    select: {
-      object: true,
-      id: true,
-    },
-    where: {
-      id,
-      type: 5,
-      OR: [
-        {
-          userid: 0,
-        },
-        {
-          userid,
-        },
-      ]
-    }
-  }))[0];
+  return (
+    await prisma.objects.findMany({
+      select: {
+        object: true,
+        id: true,
+      },
+      where: {
+        id,
+        type: 5,
+        OR: [
+          {
+            userid: 0,
+          },
+          {
+            userid,
+          },
+        ],
+      },
+    })
+  )[0];
 }
 
 export async function getRandomProfession(userid: number) {
@@ -57,8 +62,8 @@ export async function getRandomProfession(userid: number) {
         {
           userid,
         },
-      ]
-    }
+      ],
+    },
   });
   const profession = await prisma.objects.findMany({
     skip: Math.floor(Math.random() * professionCount),
@@ -76,7 +81,7 @@ export async function getRandomProfession(userid: number) {
         {
           userid,
         },
-      ]
+      ],
     },
   });
   return profession[0];
@@ -98,21 +103,24 @@ export async function getProfessionList(userid: number) {
         {
           userid,
         },
-      ]
+      ],
     },
     orderBy: [
       {
-        userid: 'asc',
+        userid: "asc",
       },
       {
-        name: 'asc',
-      }
-    ]
+        name: "asc",
+      },
+    ],
   });
   return result;
-
 }
-export async function updateProfession(userid: number, id: number, input: createProfessionInput) {
+export async function updateProfession(
+  userid: number,
+  id: number,
+  input: createProfessionInput
+) {
   const { object, description, age, game } = input;
 
   const response = await prisma.objects.updateMany({
@@ -125,7 +133,7 @@ export async function updateProfession(userid: number, id: number, input: create
       object,
       game,
       name: object.name,
-    }
+    },
   });
 
   await prisma.professionsdetails.updateMany({
@@ -137,7 +145,7 @@ export async function updateProfession(userid: number, id: number, input: create
       femalename: object.femaleName,
       description,
       age,
-    }
+    },
   });
 
   return response;
@@ -149,6 +157,6 @@ export async function deleteProfession(userid: number, id: number) {
       id,
       userid,
       type: 5,
-    }
+    },
   });
 }

@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
+import { z } from "zod";
+import { buildJsonSchemas } from "fastify-zod";
 
 export const weaponObject = z.object({
   name: z.string().optional(),
@@ -23,11 +23,11 @@ const name = z.string().min(2);
 
 const createWeaponSchema = z.object({
   game,
-  object: weaponObject
+  object: weaponObject,
 });
 
 const updateWeaponSchema = z.object({
-  object: weaponObject
+  object: weaponObject,
 });
 
 const getWeaponParamsSchema = z.object({
@@ -35,7 +35,7 @@ const getWeaponParamsSchema = z.object({
 });
 
 const getWeaponResponseSchema = z.object({
-  object: weaponObject
+  object: weaponObject,
 });
 
 const getWeaponListResponseSchema = z.object({
@@ -52,10 +52,13 @@ export type createWeaponInput = z.infer<typeof createWeaponSchema>;
 export type updateWeaponInput = z.infer<typeof updateWeaponSchema>;
 export type getWeaponListResponse = z.infer<typeof getWeaponListResponseSchema>;
 
-export const {schemas: weaponSchemas, $ref} = buildJsonSchemas({
-  createWeaponSchema,
-  updateWeaponSchema,
-  getWeaponParamsSchema,
-  getWeaponResponseSchema,
-  getWeaponListResponseSchema
-}, { $id: 'weaponSchemas' });
+export const { schemas: weaponSchemas, $ref } = buildJsonSchemas(
+  {
+    createWeaponSchema,
+    updateWeaponSchema,
+    getWeaponParamsSchema,
+    getWeaponResponseSchema,
+    getWeaponListResponseSchema,
+  },
+  { $id: "weaponSchemas" }
+);

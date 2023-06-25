@@ -1,46 +1,60 @@
-import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
-import { userObject, CREstimatedObject, CRTwoPointsObject, CRNPCObject, abilitiesBaseObject, } from '@/modules/schemas';
-import { raceObject } from '../race/race.schema';
-import { classObject } from '../class/class.schema';
-import { templateObject } from '../template/template.schema';
-import { racevariantObject } from '../racevariant/racevariant.schema';
-import { classvariantObject } from '../classvariant/classvariant.schema';
-import { professionObject } from '../profession/profession.schema';
+import { z } from "zod";
+import { buildJsonSchemas } from "fastify-zod";
+import {
+  userObject,
+  CREstimatedObject,
+  CRTwoPointsObject,
+  CRNPCObject,
+  abilitiesBaseObject,
+} from "@/modules/schemas";
+import { raceObject } from "../race/race.schema";
+import { classObject } from "../class/class.schema";
+import { templateObject } from "../template/template.schema";
+import { racevariantObject } from "../racevariant/racevariant.schema";
+import { classvariantObject } from "../classvariant/classvariant.schema";
+import { professionObject } from "../profession/profession.schema";
 
-
-export const characterObject = z.object({
-  character: z.object({
-    // naming
-    name: z.string(),
-    prename: z.string().optional(),
-    surname: z.string().optional(),
-    generic: z.boolean().optional(),
-    pronouns: z.enum(['male','female','neutral','thing']).optional(),
-    // objects
-    race: raceObject.optional(),
-    racevariant: racevariantObject.optional(),
-    class: classObject.optional(),
-    classvariant: classvariantObject.optional(),
-    profession: professionObject.optional(),
-    template: templateObject.optional(),
-    user: userObject.optional(),
-    // other stats
-    abilitiesBase: abilitiesBaseObject.optional(),
-    alignment: z.tuple([z.number(), z.number(), z.number()]).optional(),
-    alignmentMoral: z.enum(['Good','Neutral','Evil','Any','Unaligned']).optional(),
-    alignmentEthical: z.enum(['Lawful','Neutral','Chaotic','Any']).optional(),
-    // roleplaying helpers
-    smallbackground: z.string().optional(),
-    trait: z.string().optional(),
-    feeling: z.string().optional(),
-    // CR
-    CRCalculation: z.union([CRTwoPointsObject, CRNPCObject, CREstimatedObject]).optional(),
-  }).strict(),
-  // TODO: define the 'statistics' object (processed statistics from all other objects combined)
-  statistics: z.object({}).passthrough().optional(),
-}).strict();
-
+export const characterObject = z
+  .object({
+    character: z
+      .object({
+        // naming
+        name: z.string(),
+        prename: z.string().optional(),
+        surname: z.string().optional(),
+        generic: z.boolean().optional(),
+        pronouns: z.enum(["male", "female", "neutral", "thing"]).optional(),
+        // objects
+        race: raceObject.optional(),
+        racevariant: racevariantObject.optional(),
+        class: classObject.optional(),
+        classvariant: classvariantObject.optional(),
+        profession: professionObject.optional(),
+        template: templateObject.optional(),
+        user: userObject.optional(),
+        // other stats
+        abilitiesBase: abilitiesBaseObject.optional(),
+        alignment: z.tuple([z.number(), z.number(), z.number()]).optional(),
+        alignmentMoral: z
+          .enum(["Good", "Neutral", "Evil", "Any", "Unaligned"])
+          .optional(),
+        alignmentEthical: z
+          .enum(["Lawful", "Neutral", "Chaotic", "Any"])
+          .optional(),
+        // roleplaying helpers
+        smallbackground: z.string().optional(),
+        trait: z.string().optional(),
+        feeling: z.string().optional(),
+        // CR
+        CRCalculation: z
+          .union([CRTwoPointsObject, CRNPCObject, CREstimatedObject])
+          .optional(),
+      })
+      .strict(),
+    // TODO: define the 'statistics' object (processed statistics from all other objects combined)
+    statistics: z.object({}).passthrough().optional(),
+  })
+  .strict();
 
 const id = z.number();
 const userid = z.number();
@@ -53,7 +67,7 @@ const getCharacterListResponseSchema = z.object({
       id,
       userid,
       name,
-    }),
+    })
   ),
 });
 
@@ -77,9 +91,12 @@ export type createCharacterInput = z.infer<typeof createCharacterSchema>;
 export type updateCharacterInput = z.infer<typeof updateCharacterSchema>;
 export type Character = z.infer<typeof characterObject>;
 
-export const { schemas: characterSchemas, $ref } = buildJsonSchemas({
-  createCharacterSchema,
-  updateCharacterSchema,
-  getCharacterListResponseSchema,
-  getCharacterResponseSchema,
-}, { $id: 'characterSchemas' });
+export const { schemas: characterSchemas, $ref } = buildJsonSchemas(
+  {
+    createCharacterSchema,
+    updateCharacterSchema,
+    getCharacterListResponseSchema,
+    getCharacterResponseSchema,
+  },
+  { $id: "characterSchemas" }
+);

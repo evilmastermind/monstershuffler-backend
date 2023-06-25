@@ -1,8 +1,13 @@
-import prisma from '@/utils/prisma';
-import { createClassvariantInput, updateClassvariantInput } from './classvariant.schema';
+import prisma from "@/utils/prisma";
+import {
+  createClassvariantInput,
+  updateClassvariantInput,
+} from "./classvariant.schema";
 
-
-export async function createClassvariant(userid: number, input: createClassvariantInput) {
+export async function createClassvariant(
+  userid: number,
+  input: createClassvariantInput
+) {
   const { object, classId, game } = input;
 
   // check if class exists and belongs to user
@@ -15,11 +20,11 @@ export async function createClassvariant(userid: number, input: createClassvaria
       id: classId,
       userid,
       type: 3,
-    }
+    },
   });
 
   if (!classResult) {
-    throw new Error('Class not found');
+    throw new Error("Class not found");
   }
 
   return await prisma.objects.create({
@@ -29,8 +34,8 @@ export async function createClassvariant(userid: number, input: createClassvaria
       type: 10003,
       name: object.name,
       variantof: classId,
-      object
-    }
+      object,
+    },
   });
 }
 
@@ -49,8 +54,8 @@ export async function getClassvariant(userid: number, id: number) {
         {
           userid,
         },
-      ]
-    }
+      ],
+    },
   });
   return classResult[0];
 }
@@ -67,8 +72,8 @@ export async function getRandomClassvariant(userid: number, variantof: number) {
         {
           userid,
         },
-      ]
-    }
+      ],
+    },
   });
   if (variantCount === 0) {
     return null;
@@ -90,12 +95,11 @@ export async function getRandomClassvariant(userid: number, variantof: number) {
         {
           userid,
         },
-      ]
+      ],
     },
   });
   return classChosen[0];
 }
-
 
 export async function getClassvariantList(userid: number) {
   return await prisma.objects.findMany({
@@ -107,7 +111,7 @@ export async function getClassvariantList(userid: number) {
         select: {
           id: true,
           name: true,
-        }
+        },
       },
     },
     where: {
@@ -126,16 +130,19 @@ export async function getClassvariantList(userid: number) {
     },
     orderBy: [
       {
-        userid: 'asc',
+        userid: "asc",
       },
       {
-        id: 'asc',
-      }
-    ]
+        id: "asc",
+      },
+    ],
   });
 }
 
-export async function getClassvariantClassList(userid: number, variantof: number) {
+export async function getClassvariantClassList(
+  userid: number,
+  variantof: number
+) {
   return await prisma.objects.findMany({
     select: {
       id: true,
@@ -156,16 +163,20 @@ export async function getClassvariantClassList(userid: number, variantof: number
     },
     orderBy: [
       {
-        userid: 'asc',
+        userid: "asc",
       },
       {
-        id: 'asc',
-      }
-    ]
+        id: "asc",
+      },
+    ],
   });
 }
 
-export async function updateClassvariant(userid: number, id: number, input: updateClassvariantInput) {
+export async function updateClassvariant(
+  userid: number,
+  id: number,
+  input: updateClassvariantInput
+) {
   const { object } = input;
 
   return await prisma.objects.updateMany({
@@ -177,17 +188,16 @@ export async function updateClassvariant(userid: number, id: number, input: upda
     data: {
       object,
       name: object.name,
-    }
+    },
   });
 }
 
 export async function deleteClassvariant(userid: number, id: number) {
-
   return await prisma.objects.deleteMany({
     where: {
       id,
       userid,
       type: 10003,
-    }
+    },
   });
 }

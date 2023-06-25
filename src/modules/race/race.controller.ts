@@ -1,44 +1,51 @@
-import { createRaceInput, updateRaceInput, } from './race.schema';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { createRace, getRace, getRaceList, getRandomRace, getRaceWithVariantsList, updateRace, deleteRace } from './race.service';
-import { handleError } from '@/utils/errors';
+import { createRaceInput, updateRaceInput } from "./race.schema";
+import { FastifyReply, FastifyRequest } from "fastify";
+import {
+  createRace,
+  getRace,
+  getRaceList,
+  getRandomRace,
+  getRaceWithVariantsList,
+  updateRace,
+  deleteRace,
+} from "./race.service";
+import { handleError } from "@/utils/errors";
 
-export async function getRaceListHandler (
+export async function getRaceListHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id } = request.user  || { id: 0 };
+  const { id } = request.user || { id: 0 };
   try {
     const raceList = await getRaceList(id);
     return reply.code(200).send({
-      list: raceList
+      list: raceList,
     });
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-export async function getRaceWithVariantsListHandler (
+export async function getRaceWithVariantsListHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id } = request.user  || { id: 0 };
+  const { id } = request.user || { id: 0 };
   try {
     const raceList = await getRaceWithVariantsList(id);
     return reply.code(200).send({
-      list: raceList
+      list: raceList,
     });
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-
-export async function getRaceHandler (
+export async function getRaceHandler(
   request: FastifyRequest<{
     Params: {
       raceId: string;
-    } 
+    };
   }>,
   reply: FastifyReply
 ) {
@@ -52,7 +59,7 @@ export async function getRaceHandler (
   }
 }
 
-export async function getRandomRaceHandler (
+export async function getRandomRaceHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
@@ -65,9 +72,8 @@ export async function getRandomRaceHandler (
   }
 }
 
-
-export async function createRaceHandler (
-  request: FastifyRequest<{Body: createRaceInput }>,
+export async function createRaceHandler(
+  request: FastifyRequest<{ Body: createRaceInput }>,
   reply: FastifyReply
 ) {
   try {
@@ -80,12 +86,12 @@ export async function createRaceHandler (
   }
 }
 
-export async function updateRaceHandler (
+export async function updateRaceHandler(
   request: FastifyRequest<{
     Params: {
       raceId: string;
-    },
-    Body: updateRaceInput
+    };
+    Body: updateRaceInput;
   }>,
   reply: FastifyReply
 ) {
@@ -100,11 +106,11 @@ export async function updateRaceHandler (
   }
 }
 
-export async function deleteRaceHandler (
+export async function deleteRaceHandler(
   request: FastifyRequest<{
     Params: {
       raceId: string;
-    }
+    };
   }>,
   reply: FastifyReply
 ) {

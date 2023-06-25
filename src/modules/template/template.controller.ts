@@ -1,28 +1,34 @@
-import { createTemplateInput, updateTemplateInput } from './template.schema';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { createTemplate, getTemplate, getTemplateList, updateTemplate, deleteTemplate } from './template.service';
-import { handleError } from '@/utils/errors';
+import { createTemplateInput, updateTemplateInput } from "./template.schema";
+import { FastifyReply, FastifyRequest } from "fastify";
+import {
+  createTemplate,
+  getTemplate,
+  getTemplateList,
+  updateTemplate,
+  deleteTemplate,
+} from "./template.service";
+import { handleError } from "@/utils/errors";
 
-export async function getTemplateListHandler (
+export async function getTemplateListHandler(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { id } = request.user  || { id: 0 };
+  const { id } = request.user || { id: 0 };
   try {
     const templateList = await getTemplateList(id);
     return reply.code(200).send({
-      list: templateList
+      list: templateList,
     });
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-export async function getTemplateHandler (
+export async function getTemplateHandler(
   request: FastifyRequest<{
     Params: {
       templateId: string;
-    } 
+    };
   }>,
   reply: FastifyReply
 ) {
@@ -36,9 +42,8 @@ export async function getTemplateHandler (
   }
 }
 
-
-export async function createTemplateHandler (
-  request: FastifyRequest<{Body: createTemplateInput }>,
+export async function createTemplateHandler(
+  request: FastifyRequest<{ Body: createTemplateInput }>,
   reply: FastifyReply
 ) {
   try {
@@ -51,12 +56,12 @@ export async function createTemplateHandler (
   }
 }
 
-export async function updateTemplateHandler (
+export async function updateTemplateHandler(
   request: FastifyRequest<{
     Params: {
       templateId: string;
-    },
-    Body: updateTemplateInput
+    };
+    Body: updateTemplateInput;
   }>,
   reply: FastifyReply
 ) {
@@ -71,11 +76,11 @@ export async function updateTemplateHandler (
   }
 }
 
-export async function deleteTemplateHandler (
+export async function deleteTemplateHandler(
   request: FastifyRequest<{
     Params: {
       templateId: string;
-    }
+    };
   }>,
   reply: FastifyReply
 ) {

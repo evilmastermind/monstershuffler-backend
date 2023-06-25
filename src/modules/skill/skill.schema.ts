@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
+import { z } from "zod";
+import { buildJsonSchemas } from "fastify-zod";
 
 const id = z.number();
 const game = z.number();
@@ -18,7 +18,10 @@ const getSkillResponseSchema = skill;
 
 export type getSkillListResponse = z.infer<typeof getSkillListResponseSchema>;
 
-export const {schemas: skillSchemas, $ref} = buildJsonSchemas({
-  getSkillListResponseSchema,
-  getSkillResponseSchema,
-}, { $id: 'skillSchemas' });
+export const { schemas: skillSchemas, $ref } = buildJsonSchemas(
+  {
+    getSkillListResponseSchema,
+    getSkillResponseSchema,
+  },
+  { $id: "skillSchemas" }
+);

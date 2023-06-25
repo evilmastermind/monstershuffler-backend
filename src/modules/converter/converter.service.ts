@@ -1,8 +1,8 @@
-import prisma from '@/utils/prisma';
-import { actionsdetails, Prisma } from '@prisma/client';
-import { isAdmin } from '@/modules/user/user.service';
-import { objects } from '@prisma/client';
-import { type Choice } from '@/modules/schemas';
+import prisma from "@/utils/prisma";
+import { actionsdetails, Prisma } from "@prisma/client";
+import { isAdmin } from "@/modules/user/user.service";
+import { objects } from "@prisma/client";
+import { type Choice } from "@/modules/schemas";
 
 export async function countObjects() {
   const objectCount = await prisma.objects.count();
@@ -16,7 +16,7 @@ export async function getFirstObjectId() {
       id: true,
     },
     orderBy: {
-      id: 'asc',
+      id: "asc",
     },
   });
 
@@ -28,8 +28,7 @@ export async function getObjectsWithPagination(
   cursor: number | undefined,
   pageSize: number
 ) {
-
-  if(!(await isAdmin(userid))) {
+  if (!(await isAdmin(userid))) {
     return [];
   }
 
@@ -38,7 +37,7 @@ export async function getObjectsWithPagination(
     take: pageSize,
     cursor: {
       id: cursor,
-    }
+    },
   });
 }
 
@@ -85,7 +84,7 @@ export async function getActionDetails(actionId: number) {
   });
 
   if (details) {
-    details.tags = tags.map(tag => tag.tag);
+    details.tags = tags.map((tag) => tag.tag);
   }
   return details;
 }
@@ -112,41 +111,38 @@ export async function getActionDetails(actionId: number) {
 
 // ["actions","armor","backgrounds","bases","damagetypes","languages","names","professions","skills","spells","traits","voices","weapons"]
 export async function getIdsFromNames(chosenAlready: string[], source: string) {
-  
-  let table = 'objects';
+  let table = "objects";
   let objectType = 0;
   switch (source) {
-  case 'actions':
-    objectType = 101;
-    break;
-  case 'armor':
-    objectType = 1002;
-    break;
-  case 'languages':
-    table = 'languages';
-    break;
-  case 'skills':
-    table = 'skills';
-    break;
-  case 'weapons':
-    objectType = 1001;
-    break;
-  case 'spells':
-    objectType = 102;
-    break;
-  case 'objects':
-    break;
-  default:
-    console.warn('UNDEFINED TYPE DETECTED: ' + source);
-    table = 'somethingwrongtomakethisfail';
-    break;
+    case "actions":
+      objectType = 101;
+      break;
+    case "armor":
+      objectType = 1002;
+      break;
+    case "languages":
+      table = "languages";
+      break;
+    case "skills":
+      table = "skills";
+      break;
+    case "weapons":
+      objectType = 1001;
+      break;
+    case "spells":
+      objectType = 102;
+      break;
+    case "objects":
+      break;
+    default:
+      console.warn("UNDEFINED TYPE DETECTED: " + source);
+      table = "somethingwrongtomakethisfail";
+      break;
   }
 
-
-  
   const newChosenAlready: Choice[] = [];
-  for(const name of chosenAlready) {
-    if(table === 'objects') {
+  for (const name of chosenAlready) {
+    if (table === "objects") {
       const ids = await prisma.objects.findMany({
         select: {
           id: true,
@@ -154,24 +150,26 @@ export async function getIdsFromNames(chosenAlready: string[], source: string) {
         where: {
           name: {
             equals: name.trim(),
-            mode: 'insensitive' // -- for PostgreSQL only
+            mode: "insensitive", // -- for PostgreSQL only
           },
           type: objectType,
           userid: 0,
-        }
+        },
       });
       // console.log('ids:' + ids);
-      if(ids.length > 0) {
-        newChosenAlready.push({ id: ids[0].id, value: name});
+      if (ids.length > 0) {
+        newChosenAlready.push({ id: ids[0].id, value: name });
       } else {
-        newChosenAlready.push({ value: name});
+        newChosenAlready.push({ value: name });
       }
     } else {
-      const ids = await prisma.$queryRawUnsafe<{id: number}[]>(`SELECT id FROM ${table} WHERE LOWER(name) = LOWER('${name.trim()}')`);
-      if(ids.length > 0) {
-        newChosenAlready.push({ id: ids[0].id, value: name});
+      const ids = await prisma.$queryRawUnsafe<{ id: number }[]>(
+        `SELECT id FROM ${table} WHERE LOWER(name) = LOWER('${name.trim()}')`
+      );
+      if (ids.length > 0) {
+        newChosenAlready.push({ id: ids[0].id, value: name });
       } else {
-        newChosenAlready.push({ value: name});
+        newChosenAlready.push({ value: name });
       }
     }
   }

@@ -1,19 +1,25 @@
-import { FastifyInstance } from 'fastify';
-import '@fastify/jwt';
+import { FastifyInstance } from "fastify";
+import "@fastify/jwt";
+import { Transporter } from "nodemailer";
 
-declare module 'fastify' {
+export interface FastifyMailerNamedInstance {
+  [namespace: string]: Transporter;
+}
+export type FastifyMailer = FastifyMailerNamedInstance & Transporter;
+
+declare module "fastify" {
   export interface FastifyInstance {
     authenticate: any;
     authenticateOptional: any;
+    mailer: FastifyMailer;
   }
 }
 
-declare module '@fastify/jwt' {
+declare module "@fastify/jwt" {
   interface FastifyJWT {
-    payload: { id: number } // payload type is used for signing and verifying
+    payload: { id: number }; // payload type is used for signing and verifying
     user: {
-      id: number,
-      } // user type is return type of `request.user` object
+      id: number;
+    }; // user type is return type of `request.user` object
   }
 }
-

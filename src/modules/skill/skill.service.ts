@@ -1,13 +1,13 @@
-import prisma from '@/utils/prisma';
-import { ChoiceRandomObject, Choice } from '@/modules/schemas';
+import prisma from "@/utils/prisma";
+import { ChoiceRandomObject, Choice } from "@/modules/schemas";
 
 export async function getSkillList() {
   return await prisma.skills.findMany({
     orderBy: [
       {
-        name: 'asc',
-      }
-    ]
+        name: "asc",
+      },
+    ],
   });
 }
 
@@ -20,11 +20,17 @@ export async function getRandomSkill() {
   return skill[0];
 }
 
-export async function getChoiceSkill(userId: number, choice: ChoiceRandomObject['choice']) {
+export async function getChoiceSkill(
+  userId: number,
+  choice: ChoiceRandomObject["choice"]
+) {
   const parameters: Array<any> = [userId || 0];
-  const chosenAlreadyIds = choice.chosenAlready?.filter((value) => value?.id).map((value) => value?.id) || [];
+  const chosenAlreadyIds =
+    choice.chosenAlready
+      ?.filter((value) => value?.id)
+      .map((value) => value?.id) || [];
 
-  let additionalFilters = '';
+  let additionalFilters = "";
 
   if (chosenAlreadyIds.length > 0) {
     additionalFilters += ` AND id NOT IN (`;
@@ -45,13 +51,16 @@ export async function getChoiceSkill(userId: number, choice: ChoiceRandomObject[
     name: string;
   };
 
-  const result = await prisma.$queryRawUnsafe(`
+  const result = await prisma.$queryRawUnsafe(
+    `
     SELECT id, name
     FROM skills
     WHERE userid IN (0, $1)
       ${additionalFilters}
     ORDER BY RANDOM() LIMIT $${parameters.length};
-  `, ...parameters);
+  `,
+    ...parameters
+  );
 
   const fullResult: Choice[] = (result as ResultNameId[])?.map((value) => {
     return {

@@ -1,11 +1,11 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { getRandomTrait, getTraitDescription } from './trait.service';
-import { handleError } from '@/utils/errors';
-import { getRandomTraitInput } from './trait.schema';
+import { FastifyReply, FastifyRequest } from "fastify";
+import { getRandomTrait, getTraitDescription } from "./trait.service";
+import { handleError } from "@/utils/errors";
+import { getRandomTraitInput } from "./trait.schema";
 
-export async function getRandomTraitHandler (
+export async function getRandomTraitHandler(
   request: FastifyRequest<{
-    Body: getRandomTraitInput
+    Body: getRandomTraitInput;
   }>,
   reply: FastifyReply
 ) {
@@ -18,11 +18,11 @@ export async function getRandomTraitHandler (
   }
 }
 
-export async function getTraitDescriptionHandler (
+export async function getTraitDescriptionHandler(
   request: FastifyRequest<{
     Params: {
       name: string;
-    }
+    };
   }>,
   reply: FastifyReply
 ) {

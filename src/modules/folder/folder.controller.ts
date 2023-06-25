@@ -1,14 +1,18 @@
-import { CreateFolderInput } from './folder.schema';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { createFolder, getFolderContent, updateFolder, deleteFolder } from './folder.service';
-import { handleError } from '@/utils/errors';
-import { Race } from '@/modules/race/race.schema';
-import { Class } from '@/modules/class/class.schema';
-import { Template } from '@/modules/template/template.schema';
-import { Character } from '@/modules/character/character.schema';
+import { CreateFolderInput } from "./folder.schema";
+import { FastifyReply, FastifyRequest } from "fastify";
+import {
+  createFolder,
+  getFolderContent,
+  updateFolder,
+  deleteFolder,
+} from "./folder.service";
+import { handleError } from "@/utils/errors";
+import { Race } from "@/modules/race/race.schema";
+import { Class } from "@/modules/class/class.schema";
+import { Template } from "@/modules/template/template.schema";
+import { Character } from "@/modules/character/character.schema";
 
-
-function extractNegativeRatings(ratings: {value: number}[]) {
+function extractNegativeRatings(ratings: { value: number }[]) {
   return ratings.reduce((accumulator, currentValue) => {
     if (currentValue.value < 0) {
       return accumulator + currentValue.value;
@@ -16,7 +20,7 @@ function extractNegativeRatings(ratings: {value: number}[]) {
     return accumulator;
   }, 0);
 }
-function extractPositiveRatings(ratings: {value: number}[]) {
+function extractPositiveRatings(ratings: { value: number }[]) {
   return ratings.reduce((accumulator, currentValue) => {
     if (currentValue.value > 0) {
       return accumulator + currentValue.value;
@@ -25,15 +29,15 @@ function extractPositiveRatings(ratings: {value: number}[]) {
   }, 0);
 }
 
-export async function getFolderContentHandler (
+export async function getFolderContentHandler(
   request: FastifyRequest<{
     Params: {
       folderId: string;
-    } 
+    };
   }>,
   reply: FastifyReply
 ) {
-  const { id } = request.user  || { id: 0 };
+  const { id } = request.user || { id: 0 };
   const folderId = request.params.folderId;
   try {
     const folderContent = await getFolderContent(id, parseInt(folderId));
@@ -43,8 +47,12 @@ export async function getFolderContentHandler (
         // TODO: here I need to retrieve the informations inside .statistics
         adds: character?.publishedcharacters?.adds || null,
         url: character?.publishedcharacters?.url || null,
-        negativeratings: extractNegativeRatings(character.publishedcharacters_ratings),
-        positiveratings: extractPositiveRatings(character.publishedcharacters_ratings),
+        negativeratings: extractNegativeRatings(
+          character.publishedcharacters_ratings
+        ),
+        positiveratings: extractPositiveRatings(
+          character.publishedcharacters_ratings
+        ),
       };
     });
     const races = folderContent.races.map((race) => {
@@ -63,8 +71,12 @@ export async function getFolderContentHandler (
         name: (classObject.object as Class).name,
         adds: classObject?.publishedclasses?.adds || null,
         url: classObject?.publishedclasses?.url || null,
-        negativeratings: extractNegativeRatings(classObject.publishedclasses_ratings),
-        positiveratings: extractPositiveRatings(classObject.publishedclasses_ratings),
+        negativeratings: extractNegativeRatings(
+          classObject.publishedclasses_ratings
+        ),
+        positiveratings: extractPositiveRatings(
+          classObject.publishedclasses_ratings
+        ),
       };
     });
     const templates = folderContent.templates.map((template) => {
@@ -73,8 +85,12 @@ export async function getFolderContentHandler (
         name: (template.object as Template).name,
         adds: template?.publishedtemplates?.adds || null,
         url: template?.publishedtemplates?.url || null,
-        negativeratings: extractNegativeRatings(template.publishedtemplates_ratings),
-        positiveratings: extractPositiveRatings(template.publishedtemplates_ratings),
+        negativeratings: extractNegativeRatings(
+          template.publishedtemplates_ratings
+        ),
+        positiveratings: extractPositiveRatings(
+          template.publishedtemplates_ratings
+        ),
       };
     });
 
@@ -90,8 +106,8 @@ export async function getFolderContentHandler (
   }
 }
 
-export async function createFolderHandler (
-  request: FastifyRequest<{Body: CreateFolderInput }>,
+export async function createFolderHandler(
+  request: FastifyRequest<{ Body: CreateFolderInput }>,
   reply: FastifyReply
 ) {
   try {
@@ -104,12 +120,12 @@ export async function createFolderHandler (
   }
 }
 
-export async function updateFolderHandler (
+export async function updateFolderHandler(
   request: FastifyRequest<{
     Params: {
       folderId: string;
-    },
-    Body: CreateFolderInput
+    };
+    Body: CreateFolderInput;
   }>,
   reply: FastifyReply
 ) {
@@ -124,11 +140,11 @@ export async function updateFolderHandler (
   }
 }
 
-export async function deleteFolderHandler (
+export async function deleteFolderHandler(
   request: FastifyRequest<{
     Params: {
       folderId: string;
-    }
+    };
   }>,
   reply: FastifyReply
 ) {

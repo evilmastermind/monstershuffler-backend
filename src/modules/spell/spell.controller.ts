@@ -1,29 +1,35 @@
-import { createSpellInput, getSpellListInput } from './spell.schema';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { createSpell, getSpell, getSpellList, updateSpell, deleteSpell } from './spell.service';
-import { handleError } from '@/utils/errors';
+import { createSpellInput, getSpellListInput } from "./spell.schema";
+import { FastifyReply, FastifyRequest } from "fastify";
+import {
+  createSpell,
+  getSpell,
+  getSpellList,
+  updateSpell,
+  deleteSpell,
+} from "./spell.service";
+import { handleError } from "@/utils/errors";
 
-export async function getSpellListHandler (
+export async function getSpellListHandler(
   request: FastifyRequest<{ Body: getSpellListInput }>,
   reply: FastifyReply
 ) {
   const { body } = request;
-  const { id } = request.user  || { id: 0 };
+  const { id } = request.user || { id: 0 };
   try {
     const spellList = await getSpellList(id, body);
     return reply.code(200).send({
-      list: spellList
+      list: spellList,
     });
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-export async function getSpellHandler (
+export async function getSpellHandler(
   request: FastifyRequest<{
     Params: {
       spellId: string;
-    } 
+    };
   }>,
   reply: FastifyReply
 ) {
@@ -37,8 +43,8 @@ export async function getSpellHandler (
   }
 }
 
-export async function createSpellHandler (
-  request: FastifyRequest<{Body: createSpellInput }>,
+export async function createSpellHandler(
+  request: FastifyRequest<{ Body: createSpellInput }>,
   reply: FastifyReply
 ) {
   try {
@@ -51,12 +57,12 @@ export async function createSpellHandler (
   }
 }
 
-export async function updateSpellHandler (
+export async function updateSpellHandler(
   request: FastifyRequest<{
     Params: {
       spellId: string;
-    },
-    Body: createSpellInput
+    };
+    Body: createSpellInput;
   }>,
   reply: FastifyReply
 ) {
@@ -71,11 +77,11 @@ export async function updateSpellHandler (
   }
 }
 
-export async function deleteSpellHandler (
+export async function deleteSpellHandler(
   request: FastifyRequest<{
     Params: {
       spellId: string;
-    }
+    };
   }>,
   reply: FastifyReply
 ) {

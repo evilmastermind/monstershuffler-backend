@@ -1,8 +1,13 @@
-import prisma from '@/utils/prisma';
-import { createRacevariantInput, updateRacevariantInput } from './racevariant.schema';
+import prisma from "@/utils/prisma";
+import {
+  createRacevariantInput,
+  updateRacevariantInput,
+} from "./racevariant.schema";
 
-
-export async function createRacevariant(userid: number, input: createRacevariantInput) {
+export async function createRacevariant(
+  userid: number,
+  input: createRacevariantInput
+) {
   const { object, game, raceId } = input;
 
   // check if race exists and belongs to user
@@ -15,11 +20,11 @@ export async function createRacevariant(userid: number, input: createRacevariant
       id: raceId,
       userid,
       type: 2,
-    }
+    },
   });
 
   if (!raceResult) {
-    throw new Error('Race not found');
+    throw new Error("Race not found");
   }
 
   return await prisma.objects.create({
@@ -30,7 +35,7 @@ export async function createRacevariant(userid: number, input: createRacevariant
       name: object.name,
       object,
       variantof: raceId,
-    }
+    },
   });
 }
 
@@ -50,12 +55,11 @@ export async function getRacevariant(userid: number, id: number) {
         {
           userid,
         },
-      ]
-    }
+      ],
+    },
   });
   return raceResult[0];
 }
-
 
 export async function getRandomRacevariant(userid: number, variantof: number) {
   const raceCount = await prisma.objects.count({
@@ -69,8 +73,8 @@ export async function getRandomRacevariant(userid: number, variantof: number) {
         {
           userid,
         },
-      ]
-    }
+      ],
+    },
   });
   if (raceCount === 0) {
     return null;
@@ -92,7 +96,7 @@ export async function getRandomRacevariant(userid: number, variantof: number) {
         {
           userid,
         },
-      ]
+      ],
     },
   });
   return race[0];
@@ -119,17 +123,20 @@ export async function getRacevariantList(userid: number, variantof: number) {
     },
     orderBy: [
       {
-        userid: 'asc',
+        userid: "asc",
       },
       {
-        id: 'asc',
-      }
-    ]
+        id: "asc",
+      },
+    ],
   });
 }
 
-
-export async function updateRacevariant(userid: number, id: number, input: updateRacevariantInput) {
+export async function updateRacevariant(
+  userid: number,
+  id: number,
+  input: updateRacevariantInput
+) {
   const { object } = input;
 
   return await prisma.objects.updateMany({
@@ -140,8 +147,8 @@ export async function updateRacevariant(userid: number, id: number, input: updat
     },
     data: {
       object,
-      name: object.name
-    }
+      name: object.name,
+    },
   });
 }
 
@@ -151,6 +158,6 @@ export async function deleteRacevariant(userid: number, id: number) {
       id,
       userid,
       type: 10002,
-    }
+    },
   });
 }

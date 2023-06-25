@@ -1,58 +1,74 @@
-import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
-import { armorObject } from '@/modules/armor/armor.schema';
-import { bonusesObject, choiceRandomObject, statObject, speedsObject, choiceListObject, sensesObject, actionObject, imageObject, spellGroupObject, abilitiesEnum, spellsObject } from '@/modules/schemas';
-
+import { z } from "zod";
+import { buildJsonSchemas } from "fastify-zod";
+import { armorObject } from "@/modules/armor/armor.schema";
+import {
+  bonusesObject,
+  choiceRandomObject,
+  statObject,
+  speedsObject,
+  choiceListObject,
+  sensesObject,
+  actionObject,
+  imageObject,
+  spellGroupObject,
+  abilitiesEnum,
+  spellsObject,
+} from "@/modules/schemas";
 
 // TODO: missing race-specific options (in generator, race-specific options)
-export const raceObject = z.object({
-  name: z.string(),
-  // TODO: gender => pronouns
-  pronouns: z.enum(['male','female','neutral','thing']).optional(),
-  size: z.string().optional(),
-  type: z.string().optional(),
-  isSwarm: z.boolean().optional(),
-  swarmSize: z.string().optional(),
-  subtypes: z.array(statObject).optional(),
-  // TODO: this method of defining the alignment doesn' work:
-  // it's not possible to define races whose alignment lean towards neutral
-  // also: there were other types of alignment that I didn't handle
-  // any Good/Neutral/Evil alignment (See Lich)
-  alignment: z.tuple([z.number(), z.number(), z.number()]).optional(),
-  armor: z.union([armorObject, choiceRandomObject]).optional(),
-  HD: z.number().optional(),
-  abilitiesLimit: z.string().optional(),
-  speeds: speedsObject.optional(),
-  savingThrows: z.array(statObject).optional(),
-  skills: z.union([z.array(statObject), choiceRandomObject, choiceListObject]).optional(),
-  resistances: z.array(statObject).optional(),
-  immunities: z.array(statObject).optional(),
-  vulnerabilities: z.array(statObject).optional(),
-  conditionImmunities: z.array(statObject).optional(),
-  senses: sensesObject.optional(),
-  isBlind: z.boolean().optional(),
-  canSpeak: z.boolean().optional(),
-  telepathy: z.string().optional(),
-  languages: z.union([z.array(statObject), choiceRandomObject, choiceListObject]).optional(),
-  actions: z.array(actionObject).optional(),
-  bonuses: bonusesObject.optional(),
-  spells: spellsObject.optional(),
-  // generator keys
-  enableGenerator: z.boolean().optional(),
-  ageAdult: z.string().optional(),
-  ageMax: z.string().optional(),
-  heightMin: z.number().optional(),
-  heightMax: z.number().optional(),
-  nameType: z.array(z.string()).optional(),
-  addSurname: z.number().optional(),
-  // publication keys
-  image: imageObject.optional(),
-  searchTags: z.array(z.string()).optional(),
-  environments: z.array(z.string()).optional(),
-  backgroundImage: z.string().optional(),
-  background: z.object({}).passthrough().optional(),
-}).strict();
-
+export const raceObject = z
+  .object({
+    name: z.string(),
+    // TODO: gender => pronouns
+    pronouns: z.enum(["male", "female", "neutral", "thing"]).optional(),
+    size: z.string().optional(),
+    type: z.string().optional(),
+    isSwarm: z.boolean().optional(),
+    swarmSize: z.string().optional(),
+    subtypes: z.array(statObject).optional(),
+    // TODO: this method of defining the alignment doesn' work:
+    // it's not possible to define races whose alignment lean towards neutral
+    // also: there were other types of alignment that I didn't handle
+    // any Good/Neutral/Evil alignment (See Lich)
+    alignment: z.tuple([z.number(), z.number(), z.number()]).optional(),
+    armor: z.union([armorObject, choiceRandomObject]).optional(),
+    HD: z.number().optional(),
+    abilitiesLimit: z.string().optional(),
+    speeds: speedsObject.optional(),
+    savingThrows: z.array(statObject).optional(),
+    skills: z
+      .union([z.array(statObject), choiceRandomObject, choiceListObject])
+      .optional(),
+    resistances: z.array(statObject).optional(),
+    immunities: z.array(statObject).optional(),
+    vulnerabilities: z.array(statObject).optional(),
+    conditionImmunities: z.array(statObject).optional(),
+    senses: sensesObject.optional(),
+    isBlind: z.boolean().optional(),
+    canSpeak: z.boolean().optional(),
+    telepathy: z.string().optional(),
+    languages: z
+      .union([z.array(statObject), choiceRandomObject, choiceListObject])
+      .optional(),
+    actions: z.array(actionObject).optional(),
+    bonuses: bonusesObject.optional(),
+    spells: spellsObject.optional(),
+    // generator keys
+    enableGenerator: z.boolean().optional(),
+    ageAdult: z.string().optional(),
+    ageMax: z.string().optional(),
+    heightMin: z.number().optional(),
+    heightMax: z.number().optional(),
+    nameType: z.array(z.string()).optional(),
+    addSurname: z.number().optional(),
+    // publication keys
+    image: imageObject.optional(),
+    searchTags: z.array(z.string()).optional(),
+    environments: z.array(z.string()).optional(),
+    backgroundImage: z.string().optional(),
+    background: z.object({}).passthrough().optional(),
+  })
+  .strict();
 
 const id = z.number();
 const userid = z.number();
@@ -66,7 +82,7 @@ const getRaceListResponseSchema = z.object({
       id,
       userid,
       name,
-    }),
+    })
   ),
 });
 
@@ -83,14 +99,13 @@ const getRaceWithVariantsListResponseSchema = z.object({
           userid,
         })
       ),
-    }),
+    })
   ),
 });
 
-
 const getRaceResponseSchema = z.object({
   object: raceObject,
-  id
+  id,
 });
 
 const createRaceSchema = z.object({
@@ -107,10 +122,13 @@ export type createRaceInput = z.infer<typeof createRaceSchema>;
 export type updateRaceInput = z.infer<typeof updateRaceSchema>;
 export type Race = z.infer<typeof raceObject>;
 
-export const { schemas: raceSchemas, $ref } = buildJsonSchemas({
-  createRaceSchema,
-  updateRaceSchema,
-  getRaceWithVariantsListResponseSchema,
-  getRaceListResponseSchema,
-  getRaceResponseSchema,
-}, { $id: 'raceSchemas' });
+export const { schemas: raceSchemas, $ref } = buildJsonSchemas(
+  {
+    createRaceSchema,
+    updateRaceSchema,
+    getRaceWithVariantsListResponseSchema,
+    getRaceListResponseSchema,
+    getRaceResponseSchema,
+  },
+  { $id: "raceSchemas" }
+);

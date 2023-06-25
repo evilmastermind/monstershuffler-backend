@@ -1,12 +1,21 @@
-import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
-import { characterObject } from '../character/character.schema';
+import { z } from "zod";
+import { buildJsonSchemas } from "fastify-zod";
+import { characterObject } from "../character/character.schema";
 
 const id = z.number();
 
 const createRandomNpcInputSchema = z.object({
-  levelType: z.enum(['random', 'randomPeasantsMostly']).optional(),
-  classType: z.enum(['specificClass', 'randomClass', 'randomClassProfession', 'randomProfessionMostly', 'randomProfession', 'specificProfession']).optional(),
+  levelType: z.enum(["random", "randomPeasantsMostly"]).optional(),
+  classType: z
+    .enum([
+      "specificClass",
+      "randomClass",
+      "randomClassProfession",
+      "randomProfessionMostly",
+      "randomProfession",
+      "specificProfession",
+    ])
+    .optional(),
   classId: id.optional(),
   classvariantId: id.optional(),
   professionId: id.optional(),
@@ -24,7 +33,10 @@ const createRandomNpcResponseSchema = z.object({
 
 export type createRandomNpcInput = z.infer<typeof createRandomNpcInputSchema>;
 
-export const { schemas: npcSchemas, $ref } = buildJsonSchemas({
-  createRandomNpcInputSchema,
-  createRandomNpcResponseSchema,
-}, { $id: 'npcSchemas' });
+export const { schemas: npcSchemas, $ref } = buildJsonSchemas(
+  {
+    createRandomNpcInputSchema,
+    createRandomNpcResponseSchema,
+  },
+  { $id: "npcSchemas" }
+);

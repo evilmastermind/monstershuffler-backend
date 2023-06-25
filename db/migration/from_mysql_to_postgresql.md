@@ -1,5 +1,6 @@
--1 mount the old mysql database 
-``` sql
+-1 mount the old mysql database
+
+```sql
 mysql -u root -p
 ...
 use dbname (or create database dbname)
@@ -11,7 +12,8 @@ source sql.sql
 -3 get nmig https://github.com/AnatolyUss/nmig and convert the db from mysql to postgresql
 
 Example of config.json file (nmig)
-``` json
+
+```json
     [...]
     "source" : {
         "host"             : "localhost",

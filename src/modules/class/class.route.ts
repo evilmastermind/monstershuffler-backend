@@ -1,74 +1,92 @@
-import { FastifyInstance } from 'fastify';
-import { createClassHandler, getClassHandler, getRandomClassHandler, getClassListHandler, getClassWithVariantsListHandler, updateClassHandler, deleteClassHandler  } from './class.controller';
-import { $ref } from './class.schema';
-import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/modules/schemas';
+import { FastifyInstance } from "fastify";
+import {
+  createClassHandler,
+  getClassHandler,
+  getRandomClassHandler,
+  getClassListHandler,
+  getClassWithVariantsListHandler,
+  updateClassHandler,
+  deleteClassHandler,
+} from "./class.controller";
+import { $ref } from "./class.schema";
+import {
+  jwtHeaderOptional,
+  jwtHeaderRequired,
+  BatchPayload,
+} from "@/modules/schemas";
 
 async function classRoutes(server: FastifyInstance) {
   server.get(
-    '/',
+    "/",
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: 'Returns a list of all available classes in the db.',
-        description: 'Returns a list of all available classes in the db. If authenticated, also returns the classes created by the user.',
+        summary: "Returns a list of all available classes in the db.",
+        description:
+          "Returns a list of all available classes in the db. If authenticated, also returns the classes created by the user.",
         headers: jwtHeaderOptional,
-        tags: ['classes'],
+        tags: ["classes"],
         response: {
-          200: $ref('getClassListResponseSchema')
+          200: $ref("getClassListResponseSchema"),
         },
-      }
+      },
     },
     getClassListHandler
   );
 
   server.get(
-    '/random',
+    "/random",
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: 'Returns the details of a random class in the database.',
-        description: 'Returns the details of a random class from list of classes available to the user in the database.',
+        summary: "Returns the details of a random class in the database.",
+        description:
+          "Returns the details of a random class from list of classes available to the user in the database.",
         headers: jwtHeaderOptional,
-        tags: ['classes'],
+        tags: ["classes"],
         response: {
-          200: $ref('getClassResponseSchema')
+          200: $ref("getClassResponseSchema"),
         },
-      }
+      },
     },
     getRandomClassHandler
   );
 
   server.get(
-    '/withvariants',
+    "/withvariants",
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: 'Returns a list of all available combinations of classes and variants in the db.',
-        description: 'Returns a list of all available combinations of classes and variants in the db. If authenticated, also returns the classes created by the user.',
+        summary:
+          "Returns a list of all available combinations of classes and variants in the db.",
+        description:
+          "Returns a list of all available combinations of classes and variants in the db. If authenticated, also returns the classes created by the user.",
         headers: jwtHeaderOptional,
-        tags: ['classes'],
+        tags: ["classes"],
         response: {
-          200: $ref('getClassWithVariantsListResponseSchema')
+          200: $ref("getClassWithVariantsListResponseSchema"),
         },
-      }
+      },
     },
     getClassWithVariantsListHandler
   );
 
   server.get(
-    '/:classId',
+    "/:classId",
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: 'Returns the details of the class corresponding to the given id.',
-        description: 'Returns the details of the class corresponding to the given id.',
+        summary:
+          "Returns the details of the class corresponding to the given id.",
+        description:
+          "Returns the details of the class corresponding to the given id.",
         headers: jwtHeaderOptional,
-        tags: ['classes'],
+        tags: ["classes"],
         // params: $ref('getClassParamsSchema'),
         response: {
-          200: $ref('getClassResponseSchema')
-        }
-      }
+          200: $ref("getClassResponseSchema"),
+        },
+      },
     },
     getClassHandler
   );

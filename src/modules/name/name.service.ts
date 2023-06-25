@@ -1,5 +1,5 @@
-import prisma from '@/utils/prisma';
-import { getRandomNameInput } from './name.schema';
+import prisma from "@/utils/prisma";
+import { getRandomNameInput } from "./name.schema";
 
 export async function getRandomName(input: getRandomNameInput) {
   const nameCount = await prisma.names.count({
@@ -15,6 +15,6 @@ export async function getRandomName(input: getRandomNameInput) {
       race: input.race,
       gender: input.gender,
     },
-  }); 
+  });
   return name[0].name;
 }

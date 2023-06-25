@@ -1,33 +1,43 @@
-import { createRacevariantInput, updateRacevariantInput } from './racevariant.schema';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { createRacevariant, getRacevariant, getRandomRacevariant, getRacevariantList, updateRacevariant, deleteRacevariant } from './racevariant.service';
-import { handleError } from '@/utils/errors';
+import {
+  createRacevariantInput,
+  updateRacevariantInput,
+} from "./racevariant.schema";
+import { FastifyReply, FastifyRequest } from "fastify";
+import {
+  createRacevariant,
+  getRacevariant,
+  getRandomRacevariant,
+  getRacevariantList,
+  updateRacevariant,
+  deleteRacevariant,
+} from "./racevariant.service";
+import { handleError } from "@/utils/errors";
 
-export async function getRacevariantListHandler (
+export async function getRacevariantListHandler(
   request: FastifyRequest<{
     Params: {
       raceId: string;
-    } 
+    };
   }>,
   reply: FastifyReply
 ) {
-  const { id } = request.user  || { id: 0 };
+  const { id } = request.user || { id: 0 };
   const raceId = request.params.raceId;
   try {
     const racevariantList = await getRacevariantList(id, parseInt(raceId));
     return reply.code(200).send({
-      list: racevariantList
+      list: racevariantList,
     });
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-export async function getRacevariantHandler (
+export async function getRacevariantHandler(
   request: FastifyRequest<{
     Params: {
       racevariantId: string;
-    } 
+    };
   }>,
   reply: FastifyReply
 ) {
@@ -41,11 +51,11 @@ export async function getRacevariantHandler (
   }
 }
 
-export async function getRandomRacevariantHandler (
+export async function getRandomRacevariantHandler(
   request: FastifyRequest<{
     Params: {
       raceId: string;
-    } 
+    };
   }>,
   reply: FastifyReply
 ) {
@@ -59,9 +69,8 @@ export async function getRandomRacevariantHandler (
   }
 }
 
-
-export async function createRacevariantHandler (
-  request: FastifyRequest<{Body: createRacevariantInput }>,
+export async function createRacevariantHandler(
+  request: FastifyRequest<{ Body: createRacevariantInput }>,
   reply: FastifyReply
 ) {
   try {
@@ -74,12 +83,12 @@ export async function createRacevariantHandler (
   }
 }
 
-export async function updateRacevariantHandler (
+export async function updateRacevariantHandler(
   request: FastifyRequest<{
     Params: {
       racevariantId: string;
-    },
-    Body: updateRacevariantInput
+    };
+    Body: updateRacevariantInput;
   }>,
   reply: FastifyReply
 ) {
@@ -87,25 +96,32 @@ export async function updateRacevariantHandler (
     const { id } = request.user;
     const { body } = request;
     const racevariantId = request.params.racevariantId;
-    const racevariantObject = await updateRacevariant(id, parseInt(racevariantId), body);
+    const racevariantObject = await updateRacevariant(
+      id,
+      parseInt(racevariantId),
+      body
+    );
     return reply.code(200).send(racevariantObject);
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-export async function deleteRacevariantHandler (
+export async function deleteRacevariantHandler(
   request: FastifyRequest<{
     Params: {
       racevariantId: string;
-    }
+    };
   }>,
   reply: FastifyReply
 ) {
   try {
     const { id } = request.user;
     const racevariantId = request.params.racevariantId;
-    const racevariantObject = await deleteRacevariant(id, parseInt(racevariantId));
+    const racevariantObject = await deleteRacevariant(
+      id,
+      parseInt(racevariantId)
+    );
     return reply.code(200).send(racevariantObject);
   } catch (error) {
     return handleError(error, reply);

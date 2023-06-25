@@ -1,5 +1,5 @@
-import prisma from '@/utils/prisma';
-import { CreateFolderInput } from './folder.schema';
+import prisma from "@/utils/prisma";
+import { CreateFolderInput } from "./folder.schema";
 
 export async function createFolder(userid: number, input: CreateFolderInput) {
   const { name } = input;
@@ -9,10 +9,9 @@ export async function createFolder(userid: number, input: CreateFolderInput) {
       userid,
       folderid: null,
       name,
-    }
+    },
   });
 }
-
 
 export async function getFolderContent(userid: number, folderid: number) {
   const folders = await prisma.folders.findMany({
@@ -26,9 +25,9 @@ export async function getFolderContent(userid: number, folderid: number) {
     },
     orderBy: [
       {
-        name: 'asc',
-      }
-    ]
+        name: "asc",
+      },
+    ],
   });
 
   const characters = await prisma.characters.findMany({
@@ -44,8 +43,8 @@ export async function getFolderContent(userid: number, folderid: number) {
       publishedcharacters_ratings: {
         select: {
           value: true,
-        }
-      }
+        },
+      },
     },
     where: {
       folderid,
@@ -53,9 +52,9 @@ export async function getFolderContent(userid: number, folderid: number) {
     },
     orderBy: [
       {
-        id: 'asc',
-      }
-    ]
+        id: "asc",
+      },
+    ],
   });
 
   const classes = await prisma.classes.findMany({
@@ -71,8 +70,8 @@ export async function getFolderContent(userid: number, folderid: number) {
       publishedclasses_ratings: {
         select: {
           value: true,
-        }
-      }
+        },
+      },
     },
     where: {
       folderid,
@@ -80,9 +79,9 @@ export async function getFolderContent(userid: number, folderid: number) {
     },
     orderBy: [
       {
-        id: 'asc',
-      }
-    ]
+        id: "asc",
+      },
+    ],
   });
 
   const races = await prisma.races.findMany({
@@ -98,8 +97,8 @@ export async function getFolderContent(userid: number, folderid: number) {
       publishedraces_ratings: {
         select: {
           value: true,
-        }
-      }
+        },
+      },
     },
     where: {
       folderid,
@@ -107,11 +106,11 @@ export async function getFolderContent(userid: number, folderid: number) {
     },
     orderBy: [
       {
-        id: 'asc',
-      }
-    ]
+        id: "asc",
+      },
+    ],
   });
-  
+
   const templates = await prisma.templates.findMany({
     select: {
       id: true,
@@ -125,8 +124,8 @@ export async function getFolderContent(userid: number, folderid: number) {
       publishedtemplates_ratings: {
         select: {
           value: true,
-        }
-      }
+        },
+      },
     },
     where: {
       folderid,
@@ -134,9 +133,9 @@ export async function getFolderContent(userid: number, folderid: number) {
     },
     orderBy: [
       {
-        id: 'asc',
-      }
-    ]
+        id: "asc",
+      },
+    ],
   });
 
   return {
@@ -148,7 +147,11 @@ export async function getFolderContent(userid: number, folderid: number) {
   };
 }
 
-export async function updateFolder(userid: number, folderid: number, input: CreateFolderInput) {
+export async function updateFolder(
+  userid: number,
+  folderid: number,
+  input: CreateFolderInput
+) {
   const { name } = input;
 
   return await prisma.folders.updateMany({

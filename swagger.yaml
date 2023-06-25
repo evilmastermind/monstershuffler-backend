@@ -4229,6 +4229,14 @@ components:
             - username
             - id
           additionalProperties: false
+        activateUserSchema:
+          type: object
+          properties:
+            token:
+              type: string
+          required:
+            - token
+          additionalProperties: false
         loginSchema:
           type: object
           properties:
@@ -4295,6 +4303,7 @@ components:
       required:
         - createUserSchema
         - createUserResponseSchema
+        - activateUserSchema
         - loginSchema
         - loginResponseSchema
         - getUserResponseSchema
@@ -4563,6 +4572,44 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/userSchemas/properties/loginSchema"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/userSchemas/properties/loginResponseSchema"
+  /api/users/:
+    post:
+      summary: "[MS ONLY] Registers a new user in the database."
+      tags:
+        - users
+      description: Registers a new user in the database. Only accessible through
+        monstershuffler.com
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/userSchemas/properties/createUserSchema"
+      responses:
+        "201":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/userSchemas/properties/createUserResponseSchema"
+  /api/users/verify:
+    post:
+      summary: "[MS ONLY] Verifies the user's email and activates the account."
+      tags:
+        - users
+      description: Activates an account by providing the validation token sent via
+        email. Only accessible through monstershuffler.com
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/userSchemas/properties/activateUserSchema"
       responses:
         "200":
           description: Default Response

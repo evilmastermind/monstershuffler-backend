@@ -1,5 +1,5 @@
-import prisma from '@/utils/prisma';
-import { createClassInput, Class, updateClassInput } from './class.schema';
+import prisma from "@/utils/prisma";
+import { createClassInput, Class, updateClassInput } from "./class.schema";
 
 ///////////////////////////////////
 // O B J E C T   T Y P E S
@@ -31,30 +31,31 @@ export async function createClass(userid: number, input: createClassInput) {
       userid,
       name: object.name,
       object,
-    }
+    },
   });
 }
 
 export async function getClass(userid: number, id: number) {
-  return (await prisma.objects.findMany({
-    select: {
-      object: true,
-    },
-    where: {
-      id,
-      type: 3,
-      OR: [
-        {
-          userid: 0,
-        },
-        {
-          userid,
-        },
-      ]
-    }
-  }))[0];
+  return (
+    await prisma.objects.findMany({
+      select: {
+        object: true,
+      },
+      where: {
+        id,
+        type: 3,
+        OR: [
+          {
+            userid: 0,
+          },
+          {
+            userid,
+          },
+        ],
+      },
+    })
+  )[0];
 }
-
 
 export async function getRandomClass(userid: number) {
   const raceCount = await prisma.objects.count({
@@ -67,8 +68,8 @@ export async function getRandomClass(userid: number) {
         {
           userid,
         },
-      ]
-    }
+      ],
+    },
   });
   const race = await prisma.objects.findMany({
     skip: Math.floor(Math.random() * raceCount),
@@ -86,7 +87,7 @@ export async function getRandomClass(userid: number) {
         {
           userid,
         },
-      ]
+      ],
     },
   });
   return race[0];
@@ -112,17 +113,17 @@ export async function getClassWithVariantsList(userid: number) {
             {
               userid,
             },
-          ]
+          ],
         },
         orderBy: [
           {
-            userid: 'asc',
+            userid: "asc",
           },
           {
-            name: 'asc',
-          }
-        ]
-      }
+            name: "asc",
+          },
+        ],
+      },
     },
     where: {
       type: 3,
@@ -133,16 +134,16 @@ export async function getClassWithVariantsList(userid: number) {
         {
           userid,
         },
-      ]
+      ],
     },
     orderBy: [
       {
-        userid: 'asc',
+        userid: "asc",
       },
       {
-        name: 'asc',
-      }
-    ]
+        name: "asc",
+      },
+    ],
   });
   return result;
 }
@@ -163,22 +164,26 @@ export async function getClassList(userid: number) {
         {
           userid,
         },
-      ]
+      ],
     },
     orderBy: [
       {
-        userid: 'asc',
+        userid: "asc",
       },
       {
-        name: 'asc',
-      }
-    ]
+        name: "asc",
+      },
+    ],
   });
   return result;
 }
 
 // TODO: I am not updating lastedited, originaluserid, etc... Find the missing columns and update all the other services
-export async function updateClass(userid: number, id: number, input: updateClassInput) {
+export async function updateClass(
+  userid: number,
+  id: number,
+  input: updateClassInput
+) {
   const { object, game } = input;
 
   return await prisma.objects.updateMany({
@@ -191,7 +196,7 @@ export async function updateClass(userid: number, id: number, input: updateClass
       object,
       game,
       name: object.name,
-    }
+    },
   });
 }
 
@@ -201,6 +206,6 @@ export async function deleteClass(userid: number, id: number) {
       id,
       userid,
       type: 3,
-    }
+    },
   });
 }

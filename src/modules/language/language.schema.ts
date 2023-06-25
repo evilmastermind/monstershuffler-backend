@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
+import { z } from "zod";
+import { buildJsonSchemas } from "fastify-zod";
 
 const id = z.number();
 const userid = z.number();
@@ -35,11 +35,16 @@ const getLanguageListResponseSchema = z.object({
 });
 
 export type createLanguageInput = z.infer<typeof createLanguageSchema>;
-export type getLanguageListResponse = z.infer<typeof getLanguageListResponseSchema>;
+export type getLanguageListResponse = z.infer<
+  typeof getLanguageListResponseSchema
+>;
 
-export const {schemas: languageSchemas, $ref} = buildJsonSchemas({
-  createLanguageSchema,
-  updateLanguageSchema,
-  getLanguageResponseSchema,
-  getLanguageListResponseSchema
-}, { $id: 'languageSchemas' });
+export const { schemas: languageSchemas, $ref } = buildJsonSchemas(
+  {
+    createLanguageSchema,
+    updateLanguageSchema,
+    getLanguageResponseSchema,
+    getLanguageListResponseSchema,
+  },
+  { $id: "languageSchemas" }
+);

@@ -1,75 +1,93 @@
-import { FastifyInstance } from 'fastify';
-import { createRaceHandler, getRaceHandler, getRandomRaceHandler, getRaceListHandler, getRaceWithVariantsListHandler, updateRaceHandler, deleteRaceHandler  } from './race.controller';
-import { $ref } from './race.schema';
-import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/modules/schemas';
+import { FastifyInstance } from "fastify";
+import {
+  createRaceHandler,
+  getRaceHandler,
+  getRandomRaceHandler,
+  getRaceListHandler,
+  getRaceWithVariantsListHandler,
+  updateRaceHandler,
+  deleteRaceHandler,
+} from "./race.controller";
+import { $ref } from "./race.schema";
+import {
+  jwtHeaderOptional,
+  jwtHeaderRequired,
+  BatchPayload,
+} from "@/modules/schemas";
 
 async function raceRoutes(server: FastifyInstance) {
   server.get(
-    '/',
+    "/",
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: 'Returns a list of all available races in the db.',
-        description: 'Returns a list of all available races in the db. If authenticated, also returns the races created by the user.',
+        summary: "Returns a list of all available races in the db.",
+        description:
+          "Returns a list of all available races in the db. If authenticated, also returns the races created by the user.",
         headers: jwtHeaderOptional,
-        tags: ['races'],
+        tags: ["races"],
         response: {
-          200: $ref('getRaceListResponseSchema')
+          200: $ref("getRaceListResponseSchema"),
         },
-      }
+      },
     },
     getRaceListHandler
   );
 
   server.get(
-    '/withvariants',
+    "/withvariants",
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: 'Returns a list of all available combinations of races and variants in the db.',
-        description: 'Returns a list of all available combinations of races and variants in the db. If authenticated, also returns the races created by the user.',
+        summary:
+          "Returns a list of all available combinations of races and variants in the db.",
+        description:
+          "Returns a list of all available combinations of races and variants in the db. If authenticated, also returns the races created by the user.",
         headers: jwtHeaderOptional,
-        tags: ['races'],
+        tags: ["races"],
         response: {
-          200: $ref('getRaceWithVariantsListResponseSchema')
+          200: $ref("getRaceWithVariantsListResponseSchema"),
         },
-      }
+      },
     },
     getRaceWithVariantsListHandler
   );
 
   server.get(
-    '/:raceId',
+    "/:raceId",
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: 'Returns the details of the race corresponding to the given id.',
-        description: 'Returns the details of the race corresponding to the given id.',
+        summary:
+          "Returns the details of the race corresponding to the given id.",
+        description:
+          "Returns the details of the race corresponding to the given id.",
         headers: jwtHeaderOptional,
-        tags: ['races'],
+        tags: ["races"],
         // params: $ref('getRaceParamsSchema'),
         response: {
-          200: $ref('getRaceResponseSchema')
-        }
-      }
+          200: $ref("getRaceResponseSchema"),
+        },
+      },
     },
     getRaceHandler
   );
 
   server.get(
-    '/random',
+    "/random",
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: 'Returns the details of a random race from the database.',
-        description: 'Returns the details of a random race from list of races available to the user in the database.',
+        summary: "Returns the details of a random race from the database.",
+        description:
+          "Returns the details of a random race from list of races available to the user in the database.",
         headers: jwtHeaderOptional,
-        tags: ['races'],
+        tags: ["races"],
         // params: $ref('getRaceParamsSchema'),
         response: {
-          200: $ref('getRaceResponseSchema')
-        }
-      }
+          200: $ref("getRaceResponseSchema"),
+        },
+      },
     },
     getRandomRaceHandler
   );

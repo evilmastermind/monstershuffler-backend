@@ -1,43 +1,67 @@
-import { FastifyInstance } from 'fastify';
-import { loginHandler, registerUserHandler, getUserHandler, updateUserHandler } from './user.controller';
-import { jwtHeaderRequired } from '@/modules/schemas';
-import { $ref } from './user.schema';
+import { FastifyInstance } from "fastify";
+import {
+  loginHandler,
+  activationHandler,
+  registerUserHandler,
+  getUserHandler,
+  updateUserHandler,
+} from "./user.controller";
+import { jwtHeaderRequired } from "@/modules/schemas";
+import { $ref } from "./user.schema";
 
 async function userRoutes(server: FastifyInstance) {
-
   server.post(
-    '/login',
+    "/login",
     {
       schema: {
-        summary: 'Logs in a user and returns an access token.',
-        description: 'Logs in a user and returns an access token. Logged users can then receive their creations through other routes, and access other protected routes.',
-        tags: ['users'],
-        body: $ref('loginSchema'),
+        summary: "Logs in a user and returns an access token.",
+        description:
+          "Logs in a user and returns an access token. Logged users can then receive their creations through other routes, and access other protected routes.",
+        tags: ["users"],
+        body: $ref("loginSchema"),
         response: {
-          200: $ref('loginResponseSchema')
+          200: $ref("loginResponseSchema"),
         },
-      }
+      },
     },
     loginHandler
   );
 
-  // server.post(
-  //   '/', 
-  //   {
-  //     schema: {
-  //       // hide: true,
-  //       summary: '[MS ONLY] Registers a new user in the database.',
-  //       // TODO: users can only be created from monstershuffler.com
-  //       description: 'Registers a new user in the database. Only accessible through monstershuffler.com',
-  //       tags: ['users'],
-  //       body: $ref('createUserSchema'),
-  //       response: {
-  //         201: $ref('createUserResponseSchema')
-  //       }
-  //     }
-  //   },
-  //   registerUserHandler
-  // );
+  server.post(
+    "/",
+    {
+      schema: {
+        // hide: true,
+        summary: "[MS ONLY] Registers a new user in the database.",
+        // TODO: users can only be created from monstershuffler.com
+        description:
+          "Registers a new user in the database. Only accessible through monstershuffler.com",
+        tags: ["users"],
+        body: $ref("createUserSchema"),
+        response: {
+          201: $ref("createUserResponseSchema"),
+        },
+      },
+    },
+    registerUserHandler
+  );
+
+  server.post(
+    "/verify",
+    {
+      schema: {
+        summary: "[MS ONLY] Verifies the user's email and activates the account.",
+        description:
+          "Activates an account by providing the validation token sent via email. Only accessible through monstershuffler.com",
+        tags: ["users"],
+        body: $ref("activateUserSchema"),
+        response: {
+          200: $ref("loginResponseSchema"),
+        },
+      },
+    },
+    activationHandler
+  );
 
   // server.post(
   //   '/me',
@@ -51,7 +75,7 @@ async function userRoutes(server: FastifyInstance) {
   //       response: {
   //         200: $ref('getUserResponseSchema')
   //       },
-  //     },  
+  //     },
   //   },
   //   getUserHandler
   // );
@@ -85,6 +109,5 @@ async function userRoutes(server: FastifyInstance) {
   //   ,getUsersHandler
   // );
 }
-
 
 export default userRoutes;

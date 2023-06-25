@@ -1,17 +1,19 @@
-import prisma from '@/utils/prisma';
-import { createLanguageInput } from './language.schema';
-import { ChoiceRandomObject, AnyObject, Choice } from '@/modules/schemas';
+import prisma from "@/utils/prisma";
+import { createLanguageInput } from "./language.schema";
+import { ChoiceRandomObject, AnyObject, Choice } from "@/modules/schemas";
 
-
-export async function createLanguage(userid: number, input: createLanguageInput) {
+export async function createLanguage(
+  userid: number,
+  input: createLanguageInput
+) {
   const { name, script } = input;
 
   return await prisma.languages.create({
     data: {
       userid,
       name,
-      script
-    }
+      script,
+    },
   });
 }
 
@@ -25,20 +27,24 @@ export async function getLanguageList(userid: number) {
         {
           userid,
         },
-      ]
+      ],
     },
     orderBy: [
       {
-        userid: 'asc',
+        userid: "asc",
       },
       {
-        id: 'asc',
-      }
-    ]
+        id: "asc",
+      },
+    ],
   });
 }
 
-export async function updateLanguage(userid: number, id: number, input: createLanguageInput) {
+export async function updateLanguage(
+  userid: number,
+  id: number,
+  input: createLanguageInput
+) {
   const { name, script } = input;
 
   return await prisma.languages.updateMany({
@@ -48,8 +54,8 @@ export async function updateLanguage(userid: number, id: number, input: createLa
     },
     data: {
       name,
-      script
-    }
+      script,
+    },
   });
 }
 
@@ -58,16 +64,21 @@ export async function deleteLanguage(userid: number, id: number) {
     where: {
       id,
       userid,
-    }
+    },
   });
 }
 
-
-export async function getChoiceLanguage(userId: number, choice: ChoiceRandomObject['choice']) {
+export async function getChoiceLanguage(
+  userId: number,
+  choice: ChoiceRandomObject["choice"]
+) {
   const parameters: Array<any> = [userId || 0];
-  const chosenAlreadyIds = choice.chosenAlready?.filter((value) => value?.id).map((value) => value?.id) || [];
+  const chosenAlreadyIds =
+    choice.chosenAlready
+      ?.filter((value) => value?.id)
+      .map((value) => value?.id) || [];
 
-  let additionalFilters = '';
+  let additionalFilters = "";
 
   if (chosenAlreadyIds.length > 0) {
     additionalFilters += ` AND id NOT IN (`;
@@ -88,13 +99,16 @@ export async function getChoiceLanguage(userId: number, choice: ChoiceRandomObje
     name: string;
   };
 
-  const result = await prisma.$queryRawUnsafe(`
+  const result = await prisma.$queryRawUnsafe(
+    `
     SELECT id, name
     FROM languages
     WHERE userid IN (0, $1)
       ${additionalFilters}
     ORDER BY RANDOM() LIMIT $${parameters.length};
-  `, ...parameters);
+  `,
+    ...parameters
+  );
 
   const fullResult: Choice[] = (result as ResultNameId[])?.map((value) => {
     return {

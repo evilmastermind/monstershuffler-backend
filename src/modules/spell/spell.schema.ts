@@ -1,6 +1,6 @@
-import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
-import { spellObject } from '@/modules/schemas';
+import { z } from "zod";
+import { buildJsonSchemas } from "fastify-zod";
+import { spellObject } from "@/modules/schemas";
 
 const id = z.number();
 const userid = z.number();
@@ -38,7 +38,7 @@ const getSpellListResponseSchema = z.object({
       id,
       userid,
       name,
-    }),
+    })
   ),
 });
 

@@ -1,4 +1,4 @@
-import prisma from '@/utils/prisma';
+import prisma from "@/utils/prisma";
 
 export async function getRandomBackground() {
   const backgroundCount = await prisma.backgrounds.count();
