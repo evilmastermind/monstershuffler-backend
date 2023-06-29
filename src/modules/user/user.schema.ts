@@ -36,6 +36,10 @@ const activateUserSchema = z.object({
   token: z.string(),
 });
 
+const reactivateUserSchema = z.object({
+  email: z.string().email(),
+});
+
 const loginSchema = z.object({
   email: z
     .string({
@@ -68,12 +72,14 @@ export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
 export type ActivateUserInput = z.infer<typeof activateUserSchema>;
+export type ReactivateUserInput = z.infer<typeof reactivateUserSchema>;
 
 export const { schemas: userSchemas, $ref } = buildJsonSchemas(
   {
     createUserSchema,
     createUserResponseSchema,
     activateUserSchema,
+    reactivateUserSchema,
     loginSchema,
     loginResponseSchema,
     getUserResponseSchema,

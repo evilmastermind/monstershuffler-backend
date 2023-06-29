@@ -12,6 +12,18 @@ export async function createUser(input: CreateUserInput) {
   });
 }
 
+export async function createTokenPwd(id: number) {
+  return prisma.users.update({
+    where: {
+      id,
+    },
+    data: {
+      tokenpwd: await generateToken(32),
+    },
+  });
+}
+
+
 export async function getUserByToken(token: string) {
   return prisma.users.findMany({
     where: {

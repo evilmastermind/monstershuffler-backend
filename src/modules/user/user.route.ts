@@ -5,6 +5,7 @@ import {
   registerUserHandler,
   getUserHandler,
   updateUserHandler,
+  reactivationHandler,
 } from "./user.controller";
 import { jwtHeaderRequired } from "@/modules/schemas";
 import { $ref } from "./user.schema";
@@ -61,6 +62,23 @@ async function userRoutes(server: FastifyInstance) {
       },
     },
     activationHandler
+  );
+
+  server.post(
+    "/reactivation",
+    {
+      schema: {
+        summary: "[MS ONLY] Resends the activation email to the user.",
+        description: "Resends the activation email to the user. The user will have to reset their password as well. Only accessible through monstershuffler.com",
+        tags: ["users"],
+        body: $ref("reactivateUserSchema"),
+        response: {
+          200: { type: "string" },
+          404: { type: "string" },
+        },
+      },
+    },
+    reactivationHandler
   );
 
   // server.post(

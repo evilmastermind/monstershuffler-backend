@@ -4237,6 +4237,15 @@ components:
           required:
             - token
           additionalProperties: false
+        reactivateUserSchema:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+          required:
+            - email
+          additionalProperties: false
         loginSchema:
           type: object
           properties:
@@ -4304,6 +4313,7 @@ components:
         - createUserSchema
         - createUserResponseSchema
         - activateUserSchema
+        - reactivateUserSchema
         - loginSchema
         - loginResponseSchema
         - getUserResponseSchema
@@ -4617,6 +4627,32 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/userSchemas/properties/loginResponseSchema"
+  /api/users/reactivation:
+    post:
+      summary: "[MS ONLY] Resends the activation email to the user."
+      tags:
+        - users
+      description: Resends the activation email to the user. The user will have to
+        reset their password as well. Only accessible through
+        monstershuffler.com
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/userSchemas/properties/reactivateUserSchema"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: string
+        "404":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: string
   /api/converter/converter:
     get:
       summary: Converts objects from the old monstershuffler format to the new one.

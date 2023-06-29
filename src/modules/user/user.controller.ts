@@ -5,6 +5,7 @@ import {
   LoginInput,
   UpdateUserInput,
   ActivateUserInput,
+  ReactivateUserInput,
 } from "./user.schema";
 import { FastifyReply, FastifyRequest } from "fastify";
 import {
@@ -16,6 +17,7 @@ import {
   getUser,
   updateUser,
   getUserLevel,
+  createTokenPwd,
 } from "./user.service";
 import { handleError } from "@/utils/errors";
 
@@ -74,8 +76,7 @@ export async function registerUserHandler(
   }
 }
 
-// TODO: moving from ms1 to ms2 will require to reset the users' passwords
-// since the new validation/hashing process is different
+
 export async function loginHandler(
   request: FastifyRequest<{ Body: LoginInput }>,
   reply: FastifyReply
@@ -112,6 +113,7 @@ export async function activationHandler(
   request: FastifyRequest<{ Body: ActivateUserInput }>,
   reply: FastifyReply
 ) {
+  try {
   const { token } = request.body;
   const user = await getUserByToken(token);
   if (!user.length) {
@@ -121,6 +123,48 @@ export async function activationHandler(
   }
   await activateUser(user[0].id);
   return { accessToken: server.jwt.sign({ id: user[0].id }) };
+  } catch(error) {
+    return handleError(error, reply);
+  }
+}
+
+export async function reactivationHandler(
+  request: FastifyRequest<{ Body: ReactivateUserInput }>,
+  reply: FastifyReply
+) {
+    try {
+    const { email } = request.body;
+    let user = await findUserByEmail(email);
+    if (!user) {
+      return reply.code(404).send({
+        message: "Invalid email",
+      });
+    }
+    user = await createTokenPwd(user.id);
+
+    const link = `https://monstershuffler.com/reset-password?token=${user.tokenpwd}`;
+    const { mailer } = server;
+
+    mailer.sendMail({
+      to: user.email,
+      subject: "Monstershuffler.com - password reset",
+      html: `
+    <!DOCTYPE html>
+    <html lang="en">
+      <head><title>Monstershuffler.com - password reset</title></head>
+      <body>
+        <p><b>Monstershuffler.com</b></p>
+        <p>This is the link to reset your password:</p>
+        <p><a href="${link}">${link}</a></p>
+        <p>If you did not request a password reset please ignore this message.</p>
+      </body>
+    </html>
+    `,
+    });
+    return reply.code(200).send("Email sent!");
+  } catch(error) {
+    return handleError(error, reply);
+  }
 }
 
 export async function getUsersHandler(
