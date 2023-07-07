@@ -6,6 +6,7 @@ import {
   getUserHandler,
   updateUserHandler,
   reactivationHandler,
+  pwdResetHandler,
 } from "./user.controller";
 import { jwtHeaderRequired } from "@/modules/schemas";
 import { $ref } from "./user.schema";
@@ -47,7 +48,7 @@ async function userRoutes(server: FastifyInstance) {
     registerUserHandler
   );
 
-  server.post(
+  server.put(
     "/verify",
     {
       schema: {
@@ -81,22 +82,38 @@ async function userRoutes(server: FastifyInstance) {
     reactivationHandler
   );
 
-  // server.post(
-  //   '/me',
-  //   {
-  //     preHandler: [server.authenticate],
-  //     schema: {
-  //       summary: '[MS ONLY] Returns the details of the user corresponding to the given token.',
-  //       description: 'Returns the details of the user corresponding to the given token. Only accessible through monstershuffler.com',
-  //       tags: ['users'],
-  //       headers: jwtHeaderRequired,
-  //       response: {
-  //         200: $ref('getUserResponseSchema')
-  //       },
-  //     },
-  //   },
-  //   getUserHandler
-  // );
+  server.put(
+    "/pwdreset", {
+      schema: {
+        summary: "[MS ONLY] Resets the user's password.",
+        description: "Resets the user's password. Only accessible through monstershuffler.com",
+        tags: ["users"],
+        body: $ref("resetPasswordSchema"),
+        response: {
+          200: $ref("loginResponseSchema"),
+          404: { type: "string" },
+        },
+      },
+    },
+    pwdResetHandler,
+  );
+
+  server.get(
+    '/me',
+    {
+      preHandler: [server.authenticate],
+      schema: {
+        summary: '[MS ONLY] Returns the details of the user corresponding to the given token.',
+        description: 'Returns the details of the user corresponding to the given token. Only accessible through monstershuffler.com',
+        tags: ['users'],
+        headers: jwtHeaderRequired,
+        response: {
+          200: $ref('getUserResponseSchema')
+        },
+      },
+    },
+    getUserHandler
+  );
 
   // server.put(
   //   '/',

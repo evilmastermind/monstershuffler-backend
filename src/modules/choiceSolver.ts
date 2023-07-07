@@ -113,5 +113,4 @@ async function resolveRandomChoice(
   }
   father[fathersKey] = result;
 
-  console.log(father);
 }

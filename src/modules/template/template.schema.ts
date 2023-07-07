@@ -14,6 +14,7 @@ import {
   abilitiesBaseObject,
   abilitiesEnum,
   spellsObject,
+  alignmentModifiers,
 } from "@/modules/schemas";
 
 export const templateObject = z
@@ -26,11 +27,7 @@ export const templateObject = z
     isSwarm: z.boolean().optional(),
     swarmSize: z.string().optional(),
     subtypes: z.array(statObject).optional(),
-    // TODO: this method of defining the alignment doesn' work:
-    // it's not possible to define templates whose alignment lean towards neutral
-    // also: there were other types of alignment that I didn't handle
-    // any Good/Neutral/Evil alignment (See Lich)
-    alignment: z.tuple([z.number(), z.number(), z.number()]).optional(),
+    alignmentModifiers: alignmentModifiers.optional(),
     armor: z.union([armorObject, choiceRandomObject]).optional(),
     HD: z.number().optional(),
     speeds: speedsObject.optional(),

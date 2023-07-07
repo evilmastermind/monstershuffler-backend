@@ -363,3 +363,6 @@ export const userObject = z.object({
   smallbackground: z.string().optional(),
   trait: z.string().optional(),
 });
+
+export const alignmentModifiersSingle = z.tuple([z.number(), z.number(), z.number()]);
+export const alignmentModifiers = z.tuple([alignmentModifiersSingle, alignmentModifiersSingle]);

@@ -69,7 +69,6 @@ export async function getChoiceObject(
     ...parameters
   );
 
-  // console.log("result:", result);
 
   if (choice?.resultType === "nameId") {
     const fullResult: Choice[] = (result as ResultNameId[])?.map((value) => {

@@ -31,12 +31,17 @@ const createRandomNpcResponseSchema = z.object({
   npc: characterObject,
 });
 
+const createFourRandomNpcsResponseSchema = z.object({
+  npcs: z.array(characterObject),
+});
+
 export type createRandomNpcInput = z.infer<typeof createRandomNpcInputSchema>;
 
 export const { schemas: npcSchemas, $ref } = buildJsonSchemas(
   {
     createRandomNpcInputSchema,
     createRandomNpcResponseSchema,
+    createFourRandomNpcsResponseSchema,
   },
   { $id: "npcSchemas" }
 );

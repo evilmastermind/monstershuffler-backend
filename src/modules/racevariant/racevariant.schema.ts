@@ -13,6 +13,7 @@ import {
   imageObject,
   abilitiesEnum,
   spellsObject,
+  alignmentModifiers,
 } from "@/modules/schemas";
 
 // TODO: these are the keys of racevariant, edit them for racevariant
@@ -20,6 +21,7 @@ export const racevariantObject = z
   .object({
     name: z.string(),
     pronouns: z.enum(["male", "female", "neutral", "thing"]).optional(),
+    alignmentModifiers: alignmentModifiers.optional(),
     armor: z.union([armorObject, choiceRandomObject]).optional(),
     subtypes: z.array(statObject).optional(),
     speeds: speedsObject.optional(),

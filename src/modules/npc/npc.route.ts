@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { createRandomNpcHandler } from "./npc.controller";
+import { createFourRandomNpcHandler, createRandomNpcHandler } from "./npc.controller";
 import { $ref } from "./npc.schema";
 // schemas
 import { jwtHeaderOptional } from "@/modules/schemas";
@@ -21,6 +21,23 @@ async function npcRoutes(server: FastifyInstance) {
       },
     },
     createRandomNpcHandler
+  );
+  server.post(
+    "/four",
+    {
+      preHandler: [server.authenticateOptional],
+      schema: {
+        summary: "[MS ONLY] Creates four new random npcs using the settings provided.",
+        description: "Creates four new random npcs using the settings provided. Only accessible through monstershuffler.com",
+        headers: jwtHeaderOptional,
+        tags: ["npcs"],
+        body: $ref("createRandomNpcInputSchema"),
+        response: {
+          200: $ref("createFourRandomNpcsResponseSchema"),
+        },
+      },
+    },
+    createFourRandomNpcHandler
   );
 }
 

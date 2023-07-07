@@ -13,6 +13,7 @@ import {
   spellGroupObject,
   abilitiesEnum,
   spellsObject,
+  alignmentModifiers,
 } from "@/modules/schemas";
 
 // TODO: missing race-specific options (in generator, race-specific options)
@@ -30,7 +31,7 @@ export const raceObject = z
     // it's not possible to define races whose alignment lean towards neutral
     // also: there were other types of alignment that I didn't handle
     // any Good/Neutral/Evil alignment (See Lich)
-    alignment: z.tuple([z.number(), z.number(), z.number()]).optional(),
+    alignmentModifiers: alignmentModifiers.optional(),
     armor: z.union([armorObject, choiceRandomObject]).optional(),
     HD: z.number().optional(),
     abilitiesLimit: z.string().optional(),

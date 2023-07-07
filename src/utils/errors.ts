@@ -3,7 +3,6 @@ import { FastifyReply } from "fastify";
 
 export function handleError(error: unknown, reply: FastifyReply) {
   if (typeof error === "string") {
-    // console.log(error);
     return reply.code(400).send(createErrorJSON(400, "Bad request"));
   } else if (error instanceof PrismaClientKnownRequestError) {
     return reply

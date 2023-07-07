@@ -276,8 +276,18 @@ async function convertCharacterObject(object, id) {
 
 function convertAlignment(alignment) {
   const alignmentInt = alignment.map((string) => parseFloat(string));
-  alignmentInt.push(0);
-  return alignmentInt;
+  const newAligment = [[0,0,0],[0,0,0]];
+  if (alignmentInt[0]> 1) {
+    newAligment[0][0] += alignmentInt[0] - 1;
+  } else if (alignmentInt[0] < 1) {
+    newAligment[0][1] += Math.abs(alignmentInt[0] - 1);
+  }
+  if (alignmentInt[1]> 1) {
+    newAligment[1][0] += alignmentInt[0] - 1;
+  } else if (alignmentInt[1] < 1) {
+    newAligment[1][1] += Math.abs(alignmentInt[0] - 1);
+  }
+  return newAligment;
 }
 
 async function addIdsToSpells(spellSlots) {

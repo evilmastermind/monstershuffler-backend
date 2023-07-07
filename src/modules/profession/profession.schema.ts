@@ -13,6 +13,7 @@ import {
   imageObject,
   abilitiesEnum,
   spellsObject,
+  alignmentModifiers,
 } from "@/modules/schemas";
 
 export const professionObject = z
@@ -21,7 +22,7 @@ export const professionObject = z
     femaleName: z.string(),
     workplace: z.string(),
     armor: z.union([armorObject, choiceRandomObject]).optional(),
-    alignment: z.tuple([z.number(), z.number(), z.number()]).optional(),
+    alignmentModifiers: alignmentModifiers.optional(),
     subtypes: z.array(statObject).optional(),
     speeds: speedsObject.optional(),
     savingThrows: z.array(statObject).optional(),

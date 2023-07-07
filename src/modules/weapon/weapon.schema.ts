@@ -5,7 +5,7 @@ export const weaponObject = z.object({
   name: z.string().optional(),
   cost: z.string().optional(),
   weight: z.string().optional(),
-  damageType: z.string(),
+  damageType: z.string().optional(),
   special: z.string().optional(),
   die: z.string().optional(),
   diceNumber: z.string().optional(),

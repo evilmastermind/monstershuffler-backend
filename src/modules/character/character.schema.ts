@@ -6,6 +6,7 @@ import {
   CRTwoPointsObject,
   CRNPCObject,
   abilitiesBaseObject,
+  alignmentModifiers,
 } from "@/modules/schemas";
 import { raceObject } from "../race/race.schema";
 import { classObject } from "../class/class.schema";
@@ -13,6 +14,12 @@ import { templateObject } from "../template/template.schema";
 import { racevariantObject } from "../racevariant/racevariant.schema";
 import { classvariantObject } from "../classvariant/classvariant.schema";
 import { professionObject } from "../profession/profession.schema";
+
+export const statisticsObject = z.object({
+  alignment: z.array(z.string()),
+});
+
+
 
 export const characterObject = z
   .object({
@@ -34,12 +41,12 @@ export const characterObject = z
         user: userObject.optional(),
         // other stats
         abilitiesBase: abilitiesBaseObject.optional(),
-        alignment: z.tuple([z.number(), z.number(), z.number()]).optional(),
-        alignmentMoral: z
-          .enum(["Good", "Neutral", "Evil", "Any", "Unaligned"])
-          .optional(),
+        alignmentModifiers: alignmentModifiers.optional(),
         alignmentEthical: z
-          .enum(["Lawful", "Neutral", "Chaotic", "Any"])
+        .enum(["Lawful", "Neutral", "Chaotic", "Any", "Unaligned"])
+        .optional(),
+        alignmentMoral: z
+          .enum(["Good", "Neutral", "Evil", "Any"])
           .optional(),
         // roleplaying helpers
         smallbackground: z.string().optional(),
@@ -52,7 +59,7 @@ export const characterObject = z
       })
       .strict(),
     // TODO: define the 'statistics' object (processed statistics from all other objects combined)
-    statistics: z.object({}).passthrough().optional(),
+    statistics: statisticsObject.optional(),
   })
   .strict();
 

@@ -6,6 +6,7 @@ import {
   UpdateUserInput,
   ActivateUserInput,
   ReactivateUserInput,
+  ResetPasswordInput,
 } from "./user.schema";
 import { FastifyReply, FastifyRequest } from "fastify";
 import {
@@ -18,6 +19,7 @@ import {
   updateUser,
   getUserLevel,
   createTokenPwd,
+  resetPassword,
 } from "./user.service";
 import { handleError } from "@/utils/errors";
 
@@ -61,7 +63,6 @@ export async function registerUserHandler(
 
     //   (errors, info) => {
     //     if (errors) {
-    //       console.log("MAIL ERROR: ", errors);
     //       server.log.error(errors);
     //       reply.status(500);
     //       return {
@@ -127,6 +128,21 @@ export async function activationHandler(
     return handleError(error, reply);
   }
 }
+
+export async function pwdResetHandler(
+  request: FastifyRequest<{ Body: ResetPasswordInput }>,
+  reply: FastifyReply
+) {
+  try {
+  const { token, password } = request.body;
+  const user = await resetPassword(token, password);
+  return { accessToken: server.jwt.sign({ id: user.id }) };
+  } catch(error) {
+    return handleError(error, reply);
+  }
+}
+
+
 
 export async function reactivationHandler(
   request: FastifyRequest<{ Body: ReactivateUserInput }>,

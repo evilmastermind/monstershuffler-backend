@@ -36,6 +36,11 @@ const activateUserSchema = z.object({
   token: z.string(),
 });
 
+const resetPasswordSchema = z.object({
+  token: z.string(),
+  password: z.string().min(8),
+});
+
 const reactivateUserSchema = z.object({
   email: z.string().email(),
 });
@@ -73,6 +78,7 @@ export type LoginInput = z.infer<typeof loginSchema>;
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
 export type ActivateUserInput = z.infer<typeof activateUserSchema>;
 export type ReactivateUserInput = z.infer<typeof reactivateUserSchema>;
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
 
 export const { schemas: userSchemas, $ref } = buildJsonSchemas(
   {
@@ -84,6 +90,7 @@ export const { schemas: userSchemas, $ref } = buildJsonSchemas(
     loginResponseSchema,
     getUserResponseSchema,
     updateUserSchema,
+    resetPasswordSchema,
   },
   { $id: "userSchemas" }
 );

@@ -23,6 +23,23 @@ export async function createTokenPwd(id: number) {
   });
 }
 
+export async function resetPassword(token: string, password: string) {
+  const hashedPassword = await hashPassword(password);
+  await prisma.users.updateMany({
+    where: {
+      tokenpwd: token,
+    },
+    data: {
+      password: hashedPassword,
+    },
+  });
+  return (await prisma.users.findMany({
+    where: {
+      tokenpwd: token,
+    },
+  }))[0];
+}
+
 
 export async function getUserByToken(token: string) {
   return prisma.users.findMany({
