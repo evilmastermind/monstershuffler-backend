@@ -8,6 +8,7 @@ import {
   getSpellIdFromName,
   getIdsFromNames,
   getActionDetails,
+  convertBackgroundPronouns,
 } from "./converter.service";
 import { handleError } from "@/utils/errors";
 import { objects } from "@prisma/client";
@@ -51,6 +52,7 @@ V check in schemas.ts if all fields have been fixed
 export async function convertObjectsHandler(request, reply) {
   const { id } = request.user;
   try {
+    // OBJECTS
     let cursor = await getFirstObjectId();
     const pageSize = 100;
     const totalObjects = await countObjects();
@@ -64,6 +66,8 @@ export async function convertObjectsHandler(request, reply) {
         await saveObject(object);
       }
     }
+    // BACKGROUNDS
+    await convertBackgroundPronouns();
     return reply.code(200).send("OK");
   } catch (error) {
     console.warn(error);
@@ -245,7 +249,8 @@ async function convertCharacterObject(object, id) {
   }
   // alignment
   if (Object.hasOwn(object, "alignment")) {
-    object.alignment = convertAlignment(object.alignment);
+    object.alignmentModifiers = convertAlignment(object.alignment);
+    delete object.alignment;
   }
 
   //nameType (for races)
@@ -276,6 +281,7 @@ async function convertCharacterObject(object, id) {
 
 function convertAlignment(alignment) {
   const alignmentInt = alignment.map((string) => parseFloat(string));
+  // [[lawfulness, chaoticness, ethicalNeutrality], [goodness, evilness, moralNeutrality]]
   const newAligment = [[0,0,0],[0,0,0]];
   if (alignmentInt[0]> 1) {
     newAligment[0][0] += alignmentInt[0] - 1;

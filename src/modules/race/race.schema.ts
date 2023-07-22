@@ -27,10 +27,6 @@ export const raceObject = z
     isSwarm: z.boolean().optional(),
     swarmSize: z.string().optional(),
     subtypes: z.array(statObject).optional(),
-    // TODO: this method of defining the alignment doesn' work:
-    // it's not possible to define races whose alignment lean towards neutral
-    // also: there were other types of alignment that I didn't handle
-    // any Good/Neutral/Evil alignment (See Lich)
     alignmentModifiers: alignmentModifiers.optional(),
     armor: z.union([armorObject, choiceRandomObject]).optional(),
     HD: z.number().optional(),

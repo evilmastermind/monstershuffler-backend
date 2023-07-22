@@ -365,4 +365,5 @@ export const userObject = z.object({
 });
 
 export const alignmentModifiersSingle = z.tuple([z.number(), z.number(), z.number()]);
-export const alignmentModifiers = z.tuple([alignmentModifiersSingle, alignmentModifiersSingle]);
+// TODO: there's probably a bug with zod or fastify-zod that makes z.tuple([alignmentModifiersSingle, alignmentModifiersSingle]); not work
+export const alignmentModifiers = z.tuple([z.tuple([z.number(), z.number(), z.number()]), z.tuple([z.number(), z.number(), z.number()])]);

@@ -6,7 +6,6 @@ import { type Choice } from "@/modules/schemas";
 
 export async function countObjects() {
   const objectCount = await prisma.objects.count();
-
   return objectCount;
 }
 
@@ -156,7 +155,6 @@ export async function getIdsFromNames(chosenAlready: string[], source: string) {
           userid: 0,
         },
       });
-      // console.log('ids:' + ids);
       if (ids.length > 0) {
         newChosenAlready.push({ id: ids[0].id, value: name });
       } else {
@@ -174,4 +172,46 @@ export async function getIdsFromNames(chosenAlready: string[], source: string) {
     }
   }
   return newChosenAlready;
+}
+
+// function fixPronouns(text: string, pronouns: string) {
+//   let result = text;
+//   if (pronouns === "male") {
+//     result = result.replaceAll("§", "he");
+//     result = result.replaceAll("@", "his");
+//     result = result.replaceAll("#", "him");
+//   } else if (pronouns === "female") {
+//     result = result.replaceAll("§", "she");
+//     result = result.replaceAll("@", "her");
+//     result = result.replaceAll("#", "her");
+//   } else if (pronouns === "neutral") {
+//     result = result.replaceAll("§", "they");
+//     result = result.replaceAll("@", "their");
+//     result = result.replaceAll("#", "them");
+//   } else {
+//     result = result.replaceAll("§", "it");
+//     result = result.replaceAll("@", "its");
+//     result = result.replaceAll("#", "it");
+//   }
+//   return result;
+// }
+
+export async function convertBackgroundPronouns() {
+  const backgrounds = await prisma.backgrounds.findMany();
+  for (let i = 0; i < backgrounds.length; i++) {
+    const background = backgrounds[i];
+    if (background.background) {
+      background.background = background.background.replaceAll("§", "[they]");
+      background.background = background.background.replaceAll("@", "[their]");
+      background.background = background.background.replaceAll("#", "[them]");
+      await prisma.backgrounds.update({
+        where: {
+          id: background.id,
+        },
+        data: {
+          background: background.background,
+        },
+      });
+    }
+  }
 }

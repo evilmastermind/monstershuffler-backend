@@ -265,7 +265,7 @@ function calculateAlignment(traitCategory: string): [[number, number, number], [
       break;
   }
 
-  return [[goodness, evilness, moralNeutrality], [lawfulness, chaoticness, ethicalNeutrality]];
+  return [[lawfulness, chaoticness, ethicalNeutrality], [goodness, evilness, moralNeutrality]];
 }
 
 function calculateName(pronouns: string, race: Race | null) {
