@@ -55,8 +55,9 @@ async function templateRoutes(server: FastifyInstance) {
   server.post(
     "/",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Adds a new template to the db.",
         description: "[MS ONLY] Adds a new template to the db.",
         body: $ref("createTemplateSchema"),
@@ -73,8 +74,9 @@ async function templateRoutes(server: FastifyInstance) {
   server.put(
     "/:templateId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary:
           "[MS ONLY] Updates the template corresponding to the given id.",
         description:
@@ -93,8 +95,9 @@ async function templateRoutes(server: FastifyInstance) {
   server.delete(
     "/:templateId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary:
           "[MS ONLY] Deletes the template corresponding to the given id.",
         description:

@@ -57,8 +57,9 @@ async function actionRoutes(server: FastifyInstance) {
   server.post(
     "/",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Adds a new action to the db.",
         description: "[MS ONLY] Adds a new action to the db.",
         body: $ref("createActionSchema"),
@@ -75,8 +76,9 @@ async function actionRoutes(server: FastifyInstance) {
   server.put(
     "/:actionId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Updates the action corresponding to the given id.",
         description:
           "[MS ONLY] Updates the action corresponding to the given id.",
@@ -94,8 +96,9 @@ async function actionRoutes(server: FastifyInstance) {
   server.delete(
     "/:actionId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Deletes the action corresponding to the given id.",
         description:
           "[MS ONLY] Deletes the action corresponding to the given id.",

@@ -34,8 +34,9 @@ async function languageRoutes(server: FastifyInstance) {
   server.post(
     "/",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Adds a new type of language to the db.",
         description: "[MS ONLY] Adds a new type of language to the db.",
         body: $ref("createLanguageSchema"),
@@ -52,8 +53,9 @@ async function languageRoutes(server: FastifyInstance) {
   server.put(
     "/:languageId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary:
           "[MS ONLY] Updates the details of the language corresponding to the given id.",
         description:
@@ -72,8 +74,9 @@ async function languageRoutes(server: FastifyInstance) {
   server.delete(
     "/:languageId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary:
           "[MS ONLY] Deletes the language corresponding to the given id.",
         description:

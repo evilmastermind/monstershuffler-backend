@@ -21,6 +21,7 @@ const getCharacterResponseSchema = z.object({
   object: characterObject,
 });
 
+// @ts-ignore
 const createCharacterSchema = z.object({
   game,
   name,

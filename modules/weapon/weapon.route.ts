@@ -54,8 +54,9 @@ async function weaponRoutes(server: FastifyInstance) {
   server.post(
     "/",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Adds a new type of weapon to the db.",
         description: "[MS ONLY] Adds a new type of weapon to the db.",
         body: $ref("createWeaponSchema"),
@@ -72,8 +73,9 @@ async function weaponRoutes(server: FastifyInstance) {
   server.put(
     "/:weaponId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Updates the weapon corresponding to the given id.",
         description:
           "[MS ONLY] Updates the weapon corresponding to the given id.",
@@ -92,8 +94,9 @@ async function weaponRoutes(server: FastifyInstance) {
   server.delete(
     "/:weaponId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Deletes the weapon corresponding to the given id.",
         description:
           "[MS ONLY] Deletes the weapon corresponding to the given id.",

@@ -34,8 +34,9 @@ async function damageTypeRoutes(server: FastifyInstance) {
   server.post(
     "/",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Adds a new type of damage to the db.",
         description: "[MS ONLY] Adds a new type of damage to the db.",
         body: $ref("createDamageTypeSchema"),
@@ -52,8 +53,9 @@ async function damageTypeRoutes(server: FastifyInstance) {
   server.put(
     "/:damageTypeId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary:
           "[MS ONLY] Updates the details of the damage type corresponding to the given id.",
         description:
@@ -72,8 +74,9 @@ async function damageTypeRoutes(server: FastifyInstance) {
   server.delete(
     "/:damageTypeId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary:
           "[MS ONLY] Deletes the damage type corresponding to the given id.",
         description:

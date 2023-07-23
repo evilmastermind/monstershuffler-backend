@@ -95,8 +95,9 @@ async function raceRoutes(server: FastifyInstance) {
   //   server.post(
   //     '/',
   //     {
-  //       preHandler: [server.authenticate],
+  //       preHandler: [server.authenticate, server.MSOnly],
   //       schema: {
+  //         hide: true,
   //         summary: '[MS ONLY] Adds a new race to the db.',
   //         description: '[MS ONLY] Adds a new race to the db.',
   //         body: $ref('createRaceSchema'),
@@ -113,8 +114,9 @@ async function raceRoutes(server: FastifyInstance) {
   //   server.put(
   //     '/:raceId',
   //     {
-  //       preHandler: [server.authenticate],
+  //       preHandler: [server.authenticate,  server.MSOnly],
   //       schema: {
+  //         hide: true,
   //         summary: '[MS ONLY] Updates the race corresponding to the given id.',
   //         description: '[MS ONLY] Updates the race corresponding to the given id.',
   //         body: $ref('updateRaceSchema'),
@@ -131,8 +133,9 @@ async function raceRoutes(server: FastifyInstance) {
   //   server.delete(
   //     '/:raceId',
   //     {
-  //       preHandler: [server.authenticate],
+  //       preHandler: [server.authenticate, server.MSOnly],
   //       schema: {
+  //         hide: true,
   //         summary: '[MS ONLY] Deletes the race corresponding to the given id.',
   //         description: '[MS ONLY] Deletes the race corresponding to the given id.',
   //         tags: ['races'],

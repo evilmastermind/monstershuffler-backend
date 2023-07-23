@@ -55,8 +55,9 @@ async function characterRoutes(server: FastifyInstance) {
   server.post(
     "/",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Adds a new character to the db.",
         description: "[MS ONLY] Adds a new character to the db.",
         body: $ref("createCharacterSchema"),
@@ -73,8 +74,9 @@ async function characterRoutes(server: FastifyInstance) {
   server.put(
     "/:characterId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary:
           "[MS ONLY] Updates the character corresponding to the given id.",
         description:
@@ -93,8 +95,9 @@ async function characterRoutes(server: FastifyInstance) {
   server.delete(
     "/:characterId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary:
           "[MS ONLY] Deletes the character corresponding to the given id.",
         description:

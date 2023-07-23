@@ -80,8 +80,9 @@ async function professionRoutes(server: FastifyInstance) {
   // server.post(
   //   '/',
   //   {
-  //     preHandler: [server.authenticate],
+  //     preHandler: [server.authenticate, server.MSOnly],
   //     schema: {
+  //       hide: true,
   //       summary: '[MS ONLY] Adds a new profession to the db.',
   //       description: '[MS ONLY] Adds a new profession to the db.',
   //       body: $ref('createProfessionSchema'),
@@ -98,8 +99,9 @@ async function professionRoutes(server: FastifyInstance) {
   // server.put(
   //   '/:professionId',
   //   {
-  //     preHandler: [server.authenticate],
+  //     preHandler: [server.authenticate, server.MSOnly],
   //     schema: {
+  //       hide: true,
   //       summary: '[MS ONLY] Updates the profession corresponding to the given id.',
   //       description: '[MS ONLY] Updates the profession corresponding to the given id.',
   //       body: $ref('createProfessionSchema'),
@@ -116,8 +118,9 @@ async function professionRoutes(server: FastifyInstance) {
   // server.delete(
   //   '/:professionId',
   //   {
-  //     preHandler: [server.authenticate],
+  //     preHandler: [server.authenticate, server.MSOnly],
   //     schema: {
+  //       hide: true,
   //       summary: '[MS ONLY] Deletes the profession corresponding to the given id.',
   //       description: '[MS ONLY] Deletes the profession corresponding to the given id.',
   //       tags: ['professions'],

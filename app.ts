@@ -1,6 +1,6 @@
 import "module-alias/register";
 import * as dotenv from "dotenv";
-import Fastify, { FastifyRequest, FastifyReply } from "fastify";
+import Fastify, { FastifyRequest, FastifyReply, FastifyError } from "fastify";
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import { withRefResolver } from "fastify-zod";
@@ -117,6 +117,16 @@ server
       return; // keep going without authentication
     }
   })
+  .decorate('MSOnly', function(request: FastifyRequest, reply: FastifyReply, done: (err?: FastifyError) => void) {
+    const whitelist = ['127.0.0.1']; 
+    const ip = request.ip;
+  
+    if (!whitelist.includes(ip)) {
+      reply.status(403).send({ error: 'Not allowed' });
+    } else {
+      done();
+    }
+  })
   // test route
   .get("/api/health", async function () {
     return { status: "'TIS WORKIN', CHIEF!" };
@@ -169,7 +179,6 @@ async function main() {
     server.register(
       swagger,
       withRefResolver({
-        routePrefix: "api/docs",
         openapi: {
           info: {
             title: "Monstershuffler API",

@@ -55,8 +55,9 @@ async function armorRoutes(server: FastifyInstance) {
   server.post(
     "/",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Adds a new type of armor to the db.",
         description: "[MS ONLY] Adds a new type of armor to the db.",
         body: $ref("createArmorSchema"),
@@ -73,8 +74,9 @@ async function armorRoutes(server: FastifyInstance) {
   server.put(
     "/:armorId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Updates the armor corresponding to the given id.",
         description:
           "[MS ONLY] Updates the armor corresponding to the given id.",
@@ -93,8 +95,9 @@ async function armorRoutes(server: FastifyInstance) {
   server.delete(
     "/:armorId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Deletes the armor corresponding to the given id.",
         description:
           "[MS ONLY] Deletes the armor corresponding to the given id.",

@@ -32,8 +32,9 @@ async function userRoutes(server: FastifyInstance) {
   server.post(
     "/",
     {
+      preHandler: [server.MSOnly],
       schema: {
-        // hide: true,
+        hide: true,
         summary: "[MS ONLY] Registers a new user in the database.",
         // TODO: users can only be created from monstershuffler.com
         description:
@@ -51,7 +52,9 @@ async function userRoutes(server: FastifyInstance) {
   server.put(
     "/verify",
     {
+      preHandler: [server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Verifies the user's email and activates the account.",
         description:
           "Activates an account by providing the validation token sent via email. Only accessible through monstershuffler.com",
@@ -68,7 +71,9 @@ async function userRoutes(server: FastifyInstance) {
   server.post(
     "/reactivation",
     {
+      preHandler: [server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Resends the activation email to the user.",
         description: "Resends the activation email to the user. The user will have to reset their password as well. Only accessible through monstershuffler.com",
         tags: ["users"],
@@ -84,7 +89,9 @@ async function userRoutes(server: FastifyInstance) {
 
   server.put(
     "/pwdreset", {
+      preHandler: [server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Resets the user's password.",
         description: "Resets the user's password. Only accessible through monstershuffler.com",
         tags: ["users"],
@@ -101,8 +108,9 @@ async function userRoutes(server: FastifyInstance) {
   server.get(
     '/me',
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: '[MS ONLY] Returns the details of the user corresponding to the given token.',
         description: 'Returns the details of the user corresponding to the given token. Only accessible through monstershuffler.com',
         tags: ['users'],

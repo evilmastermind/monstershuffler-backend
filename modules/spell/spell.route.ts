@@ -62,8 +62,9 @@ async function spellRoutes(server: FastifyInstance) {
   server.post(
     "/",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Adds a new spell to the db.",
         description: "[MS ONLY] Adds a new spell to the db.",
         body: $ref("createSpellSchema"),
@@ -80,8 +81,9 @@ async function spellRoutes(server: FastifyInstance) {
   server.put(
     "/:spellId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Updates the spell corresponding to the given id.",
         description:
           "[MS ONLY] Updates the spell corresponding to the given id.",
@@ -99,8 +101,9 @@ async function spellRoutes(server: FastifyInstance) {
   server.delete(
     "/:spellId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Deletes the spell corresponding to the given id.",
         description:
           "[MS ONLY] Deletes the spell corresponding to the given id.",

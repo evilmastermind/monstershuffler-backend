@@ -6,8 +6,9 @@ async function converterRoutes(server: FastifyInstance) {
   server.get(
     "/converter",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary:
           "Converts objects from the old monstershuffler format to the new one.",
         description:

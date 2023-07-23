@@ -78,8 +78,9 @@ async function racevariantRoutes(server: FastifyInstance) {
   server.post(
     "/",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary: "[MS ONLY] Adds a new race variant to the db.",
         description: "[MS ONLY] Adds a new race variant to the db.",
         body: $ref("createRacevariantSchema"),
@@ -97,8 +98,9 @@ async function racevariantRoutes(server: FastifyInstance) {
   server.put(
     "/:racevariantId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary:
           "[MS ONLY] Updates the race variant corresponding to the given id.",
         description:
@@ -117,8 +119,9 @@ async function racevariantRoutes(server: FastifyInstance) {
   server.delete(
     "/:racevariantId",
     {
-      preHandler: [server.authenticate],
+      preHandler: [server.authenticate, server.MSOnly],
       schema: {
+        hide: true,
         summary:
           "[MS ONLY] Deletes the race variant corresponding to the given id.",
         description:

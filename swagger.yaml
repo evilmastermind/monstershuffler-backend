@@ -16,6 +16,8 @@ components:
               properties:
                 name:
                   type: string
+                enableGenerator:
+                  type: boolean
                 armor:
                   anyOf:
                     - type: object
@@ -265,17 +267,9 @@ components:
                                 description:
                                   type: string
                                 type:
-                                  type: string
-                                  enum:
-                                    - trait
-                                    - legendary
-                                    - action
-                                    - reaction
-                                    - bonus
-                                    - attack
-                                    - multiattack
-                                    - mythic
-                                    - lair
+                                  $ref: "#/components/schemas/classSchemas/properties/updateClassSchema/propertie\
+                                    s/object/properties/actions/items/propertie\
+                                    s/actionType"
                                 levelMin:
                                   type: number
                                 levelMax:
@@ -659,8 +653,6 @@ components:
                           - spells
                         additionalProperties: false
                   additionalProperties: false
-                enableGenerator:
-                  type: boolean
                 image:
                   type: object
                   properties:
@@ -874,20 +866,29 @@ components:
                       properties:
                         name:
                           type: string
-                        pronouns:
+                        enableGenerator:
+                          type: boolean
+                        ageAdult:
                           type: string
-                          enum:
-                            - male
-                            - female
-                            - neutral
-                            - thing
+                        ageMax:
+                          type: string
+                        heightMin:
+                          type: number
+                        heightMax:
+                          type: number
+                        nameType:
+                          type: array
+                          items:
+                            type: string
+                        addSurname:
+                          type: number
+                        pronouns:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/pro\
+                            nouns"
                         size:
                           type: string
                         type:
-                          type: string
-                        isSwarm:
-                          type: boolean
-                        swarmSize:
                           type: string
                         subtypes:
                           type: array
@@ -903,6 +904,10 @@ components:
                             required:
                               - value
                             additionalProperties: false
+                        isSwarm:
+                          type: boolean
+                        swarmSize:
+                          type: string
                         alignmentModifiers:
                           type: array
                           minItems: 2
@@ -1166,17 +1171,10 @@ components:
                                         description:
                                           type: string
                                         type:
-                                          type: string
-                                          enum:
-                                            - trait
-                                            - legendary
-                                            - action
-                                            - reaction
-                                            - bonus
-                                            - attack
-                                            - multiattack
-                                            - mythic
-                                            - lair
+                                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                                            /properties/npc/properties/characte\
+                                            r/properties/race/properties/action\
+                                            s/items/properties/actionType"
                                         levelMin:
                                           type: number
                                         levelMax:
@@ -1624,22 +1622,6 @@ components:
                                   - spells
                                 additionalProperties: false
                           additionalProperties: false
-                        enableGenerator:
-                          type: boolean
-                        ageAdult:
-                          type: string
-                        ageMax:
-                          type: string
-                        heightMin:
-                          type: number
-                        heightMax:
-                          type: number
-                        nameType:
-                          type: array
-                          items:
-                            type: string
-                        addSurname:
-                          type: number
                         image:
                           type: object
                           properties:
@@ -1674,228 +1656,73 @@ components:
                         name:
                           type: string
                         pronouns:
-                          type: string
-                          enum:
-                            - male
-                            - female
-                            - neutral
-                            - thing
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/pro\
+                            nouns"
                         alignmentModifiers:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
                             e/properties/alignmentModifiers"
                         armor:
-                          anyOf:
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/0"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/armor"
                         subtypes:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/subtypes"
                         speeds:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
                             e/properties/speeds"
                         savingThrows:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/savingThrows"
                         skills:
-                          anyOf:
-                            - type: array
-                              items:
-                                $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                  /properties/npc/properties/character/properti\
-                                  es/race/properties/subtypes/items"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/skills/anyOf/2"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/skills"
                         resistances:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/resistances"
                         immunities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/immunities"
                         vulnerabilities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/vulnerabilities"
                         conditionImmunities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/conditionImmunities"
                         senses:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
                             e/properties/senses"
                         isBlind:
-                          type: boolean
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/isBlind"
                         canSpeak:
-                          type: boolean
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/canSpeak"
                         telepathy:
-                          type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/telepathy"
                         languages:
-                          anyOf:
-                            - type: array
-                              items:
-                                $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                  /properties/npc/properties/character/properti\
-                                  es/race/properties/subtypes/items"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/skills/anyOf/2"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/languages"
                         actions:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/actions/items"
-                        spells:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
-                            e/properties/spells"
-                        enableGenerator:
-                          type: boolean
-                        image:
-                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                            /properties/npc/properties/character/properties/rac\
-                            e/properties/image"
-                        searchTags:
-                          type: array
-                          items:
-                            type: string
-                        environments:
-                          type: array
-                          items:
-                            type: string
-                        backgroundImage:
-                          type: string
-                        background:
-                          type: object
-                          properties: {}
-                          additionalProperties: true
-                      required:
-                        - name
-                      additionalProperties: false
-                    class:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                        armor:
-                          anyOf:
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/0"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
-                        subtypes:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
-                        speeds:
-                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                            /properties/npc/properties/character/properties/rac\
-                            e/properties/speeds"
-                        savingThrows:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
-                        skills:
-                          anyOf:
-                            - type: array
-                              items:
-                                $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                  /properties/npc/properties/character/properti\
-                                  es/race/properties/subtypes/items"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/skills/anyOf/2"
-                        resistances:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
-                        immunities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
-                        vulnerabilities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
-                        conditionImmunities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
-                        senses:
-                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                            /properties/npc/properties/character/properties/rac\
-                            e/properties/senses"
-                        isBlind:
-                          type: boolean
-                        canSpeak:
-                          type: boolean
-                        telepathy:
-                          type: string
-                        languages:
-                          anyOf:
-                            - type: array
-                              items:
-                                $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                  /properties/npc/properties/character/properti\
-                                  es/race/properties/subtypes/items"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/skills/anyOf/2"
-                        actions:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/actions/items"
+                            e/properties/actions"
                         bonuses:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
@@ -1905,25 +1732,129 @@ components:
                             /properties/npc/properties/character/properties/rac\
                             e/properties/spells"
                         enableGenerator:
-                          type: boolean
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/enableGenerator"
                         image:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
                             e/properties/image"
                         searchTags:
-                          type: array
-                          items:
-                            type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/searchTags"
                         environments:
-                          type: array
-                          items:
-                            type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/environments"
                         backgroundImage:
-                          type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/backgroundImage"
                         background:
-                          type: object
-                          properties: {}
-                          additionalProperties: true
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/background"
+                      required:
+                        - name
+                      additionalProperties: false
+                    class:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        enableGenerator:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/enableGenerator"
+                        armor:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/armor"
+                        subtypes:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/subtypes"
+                        speeds:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/speeds"
+                        savingThrows:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/savingThrows"
+                        skills:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/skills"
+                        resistances:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/resistances"
+                        immunities:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/immunities"
+                        vulnerabilities:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/vulnerabilities"
+                        conditionImmunities:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/conditionImmunities"
+                        senses:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/senses"
+                        isBlind:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/isBlind"
+                        canSpeak:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/canSpeak"
+                        telepathy:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/telepathy"
+                        languages:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/languages"
+                        actions:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/actions"
+                        bonuses:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/bonuses"
+                        spells:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/spells"
+                        image:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/image"
+                        searchTags:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/searchTags"
+                        environments:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/environments"
+                        backgroundImage:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/backgroundImage"
+                        background:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/background"
                       required:
                         - name
                       additionalProperties: false
@@ -1933,95 +1864,65 @@ components:
                         name:
                           type: string
                         armor:
-                          anyOf:
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/0"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/armor"
                         subtypes:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/subtypes"
                         speeds:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
                             e/properties/speeds"
                         savingThrows:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/savingThrows"
                         skills:
-                          anyOf:
-                            - type: array
-                              items:
-                                $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                  /properties/npc/properties/character/properti\
-                                  es/race/properties/subtypes/items"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/skills/anyOf/2"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/skills"
                         resistances:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/resistances"
                         immunities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/immunities"
                         vulnerabilities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/vulnerabilities"
                         conditionImmunities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/conditionImmunities"
                         senses:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
                             e/properties/senses"
                         isBlind:
-                          type: boolean
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/isBlind"
                         canSpeak:
-                          type: boolean
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/canSpeak"
                         telepathy:
-                          type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/telepathy"
                         languages:
-                          anyOf:
-                            - type: array
-                              items:
-                                $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                  /properties/npc/properties/character/properti\
-                                  es/race/properties/subtypes/items"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/skills/anyOf/2"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/languages"
                         actions:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/actions/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/actions"
                         bonuses:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
@@ -2031,25 +1932,29 @@ components:
                             /properties/npc/properties/character/properties/rac\
                             e/properties/spells"
                         enableGenerator:
-                          type: boolean
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/enableGenerator"
                         image:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
                             e/properties/image"
                         searchTags:
-                          type: array
-                          items:
-                            type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/searchTags"
                         environments:
-                          type: array
-                          items:
-                            type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/environments"
                         backgroundImage:
-                          type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/backgroundImage"
                         background:
-                          type: object
-                          properties: {}
-                          additionalProperties: true
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/background"
                       required:
                         - name
                       additionalProperties: false
@@ -2063,103 +1968,69 @@ components:
                         workplace:
                           type: string
                         armor:
-                          anyOf:
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/0"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/armor"
                         alignmentModifiers:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
                             e/properties/alignmentModifiers"
                         subtypes:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/subtypes"
                         speeds:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
                             e/properties/speeds"
                         savingThrows:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/savingThrows"
                         skills:
-                          anyOf:
-                            - type: array
-                              items:
-                                $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                  /properties/npc/properties/character/properti\
-                                  es/race/properties/subtypes/items"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/skills/anyOf/2"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/skills"
                         resistances:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/resistances"
                         immunities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/immunities"
                         vulnerabilities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/vulnerabilities"
                         conditionImmunities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/conditionImmunities"
                         senses:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
                             e/properties/senses"
                         isBlind:
-                          type: boolean
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/isBlind"
                         canSpeak:
-                          type: boolean
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/canSpeak"
                         telepathy:
-                          type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/telepathy"
                         languages:
-                          anyOf:
-                            - type: array
-                              items:
-                                $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                  /properties/npc/properties/character/properti\
-                                  es/race/properties/subtypes/items"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/skills/anyOf/2"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/languages"
                         actions:
-                          type: array
-                          items:
-                            anyOf:
-                              - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                  /properties/npc/properties/character/properti\
-                                  es/race/properties/actions/items"
-                              - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                  /properties/npc/properties/character/properti\
-                                  es/race/properties/armor/anyOf/1"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/actions"
                         bonuses:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
@@ -2169,7 +2040,9 @@ components:
                             /properties/npc/properties/character/properties/rac\
                             e/properties/spells"
                         enableGenerator:
-                          type: boolean
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/enableGenerator"
                       required:
                         - name
                         - femaleName
@@ -2178,43 +2051,42 @@ components:
                     template:
                       type: object
                       properties:
-                        name:
-                          type: string
                         pronouns:
-                          type: string
-                          enum:
-                            - male
-                            - female
-                            - neutral
-                            - thing
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/pro\
+                            nouns"
                         size:
-                          type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/size"
                         type:
-                          type: string
-                        isSwarm:
-                          type: boolean
-                        swarmSize:
-                          type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/type"
                         subtypes:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/subtypes"
+                        isSwarm:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/isSwarm"
+                        swarmSize:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/swarmSize"
                         alignmentModifiers:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
                             e/properties/alignmentModifiers"
                         armor:
-                          anyOf:
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/0"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/armor"
                         HD:
-                          type: number
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/HD"
                         speeds:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
@@ -2236,86 +2108,57 @@ components:
                               type: string
                           additionalProperties: false
                         savingThrows:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/savingThrows"
                         skills:
-                          anyOf:
-                            - type: array
-                              items:
-                                $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                  /properties/npc/properties/character/properti\
-                                  es/race/properties/subtypes/items"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/skills/anyOf/2"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/skills"
                         resistances:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/resistances"
                         immunities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/immunities"
                         vulnerabilities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/vulnerabilities"
                         conditionImmunities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/conditionImmunities"
                         senses:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
                             e/properties/senses"
                         isBlind:
-                          type: boolean
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/isBlind"
                         canSpeak:
-                          type: boolean
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/canSpeak"
                         telepathy:
-                          type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/telepathy"
                         languages:
-                          anyOf:
-                            - type: array
-                              items:
-                                $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                  /properties/npc/properties/character/properti\
-                                  es/race/properties/subtypes/items"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/skills/anyOf/2"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/languages"
                         actions:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/actions/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/actions"
                         bonuses:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
                             e/properties/bonuses"
-                        spellCasting:
-                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                            /properties/npc/properties/character/properties/rac\
-                            e/properties/actions/items/properties/variants/item\
-                            s/anyOf/0/properties/ability"
                         spells:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
@@ -2325,138 +2168,111 @@ components:
                             /properties/npc/properties/character/properties/rac\
                             e/properties/image"
                         searchTags:
-                          type: array
-                          items:
-                            type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/searchTags"
                         environments:
-                          type: array
-                          items:
-                            type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/environments"
                         backgroundImage:
-                          type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/backgroundImage"
                         background:
-                          type: object
-                          properties: {}
-                          additionalProperties: true
-                      required:
-                        - name
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/background"
                       additionalProperties: false
                     user:
                       type: object
                       properties:
                         name:
                           type: string
-                        gender:
-                          type: string
-                          enum:
-                            - male
-                            - female
-                            - neutral
-                            - thing
+                        pronouns:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/pro\
+                            nouns"
                         size:
-                          type: string
-                        type:
-                          type: string
-                        isSwarm:
-                          type: boolean
-                        swarmSize:
-                          type: string
-                        subtypes:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
-                        armor:
-                          anyOf:
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/0"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
-                        HD:
-                          type: number
-                        speeds:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
-                            e/properties/speeds"
+                            e/properties/size"
+                        isSwarm:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/isSwarm"
+                        swarmSize:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/swarmSize"
+                        type:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/type"
+                        subtypes:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/subtypes"
+                        armor:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/armor"
+                        HD:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/HD"
                         abilitiesBase:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/tem\
                             plate/properties/abilitiesBase"
-                        savingThrows:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                        speeds:
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/speeds"
                         skills:
-                          anyOf:
-                            - type: array
-                              items:
-                                $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                  /properties/npc/properties/character/properti\
-                                  es/race/properties/subtypes/items"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/skills/anyOf/2"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/skills"
                         resistances:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/resistances"
                         immunities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/immunities"
                         vulnerabilities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/vulnerabilities"
                         conditionImmunities:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/subtypes/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/conditionImmunities"
                         senses:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
                             e/properties/senses"
                         isBlind:
-                          type: boolean
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/isBlind"
                         canSpeak:
-                          type: boolean
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/canSpeak"
                         telepathy:
-                          type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/telepathy"
                         languages:
-                          anyOf:
-                            - type: array
-                              items:
-                                $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                  /properties/npc/properties/character/properti\
-                                  es/race/properties/subtypes/items"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/armor/anyOf/1"
-                            - $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                                /properties/npc/properties/character/properties\
-                                /race/properties/skills/anyOf/2"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/languages"
                         actions:
-                          type: array
-                          items:
-                            $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
-                              /properties/npc/properties/character/properties/r\
-                              ace/properties/actions/items"
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/actions"
                         bonuses:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
@@ -2470,25 +2286,27 @@ components:
                             /properties/npc/properties/character/properties/rac\
                             e/properties/image"
                         searchTags:
-                          type: array
-                          items:
-                            type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/searchTags"
                         environments:
-                          type: array
-                          items:
-                            type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/environments"
                         backgroundImage:
-                          type: string
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/backgroundImage"
                         background:
-                          type: object
-                          properties: {}
-                          additionalProperties: true
+                          $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                            /properties/npc/properties/character/properties/rac\
+                            e/properties/background"
                         smallbackground:
                           type: string
                         trait:
                           type: string
-                      required:
-                        - name
+                        feeling:
+                          type: string
                       additionalProperties: false
                     abilitiesBase:
                       $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
@@ -2514,11 +2332,17 @@ components:
                         - Evil
                         - Any
                     smallbackground:
-                      type: string
+                      $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                        /properties/npc/properties/character/properties/user/pr\
+                        operties/smallbackground"
                     trait:
-                      type: string
+                      $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                        /properties/npc/properties/character/properties/user/pr\
+                        operties/trait"
                     feeling:
-                      type: string
+                      $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                        /properties/npc/properties/character/properties/user/pr\
+                        operties/feeling"
                     CRCalculation:
                       anyOf:
                         - type: object
@@ -2842,241 +2666,228 @@ components:
                 actions:
                   type: array
                   items:
-                    anyOf:
-                      - type: object
-                        properties:
-                          tag:
-                            type: string
-                          actionType:
-                            type: string
-                            enum:
-                              - trait
-                              - legendary
-                              - action
-                              - reaction
-                              - bonus
-                              - attack
-                              - multiattack
-                              - mythic
-                              - lair
-                          subType:
-                            type: string
-                          source:
-                            type: string
-                          tags:
-                            type: array
-                            items:
-                              type: string
-                          priority:
-                            type: number
-                          variants:
-                            type: array
-                            items:
-                              anyOf:
-                                - type: object
-                                  properties:
-                                    name:
-                                      type: string
-                                    description:
-                                      type: string
-                                    type:
-                                      type: string
-                                      enum:
-                                        - trait
-                                        - legendary
-                                        - action
-                                        - reaction
-                                        - bonus
-                                        - attack
-                                        - multiattack
-                                        - mythic
-                                        - lair
-                                    levelMin:
-                                      type: number
-                                    levelMax:
-                                      type: number
-                                    ability:
-                                      type: string
-                                      enum:
-                                        - STR
-                                        - DEX
-                                        - CON
-                                        - INT
-                                        - WIS
-                                        - CHA
-                                    charges:
-                                      type: string
-                                    recharge:
-                                      type: string
-                                    cost:
-                                      type: string
-                                    values:
-                                      type: array
-                                      items:
-                                        anyOf:
-                                          - type: object
-                                            properties:
-                                              name:
-                                                type: string
-                                              type:
-                                                type: string
-                                              expression:
-                                                type: string
-                                            required:
-                                              - name
-                                              - expression
-                                            additionalProperties: false
-                                          - type: object
-                                            properties:
-                                              name:
-                                                type: string
-                                              type:
-                                                type: string
-                                              expression:
-                                                type: string
-                                              dice:
-                                                type: object
-                                                properties:
-                                                  die:
-                                                    type: string
-                                                  diceNumber:
-                                                    type: string
-                                                  diceIncrement:
-                                                    type: string
-                                                  levelMin:
-                                                    type: string
-                                                  levelMax:
-                                                    type: string
-                                                  levelInterval:
-                                                    type: string
-                                                required:
-                                                  - die
-                                                  - diceNumber
-                                                  - diceIncrement
-                                                  - levelMin
-                                                  - levelMax
-                                                  - levelInterval
-                                                additionalProperties: false
-                                            required:
-                                              - name
-                                              - dice
-                                            additionalProperties: false
-                                          - type: object
-                                            properties:
-                                              name:
-                                                type: string
-                                              type:
-                                                type: string
-                                              incrProgression:
-                                                type: object
-                                                properties:
-                                                  levelInterval:
-                                                    type: string
-                                                  levelIncrement:
-                                                    type: string
-                                                  levelMin:
-                                                    type: string
-                                                  base:
-                                                    type: string
-                                                  increment:
-                                                    type: string
-                                                required:
-                                                  - levelInterval
-                                                  - levelIncrement
-                                                  - levelMin
-                                                  - base
-                                                  - increment
-                                                additionalProperties: false
-                                            required:
-                                              - name
-                                              - incrProgression
-                                            additionalProperties: false
-                                    attacks:
-                                      type: array
-                                      items:
-                                        type: object
+                    type: object
+                    properties:
+                      tag:
+                        type: string
+                      actionType:
+                        type: string
+                        enum:
+                          - trait
+                          - legendary
+                          - action
+                          - reaction
+                          - bonus
+                          - attack
+                          - multiattack
+                          - mythic
+                          - lair
+                      subType:
+                        type: string
+                      source:
+                        type: string
+                      tags:
+                        type: array
+                        items:
+                          type: string
+                      priority:
+                        type: number
+                      variants:
+                        type: array
+                        items:
+                          anyOf:
+                            - type: object
+                              properties:
+                                name:
+                                  type: string
+                                description:
+                                  type: string
+                                type:
+                                  $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
+                                    /properties/object/properties/actions/items\
+                                    /properties/actionType"
+                                levelMin:
+                                  type: number
+                                levelMax:
+                                  type: number
+                                ability:
+                                  type: string
+                                  enum:
+                                    - STR
+                                    - DEX
+                                    - CON
+                                    - INT
+                                    - WIS
+                                    - CHA
+                                charges:
+                                  type: string
+                                recharge:
+                                  type: string
+                                cost:
+                                  type: string
+                                values:
+                                  type: array
+                                  items:
+                                    anyOf:
+                                      - type: object
                                         properties:
                                           name:
                                             type: string
-                                          replaceName:
-                                            type: boolean
-                                          attributes:
-                                            anyOf:
-                                              - type: object
-                                                properties:
-                                                  reach:
-                                                    type: string
-                                                  targets:
-                                                    type: string
-                                                  name:
-                                                    type: string
-                                                  cost:
-                                                    type: string
-                                                  weight:
-                                                    type: string
-                                                  damageType:
-                                                    type: string
-                                                  special:
-                                                    type: string
-                                                  die:
-                                                    type: string
-                                                  diceNumber:
-                                                    type: string
-                                                  dieV:
-                                                    type: string
-                                                  diceNumberV:
-                                                    type: string
-                                                  range:
-                                                    type: string
-                                                  rangeMax:
-                                                    type: string
-                                                  properties:
-                                                    type: array
-                                                    items:
-                                                      type: string
-                                                required:
-                                                  - properties
-                                                additionalProperties: false
-                                              - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                                                  /properties/object/properties\
-                                                  /armor/anyOf/1"
-                                          enchantment:
+                                          type:
+                                            type: string
+                                          expression:
+                                            type: string
+                                        required:
+                                          - name
+                                          - expression
+                                        additionalProperties: false
+                                      - type: object
+                                        properties:
+                                          name:
+                                            type: string
+                                          type:
+                                            type: string
+                                          expression:
+                                            type: string
+                                          dice:
                                             type: object
                                             properties:
-                                              type:
+                                              die:
                                                 type: string
-                                              dice:
-                                                $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                                                  /properties/object/properties\
-                                                  /actions/items/anyOf/0/proper\
-                                                  ties/variants/items/anyOf/0/p\
-                                                  roperties/values/items/anyOf/\
-                                                  1/properties/dice"
-                                              expression:
+                                              diceNumber:
+                                                type: string
+                                              diceIncrement:
+                                                type: string
+                                              levelMin:
+                                                type: string
+                                              levelMax:
+                                                type: string
+                                              levelInterval:
                                                 type: string
                                             required:
-                                              - type
+                                              - die
+                                              - diceNumber
+                                              - diceIncrement
+                                              - levelMin
+                                              - levelMax
+                                              - levelInterval
                                             additionalProperties: false
                                         required:
                                           - name
-                                          - attributes
+                                          - dice
                                         additionalProperties: false
-                                  required:
-                                    - name
-                                    - description
-                                    - type
-                                  additionalProperties: false
-                                - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                                    /properties/object/properties/armor/anyOf/1"
-                                - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                                    /properties/object/properties/skills/anyOf/\
-                                    2"
-                        required:
-                          - tag
-                          - variants
-                        additionalProperties: false
-                      - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                          /properties/object/properties/armor/anyOf/1"
+                                      - type: object
+                                        properties:
+                                          name:
+                                            type: string
+                                          type:
+                                            type: string
+                                          incrProgression:
+                                            type: object
+                                            properties:
+                                              levelInterval:
+                                                type: string
+                                              levelIncrement:
+                                                type: string
+                                              levelMin:
+                                                type: string
+                                              base:
+                                                type: string
+                                              increment:
+                                                type: string
+                                            required:
+                                              - levelInterval
+                                              - levelIncrement
+                                              - levelMin
+                                              - base
+                                              - increment
+                                            additionalProperties: false
+                                        required:
+                                          - name
+                                          - incrProgression
+                                        additionalProperties: false
+                                attacks:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                      replaceName:
+                                        type: boolean
+                                      attributes:
+                                        anyOf:
+                                          - type: object
+                                            properties:
+                                              reach:
+                                                type: string
+                                              targets:
+                                                type: string
+                                              name:
+                                                type: string
+                                              cost:
+                                                type: string
+                                              weight:
+                                                type: string
+                                              damageType:
+                                                type: string
+                                              special:
+                                                type: string
+                                              die:
+                                                type: string
+                                              diceNumber:
+                                                type: string
+                                              dieV:
+                                                type: string
+                                              diceNumberV:
+                                                type: string
+                                              range:
+                                                type: string
+                                              rangeMax:
+                                                type: string
+                                              properties:
+                                                type: array
+                                                items:
+                                                  type: string
+                                            required:
+                                              - properties
+                                            additionalProperties: false
+                                          - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
+                                              /properties/object/properties/arm\
+                                              or/anyOf/1"
+                                      enchantment:
+                                        type: object
+                                        properties:
+                                          type:
+                                            type: string
+                                          dice:
+                                            $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
+                                              /properties/object/properties/act\
+                                              ions/items/properties/variants/it\
+                                              ems/anyOf/0/properties/values/ite\
+                                              ms/anyOf/1/properties/dice"
+                                          expression:
+                                            type: string
+                                        required:
+                                          - type
+                                        additionalProperties: false
+                                    required:
+                                      - name
+                                      - attributes
+                                    additionalProperties: false
+                              required:
+                                - name
+                                - description
+                                - type
+                              additionalProperties: false
+                            - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
+                                /properties/object/properties/armor/anyOf/1"
+                            - $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
+                                /properties/object/properties/skills/anyOf/2"
+                    required:
+                      - tag
+                      - variants
+                    additionalProperties: false
                 bonuses:
                   type: object
                   properties:
@@ -3298,8 +3109,8 @@ components:
                       type: boolean
                     ability:
                       $ref: "#/components/schemas/professionSchemas/properties/createProfessionSchema\
-                        /properties/object/properties/actions/items/anyOf/0/pro\
-                        perties/variants/items/anyOf/0/properties/ability"
+                        /properties/object/properties/actions/items/properties/\
+                        variants/items/anyOf/0/properties/ability"
                     groups:
                       type: array
                       items:
@@ -3411,6 +3222,22 @@ components:
               properties:
                 name:
                   type: string
+                enableGenerator:
+                  type: boolean
+                ageAdult:
+                  type: string
+                ageMax:
+                  type: string
+                heightMin:
+                  type: number
+                heightMax:
+                  type: number
+                nameType:
+                  type: array
+                  items:
+                    type: string
+                addSurname:
+                  type: number
                 pronouns:
                   type: string
                   enum:
@@ -3421,10 +3248,6 @@ components:
                 size:
                   type: string
                 type:
-                  type: string
-                isSwarm:
-                  type: boolean
-                swarmSize:
                   type: string
                 subtypes:
                   type: array
@@ -3440,6 +3263,10 @@ components:
                     required:
                       - value
                     additionalProperties: false
+                isSwarm:
+                  type: boolean
+                swarmSize:
+                  type: string
                 alignmentModifiers:
                   type: array
                   minItems: 2
@@ -3689,17 +3516,9 @@ components:
                                 description:
                                   type: string
                                 type:
-                                  type: string
-                                  enum:
-                                    - trait
-                                    - legendary
-                                    - action
-                                    - reaction
-                                    - bonus
-                                    - attack
-                                    - multiattack
-                                    - mythic
-                                    - lair
+                                  $ref: "#/components/schemas/raceSchemas/properties/createRaceSchema/properties/\
+                                    object/properties/actions/items/properties/\
+                                    actionType"
                                 levelMin:
                                   type: number
                                 levelMax:
@@ -4082,22 +3901,6 @@ components:
                           - spells
                         additionalProperties: false
                   additionalProperties: false
-                enableGenerator:
-                  type: boolean
-                ageAdult:
-                  type: string
-                ageMax:
-                  type: string
-                heightMin:
-                  type: number
-                heightMax:
-                  type: number
-                nameType:
-                  type: array
-                  items:
-                    type: string
-                addSurname:
-                  type: number
                 image:
                   type: object
                   properties:
@@ -4465,6 +4268,12 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcInputSchema"
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: authorization
+          required: false
       responses:
         "200":
           description: Default Response
@@ -4484,6 +4293,12 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcInputSchema"
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: authorization
+          required: false
       responses:
         "200":
           description: Default Response
@@ -4499,6 +4314,12 @@ paths:
         - professions
       description: Returns a list of all available professions in the db. If
         authenticated, also returns the list of professions created by the user.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: authorization
+          required: false
       responses:
         "200":
           description: Default Response
@@ -4513,6 +4334,12 @@ paths:
       tags:
         - professions
       description: Returns the details of the profession corresponding to the given id.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: authorization
+          required: false
       responses:
         "200":
           description: Default Response
@@ -4528,6 +4355,12 @@ paths:
         - professions
       description: Returns the details of a random profession from list of professions
         available to the user in the database.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: authorization
+          required: false
       responses:
         "200":
           description: Default Response
@@ -4543,6 +4376,12 @@ paths:
         - races
       description: Returns a list of all available races in the db. If authenticated,
         also returns the races created by the user.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: authorization
+          required: false
       responses:
         "200":
           description: Default Response
@@ -4558,6 +4397,12 @@ paths:
         - races
       description: Returns a list of all available combinations of races and variants
         in the db. If authenticated, also returns the races created by the user.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: authorization
+          required: false
       responses:
         "200":
           description: Default Response
@@ -4572,6 +4417,12 @@ paths:
       tags:
         - races
       description: Returns the details of the race corresponding to the given id.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: authorization
+          required: false
       responses:
         "200":
           description: Default Response
@@ -4586,6 +4437,12 @@ paths:
         - races
       description: Returns the details of a random race from list of races available
         to the user in the database.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: authorization
+          required: false
       responses:
         "200":
           description: Default Response
@@ -4613,122 +4470,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/userSchemas/properties/loginResponseSchema"
-  /api/users/:
-    post:
-      summary: "[MS ONLY] Registers a new user in the database."
-      tags:
-        - users
-      description: Registers a new user in the database. Only accessible through
-        monstershuffler.com
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/userSchemas/properties/createUserSchema"
-      responses:
-        "201":
-          description: Default Response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/userSchemas/properties/createUserResponseSchema"
-  /api/users/verify:
-    put:
-      summary: "[MS ONLY] Verifies the user's email and activates the account."
-      tags:
-        - users
-      description: Activates an account by providing the validation token sent via
-        email. Only accessible through monstershuffler.com
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/userSchemas/properties/activateUserSchema"
-      responses:
-        "200":
-          description: Default Response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/userSchemas/properties/loginResponseSchema"
-  /api/users/reactivation:
-    post:
-      summary: "[MS ONLY] Resends the activation email to the user."
-      tags:
-        - users
-      description: Resends the activation email to the user. The user will have to
-        reset their password as well. Only accessible through
-        monstershuffler.com
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/userSchemas/properties/reactivateUserSchema"
-      responses:
-        "200":
-          description: Default Response
-          content:
-            application/json:
-              schema:
-                type: string
-        "404":
-          description: Default Response
-          content:
-            application/json:
-              schema:
-                type: string
-  /api/users/pwdreset:
-    put:
-      summary: "[MS ONLY] Resets the user's password."
-      tags:
-        - users
-      description: Resets the user's password. Only accessible through monstershuffler.com
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/userSchemas/properties/resetPasswordSchema"
-      responses:
-        "200":
-          description: Default Response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/userSchemas/properties/loginResponseSchema"
-        "404":
-          description: Default Response
-          content:
-            application/json:
-              schema:
-                type: string
-  /api/users/me:
-    get:
-      summary: "[MS ONLY] Returns the details of the user corresponding to the given
-        token."
-      tags:
-        - users
-      description: Returns the details of the user corresponding to the given token.
-        Only accessible through monstershuffler.com
-      responses:
-        "200":
-          description: Default Response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/userSchemas/properties/getUserResponseSchema"
-  /api/converter/converter:
-    get:
-      summary: Converts objects from the old monstershuffler format to the new one.
-      tags:
-        - converter
-      description: Converts objects from the old monstershuffler format to the new one.
-      parameters:
-        - schema:
-            type: string
-          in: header
-          name: authorization
-          required: true
-      responses: {}
 tags:
   - name: users
     description: "The users' account. "

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { buildJsonSchemas } from "fastify-zod";
-import { characterObject } from "../character/character.schema";
+import { characterObject } from "@/schemas/character";
 
 const id = z.number();
 
