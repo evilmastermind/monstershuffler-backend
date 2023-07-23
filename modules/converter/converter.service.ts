@@ -108,7 +108,7 @@ export async function getActionDetails(actionId: number) {
 //
 ///////////////////////////////////
 
-// ["actions","armor","backgrounds","bases","damagetypes","languages","names","professions","skills","spells","traits","voices","weapons"]
+// ["actions","armor","backgrounds","bases","damagetypes","languages","names","characterhooks","skills","spells","traits","voices","weapons"]
 export async function getIdsFromNames(chosenAlready: string[], source: string) {
   let table = "objects";
   let objectType = 0;

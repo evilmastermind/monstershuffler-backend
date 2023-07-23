@@ -9,7 +9,7 @@ INSERT INTO `objecttypes` (type, name) VALUES
 (2, 'race'),
 (3, 'class'),
 (4, 'template'),
-(5, 'profession'),
+(5, 'background'),
 (101, 'action'),
 (102, 'spell'),
 (1001, 'weapon'),
@@ -121,7 +121,7 @@ SELECT b.id,
 FROM `characters` a
   LEFT JOIN `objects` b ON a.id = b.oldid AND b.type = 1;
 
-CREATE TABLE `professionsdetails` ( 
+CREATE TABLE `backgroundsdetails` ( 
   `objectid` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `femalename` varchar(255) NOT NULL,
@@ -161,7 +161,7 @@ CREATE TABLE `templatesdetails` (
   FOREIGN KEY (objectid) REFERENCES objects(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `professionsdetails` (objectid, age, description, name, femalename)
+INSERT INTO `backgroundsdetails` (objectid, age, description, name, femalename)
 SELECT b.id, a.age, a.description,
   JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.name")),
   JSON_UNQUOTE(JSON_EXTRACT(a.object, "$.femaleName"))
@@ -320,7 +320,7 @@ FROM `reports_old` a
 CREATE INDEX id on `objects` (id) ;
 CREATE INDEX type on `objects` (type) ;
 CREATE INDEX objectid on `charactersdetails` (objectid);
-CREATE INDEX objectid on `professionsdetails` (objectid);
+CREATE INDEX objectid on `backgroundsdetails` (objectid);
 CREATE INDEX objectid on `publications` (objectid);
 CREATE INDEX type on `publications` (type);
 CREATE INDEX objectid on `publicationsenvironments` (objectid);
@@ -361,8 +361,10 @@ DROP TABLE `armor` ;
 
 
 -- NEW INSERTS
--- BACKGROUNDS
-INSERT INTO backgrounds (background)
+-- BACKGROUND => CHARACTER HOOKS
+ALTER TABLE backgrounds RENAME characterhooks;
+ALTER TABLE characterhooks RENAME COLUMN background to hook
+INSERT INTO characterhooks (hook)
 VALUES
 ('who is really a robot in disguise'),
 ('who is seeking redemption'),

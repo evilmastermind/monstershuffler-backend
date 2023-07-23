@@ -7,9 +7,11 @@ use dbname (or create database dbname)
 source old-db.sql
 ```
 
--2 execute objects.sql to update the tables
+-2 execute `objects.sql`to update the tables
 
--3 get nmig https://github.com/AnatolyUss/nmig and convert the db from mysql to postgresql
+-3 execute `inserts.sql`
+
+-4 get nmig https://github.com/AnatolyUss/nmig and convert the db from mysql to postgresql
 
 Example of config.json file (nmig)
 
@@ -36,11 +38,11 @@ Example of config.json file (nmig)
     [...]
 ```
 
--4 link the backend to the new db
+-5 link the backend to the new db
 
--5 request the conversion of all the objects in the DB with the HTTP call converter/converter, to update the JSON objects to the new version
+-6 request the conversion of all the objects in the DB with the HTTP call converter/converter, to update the JSON objects to the new version
 
--6 convert Objects from JSON to JSONB
+-7 convert Objects from JSON to JSONB
 ``` sql
  ALTER TABLE monstershuffler.objects ALTER COLUMN object TYPE JSONB USING object::JSONB;
 ```

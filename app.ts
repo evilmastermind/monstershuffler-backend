@@ -12,7 +12,8 @@ import fs from "fs";
 // schemas
 // import { actionSchemas } from '@/modules/action/action.schema';
 // import { armorSchemas } from '@/modules/armor/armor.schema';
-// import { backgroundSchemas } from '@/modules/background/background.schema';
+// import { characterhookSchemas } from '@/modules/background/characterhook.schema';
+import { backgroundSchemas } from "@/modules/background/background.schema";
 // import { characterSchemas } from '@/modules/character/character.schema';
 import { classSchemas } from "@/modules/class/class.schema";
 // import { classvariantSchemas } from '@/modules/classvariant/classvariant.schema';
@@ -21,7 +22,6 @@ import { classSchemas } from "@/modules/class/class.schema";
 // import { languageSchemas } from '@/modules/language/language.schema';
 // import { nameSchemas } from '@/modules/name/name.schema';
 import { npcSchemas } from "@/modules/npc/npc.schema";
-import { professionSchemas } from "@/modules/profession/profession.schema";
 // import { quirkSchemas } from '@/modules/quirk/quirk.schema';
 import { raceSchemas } from "@/modules/race/race.schema";
 // import { racevariantSchemas } from '@/modules/racevariant/racevariant.schema';
@@ -36,7 +36,7 @@ import { userSchemas } from "@/modules/user/user.schema";
 // routes
 // import actionRoutes from '@/modules/action/action.route';
 // import armorRoutes from '@/modules/armor/armor.route';
-// import backgroundRoutes from '@/modules/background/background.route';
+import backgroundRoutes from '@/modules/background/background.route';
 // import characterRoutes from '@/modules/character/character.route';
 import classRoutes from "@/modules/class/class.route";
 // import classvariantRoutes from '@/modules/classvariant/classvariant.route';
@@ -45,7 +45,7 @@ import classRoutes from "@/modules/class/class.route";
 // import languageRoutes from '@/modules/language/language.route';
 // import nameRoutes from '@/modules/name/name.route';
 import npcRoutes from "@/modules/npc/npc.route";
-import professionRoutes from "@/modules/profession/profession.route";
+import characterhookRoutes from "@/modules/characterhook/characterhook.route";
 // import quirkRoutes from '@/modules/quirk/quirk.route';
 import raceRoutes from "@/modules/race/race.route";
 // import racevariantRoutes from '@/modules/racevariant/racevariant.route';
@@ -149,7 +149,7 @@ async function main() {
     const schemas = [
       // ...actionSchemas,
       // ...armorSchemas,
-      // ...backgroundSchemas,
+      ...backgroundSchemas,
       // ...characterSchemas,
       ...classSchemas,
       // ...classvariantSchemas,
@@ -158,7 +158,7 @@ async function main() {
       // ...languageSchemas,
       // ...nameSchemas,
       ...npcSchemas,
-      ...professionSchemas,
+      //...characterhookSchemas,
       // ...quirkSchemas,
       ...raceSchemas,
       // ...racevariantSchemas,
@@ -189,7 +189,12 @@ async function main() {
             { name: "users", description: "The users' account. " },
             // { name: 'actions', description: 'Retrieve the official actions of srd monsters, classes and races to build your creatures faster. Save your custom actions and share them with other users.' },
             // { name: 'armor', description: 'The different types of armor that can be worn by characters.' },
-            // { name: 'backgrounds', description: 'Tiny snippets of lore to add to your characters for roleplay purposes.' },
+            {
+              name: "backgrounds",
+              description:
+                "Backgrounds are a way to define a character's occupation, like a soldier, a merchant, a priest, etc. and give them minor abilities related to that occupation. They are usually given to NPCs in place of classes.",
+            },
+            // { name: 'characterhooks', description: 'Tiny snippets of lore to provide a snapshot of a character's identity or story.' },
             // { name: 'characters', description: 'Any type of Dungeons & Dragons creature, like Monsters, NPCs, Player Characters, etc.' },
             {
               name: "classes",
@@ -204,11 +209,6 @@ async function main() {
             {
               name: "npcs",
               description: "Tools to generate non-player-characters (NPCs).",
-            },
-            {
-              name: "professions",
-              description:
-                "Professions are a way to define a character's occupation, like a soldier, a merchant, a priest, etc. and give them minor abilities related to that occupation. They are usually given to NPCs in place of classes.",
             },
             // { name: 'quirks', description: 'Quirks are small, random snippets of lore that can be added to your characters for roleplay purposes.' },
             {
@@ -244,7 +244,7 @@ async function main() {
     // server.register(languageRoutes, { prefix: 'api/languages' });
     // server.register(nameRoutes, { prefix: 'api/names' });
     server.register(npcRoutes, { prefix: "api/npcs" });
-    server.register(professionRoutes, { prefix: "api/professions" });
+    server.register(backgroundRoutes, { prefix: "api/backgrounds" });
     // server.register(quirkRoutes, { prefix: 'api/quirks' });
     server.register(raceRoutes, { prefix: "api/races" });
     // server.register(racevariantRoutes, { prefix: 'api/racevariants' });

@@ -11,7 +11,7 @@ import { createClassInput, Class, updateClassInput } from "./class.schema";
 //      2 | race
 //      3 | class
 //      4 | template
-//      5 | profession
+//      5 | background
 //    101 | action
 //    102 | spell
 //   1001 | weapon
