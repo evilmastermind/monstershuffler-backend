@@ -16,15 +16,15 @@ import {
   getRandomClassvariant,
 } from "@/modules/classvariant/classvariant.service";
 import {
-  getProfession,
-  getRandomProfession,
-} from "@/modules/profession/profession.service";
-import { Profession } from "@/modules/profession/profession.schema";
+  getBackground,
+  getRandomBackground,
+} from "@/modules/background/background.service";
+import { Background } from "@/modules/background/background.schema";
 import { getRandomSkill } from "@/modules/skill/skill.service";
 import { getRandomName } from "@/modules/name/name.service";
 import { getRandomSurname } from "@/modules/surname/surname.service";
 import { getRandomTrait } from "@/modules/trait/trait.service";
-import { getRandomBackground } from "@/modules/background/background.service";
+import { getRandomCharacterhook } from "@/modules/characterhook/characterhook.service";
 import { handleError } from "@/utils/errors";
 import { random } from "@/utils/functions";
 import { findChoices } from "@/modules/choiceSolver";
@@ -40,7 +40,8 @@ export async function createRandomNpc(
     classType,
     classId,
     classvariantId,
-    professionId,
+    backgroundType,
+    backgroundId,
     primaryRaceId,
     secondaryRaceId,
     primaryRacePercentage,
@@ -88,39 +89,24 @@ export async function createRandomNpc(
     ///////////////////////////////////////
     let classChosen: Class | null = null;
     let classvariant: Classvariant | null = null;
-    let profession: Profession | null = null;
-    if (classId && classType === "specificClass") {
+    let background: Background | null = null;
+    const random20 = classType === "randomSometimes" ? random(1, 20) : 0;
+    if (classId && classType === "specific") {
       classChosen = (await getClass(id, classId)).object as Class;
       classvariant = classvariantId
         ? ((await getClassvariant(id, classvariantId)).object as Classvariant)
         : null;
-    } else if (
-      classType === "randomClass" ||
-      classType === "randomClassProfession"
-    ) {
+    } else if (classType === "randomAlways" || random20 === 20) {
       const result = await getRandomClass(id);
       classChosen = result.object as Class;
       classvariant =
         ((await getRandomClassvariant(id, result.id))
           ?.object as Classvariant) || null;
-      if (classType === "randomClassProfession") {
-        profession = (await getRandomProfession(id)).object as Profession;
-      }
-    } else if (classType === "randomProfessionMostly") {
-      const random20 = random(1, 20);
-      if (random20 === 1) {
-        const result = await getRandomClass(id);
-        classChosen = result.object as Class;
-        classvariant =
-          ((await getRandomClassvariant(id, result.id))
-            ?.object as Classvariant) || null;
-      } else {
-        profession = (await getRandomProfession(id)).object as Profession;
-      }
-    } else if (classType === "randomProfession") {
-      profession = (await getRandomProfession(id)).object as Profession;
-    } else if (professionId && classType === "specificProfession") {
-      profession = (await getProfession(id, professionId)).object as Profession;
+    }
+    if (backgroundType === "random") {
+      background = (await getRandomBackground(id)).object as Background;
+    } else if (backgroundId && backgroundType === "specific") {
+      background = (await getBackground(id, backgroundId)).object as Background;
     }
     ///////////////////////////////////////
     // L E V E L
@@ -136,7 +122,7 @@ export async function createRandomNpc(
     const traitObject = await getRandomTrait({ feeling: 0 });
     const feelingObject = await getRandomTrait({ feeling: 1 });
     const alignmentModifiers = calculateAlignment(traitObject.category);
-    const smallbackground = await calculateBackground(pronouns);
+    const characterHook = await calculateCharacterhook();
     const result: Character = {
       character: {
         name,
@@ -145,7 +131,7 @@ export async function createRandomNpc(
         trait: traitObject.name,
         feeling: feelingObject.name,
         alignmentModifiers,
-        smallbackground,
+        characterHook,
       },
     };
 
@@ -167,9 +153,9 @@ export async function createRandomNpc(
       character["classvariant"] = classvariant;
       await findChoices(character.classvariant, character.classvariant, 0, id);
     }
-    if (profession) {
-      character["profession"] = profession;
-      await findChoices(character.profession, character.profession, 0, id);
+    if (background) {
+      character["background"] = background;
+      await findChoices(character.background, character.background, 0, id);
     }
 
     return {
@@ -205,9 +191,8 @@ function fixPronouns(text: string, pronouns: string) {
   return result;
 }
 
-async function calculateBackground(pronouns: string) {
-  const background = (await getRandomBackground()).background;
-  return fixPronouns(background, pronouns);
+async function calculateCharacterhook() {
+  return (await getRandomCharacterhook()).hook;
 }
 
 function calculateAlignment(traitCategory: string): [[number, number, number], [number, number, number]] {

@@ -116,6 +116,7 @@ async function convertNonCharacter(object, id) {
 }
 
 async function convertCharacter(object, id) {
+  renameStuff(object);
   if (Object.hasOwn(object, "user")) {
     await convertCharacterObject(object.user, id);
   }
@@ -134,10 +135,34 @@ async function convertCharacter(object, id) {
   if (Object.hasOwn(object, "template")) {
     await convertCharacterObject(object.template, id);
   }
-  if (Object.hasOwn(object, "profession")) {
-    await convertCharacterObject(object.profession, id);
+  if (Object.hasOwn(object, "background")) {
+    await convertCharacterObject(object.background, id);
   }
 }
+
+function renameStuff(object) {
+  // background => backstory
+  if (Object.hasOwn(object, "background")) {
+    object.backstory = object.background;
+    delete object.background;
+  }
+  // backgroundImage => imageBackground
+  if (Object.hasOwn(object, "backgroundImage")) {
+    object.imageBackground = object.backgroundImage;
+    delete object.backgroundImage;
+  }
+  // profession => background
+  if (Object.hasOwn(object, "profession")) {
+    object.background = object.profession;
+    delete object.profession;
+  }
+  // smallbackground => characterHook
+  if (Object.hasOwn(object, "smallbackground")) {
+    object.characterHook = object.smallbackground;
+    delete object.smallbackground;
+  }
+}
+
 
 async function convertCharacterObject(object, id) {
   addStatObjects(object);

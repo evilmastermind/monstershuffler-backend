@@ -116,7 +116,7 @@ export const resistenceImmunitiesStats = {
   conditionImmunities: z.array(statObject).optional(),
 };
 export const roleplayStats = {
-  smallbackground: z.string().optional(),
+  characterHook: z.string().optional(),
   trait: z.string().optional(),
   feeling: z.string().optional(),
 };
@@ -125,10 +125,10 @@ export const alignmentModifiersStats = {
 };
 export const publicationStats = {
   image: imageObject.optional(),
+  imageBackground: z.string().optional(),
   searchTags: z.array(z.string()).optional(),
   environments: z.array(z.string()).optional(),
-  backgroundImage: z.string().optional(),
-  background: z.object({}).passthrough().optional(),
+  backstory: z.object({}).passthrough().optional(),
 };
 export const languagesStats = {
   canSpeak: z.boolean().optional(),
@@ -337,7 +337,7 @@ export const templateObject = z
   ...publicationStats,
 }).strict();
 
-export const professionObject = z
+export const backgroundObject = z
 .object({
   name: z.string(),
   femaleName: z.string(),
@@ -369,7 +369,7 @@ export const characterObject = z
         racevariant: racevariantObject.optional(),
         class: classObject.optional(),
         classvariant: classvariantObject.optional(),
-        profession: professionObject.optional(),
+        background: backgroundObject.optional(),
         template: templateObject.optional(),
         user: userObject.optional(),
         ...abilitiesBaseStats,

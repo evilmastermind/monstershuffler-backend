@@ -8,17 +8,20 @@ const createRandomNpcInputSchema = z.object({
   levelType: z.enum(["random", "randomPeasantsMostly"]).optional(),
   classType: z
     .enum([
-      "specificClass",
-      "randomClass",
-      "randomClassProfession",
-      "randomProfessionMostly",
-      "randomProfession",
-      "specificProfession",
-    ])
-    .optional(),
+      "none",
+      "randomSometimes",
+      "randomAlways",
+      "specific",
+    ]).optional(),
+  backgroundType: z
+    .enum([
+      "none",
+      "random",
+      "specific",
+    ]).optional(),
   classId: id.optional(),
   classvariantId: id.optional(),
-  professionId: id.optional(),
+  backgroundId: id.optional(),
   primaryRaceId: id.optional(),
   secondaryRaceId: id.optional(),
   primaryRacevariantId: id.optional(),
