@@ -4380,11 +4380,11 @@ paths:
       description: Returns a list of all available classes in the db. If
         authenticated, also returns the classes created by the user.
       parameters:
-        - in: header
+        - schema:
+            type: string
+          in: header
           name: authorization
           required: false
-          schema:
-            type: string
       responses:
         "200":
           description: Default Response
@@ -4400,11 +4400,11 @@ paths:
       description: Returns the details of a random class from list of classes
         available to the user in the database.
       parameters:
-        - in: header
+        - schema:
+            type: string
+          in: header
           name: authorization
           required: false
-          schema:
-            type: string
       responses:
         "200":
           description: Default Response
@@ -4422,11 +4422,11 @@ paths:
         variants in the db. If authenticated, also returns the classes created
         by the user.
       parameters:
-        - in: header
+        - schema:
+            type: string
+          in: header
           name: authorization
           required: false
-          schema:
-            type: string
       responses:
         "200":
           description: Default Response
@@ -4442,11 +4442,11 @@ paths:
         - classes
       description: Returns the details of the class corresponding to the given id.
       parameters:
-        - in: header
+        - schema:
+            type: string
+          in: header
           name: authorization
           required: false
-          schema:
-            type: string
       responses:
         "200":
           description: Default Response
@@ -4465,12 +4465,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcInputSchema"
-      parameters:
-        - in: header
-          name: authorization
-          required: false
-          schema:
-            type: string
       responses:
         "200":
           description: Default Response
@@ -4490,12 +4484,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcInputSchema"
-      parameters:
-        - in: header
-          name: authorization
-          required: false
-          schema:
-            type: string
       responses:
         "200":
           description: Default Response
@@ -4511,12 +4499,6 @@ paths:
         - professions
       description: Returns a list of all available professions in the db. If
         authenticated, also returns the list of professions created by the user.
-      parameters:
-        - in: header
-          name: authorization
-          required: false
-          schema:
-            type: string
       responses:
         "200":
           description: Default Response
@@ -4531,12 +4513,6 @@ paths:
       tags:
         - professions
       description: Returns the details of the profession corresponding to the given id.
-      parameters:
-        - in: header
-          name: authorization
-          required: false
-          schema:
-            type: string
       responses:
         "200":
           description: Default Response
@@ -4552,12 +4528,6 @@ paths:
         - professions
       description: Returns the details of a random profession from list of professions
         available to the user in the database.
-      parameters:
-        - in: header
-          name: authorization
-          required: false
-          schema:
-            type: string
       responses:
         "200":
           description: Default Response
@@ -4573,12 +4543,6 @@ paths:
         - races
       description: Returns a list of all available races in the db. If authenticated,
         also returns the races created by the user.
-      parameters:
-        - in: header
-          name: authorization
-          required: false
-          schema:
-            type: string
       responses:
         "200":
           description: Default Response
@@ -4594,12 +4558,6 @@ paths:
         - races
       description: Returns a list of all available combinations of races and variants
         in the db. If authenticated, also returns the races created by the user.
-      parameters:
-        - in: header
-          name: authorization
-          required: false
-          schema:
-            type: string
       responses:
         "200":
           description: Default Response
@@ -4614,12 +4572,6 @@ paths:
       tags:
         - races
       description: Returns the details of the race corresponding to the given id.
-      parameters:
-        - in: header
-          name: authorization
-          required: false
-          schema:
-            type: string
       responses:
         "200":
           description: Default Response
@@ -4634,12 +4586,6 @@ paths:
         - races
       description: Returns the details of a random race from list of races available
         to the user in the database.
-      parameters:
-        - in: header
-          name: authorization
-          required: false
-          schema:
-            type: string
       responses:
         "200":
           description: Default Response
@@ -4763,12 +4709,6 @@ paths:
         - users
       description: Returns the details of the user corresponding to the given token.
         Only accessible through monstershuffler.com
-      parameters:
-        - in: header
-          name: authorization
-          required: true
-          schema:
-            type: string
       responses:
         "200":
           description: Default Response
@@ -4783,11 +4723,11 @@ paths:
         - converter
       description: Converts objects from the old monstershuffler format to the new one.
       parameters:
-        - in: header
+        - schema:
+            type: string
+          in: header
           name: authorization
           required: true
-          schema:
-            type: string
       responses: {}
 tags:
   - name: users

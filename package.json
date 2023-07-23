@@ -2,15 +2,15 @@
   "name": "monstershuffler-backend",
   "version": "0.0.1",
   "description": "backend REST API for monstershuffler.com",
-  "main": "src/app.ts",
+  "main": "app.ts",
   "scripts": {
-    "dev": "tsnd --respawn --transpile-only --exit-child src/app.ts",
-    "serve": "tsnd --respawn --transpile-only --exit-child src/app.ts",
+    "dev": "tsnd --respawn --transpile-only --exit-child app.ts",
+    "serve": "tsnd --respawn --transpile-only --exit-child app.ts",
     "build": "tsc -p tsconfig.json",
     "unbuild": "tsc --build --clean"
   },
   "_moduleAliases": {
-    "@": "src",
+    "@": "",
     "~": ""
   },
   "repository": {
