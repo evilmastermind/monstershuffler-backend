@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { buildJsonSchemas } from "fastify-zod";
-import { spellObject } from "@/schemas/character/spells";
+import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
+import { spellObject } from '@/schemas/character/spells';
 
 const id = z.number();
 const userid = z.number();

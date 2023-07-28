@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { buildJsonSchemas } from "fastify-zod";
-import { characterObject } from "@/schemas/character";
+import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
+import { characterObject } from '@/schemas/character';
 
 const id = z.number();
 const userid = z.number();
@@ -45,5 +45,5 @@ export const { schemas: characterSchemas, $ref } = buildJsonSchemas(
     getCharacterListResponseSchema,
     getCharacterResponseSchema,
   },
-  { $id: "characterSchemas" }
+  { $id: 'characterSchemas' }
 );

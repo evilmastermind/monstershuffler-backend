@@ -1,17 +1,17 @@
-import { z } from "zod";
-import { buildJsonSchemas } from "fastify-zod";
-import { backgroundObject } from "@/schemas/character";
+import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
+import { backgroundObject } from '@/schemas/character';
 
 const id = z.number();
 const userid = z.number();
 const age = z.enum([
-  "medieval",
-  "fantasy",
-  "renaissance",
-  "modern",
-  "future",
-  "space",
-  "other",
+  'medieval',
+  'fantasy',
+  'renaissance',
+  'modern',
+  'future',
+  'space',
+  'other',
 ]);
 const name = z.string().min(2);
 const description = z.string();
@@ -49,5 +49,5 @@ export const { schemas: backgroundSchemas, $ref } = buildJsonSchemas(
     getBackgroundListResponseSchema,
     getBackgroundResponseSchema,
   },
-  { $id: "backgroundSchemas" }
+  { $id: 'backgroundSchemas' }
 );

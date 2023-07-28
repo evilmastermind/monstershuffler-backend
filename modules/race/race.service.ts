@@ -1,5 +1,5 @@
-import prisma from "@/utils/prisma";
-import { Race, createRaceInput, updateRaceInput } from "./race.schema";
+import prisma from '@/utils/prisma';
+import { Race, createRaceInput, updateRaceInput } from './race.schema';
 
 export async function createRace(userid: number, input: createRaceInput) {
   const { object, game } = input;
@@ -94,10 +94,10 @@ export async function getRaceList(userid: number) {
     },
     orderBy: [
       {
-        userid: "asc",
+        userid: 'asc',
       },
       {
-        id: "asc",
+        id: 'asc',
       },
     ],
   });
@@ -127,10 +127,10 @@ export async function getRaceWithVariantsList(userid: number) {
         },
         orderBy: [
           {
-            userid: "asc",
+            userid: 'asc',
           },
           {
-            name: "asc",
+            name: 'asc',
           },
         ],
       },
@@ -148,10 +148,10 @@ export async function getRaceWithVariantsList(userid: number) {
     },
     orderBy: [
       {
-        userid: "asc",
+        userid: 'asc',
       },
       {
-        name: "asc",
+        name: 'asc',
       },
     ],
   });

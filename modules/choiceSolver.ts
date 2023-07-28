@@ -1,10 +1,14 @@
-import { z } from "zod";
-import { AnyObject } from "@/schemas";
-import { ChoiceListObject, ChoiceRandomObject, type Choice } from "@/schemas/character/choices";
-import { getChoiceObject } from "@/modules/object/object.service";
-import { random } from "@/utils/functions";
-import { getChoiceLanguage } from "./language/language.service";
-import { getChoiceSkill } from "./skill/skill.service";
+import { z } from 'zod';
+import { AnyObject } from '@/schemas';
+import {
+  ChoiceListObject,
+  ChoiceRandomObject,
+  type Choice,
+} from '@/schemas/character/choices';
+import { getChoiceObject } from '@/modules/object/object.service';
+import { random } from '@/utils/functions';
+import { getChoiceLanguage } from './language/language.service';
+import { getChoiceSkill } from './skill/skill.service';
 
 export async function findChoices(
   object: any,
@@ -12,14 +16,14 @@ export async function findChoices(
   fathersKey: string | number,
   userId: number
 ) {
-  if (typeof object === "object") {
+  if (typeof object === 'object') {
     if (Array.isArray(object)) {
       for (let index = 0; index < object.length; index++) {
         await findChoices(object[index], object, index, userId);
       }
     } else {
       for (const [key, value] of Object.entries(object)) {
-        if (key === "choice") {
+        if (key === 'choice') {
           await resolveChoice(object, father, fathersKey, userId);
         } else {
           await findChoices(value, object, key, userId);
@@ -39,17 +43,17 @@ async function resolveChoice(
 ) {
   const choice = object.choice;
   switch (choice.type) {
-    case "list":
+    case 'list':
       await resolveListChoice(choice, father, fathersKey);
       break;
-    case "random":
+    case 'random':
       await resolveRandomChoice(choice, father, fathersKey, userId);
       break;
   }
 }
 
 async function resolveListChoice(
-  choice: ChoiceListObject["choice"],
+  choice: ChoiceListObject['choice'],
   father: AnyObject,
   fathersKey: string | number
 ) {
@@ -87,7 +91,7 @@ async function resolveListChoice(
 }
 
 async function resolveRandomChoice(
-  choice: ChoiceRandomObject["choice"],
+  choice: ChoiceRandomObject['choice'],
   father: AnyObject,
   fathersKey: string | number,
   userId: number
@@ -97,16 +101,15 @@ async function resolveRandomChoice(
   let result: AnyObject | null = {};
 
   switch (source) {
-    case "objects":
+    case 'objects':
       result = await getChoiceObject(userId, choice);
       break;
-    case "languages":
+    case 'languages':
       result = await getChoiceLanguage(userId, choice);
       break;
-    case "skills":
+    case 'skills':
       result = await getChoiceSkill(userId, choice);
       break;
   }
   father[fathersKey] = result;
-
 }

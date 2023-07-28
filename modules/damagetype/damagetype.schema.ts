@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { buildJsonSchemas } from "fastify-zod";
+import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
 
 const id = z.number();
 const userid = z.number();
@@ -46,5 +46,5 @@ export const { schemas: damageTypeSchemas, $ref } = buildJsonSchemas(
     getDamageTypeResponseSchema,
     getDamageTypeListResponseSchema,
   },
-  { $id: "damageTypeSchemas" }
+  { $id: 'damageTypeSchemas' }
 );

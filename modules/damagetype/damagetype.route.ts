@@ -1,30 +1,26 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance } from 'fastify';
 import {
   createDamageTypeHandler,
   getDamageTypeListHandler,
   updateDamageTypeHandler,
   deleteDamageTypeHandler,
-} from "./damagetype.controller";
-import { $ref } from "./damagetype.schema";
-import {
-  jwtHeaderOptional,
-  jwtHeaderRequired,
-  BatchPayload,
-} from "@/schemas";
+} from './damagetype.controller';
+import { $ref } from './damagetype.schema';
+import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
 
 async function damageTypeRoutes(server: FastifyInstance) {
   server.get(
-    "/",
+    '/',
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: "Returns a list of all available damage types in the db.",
+        summary: 'Returns a list of all available damage types in the db.',
         description:
-          "Returns a list of all available damage types in the db. If authenticated, also returns the list of damage types created by the user.",
+          'Returns a list of all available damage types in the db. If authenticated, also returns the list of damage types created by the user.',
         headers: jwtHeaderOptional,
-        tags: ["damage types"],
+        tags: ['damage types'],
         response: {
-          200: $ref("getDamageTypeListResponseSchema"),
+          200: $ref('getDamageTypeListResponseSchema'),
         },
       },
     },
@@ -32,18 +28,18 @@ async function damageTypeRoutes(server: FastifyInstance) {
   );
 
   server.post(
-    "/",
+    '/',
     {
       preHandler: [server.authenticate, server.MSOnly],
       schema: {
         hide: true,
-        summary: "[MS ONLY] Adds a new type of damage to the db.",
-        description: "[MS ONLY] Adds a new type of damage to the db.",
-        body: $ref("createDamageTypeSchema"),
-        tags: ["damage types"],
+        summary: '[MS ONLY] Adds a new type of damage to the db.',
+        description: '[MS ONLY] Adds a new type of damage to the db.',
+        body: $ref('createDamageTypeSchema'),
+        tags: ['damage types'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref("getDamageTypeResponseSchema"),
+          201: $ref('getDamageTypeResponseSchema'),
         },
       },
     },
@@ -51,20 +47,20 @@ async function damageTypeRoutes(server: FastifyInstance) {
   );
 
   server.put(
-    "/:damageTypeId",
+    '/:damageTypeId',
     {
       preHandler: [server.authenticate, server.MSOnly],
       schema: {
         hide: true,
         summary:
-          "[MS ONLY] Updates the details of the damage type corresponding to the given id.",
+          '[MS ONLY] Updates the details of the damage type corresponding to the given id.',
         description:
-          "[MS ONLY] Updates the details of the damage type corresponding to the given id.",
-        body: $ref("updateDamageTypeSchema"),
-        tags: ["damage types"],
+          '[MS ONLY] Updates the details of the damage type corresponding to the given id.',
+        body: $ref('updateDamageTypeSchema'),
+        tags: ['damage types'],
         headers: jwtHeaderRequired,
         response: {
-          200: $ref("getDamageTypeResponseSchema"),
+          200: $ref('getDamageTypeResponseSchema'),
         },
       },
     },
@@ -72,16 +68,16 @@ async function damageTypeRoutes(server: FastifyInstance) {
   );
 
   server.delete(
-    "/:damageTypeId",
+    '/:damageTypeId',
     {
       preHandler: [server.authenticate, server.MSOnly],
       schema: {
         hide: true,
         summary:
-          "[MS ONLY] Deletes the damage type corresponding to the given id.",
+          '[MS ONLY] Deletes the damage type corresponding to the given id.',
         description:
-          "[MS ONLY] Deletes the damage type corresponding to the given id.",
-        tags: ["damage types"],
+          '[MS ONLY] Deletes the damage type corresponding to the given id.',
+        tags: ['damage types'],
         headers: jwtHeaderRequired,
         response: {
           200: BatchPayload,

@@ -1,12 +1,18 @@
-import { z } from "zod";
-import { armorObject } from "@/schemas/character/armor";
-import { statObject } from "@/schemas/character/choices";
-import { choiceRandomObject, choiceListObject } from '@/schemas/character/choices';
-import { actionObject } from "@/schemas/character/actions";
-import { spellsObject } from "@/schemas/character/spells";
-import { abilitiesBaseObject } from "@/schemas/character/abilities";
-import { alignmentModifiers, alignmentStats } from "@/schemas/character/alignment";
-import { statisticsObject } from "@/schemas/character/statistics";
+import { z } from 'zod';
+import { armorObject } from '@/schemas/character/armor';
+import { statObject } from '@/schemas/character/choices';
+import {
+  choiceRandomObject,
+  choiceListObject,
+} from '@/schemas/character/choices';
+import { actionObject } from '@/schemas/character/actions';
+import { spellsObject } from '@/schemas/character/spells';
+import { abilitiesBaseObject } from '@/schemas/character/abilities';
+import {
+  alignmentModifiers,
+  alignmentStats,
+} from '@/schemas/character/alignment';
+import { statisticsObject } from '@/schemas/character/statistics';
 
 export const speedsObject = z.object({
   base: z.string().optional(),
@@ -93,17 +99,16 @@ export const CRTwoPointsObject = z.object({
   x2: z.string(),
   y1: z.string(),
   y2: z.string(),
-  name: z.literal("twopoints"),
+  name: z.literal('twopoints'),
 });
 export const CRNPCObject = z.object({
-  name: z.literal("npcstandard"),
+  name: z.literal('npcstandard'),
 });
 export const CREstimatedObject = z.object({
-  name: z.literal("estimated"),
+  name: z.literal('estimated'),
 });
 
-
-export const pronouns = z.enum(["male", "female", "neutral", "thing"]);
+export const pronouns = z.enum(['male', 'female', 'neutral', 'thing']);
 
 export const swarmStats = {
   isSwarm: z.boolean().optional(),
@@ -152,8 +157,8 @@ export const spellsStats = {
 };
 export const skillsStats = {
   skills: z
-  .union([z.array(statObject), choiceRandomObject, choiceListObject])
-  .optional(),
+    .union([z.array(statObject), choiceRandomObject, choiceListObject])
+    .optional(),
 };
 export const savingThrowsStats = {
   savingThrows: z.array(statObject).optional(),
@@ -201,7 +206,6 @@ export const generatorStats = {
   enableGenerator: z.boolean().optional(),
 };
 
-
 export const raceSpecificGeneratorStats = {
   ageAdult: z.string().optional(),
   ageMax: z.string().optional(),
@@ -210,7 +214,6 @@ export const raceSpecificGeneratorStats = {
   nameType: z.array(z.string()).optional(),
   addSurname: z.number().optional(),
 };
-
 
 export const userObject = z.object({
   name: z.string().optional(),
@@ -234,128 +237,133 @@ export const userObject = z.object({
 });
 
 export const raceObject = z
-.object({
-  name: z.string(),
-  ...generatorStats,
-  ...raceSpecificGeneratorStats,
-  ...pronounsStats,
-  ...sizeStats,
-  ...typeAndSubtypesStats,
-  ...swarmStats,
-  ...alignmentModifiersStats,
-  ...armorStats,
-  ...HDStats,
-  abilitiesLimit: z.string().optional(),
-  ...speedsStats,
-  ...savingThrowsStats,
-  ...skillsStats,
-  ...resistenceImmunitiesStats,
-  ...sensesStats,
-  ...languagesStats,
-  ...actionsStats,
-  ...bonusesStats,
-  ...spellsStats,
-  ...publicationStats,
-}).strict();
+  .object({
+    name: z.string(),
+    ...generatorStats,
+    ...raceSpecificGeneratorStats,
+    ...pronounsStats,
+    ...sizeStats,
+    ...typeAndSubtypesStats,
+    ...swarmStats,
+    ...alignmentModifiersStats,
+    ...armorStats,
+    ...HDStats,
+    abilitiesLimit: z.string().optional(),
+    ...speedsStats,
+    ...savingThrowsStats,
+    ...skillsStats,
+    ...resistenceImmunitiesStats,
+    ...sensesStats,
+    ...languagesStats,
+    ...actionsStats,
+    ...bonusesStats,
+    ...spellsStats,
+    ...publicationStats,
+  })
+  .strict();
 
 export const racevariantObject = z
-.object({
-  name: z.string(),
-  ...pronounsStats,
-  ...alignmentModifiersStats,
-  ...armorStats,
-  ...subtypesStats,
-  ...speedsStats,
-  ...savingThrowsStats,
-  ...skillsStats,
-  ...resistenceImmunitiesStats,
-  ...sensesStats,
-  ...languagesStats,
-  ...actionsStats,
-  ...bonusesStats,
-  ...spellsStats,
-  ...generatorStats,
-  ...publicationStats,
-}).strict();
+  .object({
+    name: z.string(),
+    ...pronounsStats,
+    ...alignmentModifiersStats,
+    ...armorStats,
+    ...subtypesStats,
+    ...speedsStats,
+    ...savingThrowsStats,
+    ...skillsStats,
+    ...resistenceImmunitiesStats,
+    ...sensesStats,
+    ...languagesStats,
+    ...actionsStats,
+    ...bonusesStats,
+    ...spellsStats,
+    ...generatorStats,
+    ...publicationStats,
+  })
+  .strict();
 
 export const classObject = z
-.object({
-  name: z.string(),
-  ...generatorStats,
-  ...armorStats,
-  ...subtypesStats,
-  ...speedsStats,
-  ...savingThrowsStats,
-  ...skillsStats,
-  ...resistenceImmunitiesStats,
-  ...sensesStats,
-  ...languagesStats,
-  ...actionsStats,
-  ...bonusesStats,
-  ...spellsStats,
-  ...publicationStats,  
-}).strict();
+  .object({
+    name: z.string(),
+    ...generatorStats,
+    ...armorStats,
+    ...subtypesStats,
+    ...speedsStats,
+    ...savingThrowsStats,
+    ...skillsStats,
+    ...resistenceImmunitiesStats,
+    ...sensesStats,
+    ...languagesStats,
+    ...actionsStats,
+    ...bonusesStats,
+    ...spellsStats,
+    ...publicationStats,
+  })
+  .strict();
 
 export const classvariantObject = z
-.object({
-  name: z.string(),
-  ...armorStats,
-  ...subtypesStats,
-  ...speedsStats,
-  ...savingThrowsStats,
-  ...skillsStats,
-  ...resistenceImmunitiesStats,
-  ...sensesStats,
-  ...languagesStats,
-  ...actionsStats,
-  ...bonusesStats,
-  ...spellsStats,
-  ...generatorStats,
-  ...publicationStats,
-})
-.strict();
+  .object({
+    name: z.string(),
+    ...armorStats,
+    ...subtypesStats,
+    ...speedsStats,
+    ...savingThrowsStats,
+    ...skillsStats,
+    ...resistenceImmunitiesStats,
+    ...sensesStats,
+    ...languagesStats,
+    ...actionsStats,
+    ...bonusesStats,
+    ...spellsStats,
+    ...generatorStats,
+    ...publicationStats,
+  })
+  .strict();
 
 export const templateObject = z
-.object({
-  ...pronounsStats,
-  ...sizeStats,
-  ...typeAndSubtypesStats,
-  ...swarmStats,
-  ...alignmentModifiersStats,
-  ...armorStats,
-  ...HDStats,
-  ...speedsStats,
-  ...abilitiesBaseStats,    
-  ...savingThrowsStats,
-  ...skillsStats,
-  ...resistenceImmunitiesStats,
-  ...sensesStats,
-  ...languagesStats,
-  ...actionsStats,
-  ...bonusesStats,
-  ...spellsStats,
-  ...publicationStats,
-}).strict();
+  .object({
+    ...pronounsStats,
+    ...sizeStats,
+    ...typeAndSubtypesStats,
+    ...swarmStats,
+    ...alignmentModifiersStats,
+    ...armorStats,
+    ...HDStats,
+    ...speedsStats,
+    ...abilitiesBaseStats,
+    ...savingThrowsStats,
+    ...skillsStats,
+    ...resistenceImmunitiesStats,
+    ...sensesStats,
+    ...languagesStats,
+    ...actionsStats,
+    ...bonusesStats,
+    ...spellsStats,
+    ...publicationStats,
+  })
+  .strict();
 
 export const backgroundObject = z
-.object({
-  name: z.string(),
-  femaleName: z.string(),
-  workplace: z.string(),
-  ...armorStats,
-  ...alignmentModifiersStats,
-  ...subtypesStats,
-  ...speedsStats,
-  ...savingThrowsStats,
-  ...skillsStats,
-  ...resistenceImmunitiesStats,
-  ...sensesStats,
-  ...languagesStats,
-  ...actionsStats,
-  ...bonusesStats,
-  ...spellsStats,
-  ...generatorStats,
-}).strict();
+  .object({
+    name: z.string(),
+    femaleName: z.string(),
+    workplace: z.string(),
+    ...armorStats,
+    ...alignmentModifiersStats,
+    ...subtypesStats,
+    ...speedsStats,
+    ...savingThrowsStats,
+    ...skillsStats,
+    ...resistenceImmunitiesStats,
+    ...sensesStats,
+    ...languagesStats,
+    ...actionsStats,
+    ...bonusesStats,
+    ...spellsStats,
+    ...generatorStats,
+  })
+  .strict();
 
 export const characterObject = z
   .object({
@@ -377,9 +385,11 @@ export const characterObject = z
         ...alignmentStats,
         ...roleplayStats,
         // CR
-        CRCalculation: z.union([CRTwoPointsObject, CRNPCObject, CREstimatedObject])
+        CRCalculation: z
+          .union([CRTwoPointsObject, CRNPCObject, CREstimatedObject])
           .optional(),
-      }).strict(),
+      })
+      .strict(),
     statistics: statisticsObject.optional(),
   })
   .strict();

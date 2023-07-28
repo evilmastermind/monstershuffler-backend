@@ -1,18 +1,18 @@
-import { FastifyInstance } from "fastify";
-import { getRandomQuirkHandler } from "./quirk.controller";
-import { $ref } from "./quirk.schema";
+import { FastifyInstance } from 'fastify';
+import { getRandomQuirkHandler } from './quirk.controller';
+import { $ref } from './quirk.schema';
 
 async function quirkRoutes(server: FastifyInstance) {
   server.get(
-    "/random",
+    '/random',
     {
       schema: {
-        summary: "Returns a random quirk.",
+        summary: 'Returns a random quirk.',
         description:
           "Returns a random quirk, which is a string like 'Cracks knuckles.' or 'Missing teeth.'.",
-        tags: ["quirks"],
+        tags: ['quirks'],
         response: {
-          200: $ref("getRandomQuirkResponseSchema"),
+          200: $ref('getRandomQuirkResponseSchema'),
         },
       },
     },

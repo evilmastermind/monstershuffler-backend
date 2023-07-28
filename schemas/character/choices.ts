@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // object schemas
 export const statObject = z.object({
@@ -8,10 +8,10 @@ export const statObject = z.object({
 });
 export const choiceRandomObject = z.object({
   choice: z.object({
-    type: z.literal("random"),
+    type: z.literal('random'),
     number: z.number().optional(),
-    resultType: z.enum(["object", "nameId"]),
-    source: z.enum(["objects", "languages", "skills"]),
+    resultType: z.enum(['object', 'nameId']),
+    source: z.enum(['objects', 'languages', 'skills']),
     objectType: z.number().optional(),
     filters: z
       .array(
@@ -26,7 +26,7 @@ export const choiceRandomObject = z.object({
 });
 export const choiceListObject = z.object({
   choice: z.object({
-    type: z.literal("list"),
+    type: z.literal('list'),
     number: z.number(),
     list: z.array(statObject),
     isRepeatable: z.boolean().optional(),

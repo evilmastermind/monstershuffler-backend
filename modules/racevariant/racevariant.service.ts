@@ -1,8 +1,8 @@
-import prisma from "@/utils/prisma";
+import prisma from '@/utils/prisma';
 import {
   createRacevariantInput,
   updateRacevariantInput,
-} from "./racevariant.schema";
+} from './racevariant.schema';
 
 export async function createRacevariant(
   userid: number,
@@ -24,7 +24,7 @@ export async function createRacevariant(
   });
 
   if (!raceResult) {
-    throw new Error("Race not found");
+    throw new Error('Race not found');
   }
 
   return await prisma.objects.create({
@@ -123,10 +123,10 @@ export async function getRacevariantList(userid: number, variantof: number) {
     },
     orderBy: [
       {
-        userid: "asc",
+        userid: 'asc',
       },
       {
-        id: "asc",
+        id: 'asc',
       },
     ],
   });

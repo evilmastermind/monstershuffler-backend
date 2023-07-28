@@ -1,13 +1,13 @@
-import { createCharacterInput } from "./character.schema";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { createCharacterInput } from './character.schema';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createCharacter,
   getCharacter,
   getCharacterList,
   updateCharacter,
   deleteCharacter,
-} from "./character.service";
-import { handleError } from "@/utils/errors";
+} from './character.service';
+import { handleError } from '@/utils/errors';
 
 export async function getCharacterListHandler(
   request: FastifyRequest,

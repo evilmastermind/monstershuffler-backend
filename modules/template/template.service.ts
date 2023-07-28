@@ -1,5 +1,5 @@
-import prisma from "@/utils/prisma";
-import { Template, createTemplateInput } from "./template.schema";
+import prisma from '@/utils/prisma';
+import { Template, createTemplateInput } from './template.schema';
 
 export async function createTemplate(
   userid: number,
@@ -58,10 +58,10 @@ export async function getTemplateList(userid: number) {
     },
     orderBy: [
       {
-        userid: "asc",
+        userid: 'asc',
       },
       {
-        id: "asc",
+        id: 'asc',
       },
     ],
   });

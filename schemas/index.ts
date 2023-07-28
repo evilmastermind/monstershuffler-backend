@@ -1,22 +1,22 @@
 export const jwtHeaderRequired = {
-  type: "object",
+  type: 'object',
   properties: {
-    authorization: { type: "string" },
+    authorization: { type: 'string' },
   },
-  required: ["authorization"],
+  required: ['authorization'],
 };
 
 export const jwtHeaderOptional = {
-  type: "object",
+  type: 'object',
   properties: {
-    authorization: { type: "string" },
+    authorization: { type: 'string' },
   },
 };
 
 export const BatchPayload = {
-  type: "object",
+  type: 'object',
   properties: {
-    count: { type: "number" },
+    count: { type: 'number' },
   },
 };
 

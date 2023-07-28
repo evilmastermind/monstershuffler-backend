@@ -1,5 +1,5 @@
-import prisma from "@/utils/prisma";
-import { createClassInput, Class, updateClassInput } from "./class.schema";
+import prisma from '@/utils/prisma';
+import { createClassInput, Class, updateClassInput } from './class.schema';
 
 ///////////////////////////////////
 // O B J E C T   T Y P E S
@@ -117,10 +117,10 @@ export async function getClassWithVariantsList(userid: number) {
         },
         orderBy: [
           {
-            userid: "asc",
+            userid: 'asc',
           },
           {
-            name: "asc",
+            name: 'asc',
           },
         ],
       },
@@ -138,10 +138,10 @@ export async function getClassWithVariantsList(userid: number) {
     },
     orderBy: [
       {
-        userid: "asc",
+        userid: 'asc',
       },
       {
-        name: "asc",
+        name: 'asc',
       },
     ],
   });
@@ -168,10 +168,10 @@ export async function getClassList(userid: number) {
     },
     orderBy: [
       {
-        userid: "asc",
+        userid: 'asc',
       },
       {
-        name: "asc",
+        name: 'asc',
       },
     ],
   });

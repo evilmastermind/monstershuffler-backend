@@ -1,12 +1,12 @@
-import { createDamageTypeInput } from "./damagetype.schema";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { createDamageTypeInput } from './damagetype.schema';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createDamageType,
   getDamageTypeList,
   updateDamageType,
   deleteDamageType,
-} from "./damagetype.service";
-import { handleError } from "@/utils/errors";
+} from './damagetype.service';
+import { handleError } from '@/utils/errors';
 
 export async function getDamageTypeListHandler(
   request: FastifyRequest,

@@ -1,18 +1,21 @@
-import { z } from "zod";
-import { weaponObject } from "@/schemas/character/weapons";
-import { choiceRandomObject, choiceListObject } from "@/schemas/character/choices";
-import { abilitiesEnum } from "@/schemas/character/abilities";
+import { z } from 'zod';
+import { weaponObject } from '@/schemas/character/weapons';
+import {
+  choiceRandomObject,
+  choiceListObject,
+} from '@/schemas/character/choices';
+import { abilitiesEnum } from '@/schemas/character/abilities';
 
 export const actionTypesEnum = z.enum([
-  "trait",
-  "legendary",
-  "action",
-  "reaction",
-  "bonus",
-  "attack",
-  "multiattack",
-  "mythic",
-  "lair",
+  'trait',
+  'legendary',
+  'action',
+  'reaction',
+  'bonus',
+  'attack',
+  'multiattack',
+  'mythic',
+  'lair',
 ]);
 
 export const diceObject = z.object({

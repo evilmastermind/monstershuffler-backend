@@ -363,7 +363,7 @@ DROP TABLE `armor` ;
 -- NEW INSERTS
 -- BACKGROUND => CHARACTER HOOKS
 ALTER TABLE backgrounds RENAME characterhooks;
-ALTER TABLE characterhooks RENAME COLUMN background to hook
+ALTER TABLE characterhooks RENAME COLUMN background to hook;
 INSERT INTO characterhooks (hook)
 VALUES
 ('who is really a robot in disguise'),

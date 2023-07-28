@@ -1,6 +1,6 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-export const abilitiesEnum = z.enum(["STR", "DEX", "CON", "INT", "WIS", "CHA"]);
+export const abilitiesEnum = z.enum(['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']);
 
 export const abilitiesBaseObject = z.object({
   STR: z.string().optional(),

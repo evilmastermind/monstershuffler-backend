@@ -1,25 +1,25 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance } from 'fastify';
 import {
   createFolderHandler,
   getFolderContentHandler,
   updateFolderHandler,
   deleteFolderHandler,
-} from "./folder.controller";
-import { BatchPayload, jwtHeaderRequired } from "@/schemas";
-import { $ref } from "./folder.schema";
+} from './folder.controller';
+import { BatchPayload, jwtHeaderRequired } from '@/schemas';
+import { $ref } from './folder.schema';
 
 async function folderRoutes(server: FastifyInstance) {
   server.get(
-    "/:folderId",
+    '/:folderId',
     {
       schema: {
-        summary: "Returns the content of a folder.",
-        description: "Returns the content of a folder.",
-        tags: ["folders"],
+        summary: 'Returns the content of a folder.',
+        description: 'Returns the content of a folder.',
+        tags: ['folders'],
         // params: $ref('getFolderParamsSchema'),
         headers: jwtHeaderRequired,
         response: {
-          200: $ref("getFolderContentResponseSchema"),
+          200: $ref('getFolderContentResponseSchema'),
         },
       },
     },
@@ -27,17 +27,17 @@ async function folderRoutes(server: FastifyInstance) {
   );
 
   server.post(
-    "/",
+    '/',
     {
       schema: {
-        summary: "Creates a new folder.",
-        description: "Creates a new folder.",
-        body: $ref("createFolderSchema"),
-        tags: ["folders"],
+        summary: 'Creates a new folder.',
+        description: 'Creates a new folder.',
+        body: $ref('createFolderSchema'),
+        tags: ['folders'],
         // params: $ref('getFolderParamsSchema'),
         headers: jwtHeaderRequired,
         response: {
-          201: $ref("createFolderResponseSchema"),
+          201: $ref('createFolderResponseSchema'),
         },
       },
     },
@@ -45,13 +45,13 @@ async function folderRoutes(server: FastifyInstance) {
   );
 
   server.put(
-    "/:folderId",
+    '/:folderId',
     {
       schema: {
-        summary: "Renames a folder.",
-        description: "Renames a folder.",
-        body: $ref("createFolderSchema"),
-        tags: ["folders"],
+        summary: 'Renames a folder.',
+        description: 'Renames a folder.',
+        body: $ref('createFolderSchema'),
+        tags: ['folders'],
         // params: $ref('getFolderParamsSchema'),
         headers: jwtHeaderRequired,
         response: {
@@ -63,14 +63,14 @@ async function folderRoutes(server: FastifyInstance) {
   );
 
   server.delete(
-    "/:folderId",
+    '/:folderId',
     {
       schema: {
         summary:
-          "Deletes a folder, moving its content inside the trash folder.",
+          'Deletes a folder, moving its content inside the trash folder.',
         description:
-          "Deletes a folder, moving its content inside the trash folder.",
-        tags: ["folders"],
+          'Deletes a folder, moving its content inside the trash folder.',
+        tags: ['folders'],
         // params: $ref('getFolderParamsSchema'),
         headers: jwtHeaderRequired,
         response: {

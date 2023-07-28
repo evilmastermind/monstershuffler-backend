@@ -1,13 +1,13 @@
-import { createWeaponInput } from "./weapon.schema";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { createWeaponInput } from './weapon.schema';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createWeapon,
   getWeapon,
   getWeaponList,
   updateWeapon,
   deleteWeapon,
-} from "./weapon.service";
-import { handleError } from "@/utils/errors";
+} from './weapon.service';
+import { handleError } from '@/utils/errors';
 
 export async function getWeaponListHandler(
   request: FastifyRequest,

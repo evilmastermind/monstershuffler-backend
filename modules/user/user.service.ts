@@ -1,6 +1,6 @@
-import prisma from "@/utils/prisma";
-import { CreateUserInput, UpdateUserInput } from "./user.schema";
-import { hashPassword, generateToken } from "@/utils/hash";
+import prisma from '@/utils/prisma';
+import { CreateUserInput, UpdateUserInput } from './user.schema';
+import { hashPassword, generateToken } from '@/utils/hash';
 
 export async function createUser(input: CreateUserInput) {
   const { password, ...rest } = input;
@@ -33,13 +33,14 @@ export async function resetPassword(token: string, password: string) {
       password: hashedPassword,
     },
   });
-  return (await prisma.users.findMany({
-    where: {
-      tokenpwd: token,
-    },
-  }))[0];
+  return (
+    await prisma.users.findMany({
+      where: {
+        tokenpwd: token,
+      },
+    })
+  )[0];
 }
-
 
 export async function getUserByToken(token: string) {
   return prisma.users.findMany({

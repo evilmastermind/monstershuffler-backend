@@ -1,9 +1,9 @@
-import prisma from "@/utils/prisma";
+import prisma from '@/utils/prisma';
 import {
   createSpellInput,
   getSpellListInput,
   updateSpellInput,
-} from "./spell.schema";
+} from './spell.schema';
 
 // TODO: spells will be stored with their id and name inside objects
 // this means that if the spell's name changes, it will have to be updated in every object that uses it
@@ -66,67 +66,67 @@ export async function getSpellList(userid: number, filters: getSpellListInput) {
           OR: [
             {
               object: {
-                path: ["name"],
+                path: ['name'],
                 string_contains: name,
               },
             },
             {
               object: {
-                path: ["level"],
+                path: ['level'],
                 equals: level,
               },
             },
             {
               object: {
-                path: ["range"],
+                path: ['range'],
                 string_contains: range,
               },
             },
             {
               object: {
-                path: ["ritual"],
+                path: ['ritual'],
                 equals: ritual,
               },
             },
             {
               object: {
-                path: ["school"],
+                path: ['school'],
                 equals: school,
               },
             },
             {
               object: {
-                path: ["source"],
+                path: ['source'],
                 string_contains: source,
               },
             },
             {
               object: {
-                path: ["classes"],
+                path: ['classes'],
                 array_contains: className,
               },
             },
             {
               object: {
-                path: ["duration"],
+                path: ['duration'],
                 string_contains: duration,
               },
             },
             {
               object: {
-                path: ["components"],
+                path: ['components'],
                 string_contains: component,
               },
             },
             {
               object: {
-                path: ["castingTime"],
+                path: ['castingTime'],
                 string_contains: castingTime,
               },
             },
             {
               object: {
-                path: ["description"],
+                path: ['description'],
                 string_contains: description,
               },
             },

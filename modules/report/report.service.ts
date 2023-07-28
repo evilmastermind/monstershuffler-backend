@@ -1,6 +1,6 @@
-import prisma from "@/utils/prisma";
-import { createReportInput } from "./report.schema";
-import { isAdmin } from "@/modules/user/user.service";
+import prisma from '@/utils/prisma';
+import { createReportInput } from './report.schema';
+import { isAdmin } from '@/modules/user/user.service';
 
 export async function createReport(userid: number, input: createReportInput) {
   const { objectid, reason, report } = input;
@@ -23,10 +23,10 @@ export async function getReportList(userid: number) {
   return await prisma.reports.findMany({
     orderBy: [
       {
-        userid: "asc",
+        userid: 'asc',
       },
       {
-        id: "asc",
+        id: 'asc',
       },
     ],
   });

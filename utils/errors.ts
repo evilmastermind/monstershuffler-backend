@@ -1,9 +1,9 @@
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { FastifyReply } from "fastify";
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { FastifyReply } from 'fastify';
 
 export function handleError(error: unknown, reply: FastifyReply) {
-  if (typeof error === "string") {
-    return reply.code(400).send(createErrorJSON(400, "Bad request"));
+  if (typeof error === 'string') {
+    return reply.code(400).send(createErrorJSON(400, 'Bad request'));
   } else if (error instanceof PrismaClientKnownRequestError) {
     return reply
       .code(400)
@@ -16,8 +16,10 @@ export function handleError(error: unknown, reply: FastifyReply) {
 
 function handlePrismaErrors(code: string) {
   switch (code) {
-    case "P2002":
+    case 'P2002':
       return `${code}: this already exists in the database!`;
+    case 'P2010':
+      return `${code}: looks like a raw query failed.`;
   }
   return `Error code ${code}`;
 }
@@ -35,6 +37,6 @@ export function requiredString(name: string) {
 
 export function isValidId(id: number) {
   return (
-    id !== null && id !== undefined && typeof id !== "undefined" && id >= 0
+    id !== null && id !== undefined && typeof id !== 'undefined' && id >= 0
   );
 }

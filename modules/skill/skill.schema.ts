@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { buildJsonSchemas } from "fastify-zod";
+import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
 
 const id = z.number();
 const game = z.number();
@@ -23,5 +23,5 @@ export const { schemas: skillSchemas, $ref } = buildJsonSchemas(
     getSkillListResponseSchema,
     getSkillResponseSchema,
   },
-  { $id: "skillSchemas" }
+  { $id: 'skillSchemas' }
 );

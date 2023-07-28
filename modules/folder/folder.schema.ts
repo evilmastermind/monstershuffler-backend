@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { buildJsonSchemas } from "fastify-zod";
+import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
 
 const id = z.number().int();
 const name = z.string().min(2);
@@ -88,5 +88,5 @@ export const { schemas: folderSchemas, $ref } = buildJsonSchemas(
     createFolderResponseSchema,
     getFolderContentResponseSchema,
   },
-  { $id: "folderSchemas" }
+  { $id: 'folderSchemas' }
 );

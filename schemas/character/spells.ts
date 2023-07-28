@@ -1,6 +1,10 @@
-import { z } from "zod";
-import { statObject, choiceRandomObject, choiceListObject } from "@/schemas/character/choices";
-import { abilitiesEnum } from "@/schemas/character/abilities";
+import { z } from 'zod';
+import {
+  statObject,
+  choiceRandomObject,
+  choiceListObject,
+} from '@/schemas/character/choices';
+import { abilitiesEnum } from '@/schemas/character/abilities';
 
 export const spellGroupObject = z
   .object({

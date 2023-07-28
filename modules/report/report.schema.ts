@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { buildJsonSchemas } from "fastify-zod";
+import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
 
 const id = z.number();
 const objectid = z.number();
@@ -39,5 +39,5 @@ export const { schemas: reportSchemas, $ref } = buildJsonSchemas(
     createReportResponseSchema,
     getReportListResponseSchema,
   },
-  { $id: "reportSchemas" }
+  { $id: 'reportSchemas' }
 );

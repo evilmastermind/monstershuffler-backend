@@ -1,8 +1,8 @@
 import {
   createRacevariantInput,
   updateRacevariantInput,
-} from "./racevariant.schema";
-import { FastifyReply, FastifyRequest } from "fastify";
+} from './racevariant.schema';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createRacevariant,
   getRacevariant,
@@ -10,8 +10,8 @@ import {
   getRacevariantList,
   updateRacevariant,
   deleteRacevariant,
-} from "./racevariant.service";
-import { handleError } from "@/utils/errors";
+} from './racevariant.service';
+import { handleError } from '@/utils/errors';
 
 export async function getRacevariantListHandler(
   request: FastifyRequest<{

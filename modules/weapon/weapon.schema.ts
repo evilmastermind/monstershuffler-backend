@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { buildJsonSchemas } from "fastify-zod";
-import { weaponObject } from "@/schemas/character/weapons";
+import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
+import { weaponObject } from '@/schemas/character/weapons';
 
 const id = z.number();
 const userid = z.number();
@@ -46,5 +46,5 @@ export const { schemas: weaponSchemas, $ref } = buildJsonSchemas(
     getWeaponResponseSchema,
     getWeaponListResponseSchema,
   },
-  { $id: "weaponSchemas" }
+  { $id: 'weaponSchemas' }
 );

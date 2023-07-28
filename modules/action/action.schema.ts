@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { buildJsonSchemas } from "fastify-zod";
-import { actionObject } from "@/schemas/character/actions";
+import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
+import { actionObject } from '@/schemas/character/actions';
 
 const id = z.number();
 const userid = z.number();
@@ -76,5 +76,5 @@ export const { schemas: actionSchemas, $ref } = buildJsonSchemas(
     getActionListResponseSchema,
     getActionResponseSchema,
   },
-  { $id: "actionSchemas" }
+  { $id: 'actionSchemas' }
 );

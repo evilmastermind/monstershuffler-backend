@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { buildJsonSchemas } from "fastify-zod";
-import { armorObject } from "@/schemas/character/armor";
+import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
+import { armorObject } from '@/schemas/character/armor';
 
 const id = z.number();
 const game = z.number();
@@ -49,5 +49,5 @@ export const { schemas: armorSchemas, $ref } = buildJsonSchemas(
     getArmorResponseSchema,
     getArmorListResponseSchema,
   },
-  { $id: "armorSchemas" }
+  { $id: 'armorSchemas' }
 );

@@ -1,16 +1,16 @@
-import { CreateFolderInput } from "./folder.schema";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { CreateFolderInput } from './folder.schema';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createFolder,
   getFolderContent,
   updateFolder,
   deleteFolder,
-} from "./folder.service";
-import { handleError } from "@/utils/errors";
-import { Race } from "@/modules/race/race.schema";
-import { Class } from "@/modules/class/class.schema";
-import { Template } from "@/modules/template/template.schema";
-import { Character } from "@/modules/character/character.schema";
+} from './folder.service';
+import { handleError } from '@/utils/errors';
+import { Race } from '@/modules/race/race.schema';
+import { Class } from '@/modules/class/class.schema';
+import { Template } from '@/modules/template/template.schema';
+import { Character } from '@/modules/character/character.schema';
 
 function extractNegativeRatings(ratings: { value: number }[]) {
   return ratings.reduce((accumulator, currentValue) => {

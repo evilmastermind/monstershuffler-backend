@@ -1,6 +1,6 @@
-import { FastifyReply, FastifyRequest } from "fastify";
-import { getSkillList, getRandomSkill } from "./skill.service";
-import { handleError } from "@/utils/errors";
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { getSkillList, getRandomSkill } from './skill.service';
+import { handleError } from '@/utils/errors';
 
 export async function getSkillListHandler(
   request: FastifyRequest,

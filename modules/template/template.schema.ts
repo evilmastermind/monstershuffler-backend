@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { buildJsonSchemas } from "fastify-zod";
-import { templateObject } from "@/schemas/character";
+import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
+import { templateObject } from '@/schemas/character';
 
 const id = z.number();
 const userid = z.number();
@@ -42,5 +42,5 @@ export const { schemas: templateSchemas, $ref } = buildJsonSchemas(
     getTemplateListResponseSchema,
     getTemplateResponseSchema,
   },
-  { $id: "templateSchemas" }
+  { $id: 'templateSchemas' }
 );

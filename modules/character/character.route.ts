@@ -1,31 +1,27 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance } from 'fastify';
 import {
   createCharacterHandler,
   getCharacterHandler,
   getCharacterListHandler,
   updateCharacterHandler,
   deleteCharacterHandler,
-} from "./character.controller";
-import { $ref } from "./character.schema";
-import {
-  jwtHeaderOptional,
-  jwtHeaderRequired,
-  BatchPayload,
-} from "@/schemas";
+} from './character.controller';
+import { $ref } from './character.schema';
+import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
 
 async function characterRoutes(server: FastifyInstance) {
   server.get(
-    "/",
+    '/',
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: "Returns a list of all available characters in the db.",
+        summary: 'Returns a list of all available characters in the db.',
         description:
-          "Returns a list of all available characters in the db. If authenticated, also returns the list of characters created by the user.",
+          'Returns a list of all available characters in the db. If authenticated, also returns the list of characters created by the user.',
         headers: jwtHeaderOptional,
-        tags: ["characters"],
+        tags: ['characters'],
         response: {
-          200: $ref("getCharacterListResponseSchema"),
+          200: $ref('getCharacterListResponseSchema'),
         },
       },
     },
@@ -33,19 +29,19 @@ async function characterRoutes(server: FastifyInstance) {
   );
 
   server.get(
-    "/:characterId",
+    '/:characterId',
     {
       preHandler: [server.authenticateOptional],
       schema: {
         summary:
-          "Returns the details of the character corresponding to the given id.",
+          'Returns the details of the character corresponding to the given id.',
         description:
-          "Returns the details of the character corresponding to the given id.",
+          'Returns the details of the character corresponding to the given id.',
         headers: jwtHeaderOptional,
-        tags: ["characters"],
+        tags: ['characters'],
         // params: $ref('getCharacterParamsSchema'),
         response: {
-          200: $ref("getCharacterResponseSchema"),
+          200: $ref('getCharacterResponseSchema'),
         },
       },
     },
@@ -53,18 +49,18 @@ async function characterRoutes(server: FastifyInstance) {
   );
 
   server.post(
-    "/",
+    '/',
     {
       preHandler: [server.authenticate, server.MSOnly],
       schema: {
         hide: true,
-        summary: "[MS ONLY] Adds a new character to the db.",
-        description: "[MS ONLY] Adds a new character to the db.",
-        body: $ref("createCharacterSchema"),
-        tags: ["characters"],
+        summary: '[MS ONLY] Adds a new character to the db.',
+        description: '[MS ONLY] Adds a new character to the db.',
+        body: $ref('createCharacterSchema'),
+        tags: ['characters'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref("getCharacterResponseSchema"),
+          201: $ref('getCharacterResponseSchema'),
         },
       },
     },
@@ -72,17 +68,17 @@ async function characterRoutes(server: FastifyInstance) {
   );
 
   server.put(
-    "/:characterId",
+    '/:characterId',
     {
       preHandler: [server.authenticate, server.MSOnly],
       schema: {
         hide: true,
         summary:
-          "[MS ONLY] Updates the character corresponding to the given id.",
+          '[MS ONLY] Updates the character corresponding to the given id.',
         description:
-          "[MS ONLY] Updates the character corresponding to the given id.",
-        body: $ref("updateCharacterSchema"),
-        tags: ["characters"],
+          '[MS ONLY] Updates the character corresponding to the given id.',
+        body: $ref('updateCharacterSchema'),
+        tags: ['characters'],
         headers: jwtHeaderRequired,
         response: {
           200: BatchPayload,
@@ -93,16 +89,16 @@ async function characterRoutes(server: FastifyInstance) {
   );
 
   server.delete(
-    "/:characterId",
+    '/:characterId',
     {
       preHandler: [server.authenticate, server.MSOnly],
       schema: {
         hide: true,
         summary:
-          "[MS ONLY] Deletes the character corresponding to the given id.",
+          '[MS ONLY] Deletes the character corresponding to the given id.',
         description:
-          "[MS ONLY] Deletes the character corresponding to the given id.",
-        tags: ["characters"],
+          '[MS ONLY] Deletes the character corresponding to the given id.',
+        tags: ['characters'],
         headers: jwtHeaderRequired,
         response: {
           200: BatchPayload,

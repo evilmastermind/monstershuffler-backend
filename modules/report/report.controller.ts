@@ -1,7 +1,7 @@
-import { createReportInput } from "./report.schema";
-import { FastifyReply, FastifyRequest } from "fastify";
-import { createReport, getReportList } from "./report.service";
-import { handleError } from "@/utils/errors";
+import { createReportInput } from './report.schema';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { createReport, getReportList } from './report.service';
+import { handleError } from '@/utils/errors';
 
 export async function getReportListHandler(
   request: FastifyRequest,

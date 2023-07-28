@@ -1,12 +1,12 @@
-import { createLanguageInput } from "./language.schema";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { createLanguageInput } from './language.schema';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createLanguage,
   getLanguageList,
   updateLanguage,
   deleteLanguage,
-} from "./language.service";
-import { handleError } from "@/utils/errors";
+} from './language.service';
+import { handleError } from '@/utils/errors';
 
 export async function getLanguageListHandler(
   request: FastifyRequest,

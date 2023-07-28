@@ -1,17 +1,17 @@
-import { z } from "zod";
-import prisma from "@/utils/prisma";
-import { ChoiceRandomObject, Choice } from "@/schemas/character/choices";
-import { AnyObject } from "@/schemas";
+import { z } from 'zod';
+import prisma from '@/utils/prisma';
+import { ChoiceRandomObject, Choice } from '@/schemas/character/choices';
+import { AnyObject } from '@/schemas';
 
 export async function getChoiceObject(
   userId: number,
-  choice: ChoiceRandomObject["choice"]
+  choice: ChoiceRandomObject['choice']
 ) {
   if (!choice?.objectType) {
     return null;
   }
 
-  const fields = choice?.resultType === "nameId" ? "id, name" : "object";
+  const fields = choice?.resultType === 'nameId' ? 'id, name' : 'object';
 
   const parameters: Array<any> = [choice.objectType, userId || 0];
 
@@ -20,7 +20,7 @@ export async function getChoiceObject(
       ?.filter((value) => value?.id)
       .map((value) => value?.id) || [];
 
-  let additionalFilters = "";
+  let additionalFilters = '';
 
   if (chosenAlreadyIds.length > 0) {
     additionalFilters += ` AND id NOT IN (`;
@@ -70,8 +70,7 @@ export async function getChoiceObject(
     ...parameters
   );
 
-
-  if (choice?.resultType === "nameId") {
+  if (choice?.resultType === 'nameId') {
     const fullResult: Choice[] = (result as ResultNameId[])?.map((value) => {
       return {
         id: value.id,
@@ -79,7 +78,7 @@ export async function getChoiceObject(
       };
     });
     return fullResult.concat(choice.chosenAlready || []);
-  } else if (choice?.resultType === "object") {
+  } else if (choice?.resultType === 'object') {
     return (result as ResultObject[])[0]?.object;
   }
 

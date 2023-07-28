@@ -40,9 +40,10 @@ Example of config.json file (nmig)
 
 -5 link the backend to the new db
 
--6 request the conversion of all the objects in the DB with the HTTP call converter/converter, to update the JSON objects to the new version
+-6 convert Objects from JSON to JSONB
 
--7 convert Objects from JSON to JSONB
-``` sql
+```sql
  ALTER TABLE monstershuffler.objects ALTER COLUMN object TYPE JSONB USING object::JSONB;
 ```
+
+-7 request the conversion of all the objects in the DB with the HTTP call converter/converter, to update the JSON objects to the new version

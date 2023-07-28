@@ -1,11 +1,11 @@
-import prisma from "@/utils/prisma";
-import { ChoiceRandomObject, Choice } from "@/schemas/character/choices";
+import prisma from '@/utils/prisma';
+import { ChoiceRandomObject, Choice } from '@/schemas/character/choices';
 
 export async function getSkillList() {
   return await prisma.skills.findMany({
     orderBy: [
       {
-        name: "asc",
+        name: 'asc',
       },
     ],
   });
@@ -22,7 +22,7 @@ export async function getRandomSkill() {
 
 export async function getChoiceSkill(
   userId: number,
-  choice: ChoiceRandomObject["choice"]
+  choice: ChoiceRandomObject['choice']
 ) {
   const parameters: Array<any> = [userId || 0];
   const chosenAlreadyIds =
@@ -30,7 +30,7 @@ export async function getChoiceSkill(
       ?.filter((value) => value?.id)
       .map((value) => value?.id) || [];
 
-  let additionalFilters = "";
+  let additionalFilters = '';
 
   if (chosenAlreadyIds.length > 0) {
     additionalFilters += ` AND id NOT IN (`;

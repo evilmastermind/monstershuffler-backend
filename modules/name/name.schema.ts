@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { buildJsonSchemas } from "fastify-zod";
+import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
 
 const getRandomNameSchema = z.object({
   race: z.string().optional(),
@@ -17,5 +17,5 @@ export const { schemas: nameSchemas, $ref } = buildJsonSchemas(
     getRandomNameSchema,
     getRandomNameResponseSchema,
   },
-  { $id: "nameSchemas" }
+  { $id: 'nameSchemas' }
 );

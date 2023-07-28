@@ -1,34 +1,33 @@
-import { createRandomNpcInput } from "./npc.schema";
-import { FastifyReply, FastifyRequest } from "fastify";
-import { getRace, getRandomRace } from "@/modules/race/race.service";
+import { createRandomNpcInput } from './npc.schema';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { getRace, getRandomRace } from '@/modules/race/race.service';
 import {
   getRacevariant,
   getRandomRacevariant,
-} from "@/modules/racevariant/racevariant.service";
-import { Character } from "@/modules/character/character.schema";
-import { Race } from "@/modules/race/race.schema";
-import { Racevariant } from "@/modules/racevariant/racevariant.schema";
-import { Class } from "@/modules/class/class.schema";
-import { Classvariant } from "@/modules/classvariant/classvariant.schema";
-import { getClass, getRandomClass } from "@/modules/class/class.service";
+} from '@/modules/racevariant/racevariant.service';
+import { Character } from '@/modules/character/character.schema';
+import { Race } from '@/modules/race/race.schema';
+import { Racevariant } from '@/modules/racevariant/racevariant.schema';
+import { Class } from '@/modules/class/class.schema';
+import { Classvariant } from '@/modules/classvariant/classvariant.schema';
+import { getClass, getRandomClass } from '@/modules/class/class.service';
 import {
   getClassvariant,
   getRandomClassvariant,
-} from "@/modules/classvariant/classvariant.service";
+} from '@/modules/classvariant/classvariant.service';
 import {
   getBackground,
   getRandomBackground,
-} from "@/modules/background/background.service";
-import { Background } from "@/modules/background/background.schema";
-import { getRandomSkill } from "@/modules/skill/skill.service";
-import { getRandomName } from "@/modules/name/name.service";
-import { getRandomSurname } from "@/modules/surname/surname.service";
-import { getRandomTrait } from "@/modules/trait/trait.service";
-import { getRandomCharacterhook } from "@/modules/characterhook/characterhook.service";
-import { handleError } from "@/utils/errors";
-import { random } from "@/utils/functions";
-import { findChoices } from "@/modules/choiceSolver";
-
+} from '@/modules/background/background.service';
+import { Background } from '@/modules/background/background.schema';
+import { getRandomSkill } from '@/modules/skill/skill.service';
+import { getRandomName } from '@/modules/name/name.service';
+import { getRandomSurname } from '@/modules/surname/surname.service';
+import { getRandomTrait } from '@/modules/trait/trait.service';
+import { getRandomCharacterhook } from '@/modules/characterhook/characterhook.service';
+import { handleError } from '@/utils/errors';
+import { random } from '@/utils/functions';
+import { findChoices } from '@/modules/choiceSolver';
 
 export async function createRandomNpc(
   request: FastifyRequest<{ Body: createRandomNpcInput }>,
@@ -90,22 +89,22 @@ export async function createRandomNpc(
     let classChosen: Class | null = null;
     let classvariant: Classvariant | null = null;
     let background: Background | null = null;
-    const random20 = classType === "randomSometimes" ? random(1, 20) : 0;
-    if (classId && classType === "specific") {
+    const random20 = classType === 'randomSometimes' ? random(1, 20) : 0;
+    if (classId && classType === 'specific') {
       classChosen = (await getClass(id, classId)).object as Class;
       classvariant = classvariantId
         ? ((await getClassvariant(id, classvariantId)).object as Classvariant)
         : null;
-    } else if (classType === "randomAlways" || random20 === 20) {
+    } else if (classType === 'randomAlways' || random20 === 20) {
       const result = await getRandomClass(id);
       classChosen = result.object as Class;
       classvariant =
         ((await getRandomClassvariant(id, result.id))
           ?.object as Classvariant) || null;
     }
-    if (backgroundType === "random") {
+    if (backgroundType === 'random') {
       background = (await getRandomBackground(id)).object as Background;
-    } else if (backgroundId && backgroundType === "specific") {
+    } else if (backgroundId && backgroundType === 'specific') {
       background = (await getBackground(id, backgroundId)).object as Background;
     }
     ///////////////////////////////////////
@@ -138,25 +137,27 @@ export async function createRandomNpc(
     const character = result.character;
 
     if (race) {
-      character["race"] = race;
+      character['race'] = race;
       await findChoices(character.race, character.race, 0, id);
     }
     if (race && racevariant) {
-      character["racevariant"] = racevariant;
+      character['racevariant'] = racevariant;
       await findChoices(character.racevariant, character.racevariant, 0, id);
     }
     if (classChosen) {
-      character["class"] = classChosen;
+      character['class'] = classChosen;
       await findChoices(character.class, character.class, 0, id);
     }
     if (classChosen && classvariant) {
-      character["classvariant"] = classvariant;
+      character['classvariant'] = classvariant;
       await findChoices(character.classvariant, character.classvariant, 0, id);
     }
     if (background) {
-      character["background"] = background;
+      character['background'] = background;
       await findChoices(character.background, character.background, 0, id);
     }
+
+    console.log(JSON.stringify(character, null, 2));
 
     return {
       npc: {
@@ -169,33 +170,35 @@ export async function createRandomNpc(
   }
 }
 
-function fixPronouns(text: string, pronouns: string) {
-  let result = text;
-  if (pronouns === "male") {
-    result = result.replaceAll("§", "he");
-    result = result.replaceAll("@", "his");
-    result = result.replaceAll("#", "him");
-  } else if (pronouns === "female") {
-    result = result.replaceAll("§", "she");
-    result = result.replaceAll("@", "her");
-    result = result.replaceAll("#", "her");
-  } else if (pronouns === "neutral") {
-    result = result.replaceAll("§", "they");
-    result = result.replaceAll("@", "their");
-    result = result.replaceAll("#", "them");
-  } else {
-    result = result.replaceAll("§", "it");
-    result = result.replaceAll("@", "its");
-    result = result.replaceAll("#", "it");
-  }
-  return result;
-}
+// function fixPronouns(text: string, pronouns: string) {
+//   let result = text;
+//   if (pronouns === "male") {
+//     result = result.replaceAll("§", "he");
+//     result = result.replaceAll("@", "his");
+//     result = result.replaceAll("#", "him");
+//   } else if (pronouns === "female") {
+//     result = result.replaceAll("§", "she");
+//     result = result.replaceAll("@", "her");
+//     result = result.replaceAll("#", "her");
+//   } else if (pronouns === "neutral") {
+//     result = result.replaceAll("§", "they");
+//     result = result.replaceAll("@", "their");
+//     result = result.replaceAll("#", "them");
+//   } else {
+//     result = result.replaceAll("§", "it");
+//     result = result.replaceAll("@", "its");
+//     result = result.replaceAll("#", "it");
+//   }
+//   return result;
+// }
 
 async function calculateCharacterhook() {
   return (await getRandomCharacterhook()).hook;
 }
 
-function calculateAlignment(traitCategory: string): [[number, number, number], [number, number, number]] {
+function calculateAlignment(
+  traitCategory: string
+): [[number, number, number], [number, number, number]] {
   let lawfulness = 0;
   let chaoticness = 0;
   let ethicalNeutrality = 0;
@@ -204,70 +207,73 @@ function calculateAlignment(traitCategory: string): [[number, number, number], [
   let moralNeutrality = 0;
 
   switch (traitCategory) {
-    case "bad":
+    case 'bad':
       evilness += 0.5;
       chaoticness += 0.5;
       break;
-    case "weird":
+    case 'weird':
       chaoticness += 0.5;
       moralNeutrality += 0.5;
       break;
-    case "evil":
+    case 'evil':
       evilness += 1.0;
       break;
-    case "submissive":
+    case 'submissive':
       lawfulness += 0.5;
       break;
-    case "successful":
+    case 'successful':
       lawfulness += 0.5;
       break;
-    case "strong":
+    case 'strong':
       break;
-    case "weak":
+    case 'weak':
       break;
-    case "good":
+    case 'good':
       goodness = goodness + 1.0;
       break;
-    case "traumatized":
+    case 'traumatized':
       goodness = goodness + 0.5;
       break;
-    case "intelligent":
+    case 'intelligent':
       moralNeutrality += 0.25;
       ethicalNeutrality += 0.25;
       break;
-    case "stupid":
+    case 'stupid':
       break;
-    case "seductive":
+    case 'seductive':
       chaoticness += 0.5;
       break;
-    case "lawful":
+    case 'lawful':
       lawfulness = lawfulness + 1.0;
       break;
-    case "chaotic":
+    case 'chaotic':
       chaoticness = chaoticness + 1.0;
       break;
     default:
       break;
   }
 
-  return [[lawfulness, chaoticness, ethicalNeutrality], [goodness, evilness, moralNeutrality]];
+  return [
+    [lawfulness, chaoticness, ethicalNeutrality],
+    [goodness, evilness, moralNeutrality],
+  ];
 }
 
 function calculateName(pronouns: string, race: Race | null) {
-  let nameType = "human";
+  let nameType = 'human';
   if (race && race.nameType && race.nameType.length) {
     const randomIndex = random(0, race.nameType.length - 1);
     nameType = race.nameType[randomIndex];
   }
   let gender = pronouns;
-  if (gender === "neutral") {
-    gender = random(1, 2) === 1 ? "male" : "female";
+  if (gender === 'neutral') {
+    gender = random(1, 2) === 1 ? 'male' : 'female';
   }
   return getRandomName({ race: nameType, gender });
 }
 
 function calculateSurname(pronouns: string, race: Race | null) {
-  let surnameType = "human";
+  let surnameType = 'human';
   if (!race || !race.addSurname || random(1, 100) >= race.addSurname) {
     return undefined;
   }
@@ -276,8 +282,8 @@ function calculateSurname(pronouns: string, race: Race | null) {
     surnameType = race.nameType[randomIndex];
   }
   let gender = pronouns;
-  if (gender === "neutral") {
-    gender = random(1, 2) === 1 ? "male" : "female";
+  if (gender === 'neutral') {
+    gender = random(1, 2) === 1 ? 'male' : 'female';
   }
   return getRandomSurname({ race: surnameType, gender });
 }
@@ -290,17 +296,17 @@ function calculatePronouns(race: Race | null, racevariant: Racevariant | null) {
   }
   const random100 = random(1, 100);
   if (random100 <= 2) {
-    return "neutral";
+    return 'neutral';
   } else if (random100 <= 51) {
-    return "male";
+    return 'male';
   } else {
-    return "female";
+    return 'female';
   }
 }
 
-function calculateLevel(levelType = "random") {
+function calculateLevel(levelType = 'random') {
   switch (levelType) {
-    case "randomPeasantsMostly": {
+    case 'randomPeasantsMostly': {
       const randomValue = Math.floor(30 / (Math.random() * 150 + 1) + 1);
       return randomValue > 20 ? 20 : randomValue;
     }

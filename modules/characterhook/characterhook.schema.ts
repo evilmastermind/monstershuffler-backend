@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { buildJsonSchemas } from "fastify-zod";
+import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
 
 const getRandomCharacterhookResponseSchema = z.object({
   id: z.number(),
@@ -10,5 +10,5 @@ export const { schemas: characterhookSchemas, $ref } = buildJsonSchemas(
   {
     getRandomCharacterhookResponseSchema,
   },
-  { $id: "characterhookSchemas" }
+  { $id: 'characterhookSchemas' }
 );

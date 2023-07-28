@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { buildJsonSchemas } from "fastify-zod";
+import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
 
 const name = z.string().min(2);
 const type = z.string().min(2);
@@ -42,5 +42,5 @@ export const { schemas: traitSchemas, $ref } = buildJsonSchemas(
     getRandomTraitResponseSchema,
     getTraitDescriptionResponseSchema,
   },
-  { $id: "traitSchemas" }
+  { $id: 'traitSchemas' }
 );

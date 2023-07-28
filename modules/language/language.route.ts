@@ -1,30 +1,26 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance } from 'fastify';
 import {
   createLanguageHandler,
   getLanguageListHandler,
   updateLanguageHandler,
   deleteLanguageHandler,
-} from "./language.controller";
-import { $ref } from "./language.schema";
-import {
-  jwtHeaderOptional,
-  jwtHeaderRequired,
-  BatchPayload,
-} from "@/schemas";
+} from './language.controller';
+import { $ref } from './language.schema';
+import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
 
 async function languageRoutes(server: FastifyInstance) {
   server.get(
-    "/",
+    '/',
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: "Returns a list of all available languages in the db.",
+        summary: 'Returns a list of all available languages in the db.',
         description:
-          "Returns a list of all available languages in the db. If authenticated, also returns the list of languages created by the user.",
+          'Returns a list of all available languages in the db. If authenticated, also returns the list of languages created by the user.',
         headers: jwtHeaderOptional,
-        tags: ["languages"],
+        tags: ['languages'],
         response: {
-          200: $ref("getLanguageListResponseSchema"),
+          200: $ref('getLanguageListResponseSchema'),
         },
       },
     },
@@ -32,18 +28,18 @@ async function languageRoutes(server: FastifyInstance) {
   );
 
   server.post(
-    "/",
+    '/',
     {
       preHandler: [server.authenticate, server.MSOnly],
       schema: {
         hide: true,
-        summary: "[MS ONLY] Adds a new type of language to the db.",
-        description: "[MS ONLY] Adds a new type of language to the db.",
-        body: $ref("createLanguageSchema"),
-        tags: ["languages"],
+        summary: '[MS ONLY] Adds a new type of language to the db.',
+        description: '[MS ONLY] Adds a new type of language to the db.',
+        body: $ref('createLanguageSchema'),
+        tags: ['languages'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref("getLanguageResponseSchema"),
+          201: $ref('getLanguageResponseSchema'),
         },
       },
     },
@@ -51,20 +47,20 @@ async function languageRoutes(server: FastifyInstance) {
   );
 
   server.put(
-    "/:languageId",
+    '/:languageId',
     {
       preHandler: [server.authenticate, server.MSOnly],
       schema: {
         hide: true,
         summary:
-          "[MS ONLY] Updates the details of the language corresponding to the given id.",
+          '[MS ONLY] Updates the details of the language corresponding to the given id.',
         description:
-          "[MS ONLY] Updates the details of the language corresponding to the given id.",
-        body: $ref("updateLanguageSchema"),
-        tags: ["languages"],
+          '[MS ONLY] Updates the details of the language corresponding to the given id.',
+        body: $ref('updateLanguageSchema'),
+        tags: ['languages'],
         headers: jwtHeaderRequired,
         response: {
-          200: $ref("getLanguageResponseSchema"),
+          200: $ref('getLanguageResponseSchema'),
         },
       },
     },
@@ -72,16 +68,16 @@ async function languageRoutes(server: FastifyInstance) {
   );
 
   server.delete(
-    "/:languageId",
+    '/:languageId',
     {
       preHandler: [server.authenticate, server.MSOnly],
       schema: {
         hide: true,
         summary:
-          "[MS ONLY] Deletes the language corresponding to the given id.",
+          '[MS ONLY] Deletes the language corresponding to the given id.',
         description:
-          "[MS ONLY] Deletes the language corresponding to the given id.",
-        tags: ["languages"],
+          '[MS ONLY] Deletes the language corresponding to the given id.',
+        tags: ['languages'],
         headers: jwtHeaderRequired,
         response: {
           200: BatchPayload,

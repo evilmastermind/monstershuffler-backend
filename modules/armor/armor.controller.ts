@@ -1,13 +1,13 @@
-import { createArmorInput } from "./armor.schema";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { createArmorInput } from './armor.schema';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createArmor,
   getArmor,
   getArmorList,
   updateArmor,
   deleteArmor,
-} from "./armor.service";
-import { handleError } from "@/utils/errors";
+} from './armor.service';
+import { handleError } from '@/utils/errors';
 
 export async function getArmorListHandler(
   request: FastifyRequest,

@@ -1,13 +1,13 @@
-import { createTemplateInput, updateTemplateInput } from "./template.schema";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { createTemplateInput, updateTemplateInput } from './template.schema';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createTemplate,
   getTemplate,
   getTemplateList,
   updateTemplate,
   deleteTemplate,
-} from "./template.service";
-import { handleError } from "@/utils/errors";
+} from './template.service';
+import { handleError } from '@/utils/errors';
 
 export async function getTemplateListHandler(
   request: FastifyRequest,

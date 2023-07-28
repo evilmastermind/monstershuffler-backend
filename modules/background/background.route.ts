@@ -1,4 +1,4 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance } from 'fastify';
 import {
   createBackgroundHandler,
   getBackgroundHandler,
@@ -6,13 +6,9 @@ import {
   getBackgroundListHandler,
   updateBackgroundHandler,
   deleteBackgroundHandler,
-} from "./background.controller";
-import { $ref } from "./background.schema";
-import {
-  jwtHeaderOptional,
-  jwtHeaderRequired,
-  BatchPayload,
-} from "@/schemas";
+} from './background.controller';
+import { $ref } from './background.schema';
+import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
 
 // TODO: backgrounds have some random choices that choose a weapon based
 // on the weapon's name. This might cause issues if there are multiple
@@ -20,17 +16,17 @@ import {
 
 async function backgroundRoutes(server: FastifyInstance) {
   server.get(
-    "/",
+    '/',
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: "Returns a list of all available backgrounds in the db.",
+        summary: 'Returns a list of all available backgrounds in the db.',
         description:
-          "Returns a list of all available backgrounds in the db. If authenticated, also returns the list of backgrounds created by the user.",
+          'Returns a list of all available backgrounds in the db. If authenticated, also returns the list of backgrounds created by the user.',
         headers: jwtHeaderOptional,
-        tags: ["backgrounds"],
+        tags: ['backgrounds'],
         response: {
-          200: $ref("getBackgroundListResponseSchema"),
+          200: $ref('getBackgroundListResponseSchema'),
         },
       },
     },
@@ -38,19 +34,19 @@ async function backgroundRoutes(server: FastifyInstance) {
   );
 
   server.get(
-    "/:backgroundId",
+    '/:backgroundId',
     {
       preHandler: [server.authenticateOptional],
       schema: {
         summary:
-          "Returns the details of the background corresponding to the given id.",
+          'Returns the details of the background corresponding to the given id.',
         description:
-          "Returns the details of the background corresponding to the given id.",
+          'Returns the details of the background corresponding to the given id.',
         headers: jwtHeaderOptional,
-        tags: ["backgrounds"],
+        tags: ['backgrounds'],
         // params: $ref('getBackgroundParamsSchema'),
         response: {
-          200: $ref("getBackgroundResponseSchema"),
+          200: $ref('getBackgroundResponseSchema'),
         },
       },
     },
@@ -58,19 +54,19 @@ async function backgroundRoutes(server: FastifyInstance) {
   );
 
   server.get(
-    "/random",
+    '/random',
     {
       preHandler: [server.authenticateOptional],
       schema: {
         summary:
-          "Returns the details of a random background from the database.",
+          'Returns the details of a random background from the database.',
         description:
-          "Returns the details of a random background from list of backgrounds available to the user in the database.",
+          'Returns the details of a random background from list of backgrounds available to the user in the database.',
         headers: jwtHeaderOptional,
-        tags: ["backgrounds"],
+        tags: ['backgrounds'],
         // params: $ref('getBackgroundParamsSchema'),
         response: {
-          200: $ref("getBackgroundResponseSchema"),
+          200: $ref('getBackgroundResponseSchema'),
         },
       },
     },

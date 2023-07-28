@@ -1,9 +1,9 @@
-import prisma from "@/utils/prisma";
+import prisma from '@/utils/prisma';
 import {
   createActionInput,
   getActionListInput,
   updateActionInput,
-} from "./action.schema";
+} from './action.schema';
 
 export async function createAction(userid: number, input: createActionInput) {
   const { object, game, name, type, subtype, source, tags } = input;

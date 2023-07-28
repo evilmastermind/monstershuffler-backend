@@ -1,22 +1,22 @@
-import { FastifyInstance } from "fastify";
-import { $ref } from "./trait.schema";
+import { FastifyInstance } from 'fastify';
+import { $ref } from './trait.schema';
 import {
   getRandomTraitHandler,
   getTraitDescriptionHandler,
-} from "./trait.controller";
+} from './trait.controller';
 
 async function traitRoutes(server: FastifyInstance) {
   server.post(
-    "/random",
+    '/random',
     {
       schema: {
-        summary: "Returns a random trait.",
+        summary: 'Returns a random trait.',
         description:
           "Returns a random trait which is usually an adjective describing a creature's state of mind, attitude, core beliefs or current feelings.",
-        body: $ref("getRandomTraitSchema"),
-        tags: ["traits"],
+        body: $ref('getRandomTraitSchema'),
+        tags: ['traits'],
         response: {
-          200: $ref("getRandomTraitResponseSchema"),
+          200: $ref('getRandomTraitResponseSchema'),
         },
       },
     },
@@ -24,15 +24,15 @@ async function traitRoutes(server: FastifyInstance) {
   );
 
   server.get(
-    "/:name",
+    '/:name',
     {
       schema: {
-        summary: "Returns the description of a trait.",
+        summary: 'Returns the description of a trait.',
         description:
           "Returns the description of a trait which is usually an adjective describing a creature's state of mind, attitude, core beliefs or current feelings.",
-        tags: ["traits"],
+        tags: ['traits'],
         response: {
-          200: $ref("getTraitDescriptionResponseSchema"),
+          200: $ref('getTraitDescriptionResponseSchema'),
         },
       },
     },

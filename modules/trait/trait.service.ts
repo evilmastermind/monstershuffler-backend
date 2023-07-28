@@ -1,5 +1,5 @@
-import prisma from "@/utils/prisma";
-import { getRandomTraitInput } from "./trait.schema";
+import prisma from '@/utils/prisma';
+import { getRandomTraitInput } from './trait.schema';
 
 export async function getRandomTrait(input: getRandomTraitInput) {
   const traitCount = await prisma.traits.count({

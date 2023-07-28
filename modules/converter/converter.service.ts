@@ -1,8 +1,8 @@
-import prisma from "@/utils/prisma";
-import { actionsdetails, Prisma } from "@prisma/client";
-import { isAdmin } from "@/modules/user/user.service";
-import { objects } from "@prisma/client";
-import { type Choice } from "@/schemas/character/choices";
+import prisma from '@/utils/prisma';
+import { actionsdetails, Prisma } from '@prisma/client';
+import { isAdmin } from '@/modules/user/user.service';
+import { objects } from '@prisma/client';
+import { type Choice } from '@/schemas/character/choices';
 
 export async function countObjects() {
   const objectCount = await prisma.objects.count();
@@ -15,7 +15,7 @@ export async function getFirstObjectId() {
       id: true,
     },
     orderBy: {
-      id: "asc",
+      id: 'asc',
     },
   });
 
@@ -83,6 +83,7 @@ export async function getActionDetails(actionId: number) {
   });
 
   if (details) {
+    // @ts-ignore
     details.tags = tags.map((tag) => tag.tag);
   }
   return details;
@@ -98,7 +99,7 @@ export async function getActionDetails(actionId: number) {
 //      2 | race
 //      3 | class
 //      4 | template
-//      5 | profession
+//      5 | background
 //    101 | action
 //    102 | spell
 //   1001 | weapon
@@ -110,38 +111,38 @@ export async function getActionDetails(actionId: number) {
 
 // ["actions","armor","backgrounds","bases","damagetypes","languages","names","characterhooks","skills","spells","traits","voices","weapons"]
 export async function getIdsFromNames(chosenAlready: string[], source: string) {
-  let table = "objects";
+  let table = 'objects';
   let objectType = 0;
   switch (source) {
-    case "actions":
+    case 'actions':
       objectType = 101;
       break;
-    case "armor":
+    case 'armor':
       objectType = 1002;
       break;
-    case "languages":
-      table = "languages";
+    case 'languages':
+      table = 'languages';
       break;
-    case "skills":
-      table = "skills";
+    case 'skills':
+      table = 'skills';
       break;
-    case "weapons":
+    case 'weapons':
       objectType = 1001;
       break;
-    case "spells":
+    case 'spells':
       objectType = 102;
       break;
-    case "objects":
+    case 'objects':
       break;
     default:
-      console.warn("UNDEFINED TYPE DETECTED: " + source);
-      table = "somethingwrongtomakethisfail";
+      console.warn('UNDEFINED TYPE DETECTED: ' + source);
+      table = 'somethingwrongtomakethisfail';
       break;
   }
 
   const newChosenAlready: Choice[] = [];
   for (const name of chosenAlready) {
-    if (table === "objects") {
+    if (table === 'objects') {
       const ids = await prisma.objects.findMany({
         select: {
           id: true,
@@ -149,7 +150,7 @@ export async function getIdsFromNames(chosenAlready: string[], source: string) {
         where: {
           name: {
             equals: name.trim(),
-            mode: "insensitive", // -- for PostgreSQL only
+            mode: 'insensitive', // -- for PostgreSQL only
           },
           type: objectType,
           userid: 0,
@@ -197,19 +198,19 @@ export async function getIdsFromNames(chosenAlready: string[], source: string) {
 // }
 
 export async function convertBackgroundPronouns() {
-  const backgrounds = await prisma.backgrounds.findMany();
-  for (let i = 0; i < backgrounds.length; i++) {
-    const background = backgrounds[i];
-    if (background.background) {
-      background.background = background.background.replaceAll("§", "[they]");
-      background.background = background.background.replaceAll("@", "[their]");
-      background.background = background.background.replaceAll("#", "[them]");
-      await prisma.backgrounds.update({
+  const characterHooks = await prisma.characterhooks.findMany();
+  for (let i = 0; i < characterHooks.length; i++) {
+    const characterHook = characterHooks[i];
+    if (characterHook.hook) {
+      characterHook.hook = characterHook.hook.replaceAll('§', '[they]');
+      characterHook.hook = characterHook.hook.replaceAll('@', '[their]');
+      characterHook.hook = characterHook.hook.replaceAll('#', '[them]');
+      await prisma.characterhooks.update({
         where: {
-          id: background.id,
+          id: characterHook.id,
         },
         data: {
-          background: background.background,
+          hook: characterHook.hook,
         },
       });
     }

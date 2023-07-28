@@ -1,5 +1,5 @@
-import prisma from "@/utils/prisma";
-import { createDamageTypeInput } from "./damagetype.schema";
+import prisma from '@/utils/prisma';
+import { createDamageTypeInput } from './damagetype.schema';
 
 export async function createDamageType(
   userid: number,
@@ -30,10 +30,10 @@ export async function getDamageTypeList(userid: number) {
     },
     orderBy: [
       {
-        userid: "asc",
+        userid: 'asc',
       },
       {
-        id: "asc",
+        id: 'asc',
       },
     ],
   });

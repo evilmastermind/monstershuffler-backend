@@ -1,4 +1,4 @@
-import prisma from "@/utils/prisma";
+import prisma from '@/utils/prisma';
 
 export async function getRandomCharacterhook() {
   const characterhookCount = await prisma.characterhooks.count();

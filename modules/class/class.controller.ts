@@ -1,5 +1,5 @@
-import { createClassInput, updateClassInput } from "./class.schema";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { createClassInput, updateClassInput } from './class.schema';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createClass,
   getClass,
@@ -8,8 +8,8 @@ import {
   getClassWithVariantsList,
   updateClass,
   deleteClass,
-} from "./class.service";
-import { handleError } from "@/utils/errors";
+} from './class.service';
+import { handleError } from '@/utils/errors';
 
 export async function getClassListHandler(
   request: FastifyRequest,

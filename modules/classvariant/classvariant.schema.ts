@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { buildJsonSchemas } from "fastify-zod";
-import { classvariantObject } from "@/schemas/character";
+import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
+import { classvariantObject } from '@/schemas/character';
 
 const id = z.number();
 const userid = z.number();
@@ -59,5 +59,5 @@ export const { schemas: classvariantSchemas, $ref } = buildJsonSchemas(
     getClassvariantClassListResponseSchema,
     getClassvariantResponseSchema,
   },
-  { $id: "classvariantSchemas" }
+  { $id: 'classvariantSchemas' }
 );

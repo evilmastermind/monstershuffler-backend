@@ -1,5 +1,5 @@
-import prisma from "@/utils/prisma";
-import { createCharacterInput, updateCharacterInput } from "./character.schema";
+import prisma from '@/utils/prisma';
+import { createCharacterInput, updateCharacterInput } from './character.schema';
 
 export async function createCharacter(
   userid: number,
@@ -73,10 +73,10 @@ export async function getCharacterList(userid: number) {
     },
     orderBy: [
       {
-        userid: "asc",
+        userid: 'asc',
       },
       {
-        id: "asc",
+        id: 'asc',
       },
     ],
   });

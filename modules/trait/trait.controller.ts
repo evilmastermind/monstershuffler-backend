@@ -1,7 +1,7 @@
-import { FastifyReply, FastifyRequest } from "fastify";
-import { getRandomTrait, getTraitDescription } from "./trait.service";
-import { handleError } from "@/utils/errors";
-import { getRandomTraitInput } from "./trait.schema";
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { getRandomTrait, getTraitDescription } from './trait.service';
+import { handleError } from '@/utils/errors';
+import { getRandomTraitInput } from './trait.schema';
 
 export async function getRandomTraitHandler(
   request: FastifyRequest<{

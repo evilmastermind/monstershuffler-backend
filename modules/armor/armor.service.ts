@@ -1,5 +1,5 @@
-import prisma from "@/utils/prisma";
-import { createArmorInput, updateArmorInput } from "./armor.schema";
+import prisma from '@/utils/prisma';
+import { createArmorInput, updateArmorInput } from './armor.schema';
 
 export async function createArmor(userid: number, input: createArmorInput) {
   const { object, game } = input;
@@ -55,10 +55,10 @@ export async function getArmorList(userid: number) {
     },
     orderBy: [
       {
-        userid: "asc",
+        userid: 'asc',
       },
       {
-        id: "asc",
+        id: 'asc',
       },
     ],
   });

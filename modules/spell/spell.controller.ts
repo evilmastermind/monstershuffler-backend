@@ -1,13 +1,13 @@
-import { createSpellInput, getSpellListInput } from "./spell.schema";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { createSpellInput, getSpellListInput } from './spell.schema';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createSpell,
   getSpell,
   getSpellList,
   updateSpell,
   deleteSpell,
-} from "./spell.service";
-import { handleError } from "@/utils/errors";
+} from './spell.service';
+import { handleError } from '@/utils/errors';
 
 export async function getSpellListHandler(
   request: FastifyRequest<{ Body: getSpellListInput }>,

@@ -1,5 +1,5 @@
-import prisma from "@/utils/prisma";
-import { CreateFolderInput } from "./folder.schema";
+import prisma from '@/utils/prisma';
+import { CreateFolderInput } from './folder.schema';
 
 export async function createFolder(userid: number, input: CreateFolderInput) {
   const { name } = input;
@@ -25,7 +25,7 @@ export async function getFolderContent(userid: number, folderid: number) {
     },
     orderBy: [
       {
-        name: "asc",
+        name: 'asc',
       },
     ],
   });
@@ -52,7 +52,7 @@ export async function getFolderContent(userid: number, folderid: number) {
     },
     orderBy: [
       {
-        id: "asc",
+        id: 'asc',
       },
     ],
   });
@@ -79,7 +79,7 @@ export async function getFolderContent(userid: number, folderid: number) {
     },
     orderBy: [
       {
-        id: "asc",
+        id: 'asc',
       },
     ],
   });
@@ -106,7 +106,7 @@ export async function getFolderContent(userid: number, folderid: number) {
     },
     orderBy: [
       {
-        id: "asc",
+        id: 'asc',
       },
     ],
   });
@@ -133,7 +133,7 @@ export async function getFolderContent(userid: number, folderid: number) {
     },
     orderBy: [
       {
-        id: "asc",
+        id: 'asc',
       },
     ],
   });

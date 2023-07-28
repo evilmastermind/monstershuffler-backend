@@ -1,30 +1,30 @@
-import { z } from "zod";
-import { buildJsonSchemas } from "fastify-zod";
+import { z } from 'zod';
+import { buildJsonSchemas } from 'fastify-zod';
 
 const userCore = {
   email: z
     .string({
-      required_error: "Email is a required field",
-      invalid_type_error: "Email must be a string",
+      required_error: 'Email is a required field',
+      invalid_type_error: 'Email must be a string',
     })
-    .email({ message: "Invalid email address" }),
+    .email({ message: 'Invalid email address' }),
   username: z
     .string({
-      required_error: "Email is a required field",
-      invalid_type_error: "Email must be a string",
+      required_error: 'Email is a required field',
+      invalid_type_error: 'Email must be a string',
     })
-    .min(2, { message: "Username is too short (min 2 characters)" })
-    .max(21, { message: "Username is too long (max 21 characters" }),
+    .min(2, { message: 'Username is too short (min 2 characters)' })
+    .max(21, { message: 'Username is too long (max 21 characters' }),
 };
 
 const createUserSchema = z.object({
   ...userCore,
   password: z
     .string({
-      required_error: "Password is a required field",
-      invalid_type_error: "Password must be a string",
+      required_error: 'Password is a required field',
+      invalid_type_error: 'Password must be a string',
     })
-    .min(8, { message: "Password is too short (min 8 character" }),
+    .min(8, { message: 'Password is too short (min 8 character' }),
 });
 
 const createUserResponseSchema = z.object({
@@ -48,10 +48,10 @@ const reactivateUserSchema = z.object({
 const loginSchema = z.object({
   email: z
     .string({
-      required_error: "Email is a required field",
-      invalid_type_error: "Email must be a string",
+      required_error: 'Email is a required field',
+      invalid_type_error: 'Email must be a string',
     })
-    .email({ message: "Invalid email address" }),
+    .email({ message: 'Invalid email address' }),
   password: z.string(),
 });
 
@@ -92,5 +92,5 @@ export const { schemas: userSchemas, $ref } = buildJsonSchemas(
     updateUserSchema,
     resetPasswordSchema,
   },
-  { $id: "userSchemas" }
+  { $id: 'userSchemas' }
 );

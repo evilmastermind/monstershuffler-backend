@@ -1,5 +1,5 @@
-import prisma from "@/utils/prisma";
-import { createBackgroundInput, Background } from "./background.schema";
+import prisma from '@/utils/prisma';
+import { createBackgroundInput, Background } from './background.schema';
 
 export async function createBackground(
   userid: number,
@@ -107,10 +107,10 @@ export async function getBackgroundList(userid: number) {
     },
     orderBy: [
       {
-        userid: "asc",
+        userid: 'asc',
       },
       {
-        name: "asc",
+        name: 'asc',
       },
     ],
   });

@@ -1,6 +1,6 @@
-import { FastifyReply, FastifyRequest } from "fastify";
-import { getRandomCharacterhook } from "./characterhook.service";
-import { handleError } from "@/utils/errors";
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { getRandomCharacterhook } from './characterhook.service';
+import { handleError } from '@/utils/errors';
 
 export async function getRandomCharacterhookHandler(
   request: FastifyRequest,

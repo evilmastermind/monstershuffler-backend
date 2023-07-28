@@ -1,33 +1,29 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance } from 'fastify';
 import {
   getActionListHandler,
   getActionHandler,
   createActionHandler,
   updateActionHandler,
   deleteActionHandler,
-} from "./action.controller";
-import { $ref } from "./action.schema";
-import {
-  jwtHeaderOptional,
-  jwtHeaderRequired,
-  BatchPayload,
-} from "@/schemas";
+} from './action.controller';
+import { $ref } from './action.schema';
+import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
 
 async function actionRoutes(server: FastifyInstance) {
   server.post(
-    "/filter",
+    '/filter',
     {
       preHandler: [server.authenticateOptional],
       schema: {
         summary:
-          "Returns a list of actions from the db, filtered by the values specified in the body.",
+          'Returns a list of actions from the db, filtered by the values specified in the body.',
         description:
-          "Returns a list of actions from the db, filtered by the values specified in the body. If authenticated, also returns the actions created by the user.",
-        body: $ref("getActionListSchema"),
+          'Returns a list of actions from the db, filtered by the values specified in the body. If authenticated, also returns the actions created by the user.',
+        body: $ref('getActionListSchema'),
         headers: jwtHeaderOptional,
-        tags: ["actions"],
+        tags: ['actions'],
         response: {
-          200: $ref("getActionListResponseSchema"),
+          200: $ref('getActionListResponseSchema'),
         },
       },
     },
@@ -35,19 +31,19 @@ async function actionRoutes(server: FastifyInstance) {
   );
 
   server.get(
-    "/:actionId",
+    '/:actionId',
     {
       preHandler: [server.authenticateOptional],
       schema: {
         summary:
-          "Returns the details of the action corresponding to the given id.",
+          'Returns the details of the action corresponding to the given id.',
         description:
-          "Returns the details of the action corresponding to the given id.",
+          'Returns the details of the action corresponding to the given id.',
         headers: jwtHeaderOptional,
-        tags: ["actions"],
+        tags: ['actions'],
         // params: $ref('getActionParamsSchema'),
         response: {
-          200: $ref("getActionResponseSchema"),
+          200: $ref('getActionResponseSchema'),
         },
       },
     },
@@ -55,18 +51,18 @@ async function actionRoutes(server: FastifyInstance) {
   );
 
   server.post(
-    "/",
+    '/',
     {
       preHandler: [server.authenticate, server.MSOnly],
       schema: {
         hide: true,
-        summary: "[MS ONLY] Adds a new action to the db.",
-        description: "[MS ONLY] Adds a new action to the db.",
-        body: $ref("createActionSchema"),
-        tags: ["actions"],
+        summary: '[MS ONLY] Adds a new action to the db.',
+        description: '[MS ONLY] Adds a new action to the db.',
+        body: $ref('createActionSchema'),
+        tags: ['actions'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref("getActionResponseSchema"),
+          201: $ref('getActionResponseSchema'),
         },
       },
     },
@@ -74,16 +70,16 @@ async function actionRoutes(server: FastifyInstance) {
   );
 
   server.put(
-    "/:actionId",
+    '/:actionId',
     {
       preHandler: [server.authenticate, server.MSOnly],
       schema: {
         hide: true,
-        summary: "[MS ONLY] Updates the action corresponding to the given id.",
+        summary: '[MS ONLY] Updates the action corresponding to the given id.',
         description:
-          "[MS ONLY] Updates the action corresponding to the given id.",
-        body: $ref("updateActionSchema"),
-        tags: ["actions"],
+          '[MS ONLY] Updates the action corresponding to the given id.',
+        body: $ref('updateActionSchema'),
+        tags: ['actions'],
         headers: jwtHeaderRequired,
         response: {
           200: BatchPayload,
@@ -94,15 +90,15 @@ async function actionRoutes(server: FastifyInstance) {
   );
 
   server.delete(
-    "/:actionId",
+    '/:actionId',
     {
       preHandler: [server.authenticate, server.MSOnly],
       schema: {
         hide: true,
-        summary: "[MS ONLY] Deletes the action corresponding to the given id.",
+        summary: '[MS ONLY] Deletes the action corresponding to the given id.',
         description:
-          "[MS ONLY] Deletes the action corresponding to the given id.",
-        tags: ["actions"],
+          '[MS ONLY] Deletes the action corresponding to the given id.',
+        tags: ['actions'],
         headers: jwtHeaderRequired,
         response: {
           200: BatchPayload,

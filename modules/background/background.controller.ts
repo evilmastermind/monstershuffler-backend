@@ -1,5 +1,5 @@
-import { createBackgroundInput } from "./background.schema";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { createBackgroundInput } from './background.schema';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createBackground,
   getBackground,
@@ -7,8 +7,8 @@ import {
   getBackgroundList,
   updateBackground,
   deleteBackground,
-} from "./background.service";
-import { handleError } from "@/utils/errors";
+} from './background.service';
+import { handleError } from '@/utils/errors';
 
 export async function getBackgroundListHandler(
   request: FastifyRequest,

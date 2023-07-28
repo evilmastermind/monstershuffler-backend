@@ -1,13 +1,13 @@
-import { createActionInput, getActionListInput } from "./action.schema";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { createActionInput, getActionListInput } from './action.schema';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createAction,
   getAction,
   getActionList,
   updateAction,
   deleteAction,
-} from "./action.service";
-import { handleError } from "@/utils/errors";
+} from './action.service';
+import { handleError } from '@/utils/errors';
 
 export async function getActionListHandler(
   request: FastifyRequest<{ Body: getActionListInput }>,

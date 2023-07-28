@@ -1,8 +1,8 @@
-import prisma from "@/utils/prisma";
+import prisma from '@/utils/prisma';
 import {
   createClassvariantInput,
   updateClassvariantInput,
-} from "./classvariant.schema";
+} from './classvariant.schema';
 
 export async function createClassvariant(
   userid: number,
@@ -24,7 +24,7 @@ export async function createClassvariant(
   });
 
   if (!classResult) {
-    throw new Error("Class not found");
+    throw new Error('Class not found');
   }
 
   return await prisma.objects.create({
@@ -130,10 +130,10 @@ export async function getClassvariantList(userid: number) {
     },
     orderBy: [
       {
-        userid: "asc",
+        userid: 'asc',
       },
       {
-        id: "asc",
+        id: 'asc',
       },
     ],
   });
@@ -163,10 +163,10 @@ export async function getClassvariantClassList(
     },
     orderBy: [
       {
-        userid: "asc",
+        userid: 'asc',
       },
       {
-        id: "asc",
+        id: 'asc',
       },
     ],
   });

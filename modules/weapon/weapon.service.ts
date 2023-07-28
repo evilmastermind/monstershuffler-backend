@@ -1,5 +1,5 @@
-import prisma from "@/utils/prisma";
-import { createWeaponInput } from "./weapon.schema";
+import prisma from '@/utils/prisma';
+import { createWeaponInput } from './weapon.schema';
 
 export async function createWeapon(userid: number, input: createWeaponInput) {
   const { object, game } = input;
@@ -55,10 +55,10 @@ export async function getWeaponList(userid: number) {
     },
     orderBy: [
       {
-        userid: "asc",
+        userid: 'asc',
       },
       {
-        id: "asc",
+        id: 'asc',
       },
     ],
   });

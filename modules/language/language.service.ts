@@ -1,6 +1,6 @@
-import prisma from "@/utils/prisma";
-import { createLanguageInput } from "./language.schema";
-import { ChoiceRandomObject, Choice } from "@/schemas/character/choices";
+import prisma from '@/utils/prisma';
+import { createLanguageInput } from './language.schema';
+import { ChoiceRandomObject, Choice } from '@/schemas/character/choices';
 
 export async function createLanguage(
   userid: number,
@@ -31,10 +31,10 @@ export async function getLanguageList(userid: number) {
     },
     orderBy: [
       {
-        userid: "asc",
+        userid: 'asc',
       },
       {
-        id: "asc",
+        id: 'asc',
       },
     ],
   });
@@ -70,7 +70,7 @@ export async function deleteLanguage(userid: number, id: number) {
 
 export async function getChoiceLanguage(
   userId: number,
-  choice: ChoiceRandomObject["choice"]
+  choice: ChoiceRandomObject['choice']
 ) {
   const parameters: Array<any> = [userId || 0];
   const chosenAlreadyIds =
@@ -78,7 +78,7 @@ export async function getChoiceLanguage(
       ?.filter((value) => value?.id)
       .map((value) => value?.id) || [];
 
-  let additionalFilters = "";
+  let additionalFilters = '';
 
   if (chosenAlreadyIds.length > 0) {
     additionalFilters += ` AND id NOT IN (`;

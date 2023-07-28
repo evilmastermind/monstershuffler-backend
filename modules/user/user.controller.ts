@@ -1,5 +1,5 @@
-import { server } from "@/app";
-import { comparePassword } from "@/utils/hash";
+import { server } from '@/app';
+import { comparePassword } from '@/utils/hash';
 import {
   CreateUserInput,
   LoginInput,
@@ -7,8 +7,8 @@ import {
   ActivateUserInput,
   ReactivateUserInput,
   ResetPasswordInput,
-} from "./user.schema";
-import { FastifyReply, FastifyRequest } from "fastify";
+} from './user.schema';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createUser,
   getUserByToken,
@@ -20,8 +20,8 @@ import {
   getUserLevel,
   createTokenPwd,
   resetPassword,
-} from "./user.service";
-import { handleError } from "@/utils/errors";
+} from './user.service';
+import { handleError } from '@/utils/errors';
 
 export async function registerUserHandler(
   request: FastifyRequest<{ Body: CreateUserInput }>,
@@ -32,7 +32,7 @@ export async function registerUserHandler(
     const doesEmailExist = await findUserByEmail(body.email);
     if (doesEmailExist) {
       return reply.code(409).send({
-        message: "Email already exists",
+        message: 'Email already exists',
       });
     }
   } catch (error) {
@@ -45,7 +45,7 @@ export async function registerUserHandler(
 
     mailer.sendMail({
       to: user.email,
-      subject: "Monstershuffler.com - confirm your email address",
+      subject: 'Monstershuffler.com - confirm your email address',
       html: `
     <!DOCTYPE html>
     <html lang="en">
@@ -77,7 +77,6 @@ export async function registerUserHandler(
   }
 }
 
-
 export async function loginHandler(
   request: FastifyRequest<{ Body: LoginInput }>,
   reply: FastifyReply
@@ -86,14 +85,14 @@ export async function loginHandler(
     const body = request.body;
     const user = await findUserByEmail(body.email);
     const genericErrorMessage = {
-      message: "Invalid email or password",
+      message: 'Invalid email or password',
     };
     if (!user) {
       return reply.code(401).send(genericErrorMessage);
     }
     if (!user.verified) {
       return reply.code(403).send({
-        message: "Please verify your email address",
+        message: 'Please verify your email address',
       });
     }
     const isPasswordCorrect = await comparePassword(
@@ -115,16 +114,16 @@ export async function activationHandler(
   reply: FastifyReply
 ) {
   try {
-  const { token } = request.body;
-  const user = await getUserByToken(token);
-  if (!user.length) {
-    return reply.code(404).send({
-      message: "Invalid token",
-    });
-  }
-  await activateUser(user[0].id);
-  return { accessToken: server.jwt.sign({ id: user[0].id }) };
-  } catch(error) {
+    const { token } = request.body;
+    const user = await getUserByToken(token);
+    if (!user.length) {
+      return reply.code(404).send({
+        message: 'Invalid token',
+      });
+    }
+    await activateUser(user[0].id);
+    return { accessToken: server.jwt.sign({ id: user[0].id }) };
+  } catch (error) {
     return handleError(error, reply);
   }
 }
@@ -134,26 +133,24 @@ export async function pwdResetHandler(
   reply: FastifyReply
 ) {
   try {
-  const { token, password } = request.body;
-  const user = await resetPassword(token, password);
-  return { accessToken: server.jwt.sign({ id: user.id }) };
-  } catch(error) {
+    const { token, password } = request.body;
+    const user = await resetPassword(token, password);
+    return { accessToken: server.jwt.sign({ id: user.id }) };
+  } catch (error) {
     return handleError(error, reply);
   }
 }
-
-
 
 export async function reactivationHandler(
   request: FastifyRequest<{ Body: ReactivateUserInput }>,
   reply: FastifyReply
 ) {
-    try {
+  try {
     const { email } = request.body;
     let user = await findUserByEmail(email);
     if (!user) {
       return reply.code(404).send({
-        message: "Invalid email",
+        message: 'Invalid email',
       });
     }
     user = await createTokenPwd(user.id);
@@ -163,7 +160,7 @@ export async function reactivationHandler(
 
     mailer.sendMail({
       to: user.email,
-      subject: "Monstershuffler.com - password reset",
+      subject: 'Monstershuffler.com - password reset',
       html: `
     <!DOCTYPE html>
     <html lang="en">
@@ -177,8 +174,8 @@ export async function reactivationHandler(
     </html>
     `,
     });
-    return reply.code(200).send("Email sent!");
-  } catch(error) {
+    return reply.code(200).send('Email sent!');
+  } catch (error) {
     return handleError(error, reply);
   }
 }

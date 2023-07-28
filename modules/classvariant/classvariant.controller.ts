@@ -1,8 +1,8 @@
 import {
   createClassvariantInput,
   updateClassvariantInput,
-} from "./classvariant.schema";
-import { FastifyReply, FastifyRequest } from "fastify";
+} from './classvariant.schema';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createClassvariant,
   getClassvariant,
@@ -11,8 +11,8 @@ import {
   getClassvariantClassList,
   updateClassvariant,
   deleteClassvariant,
-} from "./classvariant.service";
-import { handleError } from "@/utils/errors";
+} from './classvariant.service';
+import { handleError } from '@/utils/errors';
 
 export async function getClassvariantClassListHandler(
   request: FastifyRequest<{
