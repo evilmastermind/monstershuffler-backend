@@ -2836,6 +2836,8 @@ components:
                     template:
                       type: object
                       properties:
+                        name:
+                          type: string
                         pronouns:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/pro\
@@ -2968,6 +2970,8 @@ components:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
                             e/properties/backstory"
+                      required:
+                        - name
                       additionalProperties: false
                     user:
                       type: object
@@ -3165,6 +3169,18 @@ components:
                             name:
                               type: string
                               enum:
+                                - automatic
+                            cr:
+                              type: number
+                          required:
+                            - name
+                            - cr
+                          additionalProperties: false
+                        - type: object
+                          properties:
+                            name:
+                              type: string
+                              enum:
                                 - estimated
                           required:
                             - name
@@ -3179,8 +3195,23 @@ components:
                       type: array
                       items:
                         type: string
+                    prename:
+                      type: string
+                    name:
+                      type: string
+                    surname:
+                      type: string
+                    fullName:
+                      type: string
+                    level:
+                      type: number
                   required:
                     - alignment
+                    - prename
+                    - name
+                    - surname
+                    - fullName
+                    - level
                   additionalProperties: false
               required:
                 - character

@@ -56,27 +56,31 @@ export async function createRandomNpc(
     const random100 = random(1, 100);
     let race: Race | null = null;
     let racevariant: Racevariant | null = null;
+    console.log(primaryRacePercentage, primaryRaceId, random100);
     if (
       primaryRacePercentage &&
       primaryRaceId &&
       random100 <= primaryRacePercentage
     ) {
+      console.log('Primary race requested');
       race = (await getRace(id, primaryRaceId)).object as Race;
       racevariant = primaryRacevariantId
         ? ((await getRacevariant(id, primaryRacevariantId))
-            .object as Racevariant)
+          .object as Racevariant)
         : null;
     } else if (
       secondaryRaceId &&
       secondaryRacePercentage &&
       random100 <= secondaryRacePercentage
     ) {
+      console.log('secondary Race requested');
       race = (await getRace(id, secondaryRaceId)).object as Race;
       racevariant = secondaryRacevariantId
         ? ((await getRacevariant(id, secondaryRacevariantId))
-            .object as Racevariant)
+          .object as Racevariant)
         : null;
-    } else if (primaryRacePercentage && secondaryRacePercentage) {
+    } else {
+      console.log('Random race requested');
       const result = await getRandomRace(id);
       race = result.object as Race;
       racevariant =
@@ -157,8 +161,6 @@ export async function createRandomNpc(
       await findChoices(character.background, character.background, 0, id);
     }
 
-    console.log(JSON.stringify(character, null, 2));
-
     return {
       npc: {
         character: character,
@@ -207,50 +209,50 @@ function calculateAlignment(
   let moralNeutrality = 0;
 
   switch (traitCategory) {
-    case 'bad':
-      evilness += 0.5;
-      chaoticness += 0.5;
-      break;
-    case 'weird':
-      chaoticness += 0.5;
-      moralNeutrality += 0.5;
-      break;
-    case 'evil':
-      evilness += 1.0;
-      break;
-    case 'submissive':
-      lawfulness += 0.5;
-      break;
-    case 'successful':
-      lawfulness += 0.5;
-      break;
-    case 'strong':
-      break;
-    case 'weak':
-      break;
-    case 'good':
-      goodness = goodness + 1.0;
-      break;
-    case 'traumatized':
-      goodness = goodness + 0.5;
-      break;
-    case 'intelligent':
-      moralNeutrality += 0.25;
-      ethicalNeutrality += 0.25;
-      break;
-    case 'stupid':
-      break;
-    case 'seductive':
-      chaoticness += 0.5;
-      break;
-    case 'lawful':
-      lawfulness = lawfulness + 1.0;
-      break;
-    case 'chaotic':
-      chaoticness = chaoticness + 1.0;
-      break;
-    default:
-      break;
+  case 'bad':
+    evilness += 0.5;
+    chaoticness += 0.5;
+    break;
+  case 'weird':
+    chaoticness += 0.5;
+    moralNeutrality += 0.5;
+    break;
+  case 'evil':
+    evilness += 1.0;
+    break;
+  case 'submissive':
+    lawfulness += 0.5;
+    break;
+  case 'successful':
+    lawfulness += 0.5;
+    break;
+  case 'strong':
+    break;
+  case 'weak':
+    break;
+  case 'good':
+    goodness = goodness + 1.0;
+    break;
+  case 'traumatized':
+    goodness = goodness + 0.5;
+    break;
+  case 'intelligent':
+    moralNeutrality += 0.25;
+    ethicalNeutrality += 0.25;
+    break;
+  case 'stupid':
+    break;
+  case 'seductive':
+    chaoticness += 0.5;
+    break;
+  case 'lawful':
+    lawfulness = lawfulness + 1.0;
+    break;
+  case 'chaotic':
+    chaoticness = chaoticness + 1.0;
+    break;
+  default:
+    break;
   }
 
   return [
@@ -306,11 +308,11 @@ function calculatePronouns(race: Race | null, racevariant: Racevariant | null) {
 
 function calculateLevel(levelType = 'random') {
   switch (levelType) {
-    case 'randomPeasantsMostly': {
-      const randomValue = Math.floor(30 / (Math.random() * 150 + 1) + 1);
-      return randomValue > 20 ? 20 : randomValue;
-    }
-    default:
-      return Math.floor(Math.random() * 20 + 1);
+  case 'randomPeasantsMostly': {
+    const randomValue = Math.floor(30 / (Math.random() * 150 + 1) + 1);
+    return randomValue > 20 ? 20 : randomValue;
+  }
+  default:
+    return Math.floor(Math.random() * 20 + 1);
   }
 }

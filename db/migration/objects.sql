@@ -31,6 +31,7 @@ CREATE TABLE `objects` (
 	`type` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
 	`game` int(11) NOT NULL,
+  `description` text DEFAULT NULL,
 	`userid` int(11) NOT NULL,
 	`created` datetime DEFAULT  CURRENT_TIMESTAMP,
   `lastedited` datetime DEFAULT CURRENT_TIMESTAMP,

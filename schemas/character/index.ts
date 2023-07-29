@@ -107,6 +107,10 @@ export const CRNPCObject = z.object({
 export const CREstimatedObject = z.object({
   name: z.literal('estimated'),
 });
+export const CRAutomaticObject = z.object({
+  name: z.literal('automatic'),
+  cr: z.number(),
+});
 
 export const pronouns = z.enum(['male', 'female', 'neutral', 'thing']);
 
@@ -323,6 +327,7 @@ export const classvariantObject = z
 
 export const templateObject = z
   .object({
+    name: z.string(),
     ...pronounsStats,
     ...sizeStats,
     ...typeAndSubtypesStats,
@@ -381,12 +386,12 @@ export const characterObject = z
         template: templateObject.optional(),
         user: userObject.optional(),
         ...abilitiesBaseStats,
-        alignmentModifiers: alignmentModifiers.optional(),
+        ...alignmentModifiersStats,
         ...alignmentStats,
         ...roleplayStats,
         // CR
         CRCalculation: z
-          .union([CRTwoPointsObject, CRNPCObject, CREstimatedObject])
+          .union([CRTwoPointsObject, CRNPCObject, CRAutomaticObject, CREstimatedObject])
           .optional(),
       })
       .strict(),
