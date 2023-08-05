@@ -5,6 +5,15 @@ export const statNumberString = z.object({
   string: z.string(),
 });
 
+export const Abilities = z.object({
+  STR: z.number(),
+  DEX: z.number(),
+  CON: z.number(),
+  INT: z.number(),
+  WIS: z.number(),
+  CHA: z.number(),
+});
+
 export const statisticsObject = z.object({
   alignment: z.array(z.string()),
   prename: z.string(),
@@ -16,4 +25,7 @@ export const statisticsObject = z.object({
   XP: z.string(),
   proficiency: z.number(),
   size: statNumberString,
+  abilityScores: Abilities,
+  abilityModifiers: Abilities,
+  HP: statNumberString,
 });

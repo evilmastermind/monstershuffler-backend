@@ -223,6 +223,14 @@ async function convertCharacterObject(object, id) {
     object.armor = newArray[0];
   }
 
+  // abilitiesBase should be numeric, not strings
+  if (Object.hasOwn(object, 'abilitiesBase')) {
+    for (const [ability, value] of Object.entries(object.abilitiesBase)) {
+      object.abilitiesBase[ability] = parseInt(value);
+    }
+  }
+
+
   // skills random choice fix
   if (
     Object.hasOwn(object, 'skills') &&
