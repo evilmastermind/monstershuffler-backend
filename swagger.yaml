@@ -3176,15 +3176,11 @@ components:
                             - name
                             - cr
                           additionalProperties: false
-                        - type: object
-                          properties:
-                            name:
-                              type: string
-                              enum:
-                                - estimated
-                          required:
-                            - name
-                          additionalProperties: false
+                    proficiencyCalculation:
+                      type: string
+                      enum:
+                        - level
+                        - CR
                   required:
                     - name
                   additionalProperties: false
@@ -3205,6 +3201,24 @@ components:
                       type: string
                     level:
                       type: number
+                    CR:
+                      type: object
+                      properties:
+                        number:
+                          type: number
+                        string:
+                          type: string
+                      required:
+                        - number
+                        - string
+                      additionalProperties: false
+                    XP:
+                      type: string
+                    proficiency:
+                      type: number
+                    size:
+                      $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                        /properties/npc/properties/statistics/properties/CR"
                   required:
                     - alignment
                     - prename
@@ -3212,6 +3226,50 @@ components:
                     - surname
                     - fullName
                     - level
+                    - CR
+                    - XP
+                    - proficiency
+                    - size
+                  additionalProperties: false
+                variables:
+                  type: object
+                  properties:
+                    LVL:
+                      type: number
+                    CR:
+                      type: number
+                    PROF:
+                      type: number
+                    SIZE:
+                      type: number
+                    HD:
+                      type: number
+                  required:
+                    - LVL
+                    - CR
+                    - PROF
+                    - SIZE
+                    - HD
+                  additionalProperties: false
+                tags:
+                  type: object
+                  properties:
+                    size:
+                      type: string
+                    sizegreater:
+                      type: string
+                    sizesmaller:
+                      type: string
+                    sizetwogreater:
+                      type: string
+                    sizetwosmaller:
+                      type: string
+                  required:
+                    - size
+                    - sizegreater
+                    - sizesmaller
+                    - sizetwogreater
+                    - sizetwosmaller
                   additionalProperties: false
               required:
                 - character

@@ -13,6 +13,8 @@ import {
   alignmentStats,
 } from '@/schemas/character/alignment';
 import { statisticsObject } from '@/schemas/character/statistics';
+import { variablesObject } from '@/schemas/character/variables';
+import { tagsObject } from './tags';
 
 export const speedsObject = z.object({
   base: z.string().optional(),
@@ -103,9 +105,6 @@ export const CRTwoPointsObject = z.object({
 });
 export const CRNPCObject = z.object({
   name: z.literal('npcstandard'),
-});
-export const CREstimatedObject = z.object({
-  name: z.literal('estimated'),
 });
 export const CRAutomaticObject = z.object({
   name: z.literal('automatic'),
@@ -391,10 +390,13 @@ export const characterObject = z
         ...roleplayStats,
         // CR
         CRCalculation: z
-          .union([CRTwoPointsObject, CRNPCObject, CRAutomaticObject, CREstimatedObject])
+          .union([CRTwoPointsObject, CRNPCObject, CRAutomaticObject])
           .optional(),
+        proficiencyCalculation: z.enum(['level', 'CR']).optional(),
       })
       .strict(),
     statistics: statisticsObject.optional(),
+    variables: variablesObject.optional(),
+    tags: tagsObject.optional(),
   })
   .strict();

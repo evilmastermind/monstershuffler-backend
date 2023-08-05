@@ -101,6 +101,11 @@ async function convertCharacter(object, id) {
   renameStuff(object);
   if (Object.hasOwn(object, 'user')) {
     await convertCharacterObject(object.user, id);
+    // proficiencyCalculation moved to .character
+    if (Object.hasOwn(object.user, 'proficiencyCalculation')) {
+      object.proficiencyCalculation = object.user.proficiencyCalculation === 'cr' ? 'CR' : 'level';
+      delete object.user.proficiencyCalculation;
+    }
   }
   if (Object.hasOwn(object, 'race')) {
     await convertCharacterObject(object.race, id);
