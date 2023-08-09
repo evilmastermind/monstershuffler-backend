@@ -2,11 +2,16 @@ import { z } from 'zod';
 
 export const abilitiesEnum = z.enum(['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']);
 
-export const abilitiesBaseObject = z.object({
-  STR: z.number().optional(),
-  DEX: z.number().optional(),
-  CON: z.number().optional(),
-  INT: z.number().optional(),
-  WIS: z.number().optional(),
-  CHA: z.number().optional(),
+const abilityScore = z.object({
+  value: z.number(),
+  isAutomaticCalcDisabled: z.boolean().optional(),
+});
+
+export const abilityScoresObject = z.object({
+  STR: abilityScore.optional(),
+  DEX: abilityScore.optional(),
+  CON: abilityScore.optional(),
+  INT: abilityScore.optional(),
+  WIS: abilityScore.optional(),
+  CHA: abilityScore.optional(),
 });

@@ -99,6 +99,7 @@ async function convertNonCharacter(object, id) {
 
 async function convertCharacter(object, id) {
   renameStuff(object);
+  convertAbilityScores(object);
   if (Object.hasOwn(object, 'user')) {
     await convertCharacterObject(object.user, id);
     // proficiencyCalculation moved to .character
@@ -223,11 +224,12 @@ async function convertCharacterObject(object, id) {
     object.armor = newArray[0];
   }
 
-  // abilitiesBase should be numeric, not strings
-  if (Object.hasOwn(object, 'abilitiesBase')) {
-    for (const [ability, value] of Object.entries(object.abilitiesBase)) {
-      object.abilitiesBase[ability] = parseInt(value);
-    }
+  convertAbilityScores(object);
+
+  // abilitiesLimit should be numeric, not strings
+  if (Object.hasOwn(object, 'abilitiesLimit')) {
+    object.abilityScoresLimit = parseInt(object.abilitiesLimit);
+    delete object.abilitiesLimit;
   }
 
 
@@ -299,6 +301,17 @@ async function convertCharacterObject(object, id) {
     }
     delete object.bonuses;
     object.bonuses = bonuses;
+  }
+}
+
+function convertAbilityScores(object) {
+  // abilitiesBase should be numeric, not strings
+  if (Object.hasOwn(object, 'abilitiesBase')) {
+    object.abilityScores = {};
+    for (const [ability, value] of Object.entries(object.abilitiesBase)) {
+      object.abilityScores[ability] = parseInt(value);
+    }
+    delete object.abilitiesBase;
   }
 }
 

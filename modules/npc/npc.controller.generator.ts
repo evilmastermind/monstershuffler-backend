@@ -56,13 +56,11 @@ export async function createRandomNpc(
     const random100 = random(1, 100);
     let race: Race | null = null;
     let racevariant: Racevariant | null = null;
-    console.log(primaryRacePercentage, primaryRaceId, random100);
     if (
       primaryRacePercentage &&
       primaryRaceId &&
       random100 <= primaryRacePercentage
     ) {
-      console.log('Primary race requested');
       race = (await getRace(id, primaryRaceId)).object as Race;
       racevariant = primaryRacevariantId
         ? ((await getRacevariant(id, primaryRacevariantId))
@@ -73,20 +71,22 @@ export async function createRandomNpc(
       secondaryRacePercentage &&
       random100 <= secondaryRacePercentage
     ) {
-      console.log('secondary Race requested');
       race = (await getRace(id, secondaryRaceId)).object as Race;
       racevariant = secondaryRacevariantId
         ? ((await getRacevariant(id, secondaryRacevariantId))
           .object as Racevariant)
         : null;
     } else {
-      console.log('Random race requested');
       const result = await getRandomRace(id);
       race = result.object as Race;
       racevariant =
         ((await getRandomRacevariant(id, result.id))?.object as Racevariant) ||
         null;
     }
+    ///////////////////////////////////////
+    // A G E   &   H E I G H T   &   W E I G H T
+    ///////////////////////////////////////
+    
     ///////////////////////////////////////
     // C L A S S   &   P R O F E S S I O N
     ///////////////////////////////////////

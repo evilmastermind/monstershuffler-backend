@@ -7,7 +7,7 @@ import {
 } from '@/schemas/character/choices';
 import { actionObject } from '@/schemas/character/actions';
 import { spellsObject } from '@/schemas/character/spells';
-import { abilitiesBaseObject } from '@/schemas/character/abilities';
+import { abilityScoresObject } from '@/schemas/character/abilities';
 import {
   alignmentModifiers,
   alignmentStats,
@@ -15,6 +15,7 @@ import {
 import { statisticsObject } from '@/schemas/character/statistics';
 import { variablesObject } from '@/schemas/character/variables';
 import { tagsObject } from './tags';
+import { variationsObject } from './variations';
 
 export const speedsObject = z.object({
   base: z.string().optional(),
@@ -108,7 +109,7 @@ export const CRNPCObject = z.object({
 });
 export const CRAutomaticObject = z.object({
   name: z.literal('automatic'),
-  cr: z.number(),
+  CR: z.number(),
 });
 
 export const pronouns = z.enum(['male', 'female', 'neutral', 'thing']);
@@ -123,10 +124,18 @@ export const resistenceImmunitiesStats = {
   vulnerabilities: z.array(statObject).optional(),
   conditionImmunities: z.array(statObject).optional(),
 };
+export const ages = z.enum(['child', 'adolescent', 'young adult', 'adult', 'middle-aged', 'elderly', 'venerable']);
+export const weight = z.enum(['skinny', 'average', 'chubby', 'obese']);
 export const roleplayStats = {
   characterHook: z.string().optional(),
   trait: z.string().optional(),
   feeling: z.string().optional(),
+  age: z.object({
+    number: z.number(),
+    string: ages,
+  }).optional(),
+  height: z.string().optional(),
+  weight: z.string().optional(),
 };
 export const alignmentModifiersStats = {
   alignmentModifiers: alignmentModifiers.optional(),
@@ -169,11 +178,11 @@ export const savingThrowsStats = {
 export const speedsStats = {
   speeds: speedsObject.optional(),
 };
-export const abilitiesBaseStats = {
-  abilitiesBase: abilitiesBaseObject.optional(),
+export const abilityScoresStats = {
+  abilityScores: abilityScoresObject.optional(),
 };
-export const abilitiesLimitStats = {
-  abilitiesLimit: z.string().optional(),
+export const abilityScoresLimit = {
+  abilityScoresLimit: z.number().optional(),
 };
 export const typeStats = {
   type: z.string().optional(),
@@ -226,7 +235,8 @@ export const userObject = z.object({
   ...typeAndSubtypesStats,
   ...armorStats,
   ...HDStats,
-  ...abilitiesBaseStats,
+  ...abilityScoresStats,
+  ...abilityScoresLimit,
   ...speedsStats,
   ...skillsStats,
   ...resistenceImmunitiesStats,
@@ -251,7 +261,7 @@ export const raceObject = z
     ...alignmentModifiersStats,
     ...armorStats,
     ...HDStats,
-    ...abilitiesLimitStats,
+    ...abilityScoresLimit,
     ...speedsStats,
     ...savingThrowsStats,
     ...skillsStats,
@@ -272,7 +282,7 @@ export const racevariantObject = z
     ...alignmentModifiersStats,
     ...armorStats,
     ...subtypesStats,
-    ...abilitiesLimitStats,
+    ...abilityScoresLimit,
     ...speedsStats,
     ...savingThrowsStats,
     ...skillsStats,
@@ -336,8 +346,8 @@ export const templateObject = z
     ...armorStats,
     ...HDStats,
     ...speedsStats,
-    ...abilitiesBaseStats,
-    ...abilitiesLimitStats,
+    ...abilityScoresStats,
+    ...abilityScoresLimit,
     ...savingThrowsStats,
     ...skillsStats,
     ...resistenceImmunitiesStats,
@@ -359,7 +369,7 @@ export const backgroundObject = z
     ...alignmentModifiersStats,
     ...subtypesStats,
     ...speedsStats,
-    ...abilitiesLimitStats,
+    ...abilityScoresLimit,
     ...savingThrowsStats,
     ...skillsStats,
     ...resistenceImmunitiesStats,
@@ -387,7 +397,7 @@ export const characterObject = z
         background: backgroundObject.optional(),
         template: templateObject.optional(),
         user: userObject.optional(),
-        ...abilitiesBaseStats,
+        ...abilityScoresStats,
         ...alignmentModifiersStats,
         ...alignmentStats,
         ...roleplayStats,
@@ -401,5 +411,6 @@ export const characterObject = z
     statistics: statisticsObject.optional(),
     variables: variablesObject.optional(),
     tags: tagsObject.optional(),
+    variations: variationsObject.optional(),
   })
   .strict();
