@@ -125,17 +125,18 @@ export const resistenceImmunitiesStats = {
   conditionImmunities: z.array(statObject).optional(),
 };
 export const ages = z.enum(['child', 'adolescent', 'young adult', 'adult', 'middle-aged', 'elderly', 'venerable']);
-export const weight = z.enum(['skinny', 'average', 'chubby', 'obese']);
+export const AgeObject = z.object({
+  number: z.number(),
+  string: ages,
+});
+export const WeightObject = z.enum(['skinny', 'average', 'chubby', 'obese']);
 export const roleplayStats = {
   characterHook: z.string().optional(),
   trait: z.string().optional(),
   feeling: z.string().optional(),
-  age: z.object({
-    number: z.number(),
-    string: ages,
-  }).optional(),
-  height: z.string().optional(),
-  weight: z.string().optional(),
+  age: AgeObject.optional(),
+  height: z.number().optional(),
+  weight: WeightObject.optional(),
 };
 export const alignmentModifiersStats = {
   alignmentModifiers: alignmentModifiers.optional(),
@@ -201,7 +202,7 @@ export const HDStats = {
   HD: z.number().optional(),
 };
 export const sizeStats = {
-  size: z.string().optional(),
+  size: z.number().optional(),
 };
 export const pronounsStats = {
   pronouns: pronouns.optional(),
@@ -219,8 +220,8 @@ export const generatorStats = {
 };
 
 export const raceSpecificGeneratorStats = {
-  ageAdult: z.string().optional(),
-  ageMax: z.string().optional(),
+  ageAdult: z.number().optional(),
+  ageMax: z.number().optional(),
   heightMin: z.number().optional(),
   heightMax: z.number().optional(),
   nameType: z.array(z.string()).optional(),
@@ -400,6 +401,7 @@ export const characterObject = z
         ...abilityScoresStats,
         ...alignmentModifiersStats,
         ...alignmentStats,
+        ...skillsStats,
         ...roleplayStats,
         // CR
         CRCalculation: z

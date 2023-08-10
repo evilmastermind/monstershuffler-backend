@@ -1663,9 +1663,9 @@ components:
                         enableGenerator:
                           type: boolean
                         ageAdult:
-                          type: string
+                          type: number
                         ageMax:
-                          type: string
+                          type: number
                         heightMin:
                           type: number
                         heightMax:
@@ -1681,7 +1681,7 @@ components:
                             /properties/npc/properties/character/properties/pro\
                             nouns"
                         size:
-                          type: string
+                          type: number
                         type:
                           type: string
                         subtypes:
@@ -3144,7 +3144,33 @@ components:
                         feeling:
                           type: string
                         age:
+                          type: object
+                          properties:
+                            number:
+                              type: number
+                            string:
+                              type: string
+                              enum:
+                                - child
+                                - adolescent
+                                - young adult
+                                - adult
+                                - middle-aged
+                                - elderly
+                                - venerable
+                          required:
+                            - number
+                            - string
+                          additionalProperties: false
+                        height:
+                          type: number
+                        weight:
                           type: string
+                          enum:
+                            - skinny
+                            - average
+                            - chubby
+                            - obese
                       additionalProperties: false
                     abilityScores:
                       $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
@@ -3169,6 +3195,10 @@ components:
                         - Neutral
                         - Evil
                         - Any
+                    skills:
+                      $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                        /properties/npc/properties/character/properties/race/pr\
+                        operties/skills"
                     characterHook:
                       $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                         /properties/npc/properties/character/properties/user/pr\
@@ -3185,6 +3215,14 @@ components:
                       $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                         /properties/npc/properties/character/properties/user/pr\
                         operties/age"
+                    height:
+                      $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                        /properties/npc/properties/character/properties/user/pr\
+                        operties/height"
+                    weight:
+                      $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                        /properties/npc/properties/character/properties/user/pr\
+                        operties/weight"
                     CRCalculation:
                       anyOf:
                         - type: object
@@ -3324,8 +3362,6 @@ components:
                       type: number
                     CR:
                       type: number
-                    CRBASE:
-                      type: number
                     PROF:
                       type: number
                     SIZE:
@@ -3361,7 +3397,6 @@ components:
                   required:
                     - LVL
                     - CR
-                    - CRBASE
                     - PROF
                     - SIZE
                     - HD
@@ -3445,9 +3480,9 @@ components:
                 enableGenerator:
                   type: boolean
                 ageAdult:
-                  type: string
+                  type: number
                 ageMax:
-                  type: string
+                  type: number
                 heightMin:
                   type: number
                 heightMax:
@@ -3466,7 +3501,7 @@ components:
                     - neutral
                     - thing
                 size:
-                  type: string
+                  type: number
                 type:
                   type: string
                 subtypes:

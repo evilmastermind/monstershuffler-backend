@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { createRandomNpcInput } from './npc.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { getRace, getRandomRace } from '@/modules/race/race.service';
@@ -19,6 +20,7 @@ import {
   getBackground,
   getRandomBackground,
 } from '@/modules/background/background.service';
+import { AgeObject, WeightObject } from '@/schemas/character';
 import { Background } from '@/modules/background/background.schema';
 import { getRandomSkill } from '@/modules/skill/skill.service';
 import { getRandomName } from '@/modules/name/name.service';
@@ -26,7 +28,7 @@ import { getRandomSurname } from '@/modules/surname/surname.service';
 import { getRandomTrait } from '@/modules/trait/trait.service';
 import { getRandomCharacterhook } from '@/modules/characterhook/characterhook.service';
 import { handleError } from '@/utils/errors';
-import { random } from '@/utils/functions';
+import { random, randomDecimal, round2Decimals } from '@/utils/functions';
 import { findChoices } from '@/modules/choiceSolver';
 
 export async function createRandomNpc(
@@ -83,9 +85,6 @@ export async function createRandomNpc(
         ((await getRandomRacevariant(id, result.id))?.object as Racevariant) ||
         null;
     }
-    ///////////////////////////////////////
-    // A G E   &   H E I G H T   &   W E I G H T
-    ///////////////////////////////////////
     
     ///////////////////////////////////////
     // C L A S S   &   P R O F E S S I O N
@@ -126,6 +125,10 @@ export async function createRandomNpc(
     const feelingObject = await getRandomTrait({ feeling: 1 });
     const alignmentModifiers = calculateAlignment(traitObject.category);
     const characterHook = await calculateCharacterhook();
+    const age = calculateAge(race);
+    const height = calculateHeight(race, age);
+    const weight = calculateWeight();
+
     const result: Character = {
       character: {
         name,
@@ -133,8 +136,14 @@ export async function createRandomNpc(
         pronouns,
         trait: traitObject.name,
         feeling: feelingObject.name,
+        age,
+        height,
+        weight,
         alignmentModifiers,
         characterHook,
+        skills: [{
+          value: favouriteSkill,
+        }],
       },
     };
 
@@ -193,6 +202,99 @@ export async function createRandomNpc(
 //   }
 //   return result;
 // }
+
+type Age = z.infer<typeof AgeObject>;
+
+function calculateAge(race: Race): Age {
+  const ageAdult = race.ageAdult || 0;
+  const ageMax = race.ageMax || 0;
+  const age: Age = {
+    string: 'adult',
+    number: random(18,120),
+  };
+  if (!ageMax && !ageAdult) {
+    //
+  } else if (!ageMax) {
+    const childLimit = ageAdult*0.22;
+    age.number = Math.ceil(randomDecimal(childLimit, ageAdult*7, 'middle'));
+    if (age.number < childLimit) {
+      age.string = 'child';
+    } else if (age.number < ageAdult) {
+      age.string = 'adolescent';
+    } else {
+      age.string = 'adult';
+    }
+  } else {
+    const childLimit = ageAdult*0.72; // 1-12 for humans
+    const yearsAsGrownUp = ageMax - ageAdult; // 18-90+ for humans
+    const youngAdultLimit = ageAdult + yearsAsGrownUp*0.1; // 18-24 for humans
+    const adultLimit = ageAdult + yearsAsGrownUp*0.36; // 25-44 for humans
+    const middleAgedLimit = ageAdult + yearsAsGrownUp*0.66; // 45-64 for humans
+    const elderlyLimit = ageAdult + yearsAsGrownUp*0.94; // 65-85 for humans
+    age.number = Math.ceil(randomDecimal(4, ageMax*1.15, 'middle'));
+    if (age.number < childLimit) {
+      age.string = 'child';
+    } else if (age.number < ageAdult) {
+      age.string = 'adolescent';
+    } else if (age.number < youngAdultLimit) {
+      age.string = 'young adult';
+    } else if (age.number < adultLimit) {
+      age.string = 'adult';
+    } else if (age.number < middleAgedLimit) {
+      age.string = 'middle-aged';
+    } else if (age.number < elderlyLimit) {
+      age.string = 'elderly';
+    } else {
+      age.string = 'venerable';
+    }
+  }
+  return age;
+}
+
+function calculateHeight(race: Race, age: Age) {
+  const heightMin = race.heightMin || race.heightMax || 0;
+  const heightMax = race.heightMax || race.heightMin || 0;
+  let height = 6;
+  if (!heightMin && !heightMax) {
+    const variation = randomDecimal(0.8, 1.2, 'middle'); 
+    if (race.size === 1) {
+      height = 1.75 * variation;
+    } else if (race.size === 2) {
+      height = 3 * variation;
+    } else if (!race.size || race.size === 3) {
+      height = 6 * variation;
+    } else if (race.size === 4) {
+      height = 11 * variation;
+    } else if (race.size === 5) {
+      height = 24 * variation;
+    } else if (race.size === 6) {
+      height = 48 * variation;
+    }
+  } else {
+    height = randomDecimal(heightMin, heightMax, 'beginning');
+    const ageAdult = race.ageAdult || 0;
+    if(ageAdult && age.number < ageAdult) {
+      height = height / 2 + height / 2  * (age.number/ageAdult);
+    } else if (age.string === 'child') {
+      height = height * randomDecimal(0.5, 0.8);
+    }
+  }
+  return round2Decimals(height);
+}
+
+type Weight = z.infer<typeof WeightObject>;
+
+function calculateWeight(): Weight {
+  const randomValue = random(1, 20);
+  if (randomValue <= 10) {
+    return 'average';
+  }
+  else if(randomValue <= 19 ) {
+    const weightTypes: Weight[] = ['skinny', 'chubby'];
+    return weightTypes[random(0,1)];
+  }
+  return 'obese';
+}
 
 async function calculateCharacterhook() {
   return (await getRandomCharacterhook()).hook;

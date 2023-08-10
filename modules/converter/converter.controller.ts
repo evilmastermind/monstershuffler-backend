@@ -171,9 +171,18 @@ async function convertCharacterObject(object, id) {
       object['enableGenerator'] || '0'
     );
   }
+
+  // age and height for races
+  convertAgeAndHeight(object);
+
   // deleting unused fields
   if (Object.hasOwn(object, 'published')) {
     delete object.published;
+  }
+
+  // size should be a number
+  if (Object.hasOwn(object, 'size')) {
+    object.size = parseInt(object.size);
   }
 
   // gender => pronouns
@@ -633,4 +642,19 @@ function convertProfessionFiltersInActions(filters) {
 
 function booleanEnumToBoolean(value) {
   return value === '1';
+}
+
+function convertAgeAndHeight(race) {
+  if (Object.hasOwn(race, 'ageAdult')) {
+    race.ageAdult = parseInt(race.ageAdult);
+  }
+  if (Object.hasOwn(race, 'ageMax')) {
+    race.ageMax = parseInt(race.ageMax);
+  }
+  if (Object.hasOwn(race, 'heightMin')) {
+    race.heightMin = parseInt(race.heightMin);
+  }
+  if (Object.hasOwn(race, 'heightMax')) {
+    race.heightMax = parseInt(race.heightMax);
+  }
 }
