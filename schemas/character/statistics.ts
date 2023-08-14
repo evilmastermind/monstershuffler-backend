@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { pronounsObject } from '.';
 
 export const statNumberString = z.object({
   number: z.number(),
@@ -20,11 +21,14 @@ export const statisticsObject = z.object({
   name: z.string(),
   surname: z.string(),
   fullName: z.string(),
+  pronouns: pronounsObject,
+  characterHook: z.string(),
   level: z.number(),
   CR: statNumberString,
   XP: z.string(),
   proficiency: z.number(),
   size: statNumberString,
+  sizeSwarmSingleEntity: statNumberString.optional(),
   abilityScores: Abilities,
   abilityModifiers: Abilities,
   HP: statNumberString,

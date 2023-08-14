@@ -1630,6 +1630,8 @@ components:
               type: number
               minimum: 0
               maximum: 100
+            addVoice:
+              type: boolean
           additionalProperties: false
         createRandomNpcResponseSchema:
           type: object
@@ -3171,6 +3173,21 @@ components:
                             - average
                             - chubby
                             - obese
+                        voice:
+                          type: object
+                          properties:
+                            person:
+                              type: string
+                            character:
+                              type: string
+                            production:
+                              type: string
+                            filename:
+                              type: string
+                          required:
+                            - person
+                            - filename
+                          additionalProperties: false
                       additionalProperties: false
                     abilityScores:
                       $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
@@ -3223,6 +3240,10 @@ components:
                       $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                         /properties/npc/properties/character/properties/user/pr\
                         operties/weight"
+                    voice:
+                      $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                        /properties/npc/properties/character/properties/user/pr\
+                        operties/voice"
                     CRCalculation:
                       anyOf:
                         - type: object
@@ -3290,6 +3311,8 @@ components:
                       type: string
                     fullName:
                       type: string
+                    characterHook:
+                      type: string
                     level:
                       type: number
                     CR:
@@ -3308,6 +3331,9 @@ components:
                     proficiency:
                       type: number
                     size:
+                      $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                        /properties/npc/properties/statistics/properties/CR"
+                    sizeSwarmSingleEntity:
                       $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                         /properties/npc/properties/statistics/properties/CR"
                     abilityScores:
@@ -3346,6 +3372,7 @@ components:
                     - name
                     - surname
                     - fullName
+                    - characterHook
                     - level
                     - CR
                     - XP
@@ -3417,6 +3444,54 @@ components:
                 tags:
                   type: object
                   properties:
+                    name:
+                      type: string
+                    Name:
+                      type: string
+                    he:
+                      type: string
+                    she:
+                      type: string
+                    his:
+                      type: string
+                    her:
+                      type: string
+                    him:
+                      type: string
+                    hers:
+                      type: string
+                    He:
+                      type: string
+                    His:
+                      type: string
+                    Him:
+                      type: string
+                    Hers:
+                      type: string
+                    they:
+                      type: string
+                    their:
+                      type: string
+                    them:
+                      type: string
+                    theirs:
+                      type: string
+                    They:
+                      type: string
+                    Their:
+                      type: string
+                    Them:
+                      type: string
+                    Theirs:
+                      type: string
+                    it:
+                      type: string
+                    its:
+                      type: string
+                    It:
+                      type: string
+                    Its:
+                      type: string
                     size:
                       type: string
                     sizegreater:
@@ -3428,6 +3503,30 @@ components:
                     sizetwosmaller:
                       type: string
                   required:
+                    - name
+                    - Name
+                    - he
+                    - she
+                    - his
+                    - her
+                    - him
+                    - hers
+                    - He
+                    - His
+                    - Him
+                    - Hers
+                    - they
+                    - their
+                    - them
+                    - theirs
+                    - They
+                    - Their
+                    - Them
+                    - Theirs
+                    - it
+                    - its
+                    - It
+                    - Its
                     - size
                     - sizegreater
                     - sizesmaller

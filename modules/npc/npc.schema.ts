@@ -19,6 +19,7 @@ const createRandomNpcInputSchema = z.object({
   secondaryRacevariantId: id.optional(),
   primaryRacePercentage: z.number().min(0).max(100).optional(),
   secondaryRacePercentage: z.number().min(0).max(100).optional(),
+  addVoice: z.boolean().optional(),
 });
 
 const createRandomNpcResponseSchema = z.object({

@@ -16,6 +16,7 @@ import { statisticsObject } from '@/schemas/character/statistics';
 import { variablesObject } from '@/schemas/character/variables';
 import { tagsObject } from './tags';
 import { variationsObject } from './variations';
+import { voiceObject } from './roleplay';
 
 export const speedsObject = z.object({
   base: z.string().optional(),
@@ -112,7 +113,7 @@ export const CRAutomaticObject = z.object({
   CR: z.number(),
 });
 
-export const pronouns = z.enum(['male', 'female', 'neutral', 'thing']);
+export const pronounsObject = z.enum(['male', 'female', 'neutral', 'thing']);
 
 export const swarmStats = {
   isSwarm: z.boolean().optional(),
@@ -137,6 +138,7 @@ export const roleplayStats = {
   age: AgeObject.optional(),
   height: z.number().optional(),
   weight: WeightObject.optional(),
+  voice: voiceObject.optional(),
 };
 export const alignmentModifiersStats = {
   alignmentModifiers: alignmentModifiers.optional(),
@@ -205,7 +207,7 @@ export const sizeStats = {
   size: z.number().optional(),
 };
 export const pronounsStats = {
-  pronouns: pronouns.optional(),
+  pronouns: pronounsObject.optional(),
 };
 
 export const namingStats = {

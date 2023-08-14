@@ -123,7 +123,7 @@ model objects {
   userid                Int
   created               DateTime?               @default(now()) @db.Timestamp(6)
   lastedited            DateTime?               @default(now()) @db.Timestamp(6)
-  object                Json                    @db.Json
+  object                Json
   originalid            Int?
   originaluserid        Int?
   folderid              Int?
@@ -328,7 +328,12 @@ model users {
 }
 
 model voices {
-  voice String @id @db.VarChar(255)
+  id         Int     @id @default(autoincrement())
+  gender     String  @db.VarChar(255)
+  person     String  @db.VarChar(255)
+  character  String? @db.VarChar(255)
+  production String? @db.VarChar(255)
+  filename   String  @db.VarChar(255)
 }
 
 model backgroundsdetails {

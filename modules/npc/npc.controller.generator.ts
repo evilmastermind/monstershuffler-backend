@@ -21,6 +21,7 @@ import {
   getRandomBackground,
 } from '@/modules/background/background.service';
 import { AgeObject, WeightObject } from '@/schemas/character';
+import { Voice } from '@/schemas/character/roleplay';
 import { Background } from '@/modules/background/background.schema';
 import { getRandomSkill } from '@/modules/skill/skill.service';
 import { getRandomName } from '@/modules/name/name.service';
@@ -30,6 +31,7 @@ import { getRandomCharacterhook } from '@/modules/characterhook/characterhook.se
 import { handleError } from '@/utils/errors';
 import { random, randomDecimal, round2Decimals } from '@/utils/functions';
 import { findChoices } from '@/modules/choiceSolver';
+import { getRandomVoice } from '../voices/voice.service';
 
 export async function createRandomNpc(
   request: FastifyRequest<{ Body: createRandomNpcInput }>,
@@ -49,6 +51,7 @@ export async function createRandomNpc(
     secondaryRacePercentage,
     primaryRacevariantId,
     secondaryRacevariantId,
+    addVoice,
   } = request.body;
 
   try {
@@ -114,6 +117,7 @@ export async function createRandomNpc(
     // L E V E L
     ///////////////////////////////////////
     const level = calculateLevel(levelType);
+    console.log('level: ', level);
     ///////////////////////////////////////
     // B A C K G R O U N D   F E A T U R E S
     ///////////////////////////////////////
@@ -128,6 +132,7 @@ export async function createRandomNpc(
     const age = calculateAge(race);
     const height = calculateHeight(race, age);
     const weight = calculateWeight();
+    const voice = addVoice ? await calculateVoice(pronouns) : undefined;
 
     const result: Character = {
       character: {
@@ -145,10 +150,12 @@ export async function createRandomNpc(
           value: favouriteSkill,
         }],
       },
+      variations: {
+        currentHD: level,
+      }
     };
 
     const character = result.character;
-
     if (race) {
       character['race'] = race;
       await findChoices(character.race, character.race, 0, id);
@@ -169,11 +176,12 @@ export async function createRandomNpc(
       character['background'] = background;
       await findChoices(character.background, character.background, 0, id);
     }
+    if (voice) {
+      character['voice'] = voice;
+    }
 
     return {
-      npc: {
-        character: character,
-      },
+      npc: result,
     };
   } catch (error) {
     console.warn(error);
@@ -406,6 +414,27 @@ function calculatePronouns(race: Race | null, racevariant: Racevariant | null) {
   } else {
     return 'female';
   }
+}
+
+async function calculateVoice(pronouns: string) {
+  let options;
+  if (['male','female'].includes(pronouns)) {
+    options = { gender: pronouns };
+  } else {
+    options = {};
+  }
+  const randomVoice = await getRandomVoice(options);
+  const newVoice: Voice = {
+    person: randomVoice.person,
+    filename: randomVoice.filename,
+  };
+  if (randomVoice.character) {
+    newVoice.character = randomVoice.character;
+  }
+  if (randomVoice.production) {
+    newVoice.production = randomVoice.production;
+  }
+  return newVoice;
 }
 
 function calculateLevel(levelType = 'random') {

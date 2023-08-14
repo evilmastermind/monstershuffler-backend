@@ -9,7 +9,7 @@ async function characterhookRoutes(server: FastifyInstance) {
       schema: {
         summary: 'Returns a random short characterhook.',
         description:
-          "Returns a random short characterhook , which is a string like 'from an unusual family line' or 'cursed with bad luck'.",
+          'Returns a random short characterhook , which is a string like \'from an unusual family line\' or \'cursed with bad luck\'.',
         tags: ['characterhooks'],
         response: {
           200: $ref('getRandomCharacterhookResponseSchema'),

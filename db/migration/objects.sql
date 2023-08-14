@@ -359,6 +359,60 @@ DROP TABLE `spells` ;
 DROP TABLE `weapons` ;
 DROP TABLE `armor` ;
 
+-- NEW VOICES
+DROP TABLE `voices`;
+CREATE TABLE `voices` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `gender` varchar(255) NOT NULL,
+  `person` varchar(255) NOT NULL,
+  `character` varchar(255),
+  `production` varchar(255),
+  `filename` varchar(255) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO voices (gender,person,`character`,production,filename)
+VALUES
+('male','Barrack Obama', NULL, NULL, 'barrack_obama'),
+('male','Dwayne Johnson', 'Agent Hobbs', 'Fast & Furious','agent_hobbs'),
+('male','Viggo Mortensen','Aragorn','The Lord of the Rings','aragorn'),
+('male', 'Bill Burr', NULL, NULL,'bill_burr'),
+('female', 'Uma Thurman', 'The Bride', 'Kill Bill','bride'),
+('male','James Earl Jones','Darth Vader','Star Wars','darth_vader'),
+('male', 'Dave Chappelle', NULL, NULL,'dave_chappelle'),
+('female','Imelda Staunton','Dolores Umbridge','Harry Potter','dolores_umbridge'),
+('female','Judy Garland','Dorothy','The Wizard of Oz','dorothy'),
+('female','Elizabeth Banks','Effie Trinket','The Hunger Games','effie_Trinket'),
+('female','Judy Foster','Dr. Eleanor Ann Arroway','Contact','eleanor_ann_arroway'),
+('male','Hugo Weaving','Elrond','The Lord of the Rings','elrond'),
+('female','Emily Bett Rickards','Felicity Smoak','Arrow','felicity_smoak'),
+('female','Fran Drescher','Fran Fine','The Nanny','fran_fine'),
+('male','Kevin Hart','Franklin "Mouse" Finbar','Jumanji','franklin_mouse_finbar'),
+('male','Ian McKellen','Gandalf','The Lord of the Rings','gandalf'),
+('female','Chelsea Peretti','Gina Linetti','Brooklyn 99','gina'),
+('female','Emma Watson','Hermione Granger','Harry Potter','hermione_granger'),
+('male','Sean Connery', 'James Bond','James Bond','james_bond'),
+('female','Angela Lansbury','Jessica Fletcher','Murder She Wrote','jessica_fletcher'),
+('male','Mark Hamill','Joker','Batman','joker'),
+('male','Matthew McConaughey','Joseph Cooper','Interstellar','joseph_cooper'),
+('male','Samuel L. Jackson','Jules Winnfield','Pulp Fiction','jules_winnfield'),
+('female','Katey Sagal','Turanga Leela','Futurama','leela'),
+('male','Mark Hamill','Luke Skywalker','Star Wars','luke_skywalker'),
+('female','Maggie Smith','Minerva McGonagall','Harry Potter','minerva_mcgonagall'),
+('female','Scarlett Johansson','Natasha Romanoff','Black Widow','natasha_romanoff'),
+('male','Keanu Reeves','Neo','The Matrix','neo'),
+('female','Whoopi Goldberg','Oda Mae Brown','Ghost','oda_mae_brown'),
+('male','Stephen Amell','Oliver Queen','Arrow','oliver_queen'),
+('female','Diane Morgan','Philomena Cunk',NULL,'philomena_cunk'),
+('male','Morgan Freeman','Prof. Samuel Norman','Lucy','professor_samuel_norman'),
+('female','Queen Elizabeth II',NULL,NULL,'queen_elizabeth'),
+('male','Richard Nixon',NULL,NULL,'richard_nixon'),
+('male','Arnold Schwarzenegger','The Terminator','The Terminator','terminator'),
+('male','Joe Pesci','Tommy DeVito', 'Goodfellas','tommy_devito'),
+('female','Emma Stone','Wichita','Zombieland','wichita');
+
+
+
 
 
 -- NEW INSERTS
