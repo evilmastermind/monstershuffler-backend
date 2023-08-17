@@ -10,6 +10,7 @@ import {
   convertBackgroundPronouns,
 } from './converter.service';
 import { handleError } from '@/utils/errors';
+import { validateHeaderName } from 'http';
 
 ///////////////////////////////////
 // O B J E C T   T Y P E S
@@ -267,13 +268,14 @@ async function convertCharacterObject(object, id) {
     }
     object.actions = newArray;
   }
-  // spells ids
   if (Object.hasOwn(object, 'spellSlots')) {
+    // spells ids
     object.spellSlots = await addIdsToSpells(object.spellSlots);
     // spells object
     object.spells = {
       hasSlots: false,
       ability: object?.spellcasting || 'CHA',
+      availableUnit: 'level',
       groups: object.spellSlots,
     };
     delete object.spellSlots;
@@ -346,6 +348,10 @@ function convertAlignment(alignment) {
 
 async function addIdsToSpells(spellSlots) {
   for (const spellSlot of spellSlots) {
+    if (Object.hasOwn(spellSlot, 'levelMin')) {
+      spellSlot.availableAt = parseInt(spellSlot.levelMin);
+      delete spellSlot.levelMin;
+    }
     if (Object.hasOwn(spellSlot, 'spells') && Array.isArray(spellSlot.spells)) {
       const newArray = [];
       for (const spell of spellSlot.spells) {
@@ -439,7 +445,7 @@ function addStatObjects(object) {
 function convertStatToStatObject(string) {
   return {
     value: string,
-    levelMin: '1',
+    availableAt: 1,
   };
 }
 
@@ -465,10 +471,12 @@ async function convertAction(object, id) {
     action.priority = parseInt(object.priority);
     delete object.priority;
   }
+  // this actionType here is used to search for actions if they have been published
   if (Object.hasOwn(object, 'actionType')) {
     action.actionType = object.actionType;
     delete object.actionType;
   }
+  // same for the 3 follwing keys
   if (Object.hasOwn(object, 'subType')) {
     action.subType = object.subType;
     delete object.subType;
@@ -484,12 +492,15 @@ async function convertAction(object, id) {
 
   action.variants = [{ ...object }];
 
-  // levelMin, levelMax conversion to int
-  if (Object.hasOwn(action.variants[0], 'levelMin')) {
-    action.variants[0].levelMin = parseInt(action.variants[0].levelMin);
+  // levelMin/levelMax to availableAt/availableUntil/availableUnit
+  action.availableUnit = 'level';
+  if (Object.hasOwn(action.variants[0], 'levelMin') && action.variants[0].levelMin) {
+    action.variants[0].availableAt = parseInt(action.variants[0].levelMin);
+    delete action.variants[0].levelMin;
   }
-  if (Object.hasOwn(action.variants[0], 'levelMax')) {
-    action.variants[0].levelMax = parseInt(action.variants[0].levelMax);
+  if (Object.hasOwn(action.variants[0], 'levelMax') && action.variants[0].levelMax) {
+    action.availableUntil = parseInt(action.variants[0].levelMax);
+    delete action.variants[0].levelMax;
   }
 
   // profession actions had replaceName erroneously inside the root object instead of the attack object
@@ -505,9 +516,64 @@ async function convertAction(object, id) {
       if (Object.hasOwn(attack.attributes, 'choice')) {
         await convertChoiceRandom(attack.attributes, 'weapons');
       }
+      // enchantment diceObject => levelMin/levelMax to availableAt/availableUntil/availableUnit
+      if (Object.hasOwn(attack, 'enchantment')) {
+        if (Object.hasOwn(attack.enchantment, 'dice')) {
+          convertDiceObject(attack.enchantment.dice);
+        }
+      }
     }
   }
+  // values diceObject => levelMin/levelMax to availableAt/availableUntil/availableUnit
+  if (Object.hasOwn(action.variants[0], 'values')) {
+    action.variants[0].values.forEach((value) => {
+      if (Object.hasOwn(value, 'dice')) {
+        convertDiceObject(value.dice);
+      }
+      if (Object.hasOwn(value, 'incrProgression')) {
+        value.incrProgression.unitInterval = parseInt(value.incrProgression.levelInterval);
+        delete value.incrProgression.levelInterval;
+        value.incrProgression.unitIncrement = parseInt(value.incrProgression.levelIncrement);
+        delete value.incrProgression.levelIncrement;
+        replaceLevelWithAvailable(value.incrProgression);
+        value.incrProgression.valueBase = parseInt(value.incrProgression.base);
+        delete value.incrProgression.base;
+        value.incrProgression.valueIncrement = parseInt(value.incrProgression.increment);
+        delete value.incrProgression.increment;
+      }
+    });
+  }
   return action;
+}
+
+function convertDiceObject(object) {
+  replaceLevelWithAvailable(object);
+  stringToNumber(object, 'die');
+  stringToNumber(object, 'diceNumber');
+  stringToNumber(object, 'diceIncrement');
+  if (Object.hasOwn(object, 'levelInterval')) {
+    if (object.levelInterval !== null && object.levelInterval !== undefined && object.levelInterval !== '') {
+      object.unitInterval = parseInt(object.levelInterval);
+    }
+    delete object.levelInterval;
+  }
+}
+
+function replaceLevelWithAvailable(object) {
+  if (Object.hasOwn(object, 'levelMin')) {
+    if (object.levelMin !== null && object.levelMin !== undefined && object.levelMin !== '') {
+      object.availableUnit = 'level';
+      object.availableAt = parseInt(object.levelMin);
+    }
+    delete object.levelMin;
+  }
+  if (Object.hasOwn(object, 'levelMax')) {
+    if (object.levelMax !== null && object.levelMax !== undefined && object.levelMax !== '') {
+      object.availableUnit = 'level';
+      object.availableUntil = parseInt(object.levelMax);
+    }
+    delete object.levelMax;
+  }
 }
 
 async function convertArmor(object) {
@@ -642,6 +708,16 @@ function convertProfessionFiltersInActions(filters) {
 
 function booleanEnumToBoolean(value) {
   return value === '1';
+}
+
+function stringToNumber(object, key) {
+  if (Object.hasOwn(object, key)) {
+    if(object[key] !== null && object[key] !== undefined && object[key] !== '') {
+      object[key] = parseInt(object[key]);
+    } else {
+      delete object[key];
+    }
+  }
 }
 
 function convertAgeAndHeight(race) {

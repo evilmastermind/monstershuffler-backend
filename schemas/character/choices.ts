@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const statObject = z.object({
   id: z.number().optional(),
   value: z.string(),
-  levelMin: z.string().optional(),
+  availableAt: z.number().optional(),
 });
 export const choiceRandomObject = z.object({
   choice: z.object({

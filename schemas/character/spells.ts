@@ -9,7 +9,7 @@ import { abilitiesEnum } from '@/schemas/character/abilities';
 export const spellGroupObject = z
   .object({
     tag: z.string(),
-    levelMin: z.string().optional(),
+    availableAt: z.string().optional(),
     timesDay: z.string().optional(),
     timesDayMax: z.string().optional(),
     spells: z.union([
@@ -23,6 +23,7 @@ export const spellGroupObject = z
 export const spellsObject = z.object({
   hasSlots: z.boolean().optional(),
   ability: abilitiesEnum.optional(),
+  availableUnit: z.enum(['level','cr']).optional(),
   groups: z.array(spellGroupObject).optional(),
 });
 

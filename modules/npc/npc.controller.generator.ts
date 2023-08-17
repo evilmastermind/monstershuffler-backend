@@ -113,11 +113,11 @@ export async function createRandomNpc(
     } else if (backgroundId && backgroundType === 'specific') {
       background = (await getBackground(id, backgroundId)).object as Background;
     }
+
     ///////////////////////////////////////
     // L E V E L
     ///////////////////////////////////////
     const level = calculateLevel(levelType);
-    console.log('level: ', level);
     ///////////////////////////////////////
     // B A C K G R O U N D   F E A T U R E S
     ///////////////////////////////////////

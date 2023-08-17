@@ -16,7 +16,7 @@ export async function findChoices(
   fathersKey: string | number,
   userId: number
 ) {
-  if (typeof object === 'object') {
+  if (object && typeof object === 'object') {
     if (Array.isArray(object)) {
       for (let index = 0; index < object.length; index++) {
         await findChoices(object[index], object, index, userId);

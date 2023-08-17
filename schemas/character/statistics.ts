@@ -33,3 +33,5 @@ export const statisticsObject = z.object({
   abilityModifiers: Abilities,
   HP: statNumberString,
 });
+
+type Statistics = z.infer<typeof statisticsObject>;

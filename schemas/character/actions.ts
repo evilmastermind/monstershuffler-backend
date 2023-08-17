@@ -19,12 +19,13 @@ export const actionTypesEnum = z.enum([
 ]);
 
 export const diceObject = z.object({
-  die: z.string(),
-  diceNumber: z.string(),
-  diceIncrement: z.string(),
-  levelMin: z.string(),
-  levelMax: z.string(),
-  levelInterval: z.string(),
+  die: z.number(),
+  diceNumber: z.number(),
+  diceIncrement: z.number().optional(),
+  availableAt: z.number().optional(),
+  availableUntil: z.number().optional(),
+  availableUnit: z.enum(['level','cr']).optional(),
+  unitInterval: z.number().optional(),
 });
 
 export const enchantmentObject = z.object({
@@ -62,20 +63,20 @@ export const valueIncrProgressionObject = z.object({
   name: z.string(),
   type: z.string().optional(),
   incrProgression: z.object({
-    levelInterval: z.string(),
-    levelIncrement: z.string(),
-    levelMin: z.string(),
-    base: z.string(),
-    increment: z.string(),
+    unitInterval: z.string(),
+    unitIncrement: z.string(),
+    availableAt: z.string(),
+    availableUnit: z.enum(['level','cr']).optional(),
+    valueBase: z.string(),
+    valueIncrement: z.string(),
   }),
 });
 
 export const actionVariantObject = z.object({
   name: z.string(),
   description: z.string(),
-  type: actionTypesEnum,
-  levelMin: z.number().optional(),
-  levelMax: z.number().optional(),
+  type: actionTypesEnum.optional(),
+  availableAt: z.number().optional(),
   ability: abilitiesEnum.optional(),
   charges: z.string().optional(),
   recharge: z.string().optional(),
@@ -83,21 +84,23 @@ export const actionVariantObject = z.object({
   values: z
     .array(
       z.union([
-        valueExpressionObject,
-        valueDiceObject,
+        z.any(),
+        z.any(),
         valueIncrProgressionObject,
       ])
     )
     .optional(),
   attacks: z.array(attackObject).optional(),
-});
+}); 
 export const actionObject = z.object({
   tag: z.string(),
   actionType: actionTypesEnum.optional(),
+  priority: z.number().optional(),
+  availableUnit: z.enum(['level','cr']).optional(),
+  availableUntil: z.number().optional(),
   subType: z.string().optional(),
   source: z.string().optional(),
   tags: z.array(z.string()).optional(),
-  priority: z.number().optional(),
   variants: z.array(
     z.union([actionVariantObject, choiceRandomObject, choiceListObject])
   ),
