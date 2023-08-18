@@ -14,6 +14,8 @@ components:
             object:
               type: object
               properties:
+                id:
+                  type: number
                 name:
                   type: string
                 femaleName:
@@ -792,6 +794,8 @@ components:
             object:
               type: object
               properties:
+                id:
+                  type: number
                 name:
                   type: string
                 enableGenerator:
@@ -1613,6 +1617,8 @@ components:
             npc:
               type: object
               properties:
+                id:
+                  type: number
                 character:
                   type: object
                   properties:
@@ -1634,6 +1640,8 @@ components:
                     race:
                       type: object
                       properties:
+                        id:
+                          type: number
                         name:
                           type: string
                         enableGenerator:
@@ -2406,6 +2414,8 @@ components:
                     racevariant:
                       type: object
                       properties:
+                        id:
+                          type: number
                         name:
                           type: string
                         pronouns:
@@ -2518,6 +2528,8 @@ components:
                     class:
                       type: object
                       properties:
+                        id:
+                          type: number
                         name:
                           type: string
                         enableGenerator:
@@ -2618,6 +2630,8 @@ components:
                     classvariant:
                       type: object
                       properties:
+                        id:
+                          type: number
                         name:
                           type: string
                         armor:
@@ -2718,6 +2732,8 @@ components:
                     background:
                       type: object
                       properties:
+                        id:
+                          type: number
                         name:
                           type: string
                         femaleName:
@@ -2812,6 +2828,8 @@ components:
                     template:
                       type: object
                       properties:
+                        id:
+                          type: number
                         name:
                           type: string
                         pronouns:
@@ -3261,6 +3279,13 @@ components:
                       type: array
                       items:
                         type: string
+                    pronouns:
+                      type: string
+                      enum:
+                        - male
+                        - female
+                        - neutral
+                        - thing
                     prename:
                       type: string
                     name:
@@ -3270,7 +3295,26 @@ components:
                     fullName:
                       type: string
                     characterHook:
-                      type: string
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          string:
+                            type: string
+                          type:
+                            type: string
+                            enum:
+                              - background
+                              - spell
+                              - trait
+                              - race
+                              - class
+                              - template
+                          id:
+                            type: number
+                        required:
+                          - string
+                        additionalProperties: false
                     level:
                       type: number
                     CR:
@@ -3326,11 +3370,11 @@ components:
                         /properties/npc/properties/statistics/properties/CR"
                   required:
                     - alignment
+                    - pronouns
                     - prename
                     - name
                     - surname
                     - fullName
-                    - characterHook
                     - level
                     - CR
                     - XP
@@ -3533,6 +3577,8 @@ components:
             object:
               type: object
               properties:
+                id:
+                  type: number
                 name:
                   type: string
                 enableGenerator:

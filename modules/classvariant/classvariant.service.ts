@@ -1,5 +1,6 @@
 import prisma from '@/utils/prisma';
 import {
+  Classvariant,
   createClassvariantInput,
   updateClassvariantInput,
 } from './classvariant.schema';
@@ -40,9 +41,10 @@ export async function createClassvariant(
 }
 
 export async function getClassvariant(userid: number, id: number) {
-  const classResult = await prisma.objects.findMany({
+  const result = (await prisma.objects.findMany({
     select: {
       object: true,
+      id: true,
     },
     where: {
       id,
@@ -56,8 +58,13 @@ export async function getClassvariant(userid: number, id: number) {
         },
       ],
     },
-  });
-  return classResult[0];
+  }))[0];
+  const response = {
+    object: result.object as Classvariant,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  return response;
 }
 
 export async function getRandomClassvariant(userid: number, variantof: number) {
@@ -78,7 +85,7 @@ export async function getRandomClassvariant(userid: number, variantof: number) {
   if (variantCount === 0) {
     return null;
   }
-  const classChosen = await prisma.objects.findMany({
+  const result = (await prisma.objects.findMany({
     skip: Math.floor(Math.random() * variantCount),
     take: 1,
     select: {
@@ -97,8 +104,13 @@ export async function getRandomClassvariant(userid: number, variantof: number) {
         },
       ],
     },
-  });
-  return classChosen[0];
+  }))[0];
+  const response = {
+    object: result.object as Classvariant,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  return response;
 }
 
 export async function getClassvariantList(userid: number) {

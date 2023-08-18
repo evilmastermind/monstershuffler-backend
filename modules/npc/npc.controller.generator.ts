@@ -407,7 +407,7 @@ function calculatePronouns(race: Race | null, racevariant: Racevariant | null) {
     return race.pronouns;
   }
   const random100 = random(1, 100);
-  if (random100 <= 2) {
+  if (random100 <= 3) {
     return 'neutral';
   } else if (random100 <= 51) {
     return 'male';

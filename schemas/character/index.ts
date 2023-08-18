@@ -254,6 +254,7 @@ export const userObject = z.object({
 
 export const raceObject = z
   .object({
+    id: z.number().optional(),
     name: z.string(),
     ...generatorStats,
     ...raceSpecificGeneratorStats,
@@ -280,6 +281,7 @@ export const raceObject = z
 
 export const racevariantObject = z
   .object({
+    id: z.number().optional(),
     name: z.string(),
     ...pronounsStats,
     ...alignmentModifiersStats,
@@ -302,6 +304,7 @@ export const racevariantObject = z
 
 export const classObject = z
   .object({
+    id: z.number().optional(),
     name: z.string(),
     ...generatorStats,
     ...armorStats,
@@ -321,6 +324,7 @@ export const classObject = z
 
 export const classvariantObject = z
   .object({
+    id: z.number().optional(),
     name: z.string(),
     ...armorStats,
     ...subtypesStats,
@@ -340,6 +344,7 @@ export const classvariantObject = z
 
 export const templateObject = z
   .object({
+    id: z.number().optional(),
     name: z.string(),
     ...pronounsStats,
     ...sizeStats,
@@ -365,6 +370,7 @@ export const templateObject = z
 
 export const backgroundObject = z
   .object({
+    id: z.number().optional(),
     name: z.string(),
     femaleName: z.string(),
     workplace: z.string(),
@@ -387,6 +393,7 @@ export const backgroundObject = z
 
 export const characterObject = z
   .object({
+    id: z.number().optional(),
     character: z
       .object({
         // naming

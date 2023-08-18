@@ -29,32 +29,37 @@ export async function createBackground(
 }
 
 export async function getBackground(userid: number, id: number) {
-  return (
-    await prisma.objects.findMany({
-      select: {
-        object: true,
-        id: true,
-      },
-      where: {
-        id,
-        type: 5,
-        OR: [
-          {
-            userid: 0,
-          },
-          {
-            userid,
-          },
-        ],
-      },
-    })
+  const result = (await prisma.objects.findMany({
+    select: {
+      object: true,
+      id: true,
+    },
+    where: {
+      id,
+      type: 5,
+      OR: [
+        {
+          userid: 0,
+        },
+        {
+          userid,
+        },
+      ],
+    },
+  })
   )[0];
+  const response = {
+    object: result.object as Background,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  return response;
 }
 
 export async function getRandomBackground(userid: number) {
   const backgroundCount = await prisma.objects.count({
     where: {
-      type: 2,
+      type: 5,
       OR: [
         {
           userid: 0,
@@ -65,7 +70,7 @@ export async function getRandomBackground(userid: number) {
       ],
     },
   });
-  const background = await prisma.objects.findMany({
+  const result = (await prisma.objects.findMany({
     skip: Math.floor(Math.random() * backgroundCount),
     take: 1,
     select: {
@@ -83,8 +88,13 @@ export async function getRandomBackground(userid: number) {
         },
       ],
     },
-  });
-  return background[0];
+  }))[0];
+  const response = {
+    object: result.object as Background,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  return response;
 }
 
 export async function getBackgroundList(userid: number) {

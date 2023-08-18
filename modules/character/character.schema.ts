@@ -18,6 +18,7 @@ const getCharacterListResponseSchema = z.object({
 });
 
 const getCharacterResponseSchema = z.object({
+  id,
   object: characterObject,
 });
 

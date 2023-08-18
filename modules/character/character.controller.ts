@@ -36,7 +36,7 @@ export async function getCharacterHandler(
   const characterId = request.params.characterId;
   try {
     const characterObject = await getCharacter(id, parseInt(characterId));
-    return reply.code(200).send(characterObject[0]);
+    return reply.code(200).send(characterObject);
   } catch (error) {
     return handleError(error, reply);
   }

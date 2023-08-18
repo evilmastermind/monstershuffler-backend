@@ -18,6 +18,7 @@ const getTemplateListResponseSchema = z.object({
 });
 
 const getTemplateResponseSchema = z.object({
+  id,
   object: templateObject,
 });
 

@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { pronounsObject } from '.';
 
 export const statNumberString = z.object({
   number: z.number(),
@@ -15,14 +14,20 @@ export const Abilities = z.object({
   CHA: z.number(),
 });
 
+export const DescriptionPart = z.object({
+  string: z.string(),
+  type: z.enum(['background', 'spell', 'trait', 'race', 'class', 'template']).optional(),
+  id: z.number().optional(),
+});
+
 export const statisticsObject = z.object({
   alignment: z.array(z.string()),
+  pronouns: z.enum(['male', 'female', 'neutral', 'thing']),
   prename: z.string(),
   name: z.string(),
   surname: z.string(),
   fullName: z.string(),
-  pronouns: pronounsObject,
-  characterHook: z.string(),
+  characterHook: z.array(DescriptionPart).optional(),
   level: z.number(),
   CR: statNumberString,
   XP: z.string(),

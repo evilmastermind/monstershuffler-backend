@@ -16,7 +16,7 @@ export async function createRace(userid: number, input: createRaceInput) {
 }
 
 export async function getRace(userid: number, id: number) {
-  return (
+  const result = (
     await prisma.objects.findMany({
       select: {
         object: true,
@@ -36,6 +36,12 @@ export async function getRace(userid: number, id: number) {
       },
     })
   )[0];
+  const response = {
+    object: result.object as Race,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  return response;
 }
 
 export async function getRandomRace(userid: number) {
@@ -52,7 +58,7 @@ export async function getRandomRace(userid: number) {
       ],
     },
   });
-  const race = await prisma.objects.findMany({
+  const result = (await prisma.objects.findMany({
     skip: Math.floor(Math.random() * raceCount),
     take: 1,
     select: {
@@ -70,8 +76,13 @@ export async function getRandomRace(userid: number) {
         },
       ],
     },
-  });
-  return race[0];
+  }))[0];
+  const response = {
+    object: result.object as Race,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  return response;
 }
 
 export async function getRaceList(userid: number) {

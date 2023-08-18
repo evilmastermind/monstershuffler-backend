@@ -1,5 +1,5 @@
 import prisma from '@/utils/prisma';
-import { createCharacterInput, updateCharacterInput } from './character.schema';
+import { createCharacterInput, updateCharacterInput, Character } from './character.schema';
 
 export async function createCharacter(
   userid: number,
@@ -34,9 +34,10 @@ export async function createCharacter(
 }
 
 export async function getCharacter(userid: number, id: number) {
-  return await prisma.objects.findMany({
+  const result = (await prisma.objects.findMany({
     select: {
       object: true,
+      id: true,
     },
     where: {
       id,
@@ -50,7 +51,13 @@ export async function getCharacter(userid: number, id: number) {
         },
       ],
     },
-  });
+  }))[0];
+  const response = {
+    object: result.object as Character,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  return response;
 }
 
 export async function getCharacterList(userid: number) {

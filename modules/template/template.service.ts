@@ -19,9 +19,10 @@ export async function createTemplate(
 }
 
 export async function getTemplate(userid: number, id: number) {
-  return await prisma.objects.findMany({
+  const result = (await prisma.objects.findMany({
     select: {
       object: true,
+      id: true,
     },
     where: {
       id,
@@ -35,7 +36,13 @@ export async function getTemplate(userid: number, id: number) {
         },
       ],
     },
-  });
+  }))[0];
+  const response = {
+    object: result.object as Template,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  return response;
 }
 
 export async function getTemplateList(userid: number) {
