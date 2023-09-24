@@ -328,20 +328,20 @@ function convertAbilityScores(object) {
 
 function convertAlignment(alignment) {
   const alignmentInt = alignment.map((string) => parseFloat(string));
-  // [[lawfulness, chaoticness, ethicalNeutrality], [goodness, evilness, moralNeutrality]]
+  // [[lawfulness, ethicalNeutrality, chaoticness], [goodness, moralNeutrality, evilness]]
   const newAligment = [
     [0, 0, 0],
     [0, 0, 0],
   ];
-  if (alignmentInt[0] > 1) {
-    newAligment[0][0] += alignmentInt[0] - 1;
-  } else if (alignmentInt[0] < 1) {
-    newAligment[0][1] += Math.abs(alignmentInt[0] - 1);
+  if (alignmentInt[0] > 0) {
+    newAligment[0][0] += alignmentInt[0];
+  } else if (alignmentInt[0] < 0) {
+    newAligment[0][2] += Math.abs(alignmentInt[0]);
   }
-  if (alignmentInt[1] > 1) {
-    newAligment[1][0] += alignmentInt[0] - 1;
-  } else if (alignmentInt[1] < 1) {
-    newAligment[1][1] += Math.abs(alignmentInt[0] - 1);
+  if (alignmentInt[1] > 0) {
+    newAligment[1][0] += alignmentInt[0];
+  } else if (alignmentInt[1] < 0) {
+    newAligment[1][2] += Math.abs(alignmentInt[0]);
   }
   return newAligment;
 }

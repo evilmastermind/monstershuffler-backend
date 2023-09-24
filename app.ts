@@ -72,7 +72,7 @@ server
   )
   // test route
   .get('/api/health', async function () {
-    return { status: "'TIS WORKIN', CHIEF!" };
+    return { status: '\'TIS WORKIN\', CHIEF!' };
   })
 
   .setErrorHandler(function (error, request, reply) {

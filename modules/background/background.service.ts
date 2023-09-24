@@ -48,12 +48,26 @@ export async function getBackground(userid: number, id: number) {
     },
   })
   )[0];
+  const details = await getBackgroundDetails(id);
   const response = {
     object: result.object as Background,
     id: result.id,
+    name: details.name,
+    femaleName: details.femalename,
+    age: details.age,
+    description: details.description || '',
   };
   response.object.id = result.id;
   return response;
+}
+
+export async function getBackgroundDetails(id: number) {
+  const result = (await prisma.backgroundsdetails.findMany({
+    where: {
+      objectid: id,
+    },
+  }))[0];
+  return result;
 }
 
 export async function getRandomBackground(userid: number) {

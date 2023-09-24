@@ -12,7 +12,7 @@ async function traitRoutes(server: FastifyInstance) {
       schema: {
         summary: 'Returns a random trait.',
         description:
-          "Returns a random trait which is usually an adjective describing a creature's state of mind, attitude, core beliefs or current feelings.",
+          'Returns a random trait which is usually an adjective describing a creature\'s state of mind, attitude, core beliefs or current feelings.',
         body: $ref('getRandomTraitSchema'),
         tags: ['traits'],
         response: {
@@ -29,7 +29,7 @@ async function traitRoutes(server: FastifyInstance) {
       schema: {
         summary: 'Returns the description of a trait.',
         description:
-          "Returns the description of a trait which is usually an adjective describing a creature's state of mind, attitude, core beliefs or current feelings.",
+          'Returns the description of a trait which is usually an adjective describing a creature\'s state of mind, attitude, core beliefs or current feelings.',
         tags: ['traits'],
         response: {
           200: $ref('getTraitDescriptionResponseSchema'),

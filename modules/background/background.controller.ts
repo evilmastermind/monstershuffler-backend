@@ -37,6 +37,7 @@ export async function getBackgroundHandler(
   const backgroundId = request.params.backgroundId;
   try {
     const backgroundObject = await getBackground(id, parseInt(backgroundId));
+    console.log(JSON.stringify(backgroundObject, null, 2));
     return reply.code(200).send(backgroundObject);
   } catch (error) {
     return handleError(error, reply);

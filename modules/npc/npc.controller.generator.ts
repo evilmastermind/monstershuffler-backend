@@ -312,11 +312,11 @@ function calculateAlignment(
   traitCategory: string
 ): [[number, number, number], [number, number, number]] {
   let lawfulness = 0;
-  let chaoticness = 0;
   let ethicalNeutrality = 0;
+  let chaoticness = 0;
   let goodness = 0;
-  let evilness = 0;
   let moralNeutrality = 0;
+  let evilness = 0;
 
   switch (traitCategory) {
   case 'bad':
@@ -366,8 +366,8 @@ function calculateAlignment(
   }
 
   return [
-    [lawfulness, chaoticness, ethicalNeutrality],
-    [goodness, evilness, moralNeutrality],
+    [lawfulness, ethicalNeutrality, chaoticness],
+    [goodness, moralNeutrality, evilness],
   ];
 }
 

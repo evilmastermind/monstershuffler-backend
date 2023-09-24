@@ -19,7 +19,7 @@ import { raceSchemas } from '@/modules/race/race.schema';
 // import { spellSchemas } from '@/modules/spell/spell.schema';
 // import { surnameSchemas } from '@/modules/surname/surname.schema';
 // import { templateSchemas } from '@/modules/template/template.schema';
-// import { traitSchemas } from '@/modules/trait/trait.schema';
+import { traitSchemas } from '@/modules/trait/trait.schema';
 import { userSchemas } from '@/modules/user/user.schema';
 // import { weaponSchemas } from '@/modules/weapon/weapon.schema';
 
@@ -44,7 +44,7 @@ import raceRoutes from '@/modules/race/race.route';
 // import spellRoutes from '@/modules/spell/spell.route';
 // import surnameRoutes from '@/modules/surname/surname.route';
 // import templateRoutes from '@/modules/template/template.route';
-// import traitRoutes from '@/modules/trait/trait.route';
+import traitRoutes from '@/modules/trait/trait.route';
 import userRoutes from '@/modules/user/user.route';
 // import weaponRoutes from '@/modules/weapon/weapon.route';
 // import { hashPassword } from '@/utils/hash';
@@ -72,7 +72,7 @@ export const schemas = [
   // ...spellSchemas,
   // ...surnameSchemas,
   // ...templateSchemas,
-  // ...traitSchemas,
+  ...traitSchemas,
   ...userSchemas,
   // ...weaponSchemas
 ];
@@ -98,7 +98,7 @@ export const routes = [
   //  {routes: spellRoutes,  prefix: 'api/spells' },
   //  {routes: surnameRoutes,  prefix: 'api/surnames' },
   //  {routes: templateRoutes,  prefix: 'api/templates' },
-  //  {routes: traitRoutes,  prefix: 'api/traits' },
+  { routes: traitRoutes,  prefix: 'api/traits' },
   { routes: userRoutes, prefix: 'api/users' },
   // {routes: weaponRoutes,  prefix: 'api/weapons' },
   { routes: converterRoutes, prefix: 'api/converter' },

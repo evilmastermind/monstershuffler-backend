@@ -31,6 +31,10 @@ const getBackgroundListResponseSchema = z.object({
 const getBackgroundResponseSchema = z.object({
   object,
   id,
+  name: z.string(),
+  femaleName: z.string(),
+  age: z.string(),
+  description: z.string(),
 });
 
 const createBackgroundSchema = z.object({

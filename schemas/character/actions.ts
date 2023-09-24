@@ -92,7 +92,7 @@ export const actionVariantObject = z.object({
     .optional(),
   attacks: z.array(attackObject).optional(),
 }); 
-export const actionObject = z.object({
+export const chosenActionObject = z.object({
   tag: z.string(),
   actionType: actionTypesEnum.optional(),
   priority: z.number().optional(),
@@ -105,3 +105,4 @@ export const actionObject = z.object({
     z.union([actionVariantObject, choiceRandomObject, choiceListObject])
   ),
 });
+export const actionObject = z.union([chosenActionObject, choiceRandomObject]);
