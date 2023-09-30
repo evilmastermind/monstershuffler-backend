@@ -8,7 +8,7 @@ export async function getRandomSurname(input: getRandomSurnameInput) {
       gender: input.gender,
     },
   });
-  const surname = await prisma.surnames.findMany({
+  const array = await prisma.surnames.findMany({
     skip: Math.floor(Math.random() * surnameCount),
     take: 1,
     where: {
@@ -16,6 +16,8 @@ export async function getRandomSurname(input: getRandomSurnameInput) {
       gender: input.gender,
     },
   });
-
-  return surname[0].surname;
+  if (array.length === 0) {
+    return null;
+  }
+  return array[0].surname;
 }

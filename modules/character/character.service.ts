@@ -34,7 +34,7 @@ export async function createCharacter(
 }
 
 export async function getCharacter(userid: number, id: number) {
-  const result = (await prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     select: {
       object: true,
       id: true,
@@ -51,7 +51,11 @@ export async function getCharacter(userid: number, id: number) {
         },
       ],
     },
-  }))[0];
+  });
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
   const response = {
     object: result.object as Character,
     id: result.id,

@@ -11,7 +11,7 @@ import {
   updateRacevariant,
   deleteRacevariant,
 } from './racevariant.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getRacevariantListHandler(
   request: FastifyRequest<{
@@ -45,7 +45,7 @@ export async function getRacevariantHandler(
   const racevariantId = request.params.racevariantId;
   try {
     const racevariantObject = await getRacevariant(id, parseInt(racevariantId));
-    return reply.code(200).send(racevariantObject);
+    return handleResultFound(racevariantObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }
@@ -63,7 +63,7 @@ export async function getRandomRacevariantHandler(
   const raceId = request.params.raceId;
   try {
     const racevariantObject = await getRandomRacevariant(id, parseInt(raceId));
-    return reply.code(200).send(racevariantObject);
+    return handleResultFound(racevariantObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }

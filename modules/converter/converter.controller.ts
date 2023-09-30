@@ -126,6 +126,7 @@ async function convertCharacter(object, id) {
   }
   if (Object.hasOwn(object, 'background')) {
     await convertCharacterObject(object.background, id);
+    object.background.compatibleAges = ['child', 'adolescent', 'young adult', 'adult', 'middle-aged', 'elderly', 'venerable'];
   }
 }
 

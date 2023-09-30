@@ -10,7 +10,7 @@ export async function getRandomTrait(input: getRandomTraitInput) {
       feeling: input.feeling,
     },
   });
-  const trait = await prisma.traits.findMany({
+  const array = await prisma.traits.findMany({
     skip: Math.floor(Math.random() * traitCount),
     take: 1,
     where: {
@@ -20,7 +20,11 @@ export async function getRandomTrait(input: getRandomTraitInput) {
       feeling: input.feeling,
     },
   });
-  return trait[0];
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  return result;
 }
 
 export async function getTraitDescription(name: string) {

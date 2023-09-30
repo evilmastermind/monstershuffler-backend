@@ -36,26 +36,28 @@ export async function createClass(userid: number, input: createClassInput) {
 }
 
 export async function getClass(userid: number, id: number) {
-  const result = (
-    await prisma.objects.findMany({
-      select: {
-        object: true,
-        id: true,
-      },
-      where: {
-        id,
-        type: 3,
-        OR: [
-          {
-            userid: 0,
-          },
-          {
-            userid,
-          },
-        ],
-      },
-    })
-  )[0];
+  const array = await prisma.objects.findMany({
+    select: {
+      object: true,
+      id: true,
+    },
+    where: {
+      id,
+      type: 3,
+      OR: [
+        {
+          userid: 0,
+        },
+        {
+          userid,
+        },
+      ],
+    },
+  });
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
   const response = {
     object: result.object as Class,
     id: result.id,
@@ -78,7 +80,7 @@ export async function getRandomClass(userid: number) {
       ],
     },
   });
-  const result = (await prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     skip: Math.floor(Math.random() * raceCount),
     take: 1,
     select: {
@@ -96,7 +98,11 @@ export async function getRandomClass(userid: number) {
         },
       ],
     },
-  }))[0];
+  });
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
   const response = {
     object: result.object as Class,
     id: result.id,
@@ -106,7 +112,7 @@ export async function getRandomClass(userid: number) {
 }
 
 export async function getClassWithVariantsList(userid: number) {
-  const result = prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     select: {
       id: true,
       userid: true,
@@ -157,7 +163,11 @@ export async function getClassWithVariantsList(userid: number) {
       },
     ],
   });
-  return result;
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  return { list: result };
 }
 
 export async function getClassList(userid: number) {

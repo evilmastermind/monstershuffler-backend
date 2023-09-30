@@ -1,6 +1,15 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { FastifyReply } from 'fastify';
 
+export function handleResultFound(object: any, reply: FastifyReply) {
+  if (!object) {
+    return reply.code(404).send({
+      message: 'Action not found',
+    });
+  }
+  return reply.code(200).send(object);
+}
+
 export function handleError(error: unknown, reply: FastifyReply) {
   if (typeof error === 'string') {
     return reply.code(400).send(createErrorJSON(400, 'Bad request'));
@@ -16,10 +25,10 @@ export function handleError(error: unknown, reply: FastifyReply) {
 
 function handlePrismaErrors(code: string) {
   switch (code) {
-    case 'P2002':
-      return `${code}: this already exists in the database!`;
-    case 'P2010':
-      return `${code}: looks like a raw query failed.`;
+  case 'P2002':
+    return `${code}: this already exists in the database!`;
+  case 'P2010':
+    return `${code}: looks like a raw query failed.`;
   }
   return `Error code ${code}`;
 }

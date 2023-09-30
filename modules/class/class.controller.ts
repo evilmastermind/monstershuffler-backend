@@ -9,7 +9,7 @@ import {
   updateClass,
   deleteClass,
 } from './class.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getClassListHandler(
   request: FastifyRequest,
@@ -33,9 +33,7 @@ export async function getClassWithVariantsListHandler(
   const { id } = request.user || { id: 0 };
   try {
     const classList = await getClassWithVariantsList(id);
-    return reply.code(200).send({
-      list: classList,
-    });
+    return handleResultFound(classList, reply);
   } catch (error) {
     return handleError(error, reply);
   }
@@ -53,7 +51,7 @@ export async function getClassHandler(
   const classId = request.params.classId;
   try {
     const classObject = await getClass(id, parseInt(classId));
-    return reply.code(200).send(classObject);
+    return handleResultFound(classObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }
@@ -66,7 +64,7 @@ export async function getRandomClassHandler(
   const { id } = request.user || { id: 0 };
   try {
     const classObject = await getRandomClass(id);
-    return reply.code(200).send(classObject);
+    return handleResultFound(classObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }

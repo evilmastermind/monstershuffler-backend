@@ -9,7 +9,7 @@ import {
   updateRace,
   deleteRace,
 } from './race.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getRaceListHandler(
   request: FastifyRequest,
@@ -53,7 +53,7 @@ export async function getRaceHandler(
   const raceId = request.params.raceId;
   try {
     const raceObject = await getRace(id, parseInt(raceId));
-    return reply.code(200).send(raceObject);
+    return handleResultFound(raceObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }
@@ -66,7 +66,7 @@ export async function getRandomRaceHandler(
   const { id } = request.user || { id: 0 };
   try {
     const raceObject = await getRandomRace(id);
-    return reply.code(200).send(raceObject);
+    return handleResultFound(raceObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }

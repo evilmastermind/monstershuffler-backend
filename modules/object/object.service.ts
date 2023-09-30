@@ -23,15 +23,15 @@ export async function getChoiceObject(
   let additionalFilters = '';
 
   if (chosenAlreadyIds.length > 0) {
-    additionalFilters += ` AND id NOT IN (`;
+    additionalFilters += ' AND id NOT IN (';
     chosenAlreadyIds.forEach((id, index) => {
       if (index > 0) {
-        additionalFilters += `,`;
+        additionalFilters += ',';
       }
       parameters.push(id);
       additionalFilters += `$${parameters.length}`;
     });
-    additionalFilters += `) `;
+    additionalFilters += ') ';
   }
 
   choice?.filters?.forEach((filter) => {
@@ -40,11 +40,11 @@ export async function getChoiceObject(
     filter.keyValues.forEach((value, index) => {
       parameters.push(value);
       if (index > 0) {
-        additionalFilters += `,`;
+        additionalFilters += ',';
       }
       additionalFilters += `$${parameters.length}`;
     });
-    additionalFilters += `] `;
+    additionalFilters += '] ';
   });
 
   parameters.push(choice?.number || 1);
@@ -79,8 +79,10 @@ export async function getChoiceObject(
     });
     return fullResult.concat(choice.chosenAlready || []);
   } else if (choice?.resultType === 'object') {
+    if ((result as ResultObject[])?.length === 0) {
+      return null;
+    }
     return (result as ResultObject[])[0]?.object;
   }
-
   return result as AnyObject;
 }

@@ -140,7 +140,7 @@ export async function getSpellList(userid: number, filters: getSpellListInput) {
 }
 
 export async function getSpell(userid: number, id: number) {
-  const spell = await prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     select: {
       id: true,
       userid: true,
@@ -152,8 +152,11 @@ export async function getSpell(userid: number, id: number) {
       type: 102,
     },
   });
-
-  return spell;
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  return result;
 }
 
 export async function updateSpell(

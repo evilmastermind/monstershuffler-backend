@@ -7,7 +7,7 @@ import {
   updateWeapon,
   deleteWeapon,
 } from './weapon.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getWeaponListHandler(
   request: FastifyRequest,
@@ -36,7 +36,7 @@ export async function getWeaponHandler(
   const weaponId = request.params.weaponId;
   try {
     const weapon = await getWeapon(id, parseInt(weaponId));
-    return reply.code(200).send(weapon[0]);
+    return handleResultFound(weapon, reply);
   } catch (error) {
     return handleError(error, reply);
   }

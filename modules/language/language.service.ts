@@ -81,15 +81,15 @@ export async function getChoiceLanguage(
   let additionalFilters = '';
 
   if (chosenAlreadyIds.length > 0) {
-    additionalFilters += ` AND id NOT IN (`;
+    additionalFilters += ' AND id NOT IN (';
     chosenAlreadyIds.forEach((id, index) => {
       if (index > 0) {
-        additionalFilters += `,`;
+        additionalFilters += ',';
       }
       parameters.push(id);
       additionalFilters += `$${parameters.length}`;
     });
-    additionalFilters += `) `;
+    additionalFilters += ') ';
   }
 
   parameters.push(choice?.number || 1);

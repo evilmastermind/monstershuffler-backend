@@ -19,6 +19,7 @@ import {
 import {
   getBackground,
   getRandomBackground,
+  getRandomBackgroundForAge,
 } from '@/modules/background/background.service';
 import { AgeObject, WeightObject } from '@/schemas/character';
 import { Voice } from '@/schemas/character/roleplay';
@@ -56,7 +57,7 @@ export async function createRandomNpc(
 
   try {
     ///////////////////////////////////////
-    // R A C E
+    // R A C E / S P E C I E S
     ///////////////////////////////////////
     const random100 = random(1, 100);
     let race: Race | null = null;
@@ -66,52 +67,75 @@ export async function createRandomNpc(
       primaryRaceId &&
       random100 <= primaryRacePercentage
     ) {
-      race = (await getRace(id, primaryRaceId)).object as Race;
-      racevariant = primaryRacevariantId
-        ? ((await getRacevariant(id, primaryRacevariantId))
-          .object as Racevariant)
-        : null;
+      const raceResult = await getRace(id, primaryRaceId);
+      const raceVariantResult = primaryRacevariantId? await getRacevariant(id, primaryRacevariantId) : null;
+      if (raceResult) {
+        race = raceResult.object;
+      }
+      if (raceVariantResult) {
+        racevariant = raceVariantResult.object;
+      }
     } else if (
       secondaryRaceId &&
       secondaryRacePercentage &&
       random100 <= secondaryRacePercentage
     ) {
-      race = (await getRace(id, secondaryRaceId)).object as Race;
-      racevariant = secondaryRacevariantId
-        ? ((await getRacevariant(id, secondaryRacevariantId))
-          .object as Racevariant)
-        : null;
+      const raceResult = await getRace(id, secondaryRaceId);
+      const raceVariantResult = secondaryRacevariantId? await getRacevariant(id, secondaryRacevariantId) : null;
+      if (raceResult) {
+        race = raceResult.object;
+      }
+      if (raceVariantResult) {
+        racevariant = raceVariantResult.object;
+      }
     } else {
       const result = await getRandomRace(id);
-      race = result.object as Race;
-      racevariant =
-        ((await getRandomRacevariant(id, result.id))?.object as Racevariant) ||
-        null;
+      if (result) {
+        race = result.object as Race;
+        racevariant =
+          ((await getRandomRacevariant(id, result.id))?.object as Racevariant) ||
+          null;
+      }
     }
-    
     ///////////////////////////////////////
-    // C L A S S   &   P R O F E S S I O N
+    // A G E
+    ///////////////////////////////////////
+    const age: Age = race? calculateAge(race) : { string: 'adult', number: 0 };
+    ///////////////////////////////////////
+    // C L A S S   &   B A C K G R O U N D
     ///////////////////////////////////////
     let classChosen: Class | null = null;
     let classvariant: Classvariant | null = null;
     let background: Background | null = null;
     const random20 = classType === 'randomSometimes' ? random(1, 20) : 0;
     if (classId && classType === 'specific') {
-      classChosen = (await getClass(id, classId)).object as Class;
-      classvariant = classvariantId
-        ? ((await getClassvariant(id, classvariantId)).object as Classvariant)
-        : null;
+      const classResult = await getClass(id, classId);
+      const classvariantResult = classvariantId? await getClassvariant(id, classvariantId) : null;
+      if (classResult) {
+        classChosen = classResult.object;
+      }
+      if (classvariantResult) {
+        classvariant = classvariantResult.object;
+      }
     } else if (classType === 'randomAlways' || random20 === 20) {
       const result = await getRandomClass(id);
-      classChosen = result.object as Class;
-      classvariant =
-        ((await getRandomClassvariant(id, result.id))
-          ?.object as Classvariant) || null;
+      if (result) {
+        classChosen = result.object as Class;
+        classvariant =
+          ((await getRandomClassvariant(id, result.id))
+            ?.object as Classvariant) || null;
+      }
     }
     if (backgroundType === 'random') {
-      background = (await getRandomBackground(id)).object as Background;
+      const backgroundResult = await getRandomBackground(id);
+      if (backgroundResult) {
+        background = backgroundResult.object;
+      }
     } else if (backgroundId && backgroundType === 'specific') {
-      background = (await getBackground(id, backgroundId)).object as Background;
+      const backgroundResult = await getBackground(id, backgroundId);
+      if (backgroundResult) {
+        background = backgroundResult.object;
+      }
     }
 
     ///////////////////////////////////////
@@ -119,41 +143,44 @@ export async function createRandomNpc(
     ///////////////////////////////////////
     const level = calculateLevel(levelType);
     ///////////////////////////////////////
-    // B A C K G R O U N D   F E A T U R E S
+    // R O L E P L A Y   F E A T U R E S
     ///////////////////////////////////////
     const pronouns = calculatePronouns(race, racevariant);
-    const name = await calculateName(pronouns, race);
+    const name = await calculateName(pronouns, race) || 'Character Name';
     const surname = await calculateSurname(pronouns, race);
-    const favouriteSkill = (await getRandomSkill()).name;
+    const favouriteSkill = await getRandomSkill();
     const traitObject = await getRandomTrait({ feeling: 0 });
     const feelingObject = await getRandomTrait({ feeling: 1 });
-    const alignmentModifiers = calculateAlignment(traitObject.category);
-    const characterHook = await calculateCharacterhook();
-    const age = calculateAge(race);
-    const height = calculateHeight(race, age);
+    const alignmentModifiers = calculateAlignment(traitObject?.category);
+    const characterHook = await await getRandomCharacterhook();
+    const height = race? calculateHeight(race, age) : 0;
     const weight = calculateWeight();
     const voice = addVoice ? await calculateVoice(pronouns) : undefined;
 
     const result: Character = {
       character: {
         name,
-        ...(surname !== undefined && { surname }),
         pronouns,
-        trait: traitObject.name,
-        feeling: feelingObject.name,
+        ...(surname !== null && { surname }),
+        ...(traitObject !== null && { trait: traitObject.name }),
+        ...(feelingObject !== null && { feeling: feelingObject.name }),
+        ...(characterHook !== null && { characterHook: characterHook.hook }),
+        ...(voice !== null && { voice }),
         age,
         height,
         weight,
         alignmentModifiers,
-        characterHook,
-        skills: [{
-          value: favouriteSkill,
-        }],
       },
       variations: {
         currentHD: level,
       }
     };
+
+    if (favouriteSkill) {
+      result.character.skills = [{
+        value: favouriteSkill.name,
+      }];
+    }
 
     const character = result.character;
     if (race) {
@@ -175,9 +202,6 @@ export async function createRandomNpc(
     if (background) {
       character['background'] = background;
       await findChoices(character.background, character.background, 0, id);
-    }
-    if (voice) {
-      character['voice'] = voice;
     }
 
     return {
@@ -304,12 +328,8 @@ function calculateWeight(): Weight {
   return 'obese';
 }
 
-async function calculateCharacterhook() {
-  return (await getRandomCharacterhook()).hook;
-}
-
 function calculateAlignment(
-  traitCategory: string
+  traitCategory: string | undefined
 ): [[number, number, number], [number, number, number]] {
   let lawfulness = 0;
   let ethicalNeutrality = 0;
@@ -384,10 +404,10 @@ function calculateName(pronouns: string, race: Race | null) {
   return getRandomName({ race: nameType, gender });
 }
 
-function calculateSurname(pronouns: string, race: Race | null) {
+async function calculateSurname(pronouns: string, race: Race | null) {
   let surnameType = 'human';
   if (!race || !race.addSurname || random(1, 100) >= race.addSurname) {
-    return undefined;
+    return null;
   }
   if (race && race.nameType && race.nameType.length) {
     const randomIndex = random(0, race.nameType.length - 1);
@@ -397,7 +417,7 @@ function calculateSurname(pronouns: string, race: Race | null) {
   if (gender === 'neutral') {
     gender = random(1, 2) === 1 ? 'male' : 'female';
   }
-  return getRandomSurname({ race: surnameType, gender });
+  return await getRandomSurname({ race: surnameType, gender });
 }
 
 function calculatePronouns(race: Race | null, racevariant: Racevariant | null) {
@@ -424,6 +444,9 @@ async function calculateVoice(pronouns: string) {
     options = {};
   }
   const randomVoice = await getRandomVoice(options);
+  if(!randomVoice) {
+    return null;
+  }
   const newVoice: Voice = {
     person: randomVoice.person,
     filename: randomVoice.filename,

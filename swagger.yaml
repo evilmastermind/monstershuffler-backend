@@ -22,6 +22,18 @@ components:
                   type: string
                 workplace:
                   type: string
+                compatibleAges:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - child
+                      - adolescent
+                      - young adult
+                      - adult
+                      - middle-aged
+                      - elderly
+                      - venerable
                 armor:
                   anyOf:
                     - type: object
@@ -727,6 +739,7 @@ components:
                 - name
                 - femaleName
                 - workplace
+                - compatibleAges
               additionalProperties: false
             age:
               type: string
@@ -2767,6 +2780,18 @@ components:
                           type: string
                         workplace:
                           type: string
+                        compatibleAges:
+                          type: array
+                          items:
+                            type: string
+                            enum:
+                              - child
+                              - adolescent
+                              - young adult
+                              - adult
+                              - middle-aged
+                              - elderly
+                              - venerable
                         armor:
                           $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                             /properties/npc/properties/character/properties/rac\
@@ -2851,6 +2876,7 @@ components:
                         - name
                         - femaleName
                         - workplace
+                        - compatibleAges
                       additionalProperties: false
                     template:
                       type: object
@@ -3154,15 +3180,9 @@ components:
                             number:
                               type: number
                             string:
-                              type: string
-                              enum:
-                                - child
-                                - adolescent
-                                - young adult
-                                - adult
-                                - middle-aged
-                                - elderly
-                                - venerable
+                              $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                                /properties/npc/properties/character/properties\
+                                /background/properties/compatibleAges/items"
                           required:
                             - number
                             - string
@@ -4657,6 +4677,29 @@ paths:
         - backgrounds
       description: Returns the details of a random background from list of backgrounds
         available to the user in the database.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: authorization
+          required: false
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/backgroundSchemas/properties/getBackgroundResponseS\
+                  chema"
+  "/api/backgrounds/random/{age}":
+    get:
+      summary: Returns the details of a random background for a specific age.
+      tags:
+        - backgrounds
+      description: 'Returns the details of a random background, for a specific age,
+        from list of backgrounds available to the user in the database. The age
+        must be one of the following: "child", "adolescent", "young adult",
+        "adult", "middle-aged", "elderly", "venerable".'
       parameters:
         - schema:
             type: string

@@ -7,7 +7,7 @@ import {
   updateAction,
   deleteAction,
 } from './action.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getActionListHandler(
   request: FastifyRequest<{ Body: getActionListInput }>,
@@ -37,7 +37,7 @@ export async function getActionHandler(
   const actionId = request.params.actionId;
   try {
     const actionObject = await getAction(id, parseInt(actionId));
-    return reply.code(200).send(actionObject);
+    return handleResultFound(actionObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }

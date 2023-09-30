@@ -7,12 +7,16 @@ export async function getRandomVoice(input: getRandomVoiceInput) {
       gender: input.gender,
     },
   });
-  const voice = await prisma.voices.findMany({
+  const array = await prisma.voices.findMany({
     skip: Math.floor(Math.random() * voiceCount),
     take: 1,
     where: {
       gender: input.gender,
     },
   });
-  return voice[0];
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  return result;
 }

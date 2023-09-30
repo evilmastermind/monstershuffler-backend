@@ -12,7 +12,7 @@ import {
   updateClassvariant,
   deleteClassvariant,
 } from './classvariant.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getClassvariantClassListHandler(
   request: FastifyRequest<{
@@ -67,7 +67,7 @@ export async function getClassvariantHandler(
       id,
       parseInt(classvariantId)
     );
-    return reply.code(200).send(classvariantObject);
+    return handleResultFound(classvariantObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }
@@ -88,7 +88,7 @@ export async function getRandomClassvariantHandler(
       id,
       parseInt(classId)
     );
-    return reply.code(200).send(classvariantObject);
+    return handleResultFound(classvariantObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }

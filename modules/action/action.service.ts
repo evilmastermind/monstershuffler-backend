@@ -108,8 +108,10 @@ export async function getAction(userid: number, id: number) {
       type: 101,
     },
   });
-
-  return action;
+  if (action.length) {
+    return action[0];
+  }
+  return null;
 }
 
 export async function updateAction(

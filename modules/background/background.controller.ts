@@ -4,11 +4,12 @@ import {
   createBackground,
   getBackground,
   getRandomBackground,
+  getRandomBackgroundForAge,
   getBackgroundList,
   updateBackground,
   deleteBackground,
 } from './background.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getBackgroundListHandler(
   request: FastifyRequest,
@@ -37,8 +38,7 @@ export async function getBackgroundHandler(
   const backgroundId = request.params.backgroundId;
   try {
     const backgroundObject = await getBackground(id, parseInt(backgroundId));
-    console.log(JSON.stringify(backgroundObject, null, 2));
-    return reply.code(200).send(backgroundObject);
+    return handleResultFound(backgroundObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }
@@ -51,7 +51,25 @@ export async function getRandomBackgroundHandler(
   const { id } = request.user || { id: 0 };
   try {
     const backgroundObject = await getRandomBackground(id);
-    return reply.code(200).send(backgroundObject);
+    return handleResultFound(backgroundObject, reply);
+  } catch (error) {
+    return handleError(error, reply);
+  }
+}
+
+export async function getRandomBackgroundForAgeHandler(
+  request: FastifyRequest<{
+    Params: {
+      age: string;
+    };
+  }>,
+  reply: FastifyReply
+) {
+  const { id } = request.user || { id: 0 };
+  const age = request.params.age;
+  try {
+    const backgroundObject = await getRandomBackgroundForAge(id, age);
+    return handleResultFound(backgroundObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }

@@ -3,6 +3,7 @@ import {
   createBackgroundHandler,
   getBackgroundHandler,
   getRandomBackgroundHandler,
+  getRandomBackgroundForAgeHandler,
   getBackgroundListHandler,
   updateBackgroundHandler,
   deleteBackgroundHandler,
@@ -71,6 +72,26 @@ async function backgroundRoutes(server: FastifyInstance) {
       },
     },
     getRandomBackgroundHandler
+  );
+
+  server.get(
+    '/random/:age',
+    {
+      preHandler: [server.authenticateOptional],
+      schema: {
+        summary:
+          'Returns the details of a random background for a specific age.',
+        description:
+          'Returns the details of a random background, for a specific age, from list of backgrounds available to the user in the database. The age must be one of the following: "child", "adolescent", "young adult", "adult", "middle-aged", "elderly", "venerable".',
+        headers: jwtHeaderOptional,
+        tags: ['backgrounds'],
+        // params: $ref('getBackgroundParamsSchema'),
+        response: {
+          200: $ref('getBackgroundResponseSchema'),
+        },
+      },
+    },
+    getRandomBackgroundForAgeHandler
   );
 
   // server.post(

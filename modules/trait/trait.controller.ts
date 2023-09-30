@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { getRandomTrait, getTraitDescription } from './trait.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 import { getRandomTraitInput } from './trait.schema';
 
 export async function getRandomTraitHandler(
@@ -12,7 +12,7 @@ export async function getRandomTraitHandler(
   try {
     const { body } = request;
     const trait = await getRandomTrait(body);
-    return reply.code(200).send(trait);
+    return handleResultFound(trait, reply);
   } catch (error) {
     return handleError(error, reply);
   }
@@ -29,7 +29,7 @@ export async function getTraitDescriptionHandler(
   try {
     const name = request.params.name;
     const description = await getTraitDescription(name);
-    return reply.code(200).send(description);
+    return handleResultFound(description, reply);
   } catch (error) {
     return handleError(error, reply);
   }

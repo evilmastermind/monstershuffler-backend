@@ -41,7 +41,7 @@ export async function createRacevariant(
 }
 
 export async function getRacevariant(userid: number, id: number) {
-  const result = (await prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     select: {
       object: true,
       id: true,
@@ -58,7 +58,11 @@ export async function getRacevariant(userid: number, id: number) {
         },
       ],
     },
-  }))[0];
+  });
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
   const response = {
     object: result.object as Racevariant,
     id: result.id,
@@ -85,7 +89,7 @@ export async function getRandomRacevariant(userid: number, variantof: number) {
   if (raceCount === 0) {
     return null;
   }
-  const result = (await prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     skip: Math.floor(Math.random() * raceCount),
     take: 1,
     select: {
@@ -104,7 +108,11 @@ export async function getRandomRacevariant(userid: number, variantof: number) {
         },
       ],
     },
-  }))[0];
+  });
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
   const response = {
     object: result.object as Racevariant,
     id: result.id,

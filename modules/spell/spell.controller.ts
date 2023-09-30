@@ -7,7 +7,7 @@ import {
   updateSpell,
   deleteSpell,
 } from './spell.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getSpellListHandler(
   request: FastifyRequest<{ Body: getSpellListInput }>,
@@ -37,7 +37,7 @@ export async function getSpellHandler(
   const spellId = request.params.spellId;
   try {
     const spell = await getSpell(id, parseInt(spellId));
-    return reply.code(200).send(spell[0]);
+    return handleResultFound(spell, reply);
   } catch (error) {
     return handleError(error, reply);
   }

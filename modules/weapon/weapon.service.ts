@@ -9,14 +9,14 @@ export async function createWeapon(userid: number, input: createWeaponInput) {
       game,
       type: 1001,
       userid,
-      name: object.name,
+      name: object.name || '',
       object,
     },
   });
 }
 
 export async function getWeapon(userid: number, id: number) {
-  return await prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     select: {
       object: true,
     },
@@ -33,6 +33,11 @@ export async function getWeapon(userid: number, id: number) {
       ],
     },
   });
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  return result;
 }
 
 export async function getWeaponList(userid: number) {

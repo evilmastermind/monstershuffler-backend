@@ -16,7 +16,7 @@ export async function createArmor(userid: number, input: createArmorInput) {
 }
 
 export async function getArmor(userid: number, id: number) {
-  return await prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     select: {
       object: true,
     },
@@ -33,6 +33,12 @@ export async function getArmor(userid: number, id: number) {
       ],
     },
   });
+
+  if (array.length) {
+    return array[0];
+  } else {
+    return null;
+  }
 }
 
 export async function getArmorList(userid: number) {

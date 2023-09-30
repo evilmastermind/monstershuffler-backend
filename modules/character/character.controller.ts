@@ -7,7 +7,7 @@ import {
   updateCharacter,
   deleteCharacter,
 } from './character.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getCharacterListHandler(
   request: FastifyRequest,
@@ -36,7 +36,7 @@ export async function getCharacterHandler(
   const characterId = request.params.characterId;
   try {
     const characterObject = await getCharacter(id, parseInt(characterId));
-    return reply.code(200).send(characterObject);
+    return handleResultFound(characterObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }

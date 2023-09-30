@@ -29,7 +29,7 @@ export async function createBackground(
 }
 
 export async function getBackground(userid: number, id: number) {
-  const result = (await prisma.objects.findMany({
+  const backgrounds = (await prisma.objects.findMany({
     select: {
       object: true,
       id: true,
@@ -47,27 +47,34 @@ export async function getBackground(userid: number, id: number) {
       ],
     },
   })
-  )[0];
+  );
+  if (backgrounds.length === 0) {
+    return null;
+  }
+  const result = backgrounds[0];
   const details = await getBackgroundDetails(id);
   const response = {
     object: result.object as Background,
     id: result.id,
-    name: details.name,
-    femaleName: details.femalename,
-    age: details.age,
-    description: details.description || '',
+    name: details?.name || '',
+    femaleName: details?.femalename || '',
+    age: details?.age || '',
+    description: details?.description || '',
   };
   response.object.id = result.id;
   return response;
 }
 
 export async function getBackgroundDetails(id: number) {
-  const result = (await prisma.backgroundsdetails.findMany({
+  const array = await prisma.backgroundsdetails.findMany({
     where: {
       objectid: id,
     },
-  }))[0];
-  return result;
+  });
+  if (array.length === 0) {
+    return null;
+  }
+  return array[0];
 }
 
 export async function getRandomBackground(userid: number) {
@@ -84,7 +91,7 @@ export async function getRandomBackground(userid: number) {
       ],
     },
   });
-  const result = (await prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     skip: Math.floor(Math.random() * backgroundCount),
     take: 1,
     select: {
@@ -102,7 +109,57 @@ export async function getRandomBackground(userid: number) {
         },
       ],
     },
-  }))[0];
+  });
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  const response = {
+    object: result.object as Background,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  return response;
+}
+
+export async function getRandomBackgroundForAge(userid: number, age: string) {
+  const filter = {
+    type: 5,
+    AND: [
+      {
+        OR: [
+          {
+            userid: 0,
+          },
+          {
+            userid,
+          },
+        ],
+      },
+      {
+        object: {
+          path: ['compatibleAges'],
+          equals: age,
+        },
+      },
+    ],
+  };
+  const backgroundCount = await prisma.objects.count({
+    where: filter,
+  });
+  const array = await prisma.objects.findMany({
+    skip: Math.floor(Math.random() * backgroundCount),
+    take: 1,
+    select: {
+      object: true,
+      id: true,
+    },
+    where: filter,
+  });
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
   const response = {
     object: result.object as Background,
     id: result.id,

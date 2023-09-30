@@ -374,6 +374,7 @@ export const backgroundObject = z
     name: z.string(),
     femaleName: z.string(),
     workplace: z.string(),
+    compatibleAges: z.array(ages),
     ...armorStats,
     ...alignmentModifiersStats,
     ...subtypesStats,

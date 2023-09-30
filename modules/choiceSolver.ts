@@ -121,6 +121,7 @@ async function resolveRandomChoice(
     // check if the result is an array and if it has any elements
   } else if (result && Array.isArray(result) && result.length >0) {
     father[fathersKey] = result;
+    // if the result is null, delete the key from the father object
   } else {
     delete father[fathersKey];
   }
