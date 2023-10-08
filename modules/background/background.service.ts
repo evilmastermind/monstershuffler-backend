@@ -139,7 +139,7 @@ export async function getRandomBackgroundForAge(userid: number, age: string) {
       {
         object: {
           path: ['compatibleAges'],
-          equals: age,
+          array_contains: [age],
         },
       },
     ],

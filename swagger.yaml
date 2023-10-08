@@ -1643,6 +1643,8 @@ components:
               maximum: 100
             addVoice:
               type: boolean
+            includeChildren:
+              type: boolean
           additionalProperties: false
         createRandomNpcResponseSchema:
           type: object
@@ -4934,6 +4936,27 @@ paths:
         - traits
       description: Returns a random trait which is usually an adjective describing a
         creature's state of mind, attitude, core beliefs or current feelings.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/traitSchemas/properties/getRandomTraitSchema"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/traitSchemas/properties/getRandomTraitResponseSchem\
+                  a"
+  "/api/traits/random/{age}":
+    post:
+      summary: Returns a random trait for the given age.
+      tags:
+        - traits
+      description: 'Returns a random trait for the given age. The age must be one of
+        the following: "child", "adolescent", "young adult", "adult",
+        "middle-aged", "elderly", "venerable".'
       requestBody:
         content:
           application/json:

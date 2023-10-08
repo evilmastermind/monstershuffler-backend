@@ -20,6 +20,7 @@ const createRandomNpcInputSchema = z.object({
   primaryRacePercentage: z.number().min(0).max(100).optional(),
   secondaryRacePercentage: z.number().min(0).max(100).optional(),
   addVoice: z.boolean().optional(),
+  includeChildren: z.boolean().optional(),
 });
 
 const createRandomNpcResponseSchema = z.object({

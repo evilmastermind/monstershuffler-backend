@@ -27,6 +27,35 @@ export async function getRandomTrait(input: getRandomTraitInput) {
   return result;
 }
 
+export async function getRandomTraitForAge(
+  input: getRandomTraitInput,
+  age: string
+) {
+  const filter = {
+    type: input.type,
+    subtitle: input.subtitle,
+    category: input.category,
+    feeling: input.feeling,
+    object: {
+      path: ['compatibleAges'],
+      array_contains: [age],
+    },
+  };
+  const traitCount = await prisma.traits.count({
+    where: filter,
+  });
+  const array = await prisma.traits.findMany({
+    skip: Math.floor(Math.random() * traitCount),
+    take: 1,
+    where: filter,
+  });
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  return result;
+}
+
 export async function getTraitDescription(name: string) {
   return await prisma.traits.findUnique({
     select: {

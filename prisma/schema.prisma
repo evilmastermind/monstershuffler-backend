@@ -120,6 +120,7 @@ model objects {
   type                  Int
   name                  String                  @db.VarChar(255)
   game                  Int
+  description           String?
   userid                Int
   created               DateTime?               @default(now()) @db.Timestamp(6)
   lastedited            DateTime?               @default(now()) @db.Timestamp(6)
@@ -288,6 +289,9 @@ model traits {
   category    String  @db.VarChar(255)
   feeling     Int?    @default(0) @db.SmallInt
   description String?
+  object      Json
+
+  @@index([object], map: "idx_gin_traits", type: Gin)
 }
 
 model users {
@@ -348,6 +352,9 @@ model backgroundsdetails {
 }
 
 model characterhooks {
-  id   Int    @unique(map: "characterhooks_id_idx") @default(autoincrement())
-  hook String @db.VarChar(255)
+  id     Int    @unique(map: "characterhooks_id_idx") @default(autoincrement())
+  hook   String @db.VarChar(255)
+  object Json
+
+  @@index([object], map: "idx_gin_characterhooks", type: Gin)
 }

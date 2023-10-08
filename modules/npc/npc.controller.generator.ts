@@ -27,8 +27,8 @@ import { Background } from '@/modules/background/background.schema';
 import { getRandomSkill } from '@/modules/skill/skill.service';
 import { getRandomName } from '@/modules/name/name.service';
 import { getRandomSurname } from '@/modules/surname/surname.service';
-import { getRandomTrait } from '@/modules/trait/trait.service';
-import { getRandomCharacterhook } from '@/modules/characterhook/characterhook.service';
+import { getRandomTraitForAge } from '@/modules/trait/trait.service';
+import { getRandomCharacterhookForAge } from '@/modules/characterhook/characterhook.service';
 import { handleError } from '@/utils/errors';
 import { random, randomDecimal, round2Decimals } from '@/utils/functions';
 import { findChoices } from '@/modules/choiceSolver';
@@ -53,6 +53,7 @@ export async function createRandomNpc(
     primaryRacevariantId,
     secondaryRacevariantId,
     addVoice,
+    includeChildren,
   } = request.body;
 
   try {
@@ -100,7 +101,7 @@ export async function createRandomNpc(
     ///////////////////////////////////////
     // A G E
     ///////////////////////////////////////
-    const age: Age = race? calculateAge(race) : { string: 'adult', number: 0 };
+    const age: Age = race? calculateAge(race, includeChildren) : { string: 'adult', number: 0 };
     ///////////////////////////////////////
     // C L A S S   &   B A C K G R O U N D
     ///////////////////////////////////////
@@ -149,10 +150,10 @@ export async function createRandomNpc(
     const name = await calculateName(pronouns, race) || 'Character Name';
     const surname = await calculateSurname(pronouns, race);
     const favouriteSkill = await getRandomSkill();
-    const traitObject = await getRandomTrait({ feeling: 0 });
-    const feelingObject = await getRandomTrait({ feeling: 1 });
+    const traitObject = await getRandomTraitForAge({ feeling: 0 }, age.string);
+    const feelingObject = await getRandomTraitForAge({ feeling: 1 }, age.string);
     const alignmentModifiers = calculateAlignment(traitObject?.category);
-    const characterHook = await await getRandomCharacterhook();
+    const characterHook = await await getRandomCharacterhookForAge(age.string);
     const height = race? calculateHeight(race, age) : 0;
     const weight = calculateWeight();
     const voice = addVoice ? await calculateVoice(pronouns) : undefined;
@@ -237,7 +238,7 @@ export async function createRandomNpc(
 
 type Age = z.infer<typeof AgeObject>;
 
-function calculateAge(race: Race): Age {
+function calculateAge(race: Race, includeChildren = false): Age {
   const ageAdult = race.ageAdult || 0;
   const ageMax = race.ageMax || 0;
   const age: Age = {
@@ -248,7 +249,11 @@ function calculateAge(race: Race): Age {
     //
   } else if (!ageMax) {
     const childLimit = ageAdult*0.22;
-    age.number = Math.ceil(randomDecimal(childLimit, ageAdult*7, 'middle'));
+    if (includeChildren) {
+      age.number = Math.ceil(randomDecimal(childLimit, ageAdult*7, 'middle'));
+    } else {
+      age.number = Math.ceil(randomDecimal(ageAdult, ageAdult*7, 'middle'));
+    }
     if (age.number < childLimit) {
       age.string = 'child';
     } else if (age.number < ageAdult) {
@@ -263,7 +268,11 @@ function calculateAge(race: Race): Age {
     const adultLimit = ageAdult + yearsAsGrownUp*0.36; // 25-44 for humans
     const middleAgedLimit = ageAdult + yearsAsGrownUp*0.66; // 45-64 for humans
     const elderlyLimit = ageAdult + yearsAsGrownUp*0.94; // 65-85 for humans
-    age.number = Math.ceil(randomDecimal(4, ageMax*1.15, 'middle'));
+    if (includeChildren) {
+      age.number = Math.ceil(randomDecimal(childLimit/3, ageMax*1.15, 'middle'));
+    } else {
+      age.number = Math.ceil(randomDecimal(ageAdult, ageMax*1.15, 'middle'));
+    }
     if (age.number < childLimit) {
       age.string = 'child';
     } else if (age.number < ageAdult) {

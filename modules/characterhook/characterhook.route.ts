@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { getRandomCharacterhookHandler } from './characterhook.controller';
+import { getRandomCharacterhookHandler, getRandomCharacterhookForAgeHandler } from './characterhook.controller';
 import { $ref } from './characterhook.schema';
 
 async function characterhookRoutes(server: FastifyInstance) {
@@ -17,6 +17,21 @@ async function characterhookRoutes(server: FastifyInstance) {
       },
     },
     getRandomCharacterhookHandler
+  );
+  server.get(
+    '/random/:age',
+    {
+      schema: {
+        summary: 'Returns a random characterhook for the given age.',
+        description:
+          'Returns a random characterhook for the given age. The age must be one of the following: "child", "adolescent", "young adult", "adult", "middle-aged", "elderly", "venerable".',
+        tags: ['characterhooks'],
+        response: {
+          200: $ref('getRandomCharacterhookResponseSchema'),
+        },
+      },
+    },
+    getRandomCharacterhookForAgeHandler,
   );
 }
 

@@ -11,6 +11,8 @@ import {
 } from './converter.service';
 import { handleError } from '@/utils/errors';
 import { validateHeaderName } from 'http';
+import prisma from '@/utils/prisma';
+
 
 ///////////////////////////////////
 // O B J E C T   T Y P E S
@@ -35,6 +37,12 @@ import { validateHeaderName } from 'http';
 export async function convertObjectsHandler(request, reply) {
   const { id } = request.user;
   try {
+    await prisma.$queryRaw`ALTER TABLE objects ALTER COLUMN object TYPE JSONB USING object::JSONB;`;
+    await prisma.$queryRaw`ALTER TABLE characterhooks ALTER COLUMN object TYPE JSONB USING object::JSONB;`;
+    await prisma.$queryRaw`ALTER TABLE traits ALTER COLUMN object TYPE JSONB USING object::JSONB;`;
+    await prisma.$queryRaw`CREATE INDEX idx_gin_characterhooks ON characterhooks USING GIN(object);`;
+    await prisma.$queryRaw`CREATE INDEX idx_gin_traits ON traits USING GIN(object);`;
+
     // OBJECTS
     let cursor = await getFirstObjectId();
     const pageSize = 100;
@@ -72,7 +80,12 @@ async function convertObject(object) {
   case 2:
   case 3:
   case 4:
+    await convertNonCharacter(objectJSON, object.id);
+    break;
   case 5:
+    addCompatibleAgesToBackground(objectJSON);
+    await convertNonCharacter(objectJSON, object.id);
+    break;
   case 10002:
   case 10003:
     await convertNonCharacter(objectJSON, object.id);
@@ -126,8 +139,12 @@ async function convertCharacter(object, id) {
   }
   if (Object.hasOwn(object, 'background')) {
     await convertCharacterObject(object.background, id);
-    object.background.compatibleAges = ['child', 'adolescent', 'young adult', 'adult', 'middle-aged', 'elderly', 'venerable'];
+    addCompatibleAgesToBackground(object.background);
   }
+}
+
+function addCompatibleAgesToBackground(background) {
+  background.compatibleAges = ['child', 'adolescent', 'young adult', 'adult', 'middle-aged', 'elderly', 'venerable'];
 }
 
 function renameStuff(object) {
