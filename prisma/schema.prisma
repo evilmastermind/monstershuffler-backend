@@ -25,11 +25,30 @@ model actionstags {
   @@id([objectid, tag])
 }
 
+model backgroundsdetails {
+  objectid    Int     @id
+  name        String  @db.VarChar(255)
+  femalename  String  @db.VarChar(255)
+  age         String  @db.VarChar(255)
+  description String?
+  objects     objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([objectid])
+}
+
 model bases {
   id    Int    @unique(map: "bases_id_idx") @default(autoincrement())
   age   String @db.VarChar(255)
   part  String @db.VarChar(255)
   value String @db.VarChar(255)
+}
+
+model characterhooks {
+  id     Int    @unique(map: "characterhooks_id_idx") @default(autoincrement())
+  hook   String @db.VarChar(255)
+  object Json
+
+  @@index([object], map: "idx_gin_characterhooks", type: Gin)
 }
 
 model charactersdetails {
@@ -158,6 +177,15 @@ model objecttypes {
   name         String         @db.VarChar(255)
   objects      objects[]
   publications publications[]
+}
+
+model pagesettings {
+  userid Int
+  page   String
+  object Json   @db.Json
+  users  users  @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([userid, page])
 }
 
 model publications {
@@ -323,6 +351,7 @@ model users {
   languages                        languages[]
   npcgeneratorblacklist            npcgeneratorblacklist[]
   objects                          objects[]
+  pagesettings                     pagesettings[]
   publicationsratings              publicationsratings[]
   reports_reports_moderatorTousers reports[]               @relation("reports_moderatorTousers")
   reports_reports_useridTousers    reports[]               @relation("reports_useridTousers")
@@ -338,23 +367,4 @@ model voices {
   character  String? @db.VarChar(255)
   production String? @db.VarChar(255)
   filename   String  @db.VarChar(255)
-}
-
-model backgroundsdetails {
-  objectid    Int     @id
-  name        String  @db.VarChar(255)
-  femalename  String  @db.VarChar(255)
-  age         String  @db.VarChar(255)
-  description String?
-  objects     objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@index([objectid])
-}
-
-model characterhooks {
-  id     Int    @unique(map: "characterhooks_id_idx") @default(autoincrement())
-  hook   String @db.VarChar(255)
-  object Json
-
-  @@index([object], map: "idx_gin_characterhooks", type: Gin)
 }

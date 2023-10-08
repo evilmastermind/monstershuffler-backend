@@ -1,4 +1,4 @@
-var bcrypt = require('node-php-password');
+const bcrypt = require('node-php-password');
 // const saltRounds = 10;
 
 export async function hashPassword(password: string): Promise<string> {
@@ -13,8 +13,8 @@ export async function comparePassword(
 }
 
 export async function generateToken(length: number) {
-  var s = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  return Array.apply(null, Array(length))
+  const s = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  return [...Array(length)]
     .map(function () {
       return s.charAt(Math.floor(Math.random() * s.length));
     })

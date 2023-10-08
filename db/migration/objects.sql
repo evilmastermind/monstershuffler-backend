@@ -2186,3 +2186,13 @@ UPDATE traits SET object = '{"compatibleAges": ["child","adolescent","young adul
 UPDATE traits SET object = '{"compatibleAges": ["child","adolescent","young adult","adult","middle-aged","elderly","venerable"]}' WHERE name ='Zany';
 UPDATE traits SET object = '{"compatibleAges": ["child","adolescent","young adult","adult","middle-aged","elderly","venerable"]}' WHERE name ='Zealot';
 UPDATE traits SET object = '{"compatibleAges": ["child","adolescent","young adult","adult","middle-aged","elderly","venerable"]}' WHERE name ='Zealous';
+update traits set description = "not concealing one''s thoughts or feelings; frank and communicative." where name = 'open';
+
+
+CREATE TABLE `pagesettings` (
+  `userid` int(11) NOT NULL,
+  `page` varchar(255) NOT NULL,
+  `object` json NOT NULL,
+  FOREIGN KEY (`userid`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+  PRIMARY KEY (`userid`, `page`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

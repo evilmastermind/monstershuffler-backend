@@ -166,8 +166,7 @@ export async function getClassWithVariantsList(userid: number) {
   if (array.length === 0) {
     return null;
   }
-  const result = array[0];
-  return { list: result };
+  return { list: array };
 }
 
 export async function getClassList(userid: number) {

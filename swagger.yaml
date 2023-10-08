@@ -3615,6 +3615,28 @@ components:
         - createRandomNpcResponseSchema
         - createFourRandomNpcsResponseSchema
       additionalProperties: false
+    Schema:
+      type: object
+      properties:
+        getPagesettingResponseSchema:
+          type: object
+          properties:
+            page:
+              type: string
+            object:
+              type: object
+              additionalProperties: {}
+          required:
+            - page
+            - object
+          additionalProperties: false
+        setPagesettingResponseSchema:
+          type: object
+          additionalProperties: {}
+      required:
+        - getPagesettingResponseSchema
+        - setPagesettingResponseSchema
+      additionalProperties: false
     raceSchemas:
       type: object
       properties:
@@ -4848,6 +4870,42 @@ paths:
               schema:
                 $ref: "#/components/schemas/npcSchemas/properties/createFourRandomNpcsResponseS\
                   chema"
+  "/api/pagesettings/{page}":
+    get:
+      summary: Returns the user's settings for a specific page.
+      tags:
+        - pagesettings
+      description: Returns the user's settings for a specific page.
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Schema/properties/getPagesettingResponseSchema"
+        "404":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: string
+    post:
+      summary: Saves the user's settings for a specific page.
+      tags:
+        - pagesettings
+      description: Saves the user's settings for a specific page.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Schema/properties/setPagesettingResponseSchema"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: string
   /api/races/:
     get:
       summary: Returns a list of all available races in the db.
