@@ -48,8 +48,8 @@ export async function createRandomNpc(
     backgroundId,
     primaryRaceId,
     secondaryRaceId,
-    primaryRacePercentage,
-    secondaryRacePercentage,
+    primaryRacePercentage = 0,
+    secondaryRacePercentage = 0,
     primaryRacevariantId,
     secondaryRacevariantId,
     addVoice,
@@ -64,7 +64,6 @@ export async function createRandomNpc(
     let race: Race | null = null;
     let racevariant: Racevariant | null = null;
     if (
-      primaryRacePercentage &&
       primaryRaceId &&
       random100 <= primaryRacePercentage
     ) {
@@ -78,8 +77,7 @@ export async function createRandomNpc(
       }
     } else if (
       secondaryRaceId &&
-      secondaryRacePercentage &&
-      random100 <= secondaryRacePercentage
+      random100 <= (primaryRacePercentage + secondaryRacePercentage)
     ) {
       const raceResult = await getRace(id, secondaryRaceId);
       const raceVariantResult = secondaryRacevariantId? await getRacevariant(id, secondaryRacevariantId) : null;
