@@ -121,7 +121,7 @@ export async function getRaceList(userid: number) {
 }
 
 export async function getRaceWithVariantsList(userid: number) {
-  const result = prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     select: {
       id: true,
       userid: true,
@@ -172,7 +172,10 @@ export async function getRaceWithVariantsList(userid: number) {
       },
     ],
   });
-  return result;
+  if (array.length === 0) {
+    return null;
+  }
+  return { list: array };
 }
 
 export async function updateRace(

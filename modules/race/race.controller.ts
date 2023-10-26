@@ -33,9 +33,7 @@ export async function getRaceWithVariantsListHandler(
   const { id } = request.user || { id: 0 };
   try {
     const raceList = await getRaceWithVariantsList(id);
-    return reply.code(200).send({
-      list: raceList,
-    });
+    return handleResultFound(raceList, reply);
   } catch (error) {
     return handleError(error, reply);
   }

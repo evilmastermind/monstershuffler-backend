@@ -18,7 +18,7 @@ const getRaceListResponseSchema = z.object({
   ),
 });
 
-const getRaceWithVariantsListResponseSchema = z.object({
+export const getRaceWithVariantsListResponseSchema = z.object({
   list: z.array(
     z.object({
       id,
