@@ -68,7 +68,7 @@ export async function createRandomNpc(
       random100 <= primaryRacePercentage
     ) {
       const raceResult = await getRace(id, primaryRaceId);
-      const raceVariantResult = primaryRacevariantId? await getRacevariant(id, primaryRacevariantId) : null;
+      const raceVariantResult = primaryRacevariantId? await getRacevariant(id, primaryRacevariantId) : await getRandomRacevariant(id, primaryRaceId);
       if (raceResult) {
         race = raceResult.object;
       }
@@ -80,7 +80,7 @@ export async function createRandomNpc(
       random100 <= (primaryRacePercentage + secondaryRacePercentage)
     ) {
       const raceResult = await getRace(id, secondaryRaceId);
-      const raceVariantResult = secondaryRacevariantId? await getRacevariant(id, secondaryRacevariantId) : null;
+      const raceVariantResult = secondaryRacevariantId? await getRacevariant(id, secondaryRacevariantId) : await getRandomRacevariant(id, secondaryRaceId);
       if (raceResult) {
         race = raceResult.object;
       }
@@ -109,7 +109,7 @@ export async function createRandomNpc(
     const random20 = classType === 'randomSometimes' ? random(1, 20) : 0;
     if (classId && classType === 'specific') {
       const classResult = await getClass(id, classId);
-      const classvariantResult = classvariantId? await getClassvariant(id, classvariantId) : null;
+      const classvariantResult = classvariantId? await getClassvariant(id, classvariantId) : await getRandomClassvariant(id, classId);
       if (classResult) {
         classChosen = classResult.object;
       }
