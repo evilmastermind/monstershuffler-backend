@@ -1645,6 +1645,13 @@ components:
               type: boolean
             includeChildren:
               type: boolean
+            pronounsChosen:
+              type: string
+              enum:
+                - male
+                - female
+                - neutral
+                - thing
           additionalProperties: false
         createRandomNpcResponseSchema:
           type: object
@@ -3329,12 +3336,8 @@ components:
                       items:
                         type: string
                     pronouns:
-                      type: string
-                      enum:
-                        - male
-                        - female
-                        - neutral
-                        - thing
+                      $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcInputSchema/pr\
+                        operties/pronounsChosen"
                     prename:
                       type: string
                     name:
@@ -3359,6 +3362,16 @@ components:
                               - race
                               - class
                               - template
+                              - type
+                              - subtype
+                              - language
+                              - skill
+                              - savingThrow
+                              - condition
+                              - resistance
+                              - immunity
+                              - vulnerability
+                              - conditionImmunity
                           id:
                             type: number
                         required:
@@ -3373,6 +3386,8 @@ components:
                           type: number
                         string:
                           type: string
+                        id:
+                          type: number
                       required:
                         - number
                         - string
@@ -3384,7 +3399,7 @@ components:
                     size:
                       $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                         /properties/npc/properties/statistics/properties/CR"
-                    sizeSwarmSingleEntity:
+                    sizeSingleEntityOfSwarm:
                       $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                         /properties/npc/properties/statistics/properties/CR"
                     abilityScores:
@@ -3417,6 +3432,14 @@ components:
                     HP:
                       $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
                         /properties/npc/properties/statistics/properties/CR"
+                    type:
+                      $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                        /properties/npc/properties/statistics/properties/CR"
+                    subtypes:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/npcSchemas/properties/createRandomNpcResponseSchema\
+                          /properties/npc/properties/statistics/properties/CR"
                   required:
                     - alignment
                     - pronouns
@@ -3553,6 +3576,8 @@ components:
                       type: string
                     sizetwosmaller:
                       type: string
+                    type:
+                      type: string
                   required:
                     - name
                     - Name
@@ -3583,6 +3608,7 @@ components:
                     - sizesmaller
                     - sizetwogreater
                     - sizetwosmaller
+                    - type
                   additionalProperties:
                     type: string
                 variations:
@@ -4854,7 +4880,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/classSchemas/properties/getClassResponseSchema"
-  /api/classes/withvariants:
+  /api/classes/with-variants:
     get:
       summary: Returns a list of all available combinations of classes and variants in
         the db.
@@ -4947,7 +4973,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/npcSchemas/properties/getGeneratorDataResponseSchem\
                   a"
-  /api/pagesettings/{page}:
+  /api/page-settings/{page}:
     get:
       summary: Returns the user's settings for a specific page.
       tags:
@@ -5015,7 +5041,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/raceSchemas/properties/getRaceListResponseSchema"
-  /api/races/withvariants:
+  /api/races/with-variants:
     get:
       summary: Returns a list of all available combinations of races and variants in
         the db.

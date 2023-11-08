@@ -92,7 +92,7 @@ export const routes = [
   //  {routes: languageRoutes,  prefix: 'api/languages' },
   //  {routes: nameRoutes,  prefix: 'api/names' },
   { routes: npcRoutes, prefix: 'api/npcs' },
-  { routes: pagesettingRoutes, prefix: 'api/pagesettings' },
+  { routes: pagesettingRoutes, prefix: 'api/page-settings' },
   // { routes: backgroundRoutes,  prefix: "api/backgrounds" },
   //  {routes: quirkRoutes,  prefix: 'api/quirks' },
   { routes: raceRoutes, prefix: 'api/races' },

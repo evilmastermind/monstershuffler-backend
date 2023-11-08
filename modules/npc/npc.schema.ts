@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
 import { characterObject } from '@/schemas/character';
+import { Pronouns } from '@/schemas/character/statistics';
 
 const id = z.number();
 const userid = z.number();
@@ -47,6 +48,7 @@ const createRandomNpcInputSchema = z.object({
   secondaryRacePercentage: z.number().min(0).max(100).optional(),
   addVoice: z.boolean().optional(),
   includeChildren: z.boolean().optional(),
+  pronounsChosen: Pronouns.optional(),
 });
 
 const createRandomNpcResponseSchema = z.object({

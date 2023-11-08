@@ -31,7 +31,7 @@ async function raceRoutes(server: FastifyInstance) {
   );
 
   server.get(
-    '/withvariants',
+    '/with-variants',
     {
       preHandler: [server.authenticateOptional],
       schema: {

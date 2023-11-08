@@ -1,8 +1,10 @@
+import { stat } from 'fs';
 import { z } from 'zod';
 
-export const statNumberString = z.object({
+const statNumberString = z.object({
   number: z.number(),
   string: z.string(),
+  id: z.number().optional(),
 });
 
 export const Abilities = z.object({
@@ -14,15 +16,17 @@ export const Abilities = z.object({
   CHA: z.number(),
 });
 
-export const DescriptionPart = z.object({
+const DescriptionPart = z.object({
   string: z.string(),
-  type: z.enum(['background', 'spell', 'trait', 'race', 'class', 'template']).optional(),
+  type: z.enum(['background' , 'spell' , 'trait' , 'race' , 'class' , 'template' , 'type' , 'subtype' , 'language' , 'skill'  , 'savingThrow' , 'condition' , 'resistance' , 'immunity' , 'vulnerability' , 'conditionImmunity']).optional(),
   id: z.number().optional(),
 });
 
+export const Pronouns = z.enum(['male', 'female', 'neutral', 'thing']);
+
 export const statisticsObject = z.object({
   alignment: z.array(z.string()),
-  pronouns: z.enum(['male', 'female', 'neutral', 'thing']),
+  pronouns: Pronouns,
   prename: z.string(),
   name: z.string(),
   surname: z.string(),
@@ -33,10 +37,12 @@ export const statisticsObject = z.object({
   XP: z.string(),
   proficiency: z.number(),
   size: statNumberString,
-  sizeSwarmSingleEntity: statNumberString.optional(),
+  sizeSingleEntityOfSwarm: statNumberString.optional(),
   abilityScores: Abilities,
   abilityModifiers: Abilities,
   HP: statNumberString,
+  type: statNumberString.optional(),
+  subtypes: z.array(statNumberString).optional(),
 });
 
-type Statistics = z.infer<typeof statisticsObject>;
+export type Statistics = z.infer<typeof statisticsObject>;

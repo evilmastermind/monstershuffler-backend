@@ -52,6 +52,7 @@ export async function createRandomNpc(
     secondaryRacePercentage = 0,
     primaryRacevariantId,
     secondaryRacevariantId,
+    pronounsChosen,
     addVoice,
     includeChildren,
   } = request.body;
@@ -144,7 +145,7 @@ export async function createRandomNpc(
     ///////////////////////////////////////
     // R O L E P L A Y   F E A T U R E S
     ///////////////////////////////////////
-    const pronouns = calculatePronouns(race, racevariant);
+    const pronouns = pronounsChosen || calculatePronouns(race, racevariant);
     const name = await calculateName(pronouns, race) || 'Character Name';
     const surname = await calculateSurname(pronouns, race);
     const favouriteSkill = await getRandomSkill();

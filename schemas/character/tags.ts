@@ -30,4 +30,5 @@ export const tagsObject = z.object({
   sizesmaller: z.string(),
   sizetwogreater: z.string(),
   sizetwosmaller: z.string(),
+  type: z.string(),
 }).catchall(z.string());

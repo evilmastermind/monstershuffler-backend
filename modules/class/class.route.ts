@@ -49,7 +49,7 @@ async function classRoutes(server: FastifyInstance) {
   );
 
   server.get(
-    '/withvariants',
+    '/with-variants',
     {
       preHandler: [server.authenticateOptional],
       schema: {
