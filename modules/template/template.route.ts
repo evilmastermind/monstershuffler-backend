@@ -21,7 +21,7 @@ async function templateRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['templates'],
         response: {
-          200: $ref('getTemplateListResponseSchema'),
+          200: $ref('getTemplateListResponse'),
         },
       },
     },
@@ -41,7 +41,7 @@ async function templateRoutes(server: FastifyInstance) {
         tags: ['templates'],
         // params: $ref('getTemplateParamsSchema'),
         response: {
-          200: $ref('getTemplateResponseSchema'),
+          200: $ref('getTemplateResponse'),
         },
       },
     },
@@ -56,11 +56,11 @@ async function templateRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new template to the db.',
         description: '[MS ONLY] Adds a new template to the db.',
-        body: $ref('createTemplateSchema'),
+        body: $ref('postTemplate'),
         tags: ['templates'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('getTemplateResponseSchema'),
+          201: $ref('getTemplateResponse'),
         },
       },
     },
@@ -77,7 +77,7 @@ async function templateRoutes(server: FastifyInstance) {
           '[MS ONLY] Updates the template corresponding to the given id.',
         description:
           '[MS ONLY] Updates the template corresponding to the given id.',
-        body: $ref('updateTemplateSchema'),
+        body: $ref('putTemplate'),
         tags: ['templates'],
         headers: jwtHeaderRequired,
         response: {

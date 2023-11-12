@@ -18,9 +18,9 @@ async function npcRoutes(server: FastifyInstance) {
         description: 'Creates a new random npc using the settings provided.',
         headers: jwtHeaderOptional,
         tags: ['npcs'],
-        body: $ref('createRandomNpcInputSchema'),
+        body: $ref('postRandomNpcInput'),
         response: {
-          200: $ref('createRandomNpcResponseSchema'),
+          200: $ref('postRandomNpcResponse'),
         },
       },
     },
@@ -38,9 +38,9 @@ async function npcRoutes(server: FastifyInstance) {
           'Creates four new random npcs using the settings provided. Only accessible through monstershuffler.com',
         headers: jwtHeaderOptional,
         tags: ['npcs'],
-        body: $ref('createRandomNpcInputSchema'),
+        body: $ref('postRandomNpcInput'),
         response: {
-          200: $ref('createFourRandomNpcsResponseSchema'),
+          200: $ref('postFourRandomNpcsResponse'),
         },
       },
     },
@@ -57,7 +57,7 @@ async function npcRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['npcs'],
         response: {
-          200: $ref('getGeneratorDataResponseSchema'),
+          200: $ref('getGeneratorDataResponse'),
         },
       },
     },

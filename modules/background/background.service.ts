@@ -1,9 +1,9 @@
 import prisma from '@/utils/prisma';
-import { createBackgroundInput, Background } from './background.schema';
+import { CreateBackgroundInput, Background } from './background.schema';
 
 export async function createBackground(
   userid: number,
-  input: createBackgroundInput
+  input: CreateBackgroundInput
 ) {
   const { object, description, age, game } = input;
 
@@ -200,7 +200,7 @@ export async function getBackgroundList(userid: number) {
 export async function updateBackground(
   userid: number,
   id: number,
-  input: createBackgroundInput
+  input: CreateBackgroundInput
 ) {
   const { object, description, age, game } = input;
 

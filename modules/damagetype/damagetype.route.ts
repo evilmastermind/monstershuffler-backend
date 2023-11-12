@@ -20,7 +20,7 @@ async function damageTypeRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['damage types'],
         response: {
-          200: $ref('getDamageTypeListResponseSchema'),
+          200: $ref('getDamageTypeListResponse'),
         },
       },
     },
@@ -35,11 +35,11 @@ async function damageTypeRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new type of damage to the db.',
         description: '[MS ONLY] Adds a new type of damage to the db.',
-        body: $ref('createDamageTypeSchema'),
+        body: $ref('postDamageType'),
         tags: ['damage types'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('getDamageTypeResponseSchema'),
+          201: $ref('getDamageTypeResponse'),
         },
       },
     },
@@ -56,11 +56,11 @@ async function damageTypeRoutes(server: FastifyInstance) {
           '[MS ONLY] Updates the details of the damage type corresponding to the given id.',
         description:
           '[MS ONLY] Updates the details of the damage type corresponding to the given id.',
-        body: $ref('updateDamageTypeSchema'),
+        body: $ref('putDamageType'),
         tags: ['damage types'],
         headers: jwtHeaderRequired,
         response: {
-          200: $ref('getDamageTypeResponseSchema'),
+          200: $ref('getDamageTypeResponse'),
         },
       },
     },

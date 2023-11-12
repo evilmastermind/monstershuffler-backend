@@ -14,7 +14,7 @@ async function skillRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['skills'],
         response: {
-          200: $ref('getSkillListResponseSchema'),
+          200: $ref('getSkillListResponse'),
         },
       },
     },
@@ -31,7 +31,7 @@ async function skillRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['skills'],
         response: {
-          200: $ref('getSkillResponseSchema'),
+          200: $ref('getSkillResponse'),
         },
       },
     },

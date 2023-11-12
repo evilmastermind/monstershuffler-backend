@@ -1,4 +1,4 @@
-import { PageSettings, Settings } from './pagesetting.schema';
+import { Settings } from './pagesetting.schema';
 import { setPagesetting, getPagesetting } from './pagesetting.service';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { handleError, handleResultFound } from '@/utils/errors';

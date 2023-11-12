@@ -19,11 +19,11 @@ async function actionRoutes(server: FastifyInstance) {
           'Returns a list of actions from the db, filtered by the values specified in the body.',
         description:
           'Returns a list of actions from the db, filtered by the values specified in the body. If authenticated, also returns the actions created by the user.',
-        body: $ref('getActionListSchema'),
+        body: $ref('getActionList'),
         headers: jwtHeaderOptional,
         tags: ['actions'],
         response: {
-          200: $ref('getActionListResponseSchema'),
+          200: $ref('getActionListResponse'),
         },
       },
     },
@@ -43,7 +43,7 @@ async function actionRoutes(server: FastifyInstance) {
         tags: ['actions'],
         // params: $ref('getActionParamsSchema'),
         response: {
-          200: $ref('getActionResponseSchema'),
+          200: $ref('getActionResponse'),
         },
       },
     },
@@ -58,11 +58,11 @@ async function actionRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new action to the db.',
         description: '[MS ONLY] Adds a new action to the db.',
-        body: $ref('createActionSchema'),
+        body: $ref('postAction'),
         tags: ['actions'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('getActionResponseSchema'),
+          201: $ref('getActionResponse'),
         },
       },
     },
@@ -78,7 +78,7 @@ async function actionRoutes(server: FastifyInstance) {
         summary: '[MS ONLY] Updates the action corresponding to the given id.',
         description:
           '[MS ONLY] Updates the action corresponding to the given id.',
-        body: $ref('updateActionSchema'),
+        body: $ref('putAction'),
         tags: ['actions'],
         headers: jwtHeaderRequired,
         response: {

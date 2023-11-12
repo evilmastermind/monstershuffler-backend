@@ -1,7 +1,7 @@
 import prisma from '@/utils/prisma';
-import { createArmorInput, updateArmorInput } from './armor.schema';
+import { PostArmorInput, PutArmorInput } from './armor.schema';
 
-export async function createArmor(userid: number, input: createArmorInput) {
+export async function createArmor(userid: number, input: PostArmorInput) {
   const { object, game } = input;
 
   return await prisma.objects.create({
@@ -73,7 +73,7 @@ export async function getArmorList(userid: number) {
 export async function updateArmor(
   userid: number,
   id: number,
-  input: updateArmorInput
+  input: PutArmorInput
 ) {
   const { object } = input;
 

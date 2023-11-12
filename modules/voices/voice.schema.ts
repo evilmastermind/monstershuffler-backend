@@ -1,24 +1,12 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
+import { getRandomVoiceResponse, getRandomVoice } from 'monstershuffler-shared';
 
-const getRandomVoiceSchema = z.object({
-  gender: z.string().optional(),
-});
-
-const getRandomVoiceResponseSchema = z.object({
-  id: z.number(),
-  gender: z.string(),
-  person: z.string(),
-  character: z.string().optional(),
-  production: z.string().optional(),
-  filename: z.string(),
-});
-
-export type getRandomVoiceInput = z.infer<typeof getRandomVoiceSchema>;
+export type getRandomVoiceInput = z.infer<typeof getRandomVoice>;
 export const { schemas: voiceSchemas, $ref } = buildJsonSchemas(
   {
-    getRandomVoiceSchema,
-    getRandomVoiceResponseSchema,
+    getRandomVoice,
+    getRandomVoiceResponse,
   },
   { $id: 'voiceSchemas' }
 );

@@ -1,14 +1,11 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
 
-const getRandomQuirkResponseSchema = z.object({
-  id: z.number(),
-  quirk: z.string(),
-});
+import { getRandomQuirkResponse } from 'monstershuffler-shared';
 
 export const { schemas: quirkSchemas, $ref } = buildJsonSchemas(
   {
-    getRandomQuirkResponseSchema,
+    getRandomQuirkResponse,
   },
   { $id: 'quirkSchemas' }
 );

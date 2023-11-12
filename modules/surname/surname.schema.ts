@@ -1,21 +1,13 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
+import { getRandomSurname, getRandomSurnameResponse } from 'monstershuffler-shared';
 
-const getRandomSurnameSchema = z.object({
-  race: z.string().optional(),
-  gender: z.string().optional(),
-});
-
-const getRandomSurnameResponseSchema = z.object({
-  surname: z.string(),
-});
-
-export type getRandomSurnameInput = z.infer<typeof getRandomSurnameSchema>;
+export type getRandomSurnameInput = z.infer<typeof getRandomSurname>;
 
 export const { schemas: surnameSchemas, $ref } = buildJsonSchemas(
   {
-    getRandomSurnameSchema,
-    getRandomSurnameResponseSchema,
+    getRandomSurname,
+    getRandomSurnameResponse,
   },
   { $id: 'surnameSchemas' }
 );

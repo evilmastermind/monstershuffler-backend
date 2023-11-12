@@ -21,7 +21,7 @@ async function weaponRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['weapons'],
         response: {
-          200: $ref('getWeaponListResponseSchema'),
+          200: $ref('getWeaponListResponse'),
         },
       },
     },
@@ -40,7 +40,7 @@ async function weaponRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['weapons'],
         response: {
-          200: $ref('getWeaponResponseSchema'),
+          200: $ref('getWeaponResponse'),
         },
       },
     },
@@ -55,11 +55,11 @@ async function weaponRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new type of weapon to the db.',
         description: '[MS ONLY] Adds a new type of weapon to the db.',
-        body: $ref('createWeaponSchema'),
+        body: $ref('postWeapon'),
         tags: ['weapons'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('getWeaponResponseSchema'),
+          201: $ref('getWeaponResponse'),
         },
       },
     },
@@ -75,10 +75,10 @@ async function weaponRoutes(server: FastifyInstance) {
         summary: '[MS ONLY] Updates the weapon corresponding to the given id.',
         description:
           '[MS ONLY] Updates the weapon corresponding to the given id.',
-        body: $ref('updateWeaponSchema'),
+        body: $ref('putWeapon'),
         tags: ['weapons'],
         headers: jwtHeaderRequired,
-        // params: $ref('getWeaponParamsSchema'),
+        // params: $ref('getWeaponParams'),
         response: {
           200: BatchPayload,
         },
@@ -98,7 +98,7 @@ async function weaponRoutes(server: FastifyInstance) {
           '[MS ONLY] Deletes the weapon corresponding to the given id.',
         tags: ['weapons'],
         headers: jwtHeaderRequired,
-        // params: $ref('getWeaponParamsSchema'),
+        // params: $ref('getWeaponParams'),
         response: {
           200: BatchPayload,
         },

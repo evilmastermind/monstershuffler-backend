@@ -21,7 +21,7 @@ async function characterRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['characters'],
         response: {
-          200: $ref('getCharacterListResponseSchema'),
+          200: $ref('getCharacterListResponse'),
         },
       },
     },
@@ -41,7 +41,7 @@ async function characterRoutes(server: FastifyInstance) {
         tags: ['characters'],
         // params: $ref('getCharacterParamsSchema'),
         response: {
-          200: $ref('getCharacterResponseSchema'),
+          200: $ref('getCharacterResponse'),
         },
       },
     },
@@ -56,11 +56,11 @@ async function characterRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new character to the db.',
         description: '[MS ONLY] Adds a new character to the db.',
-        body: $ref('createCharacterSchema'),
+        body: $ref('postCharacter'),
         tags: ['characters'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('getCharacterResponseSchema'),
+          201: $ref('getCharacterResponse'),
         },
       },
     },
@@ -77,7 +77,7 @@ async function characterRoutes(server: FastifyInstance) {
           '[MS ONLY] Updates the character corresponding to the given id.',
         description:
           '[MS ONLY] Updates the character corresponding to the given id.',
-        body: $ref('updateCharacterSchema'),
+        body: $ref('putCharacter'),
         tags: ['characters'],
         headers: jwtHeaderRequired,
         response: {

@@ -1,16 +1,11 @@
-import { z } from 'zod';
-import { createRandomNpcInput } from './npc.schema';
+import { PostRandomNpcInput } from './npc.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { getRace, getRandomRace } from '@/modules/race/race.service';
 import {
   getRacevariant,
   getRandomRacevariant,
 } from '@/modules/racevariant/racevariant.service';
-import { Character } from '@/modules/character/character.schema';
-import { Race } from '@/modules/race/race.schema';
-import { Racevariant } from '@/modules/racevariant/racevariant.schema';
-import { Class } from '@/modules/class/class.schema';
-import { Classvariant } from '@/modules/classvariant/classvariant.schema';
+import type { Character, Race, Racevariant, Class, Classvariant, Age, Weight, Voice, Background } from '@/types';
 import { getClass, getRandomClass } from '@/modules/class/class.service';
 import {
   getClassvariant,
@@ -18,12 +13,8 @@ import {
 } from '@/modules/classvariant/classvariant.service';
 import {
   getBackground,
-  getRandomBackground,
   getRandomBackgroundForAge,
 } from '@/modules/background/background.service';
-import { AgeObject, WeightObject } from '@/schemas/character';
-import { Voice } from '@/schemas/character/roleplay';
-import { Background } from '@/modules/background/background.schema';
 import { getRandomSkill } from '@/modules/skill/skill.service';
 import { getRandomName } from '@/modules/name/name.service';
 import { getRandomSurname } from '@/modules/surname/surname.service';
@@ -35,7 +26,7 @@ import { findChoices } from '@/modules/choiceSolver';
 import { getRandomVoice } from '../voices/voice.service';
 
 export async function createRandomNpc(
-  request: FastifyRequest<{ Body: createRandomNpcInput }>,
+  request: FastifyRequest<{ Body: PostRandomNpcInput }>,
   reply: FastifyReply
 ) {
   const { id } = request.user || { id: 0 };
@@ -127,7 +118,7 @@ export async function createRandomNpc(
       }
     }
     if (backgroundType === 'random') {
-      const backgroundResult = await getRandomBackground(id);
+      const backgroundResult = await getRandomBackgroundForAge(id, age.string);
       if (backgroundResult) {
         background = backgroundResult.object;
       }
@@ -235,8 +226,6 @@ export async function createRandomNpc(
 //   return result;
 // }
 
-type Age = z.infer<typeof AgeObject>;
-
 function calculateAge(race: Race, includeChildren = false): Age {
   const ageAdult = race.ageAdult || 0;
   const ageMax = race.ageMax || 0;
@@ -321,8 +310,6 @@ function calculateHeight(race: Race, age: Age) {
   }
   return round2Decimals(height);
 }
-
-type Weight = z.infer<typeof WeightObject>;
 
 function calculateWeight(): Weight {
   const randomValue = random(1, 20);

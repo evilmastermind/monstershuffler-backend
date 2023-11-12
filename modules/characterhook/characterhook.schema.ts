@@ -1,14 +1,10 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
-
-const getRandomCharacterhookResponseSchema = z.object({
-  id: z.number(),
-  characterhook: z.string(),
-});
+import { getRandomCharacterhookResponse } from 'monstershuffler-shared';
 
 export const { schemas: characterhookSchemas, $ref } = buildJsonSchemas(
   {
-    getRandomCharacterhookResponseSchema,
+    getRandomCharacterhookResponse,
   },
   { $id: 'characterhookSchemas' }
 );
