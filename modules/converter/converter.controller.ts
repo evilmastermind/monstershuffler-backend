@@ -11,7 +11,6 @@ import {
 import { handleError } from '@/utils/errors';
 import prisma from '@/utils/prisma';
 
-
 ///////////////////////////////////
 // O B J E C T   T Y P E S
 ///////////////////////////////////
@@ -72,36 +71,36 @@ async function convertObject(object) {
   }
 
   switch (object.type) {
-  case 1:
-    await convertCharacter(objectJSON, object.id);
-    break;
-  case 2:
-  case 3:
-  case 4:
-    await convertNonCharacter(objectJSON, object.id);
-    break;
-  case 5:
-    addCompatibleAgesToBackground(objectJSON);
-    await convertNonCharacter(objectJSON, object.id);
-    break;
-  case 10002:
-  case 10003:
-    await convertNonCharacter(objectJSON, object.id);
-    break;
-  case 101:
-    object.object = await convertAction(objectJSON, object.id);
-    break;
-  case 102:
-    // convertSpell(object);
-    break;
-  case 1001:
-    // convertWeapon(object);
-    break;
-  case 1002:
-    object.object = await convertArmor(objectJSON);
-    break;
-  default:
-    break;
+    case 1:
+      await convertCharacter(objectJSON, object.id);
+      break;
+    case 2:
+    case 3:
+    case 4:
+      await convertNonCharacter(objectJSON, object.id);
+      break;
+    case 5:
+      addCompatibleAgesToBackground(objectJSON);
+      await convertNonCharacter(objectJSON, object.id);
+      break;
+    case 10002:
+    case 10003:
+      await convertNonCharacter(objectJSON, object.id);
+      break;
+    case 101:
+      object.object = await convertAction(objectJSON, object.id);
+      break;
+    case 102:
+      // convertSpell(object);
+      break;
+    case 1001:
+      // convertWeapon(object);
+      break;
+    case 1002:
+      object.object = await convertArmor(objectJSON);
+      break;
+    default:
+      break;
   }
 }
 
@@ -116,7 +115,8 @@ async function convertCharacter(object, id) {
     await convertCharacterObject(object.user, id);
     // proficiencyCalculation moved to .character
     if (Object.hasOwn(object.user, 'proficiencyCalculation')) {
-      object.proficiencyCalculation = object.user.proficiencyCalculation === 'cr' ? 'CR' : 'level';
+      object.proficiencyCalculation =
+        object.user.proficiencyCalculation === 'cr' ? 'CR' : 'level';
       delete object.user.proficiencyCalculation;
     }
   }
@@ -142,7 +142,15 @@ async function convertCharacter(object, id) {
 }
 
 function addCompatibleAgesToBackground(background) {
-  background.compatibleAges = ['child', 'adolescent', 'young adult', 'adult', 'middle-aged', 'elderly', 'venerable'];
+  background.compatibleAges = [
+    'child',
+    'adolescent',
+    'young adult',
+    'adult',
+    'middle-aged',
+    'elderly',
+    'venerable',
+  ];
 }
 
 function renameStuff(object) {
@@ -210,27 +218,27 @@ async function convertCharacterObject(object, id) {
   // swarmSize fix
   if (Object.hasOwn(object, 'swarmSize')) {
     switch (object.swarmSize.toLowerCase()) {
-    case 'tiny':
-      object.swarmSize = '1';
-      break;
-    case 'small':
-      object.swarmSize = '2';
-      break;
-    case 'medium':
-      object.swarmSize = '3';
-      break;
-    case 'large':
-      object.swarmSize = '4';
-      break;
-    case 'huge':
-      object.swarmSize = '5';
-      break;
-    case 'gargantuan':
-      object.swarmSize = '6';
-      break;
-    default:
-      object.swarmSize = '3';
-      break;
+      case 'tiny':
+        object.swarmSize = '1';
+        break;
+      case 'small':
+        object.swarmSize = '2';
+        break;
+      case 'medium':
+        object.swarmSize = '3';
+        break;
+      case 'large':
+        object.swarmSize = '4';
+        break;
+      case 'huge':
+        object.swarmSize = '5';
+        break;
+      case 'gargantuan':
+        object.swarmSize = '6';
+        break;
+      default:
+        object.swarmSize = '3';
+        break;
     }
   }
   // armor random choice fix
@@ -252,12 +260,21 @@ async function convertCharacterObject(object, id) {
 
   convertAbilityScores(object);
 
+  // speeds (there is no plural for speed, duh)
+  if (Object.hasOwn(object, 'speeds')) {
+    object.speed = object.speeds;
+    delete object.speeds;
+    if (Object.hasOwn(object.speed, 'base')) {
+      object.speed.walk = object.speed.base;
+      delete object.speed.base;
+    }
+  }
+
   // abilitiesLimit should be numeric, not strings
   if (Object.hasOwn(object, 'abilitiesLimit')) {
     object.abilityScoresLimit = parseInt(object.abilitiesLimit);
     delete object.abilitiesLimit;
   }
-
 
   // skills random choice fix
   if (
@@ -510,11 +527,17 @@ async function convertAction(object, id) {
 
   // levelMin/levelMax to availableAt/availableUntil/availableUnit
   action.availableUnit = 'level';
-  if (Object.hasOwn(action.variants[0], 'levelMin') && action.variants[0].levelMin) {
+  if (
+    Object.hasOwn(action.variants[0], 'levelMin') &&
+    action.variants[0].levelMin
+  ) {
     action.variants[0].availableAt = parseInt(action.variants[0].levelMin);
     delete action.variants[0].levelMin;
   }
-  if (Object.hasOwn(action.variants[0], 'levelMax') && action.variants[0].levelMax) {
+  if (
+    Object.hasOwn(action.variants[0], 'levelMax') &&
+    action.variants[0].levelMax
+  ) {
     action.availableUntil = parseInt(action.variants[0].levelMax);
     delete action.variants[0].levelMax;
   }
@@ -547,14 +570,20 @@ async function convertAction(object, id) {
         convertDiceObject(value.dice);
       }
       if (Object.hasOwn(value, 'incrProgression')) {
-        value.incrProgression.unitInterval = parseInt(value.incrProgression.levelInterval);
+        value.incrProgression.unitInterval = parseInt(
+          value.incrProgression.levelInterval
+        );
         delete value.incrProgression.levelInterval;
-        value.incrProgression.unitIncrement = parseInt(value.incrProgression.levelIncrement);
+        value.incrProgression.unitIncrement = parseInt(
+          value.incrProgression.levelIncrement
+        );
         delete value.incrProgression.levelIncrement;
         replaceLevelWithAvailable(value.incrProgression);
         value.incrProgression.valueBase = parseInt(value.incrProgression.base);
         delete value.incrProgression.base;
-        value.incrProgression.valueIncrement = parseInt(value.incrProgression.increment);
+        value.incrProgression.valueIncrement = parseInt(
+          value.incrProgression.increment
+        );
         delete value.incrProgression.increment;
       }
     });
@@ -568,7 +597,11 @@ function convertDiceObject(object) {
   stringToNumber(object, 'diceNumber');
   stringToNumber(object, 'diceIncrement');
   if (Object.hasOwn(object, 'levelInterval')) {
-    if (object.levelInterval !== null && object.levelInterval !== undefined && object.levelInterval !== '') {
+    if (
+      object.levelInterval !== null &&
+      object.levelInterval !== undefined &&
+      object.levelInterval !== ''
+    ) {
       object.unitInterval = parseInt(object.levelInterval);
     }
     delete object.levelInterval;
@@ -577,14 +610,22 @@ function convertDiceObject(object) {
 
 function replaceLevelWithAvailable(object) {
   if (Object.hasOwn(object, 'levelMin')) {
-    if (object.levelMin !== null && object.levelMin !== undefined && object.levelMin !== '') {
+    if (
+      object.levelMin !== null &&
+      object.levelMin !== undefined &&
+      object.levelMin !== ''
+    ) {
       object.availableUnit = 'level';
       object.availableAt = parseInt(object.levelMin);
     }
     delete object.levelMin;
   }
   if (Object.hasOwn(object, 'levelMax')) {
-    if (object.levelMax !== null && object.levelMax !== undefined && object.levelMax !== '') {
+    if (
+      object.levelMax !== null &&
+      object.levelMax !== undefined &&
+      object.levelMax !== ''
+    ) {
       object.availableUnit = 'level';
       object.availableUntil = parseInt(object.levelMax);
     }
@@ -647,27 +688,27 @@ async function convertChoiceRandom(object, source) {
 
   if (object.choice.type === 'random') {
     switch (source) {
-    case 'actions':
-      object.choice.source = 'objects';
-      object.choice.objectType = 101;
-      convertProfessionFiltersInActions(object.choice.filters);
-      break;
-    case 'armor':
-      object.choice.source = 'objects';
-      object.choice.objectType = 1002;
-      break;
-    case 'weapons':
-      object.choice.source = 'objects';
-      object.choice.objectType = 1001;
-      break;
-    case 'spells':
-      object.choice.source = 'objects';
-      object.choice.objectType = 102;
-      break;
-    case 'skills':
-    case 'languages':
-      object.choice.source = source;
-      break;
+      case 'actions':
+        object.choice.source = 'objects';
+        object.choice.objectType = 101;
+        convertProfessionFiltersInActions(object.choice.filters);
+        break;
+      case 'armor':
+        object.choice.source = 'objects';
+        object.choice.objectType = 1002;
+        break;
+      case 'weapons':
+        object.choice.source = 'objects';
+        object.choice.objectType = 1001;
+        break;
+      case 'spells':
+        object.choice.source = 'objects';
+        object.choice.objectType = 102;
+        break;
+      case 'skills':
+      case 'languages':
+        object.choice.source = source;
+        break;
     }
   } else {
     if (Object.hasOwn(object.choice, 'source')) {
@@ -712,12 +753,12 @@ function convertProfessionFiltersInActions(filters) {
   }
   for (const filter of filters) {
     switch (filter.keyName) {
-    case 'actiontype':
-      filter.keyName = 'actionType';
-      break;
-    case 'subtype':
-      filter.keyName = 'subType';
-      break;
+      case 'actiontype':
+        filter.keyName = 'actionType';
+        break;
+      case 'subtype':
+        filter.keyName = 'subType';
+        break;
     }
   }
 }
@@ -728,7 +769,11 @@ function booleanEnumToBoolean(value) {
 
 function stringToNumber(object, key) {
   if (Object.hasOwn(object, key)) {
-    if(object[key] !== null && object[key] !== undefined && object[key] !== '') {
+    if (
+      object[key] !== null &&
+      object[key] !== undefined &&
+      object[key] !== ''
+    ) {
       object[key] = parseInt(object[key]);
     } else {
       delete object[key];

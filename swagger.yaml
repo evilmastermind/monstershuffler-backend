@@ -8,7 +8,7 @@ components:
     backgroundSchemas:
       type: object
       properties:
-        createBackgroundSchema:
+        postBackground:
           type: object
           properties:
             object:
@@ -147,9 +147,9 @@ components:
                 subtypes:
                   type: array
                   items:
-                    $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                      /properties/object/properties/armor/anyOf/1/properties/ch\
-                      oice/properties/chosenAlready/items"
+                    $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                      ies/object/properties/armor/anyOf/1/properties/choice/pro\
+                      perties/chosenAlready/items"
                 speeds:
                   type: object
                   properties:
@@ -171,18 +171,18 @@ components:
                 savingThrows:
                   type: array
                   items:
-                    $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                      /properties/object/properties/armor/anyOf/1/properties/ch\
-                      oice/properties/chosenAlready/items"
+                    $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                      ies/object/properties/armor/anyOf/1/properties/choice/pro\
+                      perties/chosenAlready/items"
                 skills:
                   anyOf:
                     - type: array
                       items:
-                        $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                          /properties/object/properties/armor/anyOf/1/propertie\
-                          s/choice/properties/chosenAlready/items"
-                    - $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/armor/anyOf/1"
+                        $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                          ies/object/properties/armor/anyOf/1/properties/choice\
+                          /properties/chosenAlready/items"
+                    - $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/armor/anyOf/1"
                     - type: object
                       properties:
                         choice:
@@ -197,10 +197,9 @@ components:
                             list:
                               type: array
                               items:
-                                $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                                  /properties/object/properties/armor/anyOf/1/p\
-                                  roperties/choice/properties/chosenAlready/ite\
-                                  ms"
+                                $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                                  ies/object/properties/armor/anyOf/1/propertie\
+                                  s/choice/properties/chosenAlready/items"
                             isRepeatable:
                               type: boolean
                           required:
@@ -214,27 +213,27 @@ components:
                 resistances:
                   type: array
                   items:
-                    $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                      /properties/object/properties/armor/anyOf/1/properties/ch\
-                      oice/properties/chosenAlready/items"
+                    $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                      ies/object/properties/armor/anyOf/1/properties/choice/pro\
+                      perties/chosenAlready/items"
                 immunities:
                   type: array
                   items:
-                    $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                      /properties/object/properties/armor/anyOf/1/properties/ch\
-                      oice/properties/chosenAlready/items"
+                    $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                      ies/object/properties/armor/anyOf/1/properties/choice/pro\
+                      perties/chosenAlready/items"
                 vulnerabilities:
                   type: array
                   items:
-                    $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                      /properties/object/properties/armor/anyOf/1/properties/ch\
-                      oice/properties/chosenAlready/items"
+                    $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                      ies/object/properties/armor/anyOf/1/properties/choice/pro\
+                      perties/chosenAlready/items"
                 conditionImmunities:
                   type: array
                   items:
-                    $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                      /properties/object/properties/armor/anyOf/1/properties/ch\
-                      oice/properties/chosenAlready/items"
+                    $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                      ies/object/properties/armor/anyOf/1/properties/choice/pro\
+                      perties/chosenAlready/items"
                 senses:
                   type: object
                   properties:
@@ -257,13 +256,13 @@ components:
                   anyOf:
                     - type: array
                       items:
-                        $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                          /properties/object/properties/armor/anyOf/1/propertie\
-                          s/choice/properties/chosenAlready/items"
-                    - $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/armor/anyOf/1"
-                    - $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/skills/anyOf/2"
+                        $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                          ies/object/properties/armor/anyOf/1/properties/choice\
+                          /properties/chosenAlready/items"
+                    - $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/armor/anyOf/1"
+                    - $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/skills/anyOf/2"
                 actions:
                   type: array
                   items:
@@ -304,177 +303,171 @@ components:
                           variants:
                             type: array
                             items:
-                              anyOf:
-                                - type: object
-                                  properties:
-                                    name:
-                                      type: string
-                                    description:
-                                      type: string
-                                    type:
-                                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                                        /properties/object/properties/actions/i\
-                                        tems/anyOf/0/properties/actionType"
-                                    availableAt:
-                                      type: number
-                                    ability:
-                                      type: string
-                                      enum:
-                                        - STR
-                                        - DEX
-                                        - CON
-                                        - INT
-                                        - WIS
-                                        - CHA
-                                    charges:
-                                      type: string
-                                    recharge:
-                                      type: string
-                                    cost:
-                                      type: string
-                                    values:
-                                      type: array
-                                      items:
-                                        anyOf:
-                                          - {}
-                                          - {}
-                                          - type: object
-                                            properties:
-                                              name:
-                                                type: string
-                                              type:
-                                                type: string
-                                              incrProgression:
-                                                type: object
-                                                properties:
-                                                  unitInterval:
-                                                    type: string
-                                                  unitIncrement:
-                                                    type: string
-                                                  availableAt:
-                                                    type: string
-                                                  availableUnit:
-                                                    type: string
-                                                    enum:
-                                                      - level
-                                                      - cr
-                                                  valueBase:
-                                                    type: string
-                                                  valueIncrement:
-                                                    type: string
-                                                required:
-                                                  - unitInterval
-                                                  - unitIncrement
-                                                  - availableAt
-                                                  - valueBase
-                                                  - valueIncrement
-                                                additionalProperties: false
-                                            required:
-                                              - name
-                                              - incrProgression
-                                            additionalProperties: false
-                                    attacks:
-                                      type: array
-                                      items:
-                                        type: object
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                description:
+                                  type: string
+                                type:
+                                  $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                                    ies/object/properties/actions/items/anyOf/0\
+                                    /properties/actionType"
+                                availableAt:
+                                  type: number
+                                ability:
+                                  type: string
+                                  enum:
+                                    - STR
+                                    - DEX
+                                    - CON
+                                    - INT
+                                    - WIS
+                                    - CHA
+                                charges:
+                                  type: string
+                                recharge:
+                                  type: string
+                                cost:
+                                  type: string
+                                values:
+                                  type: array
+                                  items:
+                                    anyOf:
+                                      - {}
+                                      - {}
+                                      - type: object
                                         properties:
                                           name:
                                             type: string
-                                          replaceName:
-                                            type: boolean
-                                          attributes:
-                                            anyOf:
-                                              - type: object
-                                                properties:
-                                                  reach:
-                                                    type: string
-                                                  targets:
-                                                    type: string
-                                                  name:
-                                                    type: string
-                                                  cost:
-                                                    type: string
-                                                  weight:
-                                                    type: string
-                                                  damageType:
-                                                    type: string
-                                                  special:
-                                                    type: string
-                                                  die:
-                                                    type: string
-                                                  diceNumber:
-                                                    type: string
-                                                  dieV:
-                                                    type: string
-                                                  diceNumberV:
-                                                    type: string
-                                                  range:
-                                                    type: string
-                                                  rangeMax:
-                                                    type: string
-                                                  properties:
-                                                    type: array
-                                                    items:
-                                                      type: string
-                                                required:
-                                                  - properties
-                                                additionalProperties: false
-                                              - $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                                                  /properties/object/properties\
-                                                  /armor/anyOf/1"
-                                          enchantment:
+                                          type:
+                                            type: string
+                                          incrProgression:
                                             type: object
                                             properties:
-                                              type:
+                                              unitInterval:
                                                 type: string
-                                              dice:
-                                                type: object
-                                                properties:
-                                                  die:
-                                                    type: number
-                                                  diceNumber:
-                                                    type: number
-                                                  diceIncrement:
-                                                    type: number
-                                                  availableAt:
-                                                    type: number
-                                                  availableUntil:
-                                                    type: number
-                                                  availableUnit:
-                                                    type: string
-                                                    enum:
-                                                      - level
-                                                      - cr
-                                                  unitInterval:
-                                                    type: number
-                                                required:
-                                                  - die
-                                                  - diceNumber
-                                                additionalProperties: false
-                                              expression:
+                                              unitIncrement:
+                                                type: string
+                                              availableAt:
+                                                type: string
+                                              availableUnit:
+                                                type: string
+                                                enum:
+                                                  - level
+                                                  - cr
+                                              valueBase:
+                                                type: string
+                                              valueIncrement:
                                                 type: string
                                             required:
-                                              - type
+                                              - unitInterval
+                                              - unitIncrement
+                                              - availableAt
+                                              - valueBase
+                                              - valueIncrement
                                             additionalProperties: false
                                         required:
                                           - name
-                                          - attributes
+                                          - incrProgression
                                         additionalProperties: false
-                                  required:
-                                    - name
-                                    - description
-                                  additionalProperties: false
-                                - $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                                    /properties/object/properties/armor/anyOf/1"
-                                - $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                                    /properties/object/properties/skills/anyOf/\
-                                    2"
+                                attacks:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                      replaceName:
+                                        type: boolean
+                                      attributes:
+                                        anyOf:
+                                          - type: object
+                                            properties:
+                                              reach:
+                                                type: string
+                                              targets:
+                                                type: string
+                                              name:
+                                                type: string
+                                              cost:
+                                                type: string
+                                              weight:
+                                                type: string
+                                              damageType:
+                                                type: string
+                                              special:
+                                                type: string
+                                              die:
+                                                type: string
+                                              diceNumber:
+                                                type: string
+                                              dieV:
+                                                type: string
+                                              diceNumberV:
+                                                type: string
+                                              range:
+                                                type: string
+                                              rangeMax:
+                                                type: string
+                                              properties:
+                                                type: array
+                                                items:
+                                                  type: string
+                                            required:
+                                              - properties
+                                            additionalProperties: false
+                                          - $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                                              ies/object/properties/armor/anyOf\
+                                              /1"
+                                      enchantment:
+                                        type: object
+                                        properties:
+                                          type:
+                                            type: string
+                                          dice:
+                                            type: object
+                                            properties:
+                                              die:
+                                                type: number
+                                              diceNumber:
+                                                type: number
+                                              diceIncrement:
+                                                type: number
+                                              availableAt:
+                                                type: number
+                                              availableUntil:
+                                                type: number
+                                              availableUnit:
+                                                type: string
+                                                enum:
+                                                  - level
+                                                  - cr
+                                              unitInterval:
+                                                type: number
+                                            required:
+                                              - die
+                                              - diceNumber
+                                            additionalProperties: false
+                                          expression:
+                                            type: string
+                                        required:
+                                          - type
+                                        additionalProperties: false
+                                    required:
+                                      - name
+                                      - attributes
+                                    additionalProperties: false
+                              required:
+                                - name
+                                - description
+                              additionalProperties: false
                         required:
                           - tag
                           - variants
                         additionalProperties: false
-                      - $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                          /properties/object/properties/armor/anyOf/1"
+                      - $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                          ies/object/properties/armor/anyOf/1"
                 bonuses:
                   type: object
                   properties:
@@ -489,205 +482,155 @@ components:
                         - value
                       additionalProperties: false
                     ACBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     sizeBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     speedBaseBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     speedBurrowBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     speedClimbBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     speedFlyBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     speedHoverBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     speedSwimBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     STRBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     DEXBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     CONBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     INTBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     WISBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     CHABonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     STRSaveBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     DEXSaveBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     CONSaveBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     INTSaveBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     WISSaveBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     CHASaveBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     AthleticsBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     AcrobaticsBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     SleightOfHandBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     StealthBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     ArcanaBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     HistoryBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     InvestigationBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     NatureBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     ReligionBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     AnimalHandlingBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     InsightBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     MedicineBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     PerceptionBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     SurvivalBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     DeceptionBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     IntimidationBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     PerformanceBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     PersuasionBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     blindsightBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     darkvisionBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     tremorsenseBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     truesightBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     rangedAttackBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     rangedDamageBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     meleeAttackBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     meleeDamageBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     spellAttackBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     spellDamageBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     weaponAttackBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                     weaponDamageBonus:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/bonuses/properties/HPBonu\
-                        s"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/bonuses/properties/HPBonus"
                   additionalProperties: false
                 spells:
                   type: object
@@ -695,9 +638,9 @@ components:
                     hasSlots:
                       type: boolean
                     ability:
-                      $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                        /properties/object/properties/actions/items/anyOf/0/pro\
-                        perties/variants/items/anyOf/0/properties/ability"
+                      $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                        ies/object/properties/actions/items/anyOf/0/properties/\
+                        variants/items/properties/ability"
                     availableUnit:
                       type: string
                       enum:
@@ -720,14 +663,13 @@ components:
                             anyOf:
                               - type: array
                                 items:
-                                  $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                                    /properties/object/properties/armor/anyOf/1\
-                                    /properties/choice/properties/chosenAlready\
-                                    /items"
-                              - $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                                  /properties/object/properties/armor/anyOf/1"
-                              - $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                                  /properties/object/properties/skills/anyOf/2"
+                                  $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                                    ies/object/properties/armor/anyOf/1/propert\
+                                    ies/choice/properties/chosenAlready/items"
+                              - $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                                  ies/object/properties/armor/anyOf/1"
+                              - $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                                  ies/object/properties/skills/anyOf/2"
                         required:
                           - tag
                           - spells
@@ -761,7 +703,7 @@ components:
             - description
             - game
           additionalProperties: false
-        getBackgroundListResponseSchema:
+        getBackgroundListResponse:
           type: object
           properties:
             list:
@@ -784,15 +726,15 @@ components:
           required:
             - list
           additionalProperties: false
-        getBackgroundResponseSchema:
+        getBackgroundResponse:
           type: object
           properties:
             object:
-              $ref: "#/components/schemas/backgroundSchemas/properties/createBackgroundSchema\
-                /properties/object"
+              $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                ies/object"
             id:
               $ref: "#/components/schemas/backgroundSchemas/properties/getBackgroundListRespo\
-                nseSchema/properties/list/items/properties/id"
+                nse/properties/list/items/properties/id"
             name:
               type: string
             femaleName:
@@ -810,9 +752,9 @@ components:
             - description
           additionalProperties: false
       required:
-        - createBackgroundSchema
-        - getBackgroundListResponseSchema
-        - getBackgroundResponseSchema
+        - postBackground
+        - getBackgroundListResponse
+        - getBackgroundResponse
       additionalProperties: false
     classSchemas:
       type: object
@@ -923,9 +865,9 @@ components:
                 subtypes:
                   type: array
                   items:
-                    $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                      s/object/properties/armor/anyOf/1/properties/choice/prope\
-                      rties/chosenAlready/items"
+                    $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                      properties/armor/anyOf/1/properties/choice/properties/cho\
+                      senAlready/items"
                 speeds:
                   type: object
                   properties:
@@ -945,18 +887,18 @@ components:
                 savingThrows:
                   type: array
                   items:
-                    $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                      s/object/properties/armor/anyOf/1/properties/choice/prope\
-                      rties/chosenAlready/items"
+                    $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                      properties/armor/anyOf/1/properties/choice/properties/cho\
+                      senAlready/items"
                 skills:
                   anyOf:
                     - type: array
                       items:
-                        $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                          s/object/properties/armor/anyOf/1/properties/choice/p\
-                          roperties/chosenAlready/items"
-                    - $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/armor/anyOf/1"
+                        $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                          properties/armor/anyOf/1/properties/choice/properties\
+                          /chosenAlready/items"
+                    - $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/armor/anyOf/1"
                     - type: object
                       properties:
                         choice:
@@ -971,9 +913,9 @@ components:
                             list:
                               type: array
                               items:
-                                $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                                  s/object/properties/armor/anyOf/1/properties/\
-                                  choice/properties/chosenAlready/items"
+                                $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                                  properties/armor/anyOf/1/properties/choice/pr\
+                                  operties/chosenAlready/items"
                             isRepeatable:
                               type: boolean
                           required:
@@ -987,27 +929,27 @@ components:
                 resistances:
                   type: array
                   items:
-                    $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                      s/object/properties/armor/anyOf/1/properties/choice/prope\
-                      rties/chosenAlready/items"
+                    $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                      properties/armor/anyOf/1/properties/choice/properties/cho\
+                      senAlready/items"
                 immunities:
                   type: array
                   items:
-                    $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                      s/object/properties/armor/anyOf/1/properties/choice/prope\
-                      rties/chosenAlready/items"
+                    $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                      properties/armor/anyOf/1/properties/choice/properties/cho\
+                      senAlready/items"
                 vulnerabilities:
                   type: array
                   items:
-                    $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                      s/object/properties/armor/anyOf/1/properties/choice/prope\
-                      rties/chosenAlready/items"
+                    $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                      properties/armor/anyOf/1/properties/choice/properties/cho\
+                      senAlready/items"
                 conditionImmunities:
                   type: array
                   items:
-                    $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                      s/object/properties/armor/anyOf/1/properties/choice/prope\
-                      rties/chosenAlready/items"
+                    $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                      properties/armor/anyOf/1/properties/choice/properties/cho\
+                      senAlready/items"
                 senses:
                   type: object
                   properties:
@@ -1030,13 +972,13 @@ components:
                   anyOf:
                     - type: array
                       items:
-                        $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                          s/object/properties/armor/anyOf/1/properties/choice/p\
-                          roperties/chosenAlready/items"
-                    - $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/armor/anyOf/1"
-                    - $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/skills/anyOf/2"
+                        $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                          properties/armor/anyOf/1/properties/choice/properties\
+                          /chosenAlready/items"
+                    - $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/armor/anyOf/1"
+                    - $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/skills/anyOf/2"
                 actions:
                   type: array
                   items:
@@ -1077,176 +1019,170 @@ components:
                           variants:
                             type: array
                             items:
-                              anyOf:
-                                - type: object
-                                  properties:
-                                    name:
-                                      type: string
-                                    description:
-                                      type: string
-                                    type:
-                                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                                        s/object/properties/actions/items/anyOf\
-                                        /0/properties/actionType"
-                                    availableAt:
-                                      type: number
-                                    ability:
-                                      type: string
-                                      enum:
-                                        - STR
-                                        - DEX
-                                        - CON
-                                        - INT
-                                        - WIS
-                                        - CHA
-                                    charges:
-                                      type: string
-                                    recharge:
-                                      type: string
-                                    cost:
-                                      type: string
-                                    values:
-                                      type: array
-                                      items:
-                                        anyOf:
-                                          - {}
-                                          - {}
-                                          - type: object
-                                            properties:
-                                              name:
-                                                type: string
-                                              type:
-                                                type: string
-                                              incrProgression:
-                                                type: object
-                                                properties:
-                                                  unitInterval:
-                                                    type: string
-                                                  unitIncrement:
-                                                    type: string
-                                                  availableAt:
-                                                    type: string
-                                                  availableUnit:
-                                                    type: string
-                                                    enum:
-                                                      - level
-                                                      - cr
-                                                  valueBase:
-                                                    type: string
-                                                  valueIncrement:
-                                                    type: string
-                                                required:
-                                                  - unitInterval
-                                                  - unitIncrement
-                                                  - availableAt
-                                                  - valueBase
-                                                  - valueIncrement
-                                                additionalProperties: false
-                                            required:
-                                              - name
-                                              - incrProgression
-                                            additionalProperties: false
-                                    attacks:
-                                      type: array
-                                      items:
-                                        type: object
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                description:
+                                  type: string
+                                type:
+                                  $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                                    properties/actions/items/anyOf/0/properties\
+                                    /actionType"
+                                availableAt:
+                                  type: number
+                                ability:
+                                  type: string
+                                  enum:
+                                    - STR
+                                    - DEX
+                                    - CON
+                                    - INT
+                                    - WIS
+                                    - CHA
+                                charges:
+                                  type: string
+                                recharge:
+                                  type: string
+                                cost:
+                                  type: string
+                                values:
+                                  type: array
+                                  items:
+                                    anyOf:
+                                      - {}
+                                      - {}
+                                      - type: object
                                         properties:
                                           name:
                                             type: string
-                                          replaceName:
-                                            type: boolean
-                                          attributes:
-                                            anyOf:
-                                              - type: object
-                                                properties:
-                                                  reach:
-                                                    type: string
-                                                  targets:
-                                                    type: string
-                                                  name:
-                                                    type: string
-                                                  cost:
-                                                    type: string
-                                                  weight:
-                                                    type: string
-                                                  damageType:
-                                                    type: string
-                                                  special:
-                                                    type: string
-                                                  die:
-                                                    type: string
-                                                  diceNumber:
-                                                    type: string
-                                                  dieV:
-                                                    type: string
-                                                  diceNumberV:
-                                                    type: string
-                                                  range:
-                                                    type: string
-                                                  rangeMax:
-                                                    type: string
-                                                  properties:
-                                                    type: array
-                                                    items:
-                                                      type: string
-                                                required:
-                                                  - properties
-                                                additionalProperties: false
-                                              - $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                                                  s/object/properties/armor/any\
-                                                  Of/1"
-                                          enchantment:
+                                          type:
+                                            type: string
+                                          incrProgression:
                                             type: object
                                             properties:
-                                              type:
+                                              unitInterval:
                                                 type: string
-                                              dice:
-                                                type: object
-                                                properties:
-                                                  die:
-                                                    type: number
-                                                  diceNumber:
-                                                    type: number
-                                                  diceIncrement:
-                                                    type: number
-                                                  availableAt:
-                                                    type: number
-                                                  availableUntil:
-                                                    type: number
-                                                  availableUnit:
-                                                    type: string
-                                                    enum:
-                                                      - level
-                                                      - cr
-                                                  unitInterval:
-                                                    type: number
-                                                required:
-                                                  - die
-                                                  - diceNumber
-                                                additionalProperties: false
-                                              expression:
+                                              unitIncrement:
+                                                type: string
+                                              availableAt:
+                                                type: string
+                                              availableUnit:
+                                                type: string
+                                                enum:
+                                                  - level
+                                                  - cr
+                                              valueBase:
+                                                type: string
+                                              valueIncrement:
                                                 type: string
                                             required:
-                                              - type
+                                              - unitInterval
+                                              - unitIncrement
+                                              - availableAt
+                                              - valueBase
+                                              - valueIncrement
                                             additionalProperties: false
                                         required:
                                           - name
-                                          - attributes
+                                          - incrProgression
                                         additionalProperties: false
-                                  required:
-                                    - name
-                                    - description
-                                  additionalProperties: false
-                                - $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                                    s/object/properties/armor/anyOf/1"
-                                - $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                                    s/object/properties/skills/anyOf/2"
+                                attacks:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                      replaceName:
+                                        type: boolean
+                                      attributes:
+                                        anyOf:
+                                          - type: object
+                                            properties:
+                                              reach:
+                                                type: string
+                                              targets:
+                                                type: string
+                                              name:
+                                                type: string
+                                              cost:
+                                                type: string
+                                              weight:
+                                                type: string
+                                              damageType:
+                                                type: string
+                                              special:
+                                                type: string
+                                              die:
+                                                type: string
+                                              diceNumber:
+                                                type: string
+                                              dieV:
+                                                type: string
+                                              diceNumberV:
+                                                type: string
+                                              range:
+                                                type: string
+                                              rangeMax:
+                                                type: string
+                                              properties:
+                                                type: array
+                                                items:
+                                                  type: string
+                                            required:
+                                              - properties
+                                            additionalProperties: false
+                                          - $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                                              properties/armor/anyOf/1"
+                                      enchantment:
+                                        type: object
+                                        properties:
+                                          type:
+                                            type: string
+                                          dice:
+                                            type: object
+                                            properties:
+                                              die:
+                                                type: number
+                                              diceNumber:
+                                                type: number
+                                              diceIncrement:
+                                                type: number
+                                              availableAt:
+                                                type: number
+                                              availableUntil:
+                                                type: number
+                                              availableUnit:
+                                                type: string
+                                                enum:
+                                                  - level
+                                                  - cr
+                                              unitInterval:
+                                                type: number
+                                            required:
+                                              - die
+                                              - diceNumber
+                                            additionalProperties: false
+                                          expression:
+                                            type: string
+                                        required:
+                                          - type
+                                        additionalProperties: false
+                                    required:
+                                      - name
+                                      - attributes
+                                    additionalProperties: false
+                              required:
+                                - name
+                                - description
+                              additionalProperties: false
                         required:
                           - tag
                           - variants
                         additionalProperties: false
-                      - $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                          s/object/properties/armor/anyOf/1"
+                      - $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                          properties/armor/anyOf/1"
                 bonuses:
                   type: object
                   properties:
@@ -1261,155 +1197,155 @@ components:
                         - value
                       additionalProperties: false
                     ACBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     sizeBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     speedBaseBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     speedBurrowBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     speedClimbBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     speedFlyBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     speedHoverBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     speedSwimBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     STRBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     DEXBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     CONBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     INTBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     WISBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     CHABonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     STRSaveBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     DEXSaveBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     CONSaveBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     INTSaveBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     WISSaveBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     CHASaveBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     AthleticsBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     AcrobaticsBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     SleightOfHandBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     StealthBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     ArcanaBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     HistoryBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     InvestigationBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     NatureBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     ReligionBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     AnimalHandlingBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     InsightBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     MedicineBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     PerceptionBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     SurvivalBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     DeceptionBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     IntimidationBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     PerformanceBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     PersuasionBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     blindsightBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     darkvisionBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     tremorsenseBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     truesightBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     rangedAttackBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     rangedDamageBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     meleeAttackBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     meleeDamageBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     spellAttackBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     spellDamageBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     weaponAttackBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                     weaponDamageBonus:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/bonuses/properties/HPBonus"
                   additionalProperties: false
                 spells:
                   type: object
@@ -1417,9 +1353,9 @@ components:
                     hasSlots:
                       type: boolean
                     ability:
-                      $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                        s/object/properties/actions/items/anyOf/0/properties/va\
-                        riants/items/anyOf/0/properties/ability"
+                      $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                        properties/actions/items/anyOf/0/properties/variants/it\
+                        ems/properties/ability"
                     availableUnit:
                       type: string
                       enum:
@@ -1442,13 +1378,13 @@ components:
                             anyOf:
                               - type: array
                                 items:
-                                  $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                                    s/object/properties/armor/anyOf/1/propertie\
-                                    s/choice/properties/chosenAlready/items"
-                              - $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                                  s/object/properties/armor/anyOf/1"
-                              - $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                                  s/object/properties/skills/anyOf/2"
+                                  $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                                    properties/armor/anyOf/1/properties/choice/\
+                                    properties/chosenAlready/items"
+                              - $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                                  properties/armor/anyOf/1"
+                              - $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                                  properties/skills/anyOf/2"
                         required:
                           - tag
                           - spells
@@ -1492,11 +1428,9 @@ components:
           type: object
           properties:
             game:
-              $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                s/game"
+              $ref: "#/components/schemas/classSchemas/properties/putClass/properties/game"
             object:
-              $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                s/object"
+              $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object"
           required:
             - game
             - object
@@ -1522,14 +1456,13 @@ components:
                       type: object
                       properties:
                         id:
-                          $ref: "#/components/schemas/classSchemas/properties/getClassWithVariantsListRes\
-                            ponseSchema/properties/list/items/properties/id"
+                          type: number
                         name:
                           $ref: "#/components/schemas/classSchemas/properties/getClassWithVariantsListRes\
-                            ponseSchema/properties/list/items/properties/name"
+                            ponse/properties/list/items/properties/name"
                         userid:
                           $ref: "#/components/schemas/classSchemas/properties/getClassWithVariantsListRes\
-                            ponseSchema/properties/list/items/properties/userid"
+                            ponse/properties/list/items/properties/userid"
                       required:
                         - id
                         - name
@@ -1553,14 +1486,13 @@ components:
                 type: object
                 properties:
                   id:
-                    $ref: "#/components/schemas/classSchemas/properties/getClassWithVariantsListRes\
-                      ponseSchema/properties/list/items/properties/id"
+                    type: number
                   userid:
                     $ref: "#/components/schemas/classSchemas/properties/getClassWithVariantsListRes\
-                      ponseSchema/properties/list/items/properties/userid"
+                      ponse/properties/list/items/properties/userid"
                   name:
                     $ref: "#/components/schemas/classSchemas/properties/getClassWithVariantsListRes\
-                      ponseSchema/properties/list/items/properties/name"
+                      ponse/properties/list/items/properties/name"
                 required:
                   - id
                   - userid
@@ -1573,11 +1505,9 @@ components:
           type: object
           properties:
             object:
-              $ref: "#/components/schemas/classSchemas/properties/putClass/propertie\
-                s/object"
+              $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object"
             id:
-              $ref: "#/components/schemas/classSchemas/properties/getClassWithVariantsListRes\
-                ponseSchema/properties/list/items/properties/id"
+              type: number
           required:
             - object
             - id
@@ -1983,176 +1913,167 @@ components:
                                   variants:
                                     type: array
                                     items:
-                                      anyOf:
-                                        - type: object
-                                          properties:
-                                            name:
-                                              type: string
-                                            description:
-                                              type: string
-                                            type:
-                                              $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                                ies/npc/properties/character/pr\
-                                                operties/race/properties/action\
-                                                s/items/anyOf/0/properties/acti\
-                                                onType"
-                                            availableAt:
-                                              type: number
-                                            ability:
-                                              type: string
-                                              enum:
-                                                - STR
-                                                - DEX
-                                                - CON
-                                                - INT
-                                                - WIS
-                                                - CHA
-                                            charges:
-                                              type: string
-                                            recharge:
-                                              type: string
-                                            cost:
-                                              type: string
-                                            values:
-                                              type: array
-                                              items:
-                                                anyOf:
-                                                  - {}
-                                                  - {}
-                                                  - type: object
-                                                    properties:
-                                                      name:
-                                                        type: string
-                                                      type:
-                                                        type: string
-                                                      incrProgression:
-                                                        type: object
-                                                        properties:
-                                                          unitInterval:
-                                                            type: string
-                                                          unitIncrement:
-                                                            type: string
-                                                          availableAt:
-                                                            type: string
-                                                          availableUnit:
-                                                            type: string
-                                                            enum:
-                                                              - level
-                                                              - cr
-                                                          valueBase:
-                                                            type: string
-                                                          valueIncrement:
-                                                            type: string
-                                                        required:
-                                                          - unitInterval
-                                                          - unitIncrement
-                                                          - availableAt
-                                                          - valueBase
-                                                          - valueIncrement
-                                                        additionalProperties: false
-                                                    required:
-                                                      - name
-                                                      - incrProgression
-                                                    additionalProperties: false
-                                            attacks:
-                                              type: array
-                                              items:
-                                                type: object
+                                      type: object
+                                      properties:
+                                        name:
+                                          type: string
+                                        description:
+                                          type: string
+                                        type:
+                                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                                            ies/npc/properties/character/proper\
+                                            ties/race/properties/actions/items/\
+                                            anyOf/0/properties/actionType"
+                                        availableAt:
+                                          type: number
+                                        ability:
+                                          type: string
+                                          enum:
+                                            - STR
+                                            - DEX
+                                            - CON
+                                            - INT
+                                            - WIS
+                                            - CHA
+                                        charges:
+                                          type: string
+                                        recharge:
+                                          type: string
+                                        cost:
+                                          type: string
+                                        values:
+                                          type: array
+                                          items:
+                                            anyOf:
+                                              - {}
+                                              - {}
+                                              - type: object
                                                 properties:
                                                   name:
                                                     type: string
-                                                  replaceName:
-                                                    type: boolean
-                                                  attributes:
-                                                    anyOf:
-                                                      - type: object
-                                                        properties:
-                                                          reach:
-                                                            type: string
-                                                          targets:
-                                                            type: string
-                                                          name:
-                                                            type: string
-                                                          cost:
-                                                            type: string
-                                                          weight:
-                                                            type: string
-                                                          damageType:
-                                                            type: string
-                                                          special:
-                                                            type: string
-                                                          die:
-                                                            type: string
-                                                          diceNumber:
-                                                            type: string
-                                                          dieV:
-                                                            type: string
-                                                          diceNumberV:
-                                                            type: string
-                                                          range:
-                                                            type: string
-                                                          rangeMax:
-                                                            type: string
-                                                          properties:
-                                                            type: array
-                                                            items:
-                                                              type: string
-                                                        required:
-                                                          - properties
-                                                        additionalProperties: false
-                                                      - $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                                          ies/npc/properties/ch\
-                                                          aracter/properties/ra\
-                                                          ce/properties/armor/a\
-                                                          nyOf/1"
-                                                  enchantment:
+                                                  type:
+                                                    type: string
+                                                  incrProgression:
                                                     type: object
                                                     properties:
-                                                      type:
+                                                      unitInterval:
                                                         type: string
-                                                      dice:
-                                                        type: object
-                                                        properties:
-                                                          die:
-                                                            type: number
-                                                          diceNumber:
-                                                            type: number
-                                                          diceIncrement:
-                                                            type: number
-                                                          availableAt:
-                                                            type: number
-                                                          availableUntil:
-                                                            type: number
-                                                          availableUnit:
-                                                            type: string
-                                                            enum:
-                                                              - level
-                                                              - cr
-                                                          unitInterval:
-                                                            type: number
-                                                        required:
-                                                          - die
-                                                          - diceNumber
-                                                        additionalProperties: false
-                                                      expression:
+                                                      unitIncrement:
+                                                        type: string
+                                                      availableAt:
+                                                        type: string
+                                                      availableUnit:
+                                                        type: string
+                                                        enum:
+                                                          - level
+                                                          - cr
+                                                      valueBase:
+                                                        type: string
+                                                      valueIncrement:
                                                         type: string
                                                     required:
-                                                      - type
+                                                      - unitInterval
+                                                      - unitIncrement
+                                                      - availableAt
+                                                      - valueBase
+                                                      - valueIncrement
                                                     additionalProperties: false
                                                 required:
                                                   - name
-                                                  - attributes
+                                                  - incrProgression
                                                 additionalProperties: false
-                                          required:
-                                            - name
-                                            - description
-                                          additionalProperties: false
-                                        - $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                            ies/npc/properties/character/proper\
-                                            ties/race/properties/armor/anyOf/1"
-                                        - $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                            ies/npc/properties/character/proper\
-                                            ties/race/properties/skills/anyOf/2"
+                                        attacks:
+                                          type: array
+                                          items:
+                                            type: object
+                                            properties:
+                                              name:
+                                                type: string
+                                              replaceName:
+                                                type: boolean
+                                              attributes:
+                                                anyOf:
+                                                  - type: object
+                                                    properties:
+                                                      reach:
+                                                        type: string
+                                                      targets:
+                                                        type: string
+                                                      name:
+                                                        type: string
+                                                      cost:
+                                                        type: string
+                                                      weight:
+                                                        type: string
+                                                      damageType:
+                                                        type: string
+                                                      special:
+                                                        type: string
+                                                      die:
+                                                        type: string
+                                                      diceNumber:
+                                                        type: string
+                                                      dieV:
+                                                        type: string
+                                                      diceNumberV:
+                                                        type: string
+                                                      range:
+                                                        type: string
+                                                      rangeMax:
+                                                        type: string
+                                                      properties:
+                                                        type: array
+                                                        items:
+                                                          type: string
+                                                    required:
+                                                      - properties
+                                                    additionalProperties: false
+                                                  - $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                                                      ies/npc/properties/charac\
+                                                      ter/properties/race/prope\
+                                                      rties/armor/anyOf/1"
+                                              enchantment:
+                                                type: object
+                                                properties:
+                                                  type:
+                                                    type: string
+                                                  dice:
+                                                    type: object
+                                                    properties:
+                                                      die:
+                                                        type: number
+                                                      diceNumber:
+                                                        type: number
+                                                      diceIncrement:
+                                                        type: number
+                                                      availableAt:
+                                                        type: number
+                                                      availableUntil:
+                                                        type: number
+                                                      availableUnit:
+                                                        type: string
+                                                        enum:
+                                                          - level
+                                                          - cr
+                                                      unitInterval:
+                                                        type: number
+                                                    required:
+                                                      - die
+                                                      - diceNumber
+                                                    additionalProperties: false
+                                                  expression:
+                                                    type: string
+                                                required:
+                                                  - type
+                                                additionalProperties: false
+                                            required:
+                                              - name
+                                              - attributes
+                                            additionalProperties: false
+                                      required:
+                                        - name
+                                        - description
+                                      additionalProperties: false
                                 required:
                                   - tag
                                   - variants
@@ -2383,7 +2304,7 @@ components:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                                 ies/npc/properties/character/properties/race/pr\
                                 operties/actions/items/anyOf/0/properties/varia\
-                                nts/items/anyOf/0/properties/ability"
+                                nts/items/properties/ability"
                             availableUnit:
                               type: string
                               enum:
@@ -3866,8 +3787,8 @@ components:
                             chosenAlready:
                               type: array
                               items:
-                                $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                                  object/properties/subtypes/items"
+                                $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                                  roperties/subtypes/items"
                           required:
                             - type
                             - resultType
@@ -3899,16 +3820,16 @@ components:
                 savingThrows:
                   type: array
                   items:
-                    $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                      object/properties/subtypes/items"
+                    $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                      roperties/subtypes/items"
                 skills:
                   anyOf:
                     - type: array
                       items:
-                        $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                          object/properties/subtypes/items"
-                    - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/armor/anyOf/1"
+                        $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                          roperties/subtypes/items"
+                    - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/armor/anyOf/1"
                     - type: object
                       properties:
                         choice:
@@ -3923,8 +3844,8 @@ components:
                             list:
                               type: array
                               items:
-                                $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                                  object/properties/subtypes/items"
+                                $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                                  roperties/subtypes/items"
                             isRepeatable:
                               type: boolean
                           required:
@@ -3938,23 +3859,23 @@ components:
                 resistances:
                   type: array
                   items:
-                    $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                      object/properties/subtypes/items"
+                    $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                      roperties/subtypes/items"
                 immunities:
                   type: array
                   items:
-                    $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                      object/properties/subtypes/items"
+                    $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                      roperties/subtypes/items"
                 vulnerabilities:
                   type: array
                   items:
-                    $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                      object/properties/subtypes/items"
+                    $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                      roperties/subtypes/items"
                 conditionImmunities:
                   type: array
                   items:
-                    $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                      object/properties/subtypes/items"
+                    $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                      roperties/subtypes/items"
                 senses:
                   type: object
                   properties:
@@ -3977,12 +3898,12 @@ components:
                   anyOf:
                     - type: array
                       items:
-                        $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                          object/properties/subtypes/items"
-                    - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/armor/anyOf/1"
-                    - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/skills/anyOf/2"
+                        $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                          roperties/subtypes/items"
+                    - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/armor/anyOf/1"
+                    - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/skills/anyOf/2"
                 actions:
                   type: array
                   items:
@@ -4023,176 +3944,170 @@ components:
                           variants:
                             type: array
                             items:
-                              anyOf:
-                                - type: object
-                                  properties:
-                                    name:
-                                      type: string
-                                    description:
-                                      type: string
-                                    type:
-                                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                                        object/properties/actions/items/anyOf/0\
-                                        /properties/actionType"
-                                    availableAt:
-                                      type: number
-                                    ability:
-                                      type: string
-                                      enum:
-                                        - STR
-                                        - DEX
-                                        - CON
-                                        - INT
-                                        - WIS
-                                        - CHA
-                                    charges:
-                                      type: string
-                                    recharge:
-                                      type: string
-                                    cost:
-                                      type: string
-                                    values:
-                                      type: array
-                                      items:
-                                        anyOf:
-                                          - {}
-                                          - {}
-                                          - type: object
-                                            properties:
-                                              name:
-                                                type: string
-                                              type:
-                                                type: string
-                                              incrProgression:
-                                                type: object
-                                                properties:
-                                                  unitInterval:
-                                                    type: string
-                                                  unitIncrement:
-                                                    type: string
-                                                  availableAt:
-                                                    type: string
-                                                  availableUnit:
-                                                    type: string
-                                                    enum:
-                                                      - level
-                                                      - cr
-                                                  valueBase:
-                                                    type: string
-                                                  valueIncrement:
-                                                    type: string
-                                                required:
-                                                  - unitInterval
-                                                  - unitIncrement
-                                                  - availableAt
-                                                  - valueBase
-                                                  - valueIncrement
-                                                additionalProperties: false
-                                            required:
-                                              - name
-                                              - incrProgression
-                                            additionalProperties: false
-                                    attacks:
-                                      type: array
-                                      items:
-                                        type: object
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                description:
+                                  type: string
+                                type:
+                                  $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                                    roperties/actions/items/anyOf/0/properties/\
+                                    actionType"
+                                availableAt:
+                                  type: number
+                                ability:
+                                  type: string
+                                  enum:
+                                    - STR
+                                    - DEX
+                                    - CON
+                                    - INT
+                                    - WIS
+                                    - CHA
+                                charges:
+                                  type: string
+                                recharge:
+                                  type: string
+                                cost:
+                                  type: string
+                                values:
+                                  type: array
+                                  items:
+                                    anyOf:
+                                      - {}
+                                      - {}
+                                      - type: object
                                         properties:
                                           name:
                                             type: string
-                                          replaceName:
-                                            type: boolean
-                                          attributes:
-                                            anyOf:
-                                              - type: object
-                                                properties:
-                                                  reach:
-                                                    type: string
-                                                  targets:
-                                                    type: string
-                                                  name:
-                                                    type: string
-                                                  cost:
-                                                    type: string
-                                                  weight:
-                                                    type: string
-                                                  damageType:
-                                                    type: string
-                                                  special:
-                                                    type: string
-                                                  die:
-                                                    type: string
-                                                  diceNumber:
-                                                    type: string
-                                                  dieV:
-                                                    type: string
-                                                  diceNumberV:
-                                                    type: string
-                                                  range:
-                                                    type: string
-                                                  rangeMax:
-                                                    type: string
-                                                  properties:
-                                                    type: array
-                                                    items:
-                                                      type: string
-                                                required:
-                                                  - properties
-                                                additionalProperties: false
-                                              - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                                                  object/properties/armor/anyOf\
-                                                  /1"
-                                          enchantment:
+                                          type:
+                                            type: string
+                                          incrProgression:
                                             type: object
                                             properties:
-                                              type:
+                                              unitInterval:
                                                 type: string
-                                              dice:
-                                                type: object
-                                                properties:
-                                                  die:
-                                                    type: number
-                                                  diceNumber:
-                                                    type: number
-                                                  diceIncrement:
-                                                    type: number
-                                                  availableAt:
-                                                    type: number
-                                                  availableUntil:
-                                                    type: number
-                                                  availableUnit:
-                                                    type: string
-                                                    enum:
-                                                      - level
-                                                      - cr
-                                                  unitInterval:
-                                                    type: number
-                                                required:
-                                                  - die
-                                                  - diceNumber
-                                                additionalProperties: false
-                                              expression:
+                                              unitIncrement:
+                                                type: string
+                                              availableAt:
+                                                type: string
+                                              availableUnit:
+                                                type: string
+                                                enum:
+                                                  - level
+                                                  - cr
+                                              valueBase:
+                                                type: string
+                                              valueIncrement:
                                                 type: string
                                             required:
-                                              - type
+                                              - unitInterval
+                                              - unitIncrement
+                                              - availableAt
+                                              - valueBase
+                                              - valueIncrement
                                             additionalProperties: false
                                         required:
                                           - name
-                                          - attributes
+                                          - incrProgression
                                         additionalProperties: false
-                                  required:
-                                    - name
-                                    - description
-                                  additionalProperties: false
-                                - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                                    object/properties/armor/anyOf/1"
-                                - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                                    object/properties/skills/anyOf/2"
+                                attacks:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                      replaceName:
+                                        type: boolean
+                                      attributes:
+                                        anyOf:
+                                          - type: object
+                                            properties:
+                                              reach:
+                                                type: string
+                                              targets:
+                                                type: string
+                                              name:
+                                                type: string
+                                              cost:
+                                                type: string
+                                              weight:
+                                                type: string
+                                              damageType:
+                                                type: string
+                                              special:
+                                                type: string
+                                              die:
+                                                type: string
+                                              diceNumber:
+                                                type: string
+                                              dieV:
+                                                type: string
+                                              diceNumberV:
+                                                type: string
+                                              range:
+                                                type: string
+                                              rangeMax:
+                                                type: string
+                                              properties:
+                                                type: array
+                                                items:
+                                                  type: string
+                                            required:
+                                              - properties
+                                            additionalProperties: false
+                                          - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                                              roperties/armor/anyOf/1"
+                                      enchantment:
+                                        type: object
+                                        properties:
+                                          type:
+                                            type: string
+                                          dice:
+                                            type: object
+                                            properties:
+                                              die:
+                                                type: number
+                                              diceNumber:
+                                                type: number
+                                              diceIncrement:
+                                                type: number
+                                              availableAt:
+                                                type: number
+                                              availableUntil:
+                                                type: number
+                                              availableUnit:
+                                                type: string
+                                                enum:
+                                                  - level
+                                                  - cr
+                                              unitInterval:
+                                                type: number
+                                            required:
+                                              - die
+                                              - diceNumber
+                                            additionalProperties: false
+                                          expression:
+                                            type: string
+                                        required:
+                                          - type
+                                        additionalProperties: false
+                                    required:
+                                      - name
+                                      - attributes
+                                    additionalProperties: false
+                              required:
+                                - name
+                                - description
+                              additionalProperties: false
                         required:
                           - tag
                           - variants
                         additionalProperties: false
-                      - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                          object/properties/armor/anyOf/1"
+                      - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                          roperties/armor/anyOf/1"
                 bonuses:
                   type: object
                   properties:
@@ -4207,155 +4122,155 @@ components:
                         - value
                       additionalProperties: false
                     ACBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     sizeBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     speedBaseBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     speedBurrowBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     speedClimbBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     speedFlyBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     speedHoverBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     speedSwimBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     STRBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     DEXBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     CONBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     INTBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     WISBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     CHABonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     STRSaveBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     DEXSaveBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     CONSaveBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     INTSaveBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     WISSaveBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     CHASaveBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     AthleticsBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     AcrobaticsBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     SleightOfHandBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     StealthBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     ArcanaBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     HistoryBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     InvestigationBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     NatureBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     ReligionBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     AnimalHandlingBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     InsightBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     MedicineBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     PerceptionBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     SurvivalBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     DeceptionBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     IntimidationBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     PerformanceBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     PersuasionBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     blindsightBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     darkvisionBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     tremorsenseBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     truesightBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     rangedAttackBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     rangedDamageBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     meleeAttackBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     meleeDamageBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     spellAttackBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     spellDamageBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     weaponAttackBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                     weaponDamageBonus:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/bonuses/properties/HPBonus"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/bonuses/properties/HPBonus"
                   additionalProperties: false
                 spells:
                   type: object
@@ -4363,9 +4278,9 @@ components:
                     hasSlots:
                       type: boolean
                     ability:
-                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                        object/properties/actions/items/anyOf/0/properties/vari\
-                        ants/items/anyOf/0/properties/ability"
+                      $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                        roperties/actions/items/anyOf/0/properties/variants/ite\
+                        ms/properties/ability"
                     availableUnit:
                       type: string
                       enum:
@@ -4388,12 +4303,12 @@ components:
                             anyOf:
                               - type: array
                                 items:
-                                  $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                                    object/properties/subtypes/items"
-                              - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                                  object/properties/armor/anyOf/1"
-                              - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                                  object/properties/skills/anyOf/2"
+                                  $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                                    roperties/subtypes/items"
+                              - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                                  roperties/armor/anyOf/1"
+                              - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                                  roperties/skills/anyOf/2"
                         required:
                           - tag
                           - spells
@@ -4435,11 +4350,9 @@ components:
           type: object
           properties:
             object:
-              $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                object"
+              $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object"
             game:
-              $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                game"
+              $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/game"
           required:
             - object
             - game
@@ -4465,14 +4378,13 @@ components:
                       type: object
                       properties:
                         id:
-                          $ref: "#/components/schemas/raceSchemas/properties/getRaceWithVariantsListRespo\
-                            nseSchema/properties/list/items/properties/id"
+                          type: number
                         name:
                           $ref: "#/components/schemas/raceSchemas/properties/getRaceWithVariantsListRespo\
-                            nseSchema/properties/list/items/properties/name"
+                            nse/properties/list/items/properties/name"
                         userid:
                           $ref: "#/components/schemas/raceSchemas/properties/getRaceWithVariantsListRespo\
-                            nseSchema/properties/list/items/properties/userid"
+                            nse/properties/list/items/properties/userid"
                       required:
                         - id
                         - name
@@ -4496,14 +4408,13 @@ components:
                 type: object
                 properties:
                   id:
-                    $ref: "#/components/schemas/raceSchemas/properties/getRaceWithVariantsListRespo\
-                      nseSchema/properties/list/items/properties/id"
+                    type: number
                   userid:
                     $ref: "#/components/schemas/raceSchemas/properties/getRaceWithVariantsListRespo\
-                      nseSchema/properties/list/items/properties/userid"
+                      nse/properties/list/items/properties/userid"
                   name:
                     $ref: "#/components/schemas/raceSchemas/properties/getRaceWithVariantsListRespo\
-                      nseSchema/properties/list/items/properties/name"
+                      nse/properties/list/items/properties/name"
                 required:
                   - id
                   - userid
@@ -4516,11 +4427,9 @@ components:
           type: object
           properties:
             object:
-              $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/\
-                object"
+              $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object"
             id:
-              $ref: "#/components/schemas/raceSchemas/properties/getRaceWithVariantsListRespo\
-                nseSchema/properties/list/items/properties/id"
+              type: number
           required:
             - object
             - id
@@ -4555,17 +4464,17 @@ components:
               type: string
               minLength: 2
             type:
-              $ref: "#/components/schemas/traitSchemas/properties/getRandomTrait/proper\
-                ties/type"
+              $ref: "#/components/schemas/traitSchemas/properties/getRandomTrait/properties/t\
+                ype"
             subtitle:
-              $ref: "#/components/schemas/traitSchemas/properties/getRandomTrait/proper\
-                ties/subtitle"
+              $ref: "#/components/schemas/traitSchemas/properties/getRandomTrait/properties/s\
+                ubtitle"
             category:
-              $ref: "#/components/schemas/traitSchemas/properties/getRandomTrait/proper\
-                ties/category"
+              $ref: "#/components/schemas/traitSchemas/properties/getRandomTrait/properties/c\
+                ategory"
             feeling:
-              $ref: "#/components/schemas/traitSchemas/properties/getRandomTrait/proper\
-                ties/feeling"
+              $ref: "#/components/schemas/traitSchemas/properties/getRandomTrait/properties/f\
+                eeling"
             description:
               type: string
           required:
@@ -4580,8 +4489,8 @@ components:
           type: object
           properties:
             description:
-              $ref: "#/components/schemas/traitSchemas/properties/getRandomTraitResponseSchem\
-                a/properties/description"
+              $ref: "#/components/schemas/traitSchemas/properties/getRandomTraitResponse/prop\
+                erties/description"
           required:
             - description
           additionalProperties: false
@@ -4615,11 +4524,9 @@ components:
           type: object
           properties:
             email:
-              $ref: "#/components/schemas/userSchemas/properties/postUser/properties/\
-                email"
+              $ref: "#/components/schemas/userSchemas/properties/postUser/properties/email"
             username:
-              $ref: "#/components/schemas/userSchemas/properties/postUser/properties/\
-                username"
+              $ref: "#/components/schemas/userSchemas/properties/postUser/properties/username"
             id:
               type: number
           required:
@@ -4670,11 +4577,9 @@ components:
             id:
               type: number
             email:
-              $ref: "#/components/schemas/userSchemas/properties/postUser/properties/\
-                email"
+              $ref: "#/components/schemas/userSchemas/properties/postUser/properties/email"
             username:
-              $ref: "#/components/schemas/userSchemas/properties/postUser/properties/\
-                username"
+              $ref: "#/components/schemas/userSchemas/properties/postUser/properties/username"
             level:
               type: number
             created:
@@ -4751,7 +4656,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/backgroundSchemas/properties/getBackgroundListRespo\
-                  nseSchema"
+                  nse"
   /api/backgrounds/{backgroundId}:
     get:
       summary: Returns the details of the background corresponding to the given id.
@@ -4775,8 +4680,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/backgroundSchemas/properties/getBackgroundResponseS\
-                  chema"
+                $ref: "#/components/schemas/backgroundSchemas/properties/getBackgroundResponse"
   /api/backgrounds/random:
     get:
       summary: Returns the details of a random background from the database.
@@ -4796,8 +4700,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/backgroundSchemas/properties/getBackgroundResponseS\
-                  chema"
+                $ref: "#/components/schemas/backgroundSchemas/properties/getBackgroundResponse"
   /api/backgrounds/random/{age}:
     get:
       summary: Returns the details of a random background for a specific age.
@@ -4824,8 +4727,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/backgroundSchemas/properties/getBackgroundResponseS\
-                  chema"
+                $ref: "#/components/schemas/backgroundSchemas/properties/getBackgroundResponse"
   /api/classes/:
     get:
       summary: Returns a list of all available classes in the db.
@@ -4888,7 +4790,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/classSchemas/properties/getClassWithVariantsListRes\
-                  ponseSchema"
+                  ponse"
   /api/classes/{classId}:
     get:
       summary: Returns the details of the class corresponding to the given id.
@@ -5047,7 +4949,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/raceSchemas/properties/getRaceWithVariantsListRespo\
-                  nseSchema"
+                  nse"
   /api/races/{raceId}:
     get:
       summary: Returns the details of the race corresponding to the given id.
@@ -5110,8 +5012,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/traitSchemas/properties/getRandomTraitResponseSchem\
-                  a"
+                $ref: "#/components/schemas/traitSchemas/properties/getRandomTraitResponse"
   /api/traits/random/{age}:
     post:
       summary: Returns a random trait for the given age.
@@ -5137,8 +5038,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/traitSchemas/properties/getRandomTraitResponseSchem\
-                  a"
+                $ref: "#/components/schemas/traitSchemas/properties/getRandomTraitResponse"
   /api/traits/{name}:
     get:
       summary: Returns the description of a trait.
@@ -5159,8 +5059,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/traitSchemas/properties/getTraitDescriptionResponse\
-                  Schema"
+                $ref: "#/components/schemas/traitSchemas/properties/getTraitDescriptionResponse"
   /api/users/login:
     post:
       summary: Logs in a user and returns an access token.

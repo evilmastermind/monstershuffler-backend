@@ -1,7 +1,11 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
-import { postRandomNpcInput, postRandomNpcResponse, postFourRandomNpcsResponse, getGeneratorDataResponse } from 'monstershuffler-shared';
-
+import {
+  postRandomNpcInput,
+  postRandomNpcResponse,
+  postFourRandomNpcsResponse,
+  getGeneratorDataResponse,
+} from 'monstershuffler-shared';
 
 export type PostRandomNpcInput = z.infer<typeof postRandomNpcInput>;
 
