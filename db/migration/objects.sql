@@ -1,3 +1,5 @@
+ALTER TABLE users ADD COLUMN settings JSON;
+
 CREATE TABLE `objecttypes` (
   `type` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,

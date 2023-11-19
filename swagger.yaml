@@ -112,6 +112,25 @@ components:
                                     type: number
                                   value:
                                     type: string
+                                  type:
+                                    type: string
+                                    enum:
+                                      - background
+                                      - spell
+                                      - trait
+                                      - race
+                                      - class
+                                      - template
+                                      - type
+                                      - subtype
+                                      - language
+                                      - skill
+                                      - savingThrow
+                                      - condition
+                                      - resistance
+                                      - immunity
+                                      - vulnerability
+                                      - conditionImmunity
                                   availableAt:
                                     type: number
                                 required:
@@ -153,7 +172,7 @@ components:
                 speeds:
                   type: object
                   properties:
-                    base:
+                    walk:
                       type: string
                     burrow:
                       type: string
@@ -487,22 +506,22 @@ components:
                     sizeBonus:
                       $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
                         ies/object/properties/bonuses/properties/HPBonus"
-                    speedBaseBonus:
+                    walkBonus:
                       $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
                         ies/object/properties/bonuses/properties/HPBonus"
-                    speedBurrowBonus:
+                    burrowBonus:
                       $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
                         ies/object/properties/bonuses/properties/HPBonus"
-                    speedClimbBonus:
+                    climbBonus:
                       $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
                         ies/object/properties/bonuses/properties/HPBonus"
-                    speedFlyBonus:
+                    flyBonus:
                       $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
                         ies/object/properties/bonuses/properties/HPBonus"
-                    speedHoverBonus:
+                    hoverBonus:
                       $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
                         ies/object/properties/bonuses/properties/HPBonus"
-                    speedSwimBonus:
+                    swimBonus:
                       $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
                         ies/object/properties/bonuses/properties/HPBonus"
                     STRBonus:
@@ -849,6 +868,25 @@ components:
                                     type: number
                                   value:
                                     type: string
+                                  type:
+                                    type: string
+                                    enum:
+                                      - background
+                                      - spell
+                                      - trait
+                                      - race
+                                      - class
+                                      - template
+                                      - type
+                                      - subtype
+                                      - language
+                                      - skill
+                                      - savingThrow
+                                      - condition
+                                      - resistance
+                                      - immunity
+                                      - vulnerability
+                                      - conditionImmunity
                                   availableAt:
                                     type: number
                                 required:
@@ -871,7 +909,7 @@ components:
                 speeds:
                   type: object
                   properties:
-                    base:
+                    walk:
                       type: string
                     burrow:
                       type: string
@@ -1202,22 +1240,22 @@ components:
                     sizeBonus:
                       $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
                         properties/bonuses/properties/HPBonus"
-                    speedBaseBonus:
+                    walkBonus:
                       $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
                         properties/bonuses/properties/HPBonus"
-                    speedBurrowBonus:
+                    burrowBonus:
                       $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
                         properties/bonuses/properties/HPBonus"
-                    speedClimbBonus:
+                    climbBonus:
                       $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
                         properties/bonuses/properties/HPBonus"
-                    speedFlyBonus:
+                    flyBonus:
                       $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
                         properties/bonuses/properties/HPBonus"
-                    speedHoverBonus:
+                    hoverBonus:
                       $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
                         properties/bonuses/properties/HPBonus"
-                    speedSwimBonus:
+                    swimBonus:
                       $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
                         properties/bonuses/properties/HPBonus"
                     STRBonus:
@@ -1644,6 +1682,25 @@ components:
                                 type: number
                               value:
                                 type: string
+                              type:
+                                type: string
+                                enum:
+                                  - background
+                                  - spell
+                                  - trait
+                                  - race
+                                  - class
+                                  - template
+                                  - type
+                                  - subtype
+                                  - language
+                                  - skill
+                                  - savingThrow
+                                  - condition
+                                  - resistance
+                                  - immunity
+                                  - vulnerability
+                                  - conditionImmunity
                               availableAt:
                                 type: number
                             required:
@@ -1762,7 +1819,7 @@ components:
                         speeds:
                           type: object
                           properties:
-                            base:
+                            walk:
                               type: string
                             burrow:
                               type: string
@@ -2102,27 +2159,27 @@ components:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                                 ies/npc/properties/character/properties/race/pr\
                                 operties/bonuses/properties/HPBonus"
-                            speedBaseBonus:
+                            walkBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                                 ies/npc/properties/character/properties/race/pr\
                                 operties/bonuses/properties/HPBonus"
-                            speedBurrowBonus:
+                            burrowBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                                 ies/npc/properties/character/properties/race/pr\
                                 operties/bonuses/properties/HPBonus"
-                            speedClimbBonus:
+                            climbBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                                 ies/npc/properties/character/properties/race/pr\
                                 operties/bonuses/properties/HPBonus"
-                            speedFlyBonus:
+                            flyBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                                 ies/npc/properties/character/properties/race/pr\
                                 operties/bonuses/properties/HPBonus"
-                            speedHoverBonus:
+                            hoverBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                                 ies/npc/properties/character/properties/race/pr\
                                 operties/bonuses/properties/HPBonus"
-                            speedSwimBonus:
+                            swimBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                                 ies/npc/properties/character/properties/race/pr\
                                 operties/bonuses/properties/HPBonus"
@@ -3268,24 +3325,9 @@ components:
                           string:
                             type: string
                           type:
-                            type: string
-                            enum:
-                              - background
-                              - spell
-                              - trait
-                              - race
-                              - class
-                              - template
-                              - type
-                              - subtype
-                              - language
-                              - skill
-                              - savingThrow
-                              - condition
-                              - resistance
-                              - immunity
-                              - vulnerability
-                              - conditionImmunity
+                            $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                              ies/npc/properties/character/properties/race/prop\
+                              erties/subtypes/items/properties/type"
                           id:
                             type: number
                         required:
@@ -3298,11 +3340,16 @@ components:
                         ies/npc/properties/statistics/properties/alignment"
                     XP:
                       type: string
+                    AC:
+                      $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                        ies/npc/properties/statistics/properties/alignment"
                     proficiency:
                       type: number
                     size:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                         ies/npc/properties/statistics/properties/alignment"
+                    isSwarm:
+                      type: boolean
                     sizeSingleEntityOfSwarm:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                         ies/npc/properties/statistics/properties/alignment"
@@ -3342,9 +3389,30 @@ components:
                       type: array
                       items:
                         $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                          ies/npc/properties/statistics/properties/alignment"
+                          ies/npc/properties/statistics/properties/characterHoo\
+                          k/items"
                     meta:
                       type: string
+                    speeds:
+                      type: object
+                      properties:
+                        walk:
+                          type: number
+                        burrow:
+                          type: number
+                        climb:
+                          type: number
+                        fly:
+                          type: number
+                        hover:
+                          type: number
+                        swim:
+                          type: number
+                        string:
+                          type: string
+                      required:
+                        - string
+                      additionalProperties: false
                   required:
                     - alignment
                     - pronouns
@@ -3355,6 +3423,7 @@ components:
                     - level
                     - CR
                     - XP
+                    - AC
                     - proficiency
                     - size
                     - abilityScores
@@ -3377,6 +3446,8 @@ components:
                     HD:
                       type: number
                     HP:
+                      type: number
+                    AC:
                       type: number
                     STR:
                       type: number
@@ -3402,6 +3473,18 @@ components:
                       type: number
                     CHAVALUE:
                       type: number
+                    SPEED:
+                      type: number
+                    BURROW:
+                      type: number
+                    CLIMB:
+                      type: number
+                    FLY:
+                      type: number
+                    HOVER:
+                      type: number
+                    SWIM:
+                      type: number
                   required:
                     - LVL
                     - CR
@@ -3409,6 +3492,7 @@ components:
                     - SIZE
                     - HD
                     - HP
+                    - AC
                     - STR
                     - DEX
                     - CON
@@ -3421,6 +3505,12 @@ components:
                     - INTVALUE
                     - WISVALUE
                     - CHAVALUE
+                    - SPEED
+                    - BURROW
+                    - CLIMB
+                    - FLY
+                    - HOVER
+                    - SWIM
                   additionalProperties: false
                 tags:
                   type: object
@@ -3687,6 +3777,25 @@ components:
                         type: number
                       value:
                         type: string
+                      type:
+                        type: string
+                        enum:
+                          - background
+                          - spell
+                          - trait
+                          - race
+                          - class
+                          - template
+                          - type
+                          - subtype
+                          - language
+                          - skill
+                          - savingThrow
+                          - condition
+                          - resistance
+                          - immunity
+                          - vulnerability
+                          - conditionImmunity
                       availableAt:
                         type: number
                     required:
@@ -3804,7 +3913,7 @@ components:
                 speeds:
                   type: object
                   properties:
-                    base:
+                    walk:
                       type: string
                     burrow:
                       type: string
@@ -4127,22 +4236,22 @@ components:
                     sizeBonus:
                       $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
                         roperties/bonuses/properties/HPBonus"
-                    speedBaseBonus:
+                    walkBonus:
                       $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
                         roperties/bonuses/properties/HPBonus"
-                    speedBurrowBonus:
+                    burrowBonus:
                       $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
                         roperties/bonuses/properties/HPBonus"
-                    speedClimbBonus:
+                    climbBonus:
                       $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
                         roperties/bonuses/properties/HPBonus"
-                    speedFlyBonus:
+                    flyBonus:
                       $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
                         roperties/bonuses/properties/HPBonus"
-                    speedHoverBonus:
+                    hoverBonus:
                       $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
                         roperties/bonuses/properties/HPBonus"
-                    speedSwimBonus:
+                    swimBonus:
                       $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
                         roperties/bonuses/properties/HPBonus"
                     STRBonus:

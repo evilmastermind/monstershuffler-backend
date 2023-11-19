@@ -37,6 +37,7 @@ export async function convertObjectsHandler(request, reply) {
     await prisma.$queryRaw`ALTER TABLE objects ALTER COLUMN object TYPE JSONB USING object::JSONB;`;
     await prisma.$queryRaw`ALTER TABLE characterhooks ALTER COLUMN object TYPE JSONB USING object::JSONB;`;
     await prisma.$queryRaw`ALTER TABLE traits ALTER COLUMN object TYPE JSONB USING object::JSONB;`;
+    await prisma.$queryRaw`ALTER TABLE users ALTER COLUMN settings TYPE JSONB USING object::JSONB;`;
     await prisma.$queryRaw`CREATE INDEX idx_gin_characterhooks ON characterhooks USING GIN(object);`;
     await prisma.$queryRaw`CREATE INDEX idx_gin_traits ON traits USING GIN(object);`;
 
@@ -260,13 +261,10 @@ async function convertCharacterObject(object, id) {
 
   convertAbilityScores(object);
 
-  // speeds (there is no plural for speed, duh)
   if (Object.hasOwn(object, 'speeds')) {
-    object.speed = object.speeds;
-    delete object.speeds;
-    if (Object.hasOwn(object.speed, 'base')) {
-      object.speed.walk = object.speed.base;
-      delete object.speed.base;
+    if (Object.hasOwn(object.speeds, 'base')) {
+      object.speeds.walk = object.speeds.base;
+      delete object.speeds.base;
     }
   }
 
@@ -342,6 +340,30 @@ async function convertCharacterObject(object, id) {
         bonus.name = value.name.toString();
       }
       bonuses[key] = bonus;
+    }
+    if (Object.hasOwn(bonuses, 'speedBaseBonus')) {
+      bonuses.walkBonus = bonuses.speedBaseBonus;
+      delete bonuses.speedBaseBonus;
+    }
+    if (Object.hasOwn(bonuses, 'speedFlyBonus')) {
+      bonuses.flyBonus = bonuses.speedFlyBonus;
+      delete bonuses.speedFlyBonus;
+    }
+    if (Object.hasOwn(bonuses, 'speedBurrowBonus')) {
+      bonuses.burrowBonus = bonuses.speedBurrowBonus;
+      delete bonuses.speedBurrowBonus;
+    }
+    if (Object.hasOwn(bonuses, 'speedClimbBonus')) {
+      bonuses.climbBonus = bonuses.speedClimbBonus;
+      delete bonuses.speedClimbBonus;
+    }
+    if (Object.hasOwn(bonuses, 'speedSwimBonus')) {
+      bonuses.swimBonus = bonuses.speedSwimBonus;
+      delete bonuses.speedSwimBonus;
+    }
+    if (Object.hasOwn(bonuses, 'speedHoverBonus')) {
+      bonuses.hoverBonus = bonuses.speedHoverBonus;
+      delete bonuses.speedHoverBonus;
     }
     delete object.bonuses;
     object.bonuses = bonuses;
