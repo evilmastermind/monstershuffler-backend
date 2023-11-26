@@ -1,10 +1,5 @@
-import { z } from 'zod';
 import { AnyObject } from '@/schemas';
-import {
-  ChoiceListObject,
-  ChoiceRandomObject,
-  type Choice,
-} from '@/schemas/character/choices';
+import type { ChoiceListObject, ChoiceRandomObject, Choice } from '@/types';
 import { getChoiceObject } from '@/modules/object/object.service';
 import { random } from '@/utils/functions';
 import { getChoiceLanguage } from './language/language.service';
@@ -43,12 +38,12 @@ async function resolveChoice(
 ) {
   const choice = object.choice;
   switch (choice.type) {
-  case 'list':
-    await resolveListChoice(choice, father, fathersKey);
-    break;
-  case 'random':
-    await resolveRandomChoice(choice, father, fathersKey, userId);
-    break;
+    case 'list':
+      await resolveListChoice(choice, father, fathersKey);
+      break;
+    case 'random':
+      await resolveRandomChoice(choice, father, fathersKey, userId);
+      break;
   }
 }
 
@@ -87,7 +82,7 @@ async function resolveListChoice(
       i++;
     }
   }
-  if(chosen.length > 0) {
+  if (chosen.length > 0) {
     father[fathersKey] = chosen;
   } else {
     delete father[fathersKey];
@@ -105,21 +100,21 @@ async function resolveRandomChoice(
   let result: AnyObject | null = {};
 
   switch (source) {
-  case 'objects':
-    result = await getChoiceObject(userId, choice);
-    break;
-  case 'languages':
-    result = await getChoiceLanguage(userId, choice);
-    break;
-  case 'skills':
-    result = await getChoiceSkill(userId, choice);
-    break;
+    case 'objects':
+      result = await getChoiceObject(userId, choice);
+      break;
+    case 'languages':
+      result = await getChoiceLanguage(userId, choice);
+      break;
+    case 'skills':
+      result = await getChoiceSkill(userId, choice);
+      break;
   }
   // check if the result is an object and if it has any keys
   if (result && typeof result === 'object' && Object.keys(result).length > 0) {
     father[fathersKey] = result;
     // check if the result is an array and if it has any elements
-  } else if (result && Array.isArray(result) && result.length >0) {
+  } else if (result && Array.isArray(result) && result.length > 0) {
     father[fathersKey] = result;
     // if the result is null, delete the key from the father object
   } else {

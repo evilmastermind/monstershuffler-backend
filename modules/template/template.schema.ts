@@ -1,7 +1,12 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
-import { templateObject } from '@/schemas/character';
-import { getTemplateListResponse, getTemplateResponse, postTemplate, putTemplate } from 'monstershuffler-shared';
+import { templateObject } from 'monstershuffler-shared';
+import {
+  getTemplateListResponse,
+  getTemplateResponse,
+  postTemplate,
+  putTemplate,
+} from 'monstershuffler-shared';
 
 export type createTemplateInput = z.infer<typeof postTemplate>;
 export type updateTemplateInput = z.infer<typeof putTemplate>;

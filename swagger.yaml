@@ -4699,6 +4699,26 @@ components:
               format: date-time
             avatar:
               type: string
+            settings:
+              anyOf:
+                - type: object
+                  properties:
+                    stats:
+                      type: object
+                      properties:
+                        lengthUnit:
+                          type: string
+                          enum:
+                            - feet
+                            - meters
+                            - squares
+                      required:
+                        - lengthUnit
+                      additionalProperties: false
+                  required:
+                    - stats
+                  additionalProperties: false
+                - type: "null"
           required:
             - id
             - email
@@ -4707,6 +4727,7 @@ components:
             - created
             - publishsuspension
             - avatar
+            - settings
           additionalProperties: false
         putUser:
           type: object

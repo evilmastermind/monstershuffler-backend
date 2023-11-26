@@ -1,7 +1,12 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
-import { racevariantObject } from '@/schemas/character';
-import { getRacevariantListResponse, getRacevariantResponse, postRacevariant, putRacevariant } from 'monstershuffler-shared';
+import { racevariantObject } from 'monstershuffler-shared';
+import {
+  getRacevariantListResponse,
+  getRacevariantResponse,
+  postRacevariant,
+  putRacevariant,
+} from 'monstershuffler-shared';
 
 export type createRacevariantInput = z.infer<typeof postRacevariant>;
 export type updateRacevariantInput = z.infer<typeof putRacevariant>;

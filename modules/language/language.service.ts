@@ -1,6 +1,6 @@
 import prisma from '@/utils/prisma';
 import { createLanguageInput } from './language.schema';
-import { ChoiceRandomObject, Choice } from '@/schemas/character/choices';
+import { ChoiceRandomObject, Choice } from '@/types';
 
 export async function createLanguage(
   userid: number,

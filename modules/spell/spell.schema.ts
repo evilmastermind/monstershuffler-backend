@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
-import { spellObject } from '@/schemas/character/spells';
+import { spellObject } from 'monstershuffler-shared';
 import {
   getSpellListResponse,
   getSpellResponse,

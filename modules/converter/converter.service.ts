@@ -1,8 +1,7 @@
 import prisma from '@/utils/prisma';
-import { actionsdetails, Prisma } from '@prisma/client';
 import { isAdmin } from '@/modules/user/user.service';
 import { objects } from '@prisma/client';
-import { type Choice } from '@/schemas/character/choices';
+import type { Choice } from '@/types';
 
 export async function countObjects() {
   const objectCount = await prisma.objects.count();

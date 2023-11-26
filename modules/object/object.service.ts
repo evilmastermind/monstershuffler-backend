@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import prisma from '@/utils/prisma';
-import { ChoiceRandomObject, Choice } from '@/schemas/character/choices';
+import { ChoiceRandomObject, Choice } from '@/types';
 import { AnyObject } from '@/schemas';
 
 export async function getChoiceObject(

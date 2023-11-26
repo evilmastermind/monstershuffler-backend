@@ -1,5 +1,5 @@
 import prisma from '@/utils/prisma';
-import { ChoiceRandomObject, Choice } from '@/schemas/character/choices';
+import { ChoiceRandomObject, Choice } from '@/types';
 
 export async function getSkillList() {
   return await prisma.skills.findMany({
