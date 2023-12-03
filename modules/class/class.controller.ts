@@ -33,7 +33,6 @@ export async function getClassWithVariantsListHandler(
   const { id } = request.user || { id: 0 };
   try {
     const classList = await getClassWithVariantsList(id);
-    console.log(classList);
     return handleResultFound(classList, reply);
   } catch (error) {
     return handleError(error, reply);

@@ -195,6 +195,8 @@ export async function createRandomNpc(
       await findChoices(character.background, character.background, 0, id);
     }
 
+    character.CRCalculation =  { name: 'automatic', CR: -1 };
+
     return {
       npc: result,
     };
@@ -456,6 +458,7 @@ async function calculateVoice(pronouns: string) {
 }
 
 function calculateLevel(levelType = 'random') {
+  return 1;
   switch (levelType) {
   case 'randomPeasantsMostly': {
     const randomValue = Math.floor(30 / (Math.random() * 150 + 1) + 1);
