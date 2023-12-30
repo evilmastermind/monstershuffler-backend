@@ -72,36 +72,36 @@ async function convertObject(object) {
   }
 
   switch (object.type) {
-    case 1:
-      await convertCharacter(objectJSON, object.id);
-      break;
-    case 2:
-    case 3:
-    case 4:
-      await convertNonCharacter(objectJSON, object.id);
-      break;
-    case 5:
-      addCompatibleAgesToBackground(objectJSON);
-      await convertNonCharacter(objectJSON, object.id);
-      break;
-    case 10002:
-    case 10003:
-      await convertNonCharacter(objectJSON, object.id);
-      break;
-    case 101:
-      object.object = await convertAction(objectJSON, object.id);
-      break;
-    case 102:
-      // convertSpell(object);
-      break;
-    case 1001:
-      // convertWeapon(object);
-      break;
-    case 1002:
-      object.object = await convertArmor(objectJSON);
-      break;
-    default:
-      break;
+  case 1:
+    await convertCharacter(objectJSON, object.id);
+    break;
+  case 2:
+  case 3:
+  case 4:
+    await convertNonCharacter(objectJSON, object.id);
+    break;
+  case 5:
+    addCompatibleAgesToBackground(objectJSON);
+    await convertNonCharacter(objectJSON, object.id);
+    break;
+  case 10002:
+  case 10003:
+    await convertNonCharacter(objectJSON, object.id);
+    break;
+  case 101:
+    object.object = await convertAction(objectJSON, object.id);
+    break;
+  case 102:
+    // convertSpell(object);
+    break;
+  case 1001:
+    // convertWeapon(object);
+    break;
+  case 1002:
+    object.object = await convertArmor(objectJSON);
+    break;
+  default:
+    break;
   }
 }
 
@@ -219,27 +219,27 @@ async function convertCharacterObject(object, id) {
   // swarmSize fix
   if (Object.hasOwn(object, 'swarmSize')) {
     switch (object.swarmSize.toLowerCase()) {
-      case 'tiny':
-        object.swarmSize = '1';
-        break;
-      case 'small':
-        object.swarmSize = '2';
-        break;
-      case 'medium':
-        object.swarmSize = '3';
-        break;
-      case 'large':
-        object.swarmSize = '4';
-        break;
-      case 'huge':
-        object.swarmSize = '5';
-        break;
-      case 'gargantuan':
-        object.swarmSize = '6';
-        break;
-      default:
-        object.swarmSize = '3';
-        break;
+    case 'tiny':
+      object.swarmSize = '1';
+      break;
+    case 'small':
+      object.swarmSize = '2';
+      break;
+    case 'medium':
+      object.swarmSize = '3';
+      break;
+    case 'large':
+      object.swarmSize = '4';
+      break;
+    case 'huge':
+      object.swarmSize = '5';
+      break;
+    case 'gargantuan':
+      object.swarmSize = '6';
+      break;
+    default:
+      object.swarmSize = '3';
+      break;
     }
   }
   // armor random choice fix
@@ -510,6 +510,23 @@ async function convertAction(object, id) {
     return object;
   }
 
+  if(Object.hasOwn(object, 'recharge')) {
+    switch (object.recharge) {
+    case '3–6':
+      object.recharge = '3-6';
+      break;
+    case '4–6':
+      object.recharge = '4-6';
+      break;
+    case '5–6':
+      object.recharge = '5-6';
+      break;
+    case '6–6':
+      object.recharge = '6-6';
+      break;
+    }
+  }
+
   // (random actions)
   if (Object.hasOwn(object, 'choice')) {
     await convertChoiceRandom(object, 'actions');
@@ -710,27 +727,27 @@ async function convertChoiceRandom(object, source) {
 
   if (object.choice.type === 'random') {
     switch (source) {
-      case 'actions':
-        object.choice.source = 'objects';
-        object.choice.objectType = 101;
-        convertProfessionFiltersInActions(object.choice.filters);
-        break;
-      case 'armor':
-        object.choice.source = 'objects';
-        object.choice.objectType = 1002;
-        break;
-      case 'weapons':
-        object.choice.source = 'objects';
-        object.choice.objectType = 1001;
-        break;
-      case 'spells':
-        object.choice.source = 'objects';
-        object.choice.objectType = 102;
-        break;
-      case 'skills':
-      case 'languages':
-        object.choice.source = source;
-        break;
+    case 'actions':
+      object.choice.source = 'objects';
+      object.choice.objectType = 101;
+      convertProfessionFiltersInActions(object.choice.filters);
+      break;
+    case 'armor':
+      object.choice.source = 'objects';
+      object.choice.objectType = 1002;
+      break;
+    case 'weapons':
+      object.choice.source = 'objects';
+      object.choice.objectType = 1001;
+      break;
+    case 'spells':
+      object.choice.source = 'objects';
+      object.choice.objectType = 102;
+      break;
+    case 'skills':
+    case 'languages':
+      object.choice.source = source;
+      break;
     }
   } else {
     if (Object.hasOwn(object.choice, 'source')) {
@@ -775,12 +792,12 @@ function convertProfessionFiltersInActions(filters) {
   }
   for (const filter of filters) {
     switch (filter.keyName) {
-      case 'actiontype':
-        filter.keyName = 'actionType';
-        break;
-      case 'subtype':
-        filter.keyName = 'subType';
-        break;
+    case 'actiontype':
+      filter.keyName = 'actionType';
+      break;
+    case 'subtype':
+      filter.keyName = 'subType';
+      break;
     }
   }
 }
