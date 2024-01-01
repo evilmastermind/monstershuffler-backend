@@ -368,6 +368,12 @@ async function convertCharacterObject(object, id) {
     delete object.bonuses;
     object.bonuses = bonuses;
   }
+
+  // legendaryActionsAvailable => legendaryActionsMax
+  if (Object.hasOwn(object, 'legendaryActionsAvailable')) {
+    object.legendaryActionsMax = object.legendaryActionsAvailable;
+    delete object.legendaryActionsAvailable;
+  }
 }
 
 function convertAbilityScores(object) {
