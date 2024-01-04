@@ -37,7 +37,7 @@ export async function convertObjectsHandler(request, reply) {
     await prisma.$queryRaw`ALTER TABLE objects ALTER COLUMN object TYPE JSONB USING object::JSONB;`;
     await prisma.$queryRaw`ALTER TABLE characterhooks ALTER COLUMN object TYPE JSONB USING object::JSONB;`;
     await prisma.$queryRaw`ALTER TABLE traits ALTER COLUMN object TYPE JSONB USING object::JSONB;`;
-    await prisma.$queryRaw`ALTER TABLE users ALTER COLUMN settings TYPE JSONB USING object::JSONB;`;
+    await prisma.$queryRaw`ALTER TABLE users ALTER COLUMN settings TYPE JSONB USING settings::JSONB;`;
     await prisma.$queryRaw`CREATE INDEX idx_gin_characterhooks ON characterhooks USING GIN(object);`;
     await prisma.$queryRaw`CREATE INDEX idx_gin_traits ON traits USING GIN(object);`;
 
@@ -95,7 +95,7 @@ async function convertObject(object) {
     // convertSpell(object);
     break;
   case 1001:
-    // convertWeapon(object);
+    convertWeapon(object);
     break;
   case 1002:
     object.object = await convertArmor(objectJSON);
@@ -635,6 +635,15 @@ function convertDiceObject(object) {
   stringToNumber(object, 'die');
   stringToNumber(object, 'diceNumber');
   stringToNumber(object, 'diceIncrement');
+  // die => sides and diceNumber => dice
+  if (Object.hasOwn(object, 'die')) {
+    object.sides = object.die;
+    delete object.die;
+  }
+  if (Object.hasOwn(object, 'diceNumber')) {
+    object.dice = object.diceNumber;
+    delete object.diceNumber;
+  }
   if (Object.hasOwn(object, 'levelInterval')) {
     if (
       object.levelInterval !== null &&
@@ -832,5 +841,24 @@ function convertAgeAndHeight(race) {
   }
   if (Object.hasOwn(race, 'heightMax')) {
     race.heightMax = parseInt(race.heightMax);
+  }
+}
+
+function convertWeapon(object) {
+  if (Object.hasOwn(object, 'die')) {
+    object.sides = object.die;
+    delete object.die;
+  }
+  if (Object.hasOwn(object, 'diceNumber')) {
+    object.dice = object.diceNumber;
+    delete object.diceNumber;
+  }
+  if (Object.hasOwn(object, 'dieV')) {
+    object.sidesV = object.dieV;
+    delete object.dieV;
+  }
+  if (Object.hasOwn(object, 'diceNumberV')) {
+    object.diceV = object.diceNumberV;
+    delete object.diceNumberV;
   }
 }
