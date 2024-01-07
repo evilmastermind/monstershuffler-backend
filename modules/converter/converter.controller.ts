@@ -92,10 +92,10 @@ async function convertObject(object) {
     object.object = await convertAction(objectJSON, object.id);
     break;
   case 102:
-    // convertSpell(object);
+    // object.object = convertSpell(objectJSON);
     break;
   case 1001:
-    convertWeapon(object);
+    object.object = convertWeapon(objectJSON);
     break;
   case 1002:
     object.object = await convertArmor(objectJSON);
@@ -606,6 +606,9 @@ async function convertAction(object, id) {
           convertDiceObject(attack.enchantment.dice);
         }
       }
+      if (Object.hasOwn(attack, 'attributes')) {
+        convertWeapon(attack.attributes);
+      }
     }
   }
   // values diceObject => levelMin/levelMax to availableAt/availableUntil/availableUnit
@@ -866,5 +869,8 @@ function convertWeapon(object) {
   if (Object.hasOwn(object, 'diceNumberV')) {
     object.diceV = object.diceNumberV;
     delete object.diceNumberV;
+  }
+  if ('reach' in object && object.reach === '') {
+    delete object.reach;
   }
 }

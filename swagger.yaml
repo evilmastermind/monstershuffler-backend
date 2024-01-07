@@ -73,8 +73,6 @@ components:
                               type: string
                               enum:
                                 - random
-                            number:
-                              type: number
                             resultType:
                               type: string
                               enum:
@@ -86,6 +84,8 @@ components:
                                 - objects
                                 - languages
                                 - skills
+                            number:
+                              type: number
                             objectType:
                               type: number
                             filters:
@@ -115,24 +115,38 @@ components:
                                   type:
                                     type: string
                                     enum:
+                                      - alignment
+                                      - armor
                                       - background
-                                      - spell
-                                      - trait
-                                      - race
                                       - class
-                                      - template
-                                      - type
-                                      - subtype
-                                      - language
-                                      - skill
-                                      - savingThrow
                                       - condition
-                                      - resistance
-                                      - immunity
-                                      - vulnerability
                                       - conditionImmunity
+                                      - damageType
+                                      - immunity
+                                      - item
+                                      - language
+                                      - pronouns
+                                      - race
+                                      - resistance
+                                      - savingThrow
+                                      - sense
+                                      - size
+                                      - skill
+                                      - speed
+                                      - spell
+                                      - subtype
+                                      - template
+                                      - trait
+                                      - type
+                                      - vulnerability
+                                      - weapon
                                   availableAt:
                                     type: number
+                                  availableUnit:
+                                    type: string
+                                    enum:
+                                      - level
+                                      - cr
                                 required:
                                   - value
                                 additionalProperties: false
@@ -290,35 +304,8 @@ components:
                         properties:
                           tag:
                             type: string
-                          actionType:
-                            type: string
-                            enum:
-                              - trait
-                              - legendary
-                              - action
-                              - reaction
-                              - bonus
-                              - attack
-                              - multiattack
-                              - mythic
-                              - lair
                           priority:
                             type: number
-                          availableUnit:
-                            type: string
-                            enum:
-                              - level
-                              - cr
-                          availableUntil:
-                            type: number
-                          subType:
-                            type: string
-                          source:
-                            type: string
-                          tags:
-                            type: array
-                            items:
-                              type: string
                           variants:
                             type: array
                             items:
@@ -326,12 +313,36 @@ components:
                               properties:
                                 name:
                                   type: string
+                                type:
+                                  type: string
+                                  enum:
+                                    - trait
+                                    - legendary
+                                    - action
+                                    - reaction
+                                    - bonus
+                                    - attack
+                                    - multiattack
+                                    - mythic
+                                    - lair
+                                charges:
+                                  type: string
+                                recharge:
+                                  type: string
+                                  enum:
+                                    - turn
+                                    - short
+                                    - day
+                                    - week
+                                    - month
+                                    - 3-6
+                                    - 4-6
+                                    - 5-6
+                                    - 6-6
+                                    - spellGroup
+                                    - spellSlot
                                 description:
                                   type: string
-                                type:
-                                  $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
-                                    ies/object/properties/actions/items/anyOf/0\
-                                    /properties/actionType"
                                 availableAt:
                                   type: number
                                 ability:
@@ -343,18 +354,60 @@ components:
                                     - INT
                                     - WIS
                                     - CHA
-                                charges:
-                                  type: string
-                                recharge:
-                                  type: string
                                 cost:
                                   type: string
                                 values:
                                   type: array
                                   items:
                                     anyOf:
-                                      - {}
-                                      - {}
+                                      - type: object
+                                        properties:
+                                          name:
+                                            type: string
+                                          type:
+                                            type: string
+                                          expression:
+                                            type: string
+                                          dice:
+                                            type: object
+                                            properties:
+                                              dice:
+                                                type: number
+                                              sides:
+                                                type: number
+                                              diceIncrement:
+                                                type: number
+                                              availableAt:
+                                                type: number
+                                              availableUntil:
+                                                type: number
+                                              availableUnit:
+                                                type: string
+                                                enum:
+                                                  - level
+                                                  - cr
+                                              unitInterval:
+                                                type: number
+                                            required:
+                                              - dice
+                                              - sides
+                                            additionalProperties: false
+                                        required:
+                                          - name
+                                          - dice
+                                        additionalProperties: false
+                                      - type: object
+                                        properties:
+                                          name:
+                                            type: string
+                                          type:
+                                            type: string
+                                          expression:
+                                            type: string
+                                        required:
+                                          - name
+                                          - expression
+                                        additionalProperties: false
                                       - type: object
                                         properties:
                                           name:
@@ -365,20 +418,20 @@ components:
                                             type: object
                                             properties:
                                               unitInterval:
-                                                type: string
+                                                type: number
                                               unitIncrement:
-                                                type: string
+                                                type: number
                                               availableAt:
-                                                type: string
+                                                type: number
                                               availableUnit:
                                                 type: string
                                                 enum:
                                                   - level
                                                   - cr
                                               valueBase:
-                                                type: string
+                                                type: number
                                               valueIncrement:
-                                                type: string
+                                                type: number
                                             required:
                                               - unitInterval
                                               - unitIncrement
@@ -399,75 +452,18 @@ components:
                                         type: string
                                       replaceName:
                                         type: boolean
-                                      attributes:
-                                        anyOf:
-                                          - type: object
-                                            properties:
-                                              reach:
-                                                type: string
-                                              targets:
-                                                type: string
-                                              name:
-                                                type: string
-                                              cost:
-                                                type: string
-                                              weight:
-                                                type: string
-                                              damageType:
-                                                type: string
-                                              special:
-                                                type: string
-                                              die:
-                                                type: string
-                                              diceNumber:
-                                                type: string
-                                              dieV:
-                                                type: string
-                                              diceNumberV:
-                                                type: string
-                                              range:
-                                                type: string
-                                              rangeMax:
-                                                type: string
-                                              properties:
-                                                type: array
-                                                items:
-                                                  type: string
-                                            required:
-                                              - properties
-                                            additionalProperties: false
-                                          - $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
-                                              ies/object/properties/armor/anyOf\
-                                              /1"
+                                      attributes: {}
                                       enchantment:
                                         type: object
                                         properties:
                                           type:
                                             type: string
                                           dice:
-                                            type: object
-                                            properties:
-                                              die:
-                                                type: number
-                                              diceNumber:
-                                                type: number
-                                              diceIncrement:
-                                                type: number
-                                              availableAt:
-                                                type: number
-                                              availableUntil:
-                                                type: number
-                                              availableUnit:
-                                                type: string
-                                                enum:
-                                                  - level
-                                                  - cr
-                                              unitInterval:
-                                                type: number
-                                            required:
-                                              - die
-                                              - diceNumber
-                                            additionalProperties: false
+                                            $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                                              ies/object/properties/actions/ite\
+                                              ms/anyOf/0/properties/variants/it\
+                                              ems/properties/values/items/anyOf\
+                                              /0/properties/dice"
                                           expression:
                                             type: string
                                         required:
@@ -475,12 +471,30 @@ components:
                                         additionalProperties: false
                                     required:
                                       - name
-                                      - attributes
                                     additionalProperties: false
                               required:
                                 - name
                                 - description
                               additionalProperties: false
+                          actionType:
+                            $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                              ies/object/properties/actions/items/anyOf/0/prope\
+                              rties/variants/items/properties/type"
+                          availableUnit:
+                            type: string
+                            enum:
+                              - level
+                              - cr
+                          availableUntil:
+                            type: number
+                          subType:
+                            type: string
+                          source:
+                            type: string
+                          tags:
+                            type: array
+                            items:
+                              type: string
                         required:
                           - tag
                           - variants
@@ -694,6 +708,8 @@ components:
                           - spells
                         additionalProperties: false
                   additionalProperties: false
+                legendaryActionsMax:
+                  type: string
                 enableGenerator:
                   type: boolean
               required:
@@ -829,8 +845,6 @@ components:
                               type: string
                               enum:
                                 - random
-                            number:
-                              type: number
                             resultType:
                               type: string
                               enum:
@@ -842,6 +856,8 @@ components:
                                 - objects
                                 - languages
                                 - skills
+                            number:
+                              type: number
                             objectType:
                               type: number
                             filters:
@@ -871,24 +887,38 @@ components:
                                   type:
                                     type: string
                                     enum:
+                                      - alignment
+                                      - armor
                                       - background
-                                      - spell
-                                      - trait
-                                      - race
                                       - class
-                                      - template
-                                      - type
-                                      - subtype
-                                      - language
-                                      - skill
-                                      - savingThrow
                                       - condition
-                                      - resistance
-                                      - immunity
-                                      - vulnerability
                                       - conditionImmunity
+                                      - damageType
+                                      - immunity
+                                      - item
+                                      - language
+                                      - pronouns
+                                      - race
+                                      - resistance
+                                      - savingThrow
+                                      - sense
+                                      - size
+                                      - skill
+                                      - speed
+                                      - spell
+                                      - subtype
+                                      - template
+                                      - trait
+                                      - type
+                                      - vulnerability
+                                      - weapon
                                   availableAt:
                                     type: number
+                                  availableUnit:
+                                    type: string
+                                    enum:
+                                      - level
+                                      - cr
                                 required:
                                   - value
                                 additionalProperties: false
@@ -1025,35 +1055,8 @@ components:
                         properties:
                           tag:
                             type: string
-                          actionType:
-                            type: string
-                            enum:
-                              - trait
-                              - legendary
-                              - action
-                              - reaction
-                              - bonus
-                              - attack
-                              - multiattack
-                              - mythic
-                              - lair
                           priority:
                             type: number
-                          availableUnit:
-                            type: string
-                            enum:
-                              - level
-                              - cr
-                          availableUntil:
-                            type: number
-                          subType:
-                            type: string
-                          source:
-                            type: string
-                          tags:
-                            type: array
-                            items:
-                              type: string
                           variants:
                             type: array
                             items:
@@ -1061,12 +1064,36 @@ components:
                               properties:
                                 name:
                                   type: string
+                                type:
+                                  type: string
+                                  enum:
+                                    - trait
+                                    - legendary
+                                    - action
+                                    - reaction
+                                    - bonus
+                                    - attack
+                                    - multiattack
+                                    - mythic
+                                    - lair
+                                charges:
+                                  type: string
+                                recharge:
+                                  type: string
+                                  enum:
+                                    - turn
+                                    - short
+                                    - day
+                                    - week
+                                    - month
+                                    - 3-6
+                                    - 4-6
+                                    - 5-6
+                                    - 6-6
+                                    - spellGroup
+                                    - spellSlot
                                 description:
                                   type: string
-                                type:
-                                  $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
-                                    properties/actions/items/anyOf/0/properties\
-                                    /actionType"
                                 availableAt:
                                   type: number
                                 ability:
@@ -1078,18 +1105,60 @@ components:
                                     - INT
                                     - WIS
                                     - CHA
-                                charges:
-                                  type: string
-                                recharge:
-                                  type: string
                                 cost:
                                   type: string
                                 values:
                                   type: array
                                   items:
                                     anyOf:
-                                      - {}
-                                      - {}
+                                      - type: object
+                                        properties:
+                                          name:
+                                            type: string
+                                          type:
+                                            type: string
+                                          expression:
+                                            type: string
+                                          dice:
+                                            type: object
+                                            properties:
+                                              dice:
+                                                type: number
+                                              sides:
+                                                type: number
+                                              diceIncrement:
+                                                type: number
+                                              availableAt:
+                                                type: number
+                                              availableUntil:
+                                                type: number
+                                              availableUnit:
+                                                type: string
+                                                enum:
+                                                  - level
+                                                  - cr
+                                              unitInterval:
+                                                type: number
+                                            required:
+                                              - dice
+                                              - sides
+                                            additionalProperties: false
+                                        required:
+                                          - name
+                                          - dice
+                                        additionalProperties: false
+                                      - type: object
+                                        properties:
+                                          name:
+                                            type: string
+                                          type:
+                                            type: string
+                                          expression:
+                                            type: string
+                                        required:
+                                          - name
+                                          - expression
+                                        additionalProperties: false
                                       - type: object
                                         properties:
                                           name:
@@ -1100,20 +1169,20 @@ components:
                                             type: object
                                             properties:
                                               unitInterval:
-                                                type: string
+                                                type: number
                                               unitIncrement:
-                                                type: string
+                                                type: number
                                               availableAt:
-                                                type: string
+                                                type: number
                                               availableUnit:
                                                 type: string
                                                 enum:
                                                   - level
                                                   - cr
                                               valueBase:
-                                                type: string
+                                                type: number
                                               valueIncrement:
-                                                type: string
+                                                type: number
                                             required:
                                               - unitInterval
                                               - unitIncrement
@@ -1134,74 +1203,18 @@ components:
                                         type: string
                                       replaceName:
                                         type: boolean
-                                      attributes:
-                                        anyOf:
-                                          - type: object
-                                            properties:
-                                              reach:
-                                                type: string
-                                              targets:
-                                                type: string
-                                              name:
-                                                type: string
-                                              cost:
-                                                type: string
-                                              weight:
-                                                type: string
-                                              damageType:
-                                                type: string
-                                              special:
-                                                type: string
-                                              die:
-                                                type: string
-                                              diceNumber:
-                                                type: string
-                                              dieV:
-                                                type: string
-                                              diceNumberV:
-                                                type: string
-                                              range:
-                                                type: string
-                                              rangeMax:
-                                                type: string
-                                              properties:
-                                                type: array
-                                                items:
-                                                  type: string
-                                            required:
-                                              - properties
-                                            additionalProperties: false
-                                          - $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
-                                              properties/armor/anyOf/1"
+                                      attributes: {}
                                       enchantment:
                                         type: object
                                         properties:
                                           type:
                                             type: string
                                           dice:
-                                            type: object
-                                            properties:
-                                              die:
-                                                type: number
-                                              diceNumber:
-                                                type: number
-                                              diceIncrement:
-                                                type: number
-                                              availableAt:
-                                                type: number
-                                              availableUntil:
-                                                type: number
-                                              availableUnit:
-                                                type: string
-                                                enum:
-                                                  - level
-                                                  - cr
-                                              unitInterval:
-                                                type: number
-                                            required:
-                                              - die
-                                              - diceNumber
-                                            additionalProperties: false
+                                            $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                                              properties/actions/items/anyOf/0/\
+                                              properties/variants/items/propert\
+                                              ies/values/items/anyOf/0/properti\
+                                              es/dice"
                                           expression:
                                             type: string
                                         required:
@@ -1209,12 +1222,30 @@ components:
                                         additionalProperties: false
                                     required:
                                       - name
-                                      - attributes
                                     additionalProperties: false
                               required:
                                 - name
                                 - description
                               additionalProperties: false
+                          actionType:
+                            $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                              properties/actions/items/anyOf/0/properties/varia\
+                              nts/items/properties/type"
+                          availableUnit:
+                            type: string
+                            enum:
+                              - level
+                              - cr
+                          availableUntil:
+                            type: number
+                          subType:
+                            type: string
+                          source:
+                            type: string
+                          tags:
+                            type: array
+                            items:
+                              type: string
                         required:
                           - tag
                           - variants
@@ -1428,6 +1459,8 @@ components:
                           - spells
                         additionalProperties: false
                   additionalProperties: false
+                legendaryActionsMax:
+                  type: string
                 image:
                   type: object
                   properties:
@@ -1685,24 +1718,38 @@ components:
                               type:
                                 type: string
                                 enum:
+                                  - alignment
+                                  - armor
                                   - background
-                                  - spell
-                                  - trait
-                                  - race
                                   - class
-                                  - template
-                                  - type
-                                  - subtype
-                                  - language
-                                  - skill
-                                  - savingThrow
                                   - condition
-                                  - resistance
-                                  - immunity
-                                  - vulnerability
                                   - conditionImmunity
+                                  - damageType
+                                  - immunity
+                                  - item
+                                  - language
+                                  - pronouns
+                                  - race
+                                  - resistance
+                                  - savingThrow
+                                  - sense
+                                  - size
+                                  - skill
+                                  - speed
+                                  - spell
+                                  - subtype
+                                  - template
+                                  - trait
+                                  - type
+                                  - vulnerability
+                                  - weapon
                               availableAt:
                                 type: number
+                              availableUnit:
+                                type: string
+                                enum:
+                                  - level
+                                  - cr
                             required:
                               - value
                             additionalProperties: false
@@ -1768,8 +1815,6 @@ components:
                                       type: string
                                       enum:
                                         - random
-                                    number:
-                                      type: number
                                     resultType:
                                       type: string
                                       enum:
@@ -1781,6 +1826,8 @@ components:
                                         - objects
                                         - languages
                                         - skills
+                                    number:
+                                      type: number
                                     objectType:
                                       type: number
                                     filters:
@@ -1938,35 +1985,8 @@ components:
                                 properties:
                                   tag:
                                     type: string
-                                  actionType:
-                                    type: string
-                                    enum:
-                                      - trait
-                                      - legendary
-                                      - action
-                                      - reaction
-                                      - bonus
-                                      - attack
-                                      - multiattack
-                                      - mythic
-                                      - lair
                                   priority:
                                     type: number
-                                  availableUnit:
-                                    type: string
-                                    enum:
-                                      - level
-                                      - cr
-                                  availableUntil:
-                                    type: number
-                                  subType:
-                                    type: string
-                                  source:
-                                    type: string
-                                  tags:
-                                    type: array
-                                    items:
-                                      type: string
                                   variants:
                                     type: array
                                     items:
@@ -1974,13 +1994,36 @@ components:
                                       properties:
                                         name:
                                           type: string
+                                        type:
+                                          type: string
+                                          enum:
+                                            - trait
+                                            - legendary
+                                            - action
+                                            - reaction
+                                            - bonus
+                                            - attack
+                                            - multiattack
+                                            - mythic
+                                            - lair
+                                        charges:
+                                          type: string
+                                        recharge:
+                                          type: string
+                                          enum:
+                                            - turn
+                                            - short
+                                            - day
+                                            - week
+                                            - month
+                                            - 3-6
+                                            - 4-6
+                                            - 5-6
+                                            - 6-6
+                                            - spellGroup
+                                            - spellSlot
                                         description:
                                           type: string
-                                        type:
-                                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                            ies/npc/properties/character/proper\
-                                            ties/race/properties/actions/items/\
-                                            anyOf/0/properties/actionType"
                                         availableAt:
                                           type: number
                                         ability:
@@ -1992,18 +2035,60 @@ components:
                                             - INT
                                             - WIS
                                             - CHA
-                                        charges:
-                                          type: string
-                                        recharge:
-                                          type: string
                                         cost:
                                           type: string
                                         values:
                                           type: array
                                           items:
                                             anyOf:
-                                              - {}
-                                              - {}
+                                              - type: object
+                                                properties:
+                                                  name:
+                                                    type: string
+                                                  type:
+                                                    type: string
+                                                  expression:
+                                                    type: string
+                                                  dice:
+                                                    type: object
+                                                    properties:
+                                                      dice:
+                                                        type: number
+                                                      sides:
+                                                        type: number
+                                                      diceIncrement:
+                                                        type: number
+                                                      availableAt:
+                                                        type: number
+                                                      availableUntil:
+                                                        type: number
+                                                      availableUnit:
+                                                        type: string
+                                                        enum:
+                                                          - level
+                                                          - cr
+                                                      unitInterval:
+                                                        type: number
+                                                    required:
+                                                      - dice
+                                                      - sides
+                                                    additionalProperties: false
+                                                required:
+                                                  - name
+                                                  - dice
+                                                additionalProperties: false
+                                              - type: object
+                                                properties:
+                                                  name:
+                                                    type: string
+                                                  type:
+                                                    type: string
+                                                  expression:
+                                                    type: string
+                                                required:
+                                                  - name
+                                                  - expression
+                                                additionalProperties: false
                                               - type: object
                                                 properties:
                                                   name:
@@ -2014,20 +2099,20 @@ components:
                                                     type: object
                                                     properties:
                                                       unitInterval:
-                                                        type: string
+                                                        type: number
                                                       unitIncrement:
-                                                        type: string
+                                                        type: number
                                                       availableAt:
-                                                        type: string
+                                                        type: number
                                                       availableUnit:
                                                         type: string
                                                         enum:
                                                           - level
                                                           - cr
                                                       valueBase:
-                                                        type: string
+                                                        type: number
                                                       valueIncrement:
-                                                        type: string
+                                                        type: number
                                                     required:
                                                       - unitInterval
                                                       - unitIncrement
@@ -2048,76 +2133,21 @@ components:
                                                 type: string
                                               replaceName:
                                                 type: boolean
-                                              attributes:
-                                                anyOf:
-                                                  - type: object
-                                                    properties:
-                                                      reach:
-                                                        type: string
-                                                      targets:
-                                                        type: string
-                                                      name:
-                                                        type: string
-                                                      cost:
-                                                        type: string
-                                                      weight:
-                                                        type: string
-                                                      damageType:
-                                                        type: string
-                                                      special:
-                                                        type: string
-                                                      die:
-                                                        type: string
-                                                      diceNumber:
-                                                        type: string
-                                                      dieV:
-                                                        type: string
-                                                      diceNumberV:
-                                                        type: string
-                                                      range:
-                                                        type: string
-                                                      rangeMax:
-                                                        type: string
-                                                      properties:
-                                                        type: array
-                                                        items:
-                                                          type: string
-                                                    required:
-                                                      - properties
-                                                    additionalProperties: false
-                                                  - $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                                      ies/npc/properties/charac\
-                                                      ter/properties/race/prope\
-                                                      rties/armor/anyOf/1"
+                                              attributes: {}
                                               enchantment:
                                                 type: object
                                                 properties:
                                                   type:
                                                     type: string
                                                   dice:
-                                                    type: object
-                                                    properties:
-                                                      die:
-                                                        type: number
-                                                      diceNumber:
-                                                        type: number
-                                                      diceIncrement:
-                                                        type: number
-                                                      availableAt:
-                                                        type: number
-                                                      availableUntil:
-                                                        type: number
-                                                      availableUnit:
-                                                        type: string
-                                                        enum:
-                                                          - level
-                                                          - cr
-                                                      unitInterval:
-                                                        type: number
-                                                    required:
-                                                      - die
-                                                      - diceNumber
-                                                    additionalProperties: false
+                                                    $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                                                      ies/npc/properties/charac\
+                                                      ter/properties/race/prope\
+                                                      rties/actions/items/anyOf\
+                                                      /0/properties/variants/it\
+                                                      ems/properties/values/ite\
+                                                      ms/anyOf/0/properties/dic\
+                                                      e"
                                                   expression:
                                                     type: string
                                                 required:
@@ -2125,12 +2155,31 @@ components:
                                                 additionalProperties: false
                                             required:
                                               - name
-                                              - attributes
                                             additionalProperties: false
                                       required:
                                         - name
                                         - description
                                       additionalProperties: false
+                                  actionType:
+                                    $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                                      ies/npc/properties/character/properties/r\
+                                      ace/properties/actions/items/anyOf/0/prop\
+                                      erties/variants/items/properties/type"
+                                  availableUnit:
+                                    type: string
+                                    enum:
+                                      - level
+                                      - cr
+                                  availableUntil:
+                                    type: number
+                                  subType:
+                                    type: string
+                                  source:
+                                    type: string
+                                  tags:
+                                    type: array
+                                    items:
+                                      type: string
                                 required:
                                   - tag
                                   - variants
@@ -2398,6 +2447,8 @@ components:
                                   - spells
                                 additionalProperties: false
                           additionalProperties: false
+                        legendaryActionsMax:
+                          type: string
                         image:
                           type: object
                           properties:
@@ -2512,6 +2563,10 @@ components:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
                             ties/spells"
+                        legendaryActionsMax:
+                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                            ies/npc/properties/character/properties/race/proper\
+                            ties/legendaryActionsMax"
                         enableGenerator:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
@@ -2618,6 +2673,10 @@ components:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
                             ties/spells"
+                        legendaryActionsMax:
+                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                            ies/npc/properties/character/properties/race/proper\
+                            ties/legendaryActionsMax"
                         image:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
@@ -2716,6 +2775,10 @@ components:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
                             ties/spells"
+                        legendaryActionsMax:
+                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                            ies/npc/properties/character/properties/race/proper\
+                            ties/legendaryActionsMax"
                         enableGenerator:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
@@ -2842,6 +2905,10 @@ components:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
                             ties/spells"
+                        legendaryActionsMax:
+                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                            ies/npc/properties/character/properties/race/proper\
+                            ties/legendaryActionsMax"
                         enableGenerator:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
@@ -2992,6 +3059,10 @@ components:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
                             ties/spells"
+                        legendaryActionsMax:
+                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                            ies/npc/properties/character/properties/race/proper\
+                            ties/legendaryActionsMax"
                         image:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
@@ -3115,6 +3186,10 @@ components:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
                             ties/spells"
+                        legendaryActionsMax:
+                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                            ies/npc/properties/character/properties/race/proper\
+                            ties/legendaryActionsMax"
                         image:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
@@ -3179,6 +3254,11 @@ components:
                             - filename
                           additionalProperties: false
                       additionalProperties: false
+                    conditions:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                          ies/npc/properties/character/properties/user"
                     abilityScores:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                         ies/npc/properties/character/properties/template/proper\
@@ -3299,12 +3379,102 @@ components:
                         array:
                           type: array
                           items:
-                            type: string
+                            type: object
+                            properties:
+                              string:
+                                type: string
+                              number:
+                                type: number
+                              type:
+                                type: string
+                                enum:
+                                  - alignment
+                                  - armor
+                                  - background
+                                  - class
+                                  - condition
+                                  - conditionImmunity
+                                  - damageType
+                                  - immunity
+                                  - item
+                                  - language
+                                  - pronouns
+                                  - race
+                                  - resistance
+                                  - savingThrow
+                                  - sense
+                                  - size
+                                  - skill
+                                  - speed
+                                  - spell
+                                  - subtype
+                                  - template
+                                  - trait
+                                  - type
+                                  - vulnerability
+                                  - weapon
+                                  - text
+                                  - translatableText
+                                  - nextLine
+                                  - endOfParagraph
+                                  - numberWithSign
+                                  - numberAsWord
+                                  - ordinal
+                                  - ft
+                                  - rollableNumberWithSign
+                                  - feet
+                                  - resource
+                                  - tag
+                                  - rollableDice
+                              format:
+                                type: array
+                                items:
+                                  type: string
+                                  enum:
+                                    - italic
+                                    - bold
+                                    - underline
+                                    - strikethrough
+                                    - superscript
+                                    - subscript
+                              dice:
+                                type: array
+                                items:
+                                  anyOf:
+                                    - type: object
+                                      properties:
+                                        dice:
+                                          type: number
+                                        sides:
+                                          type: number
+                                        bonus:
+                                          type: number
+                                        type:
+                                          type: string
+                                      required:
+                                        - dice
+                                        - sides
+                                      additionalProperties: false
+                                    - type: object
+                                      properties:
+                                        value:
+                                          type: number
+                                        type:
+                                          type: string
+                                      required:
+                                        - value
+                                      additionalProperties: false
+                              id:
+                                type: number
+                            required:
+                              - string
+                            additionalProperties: false
                         id:
                           type: number
                       required:
                         - number
                         - string
+                        - array
                       additionalProperties: false
                     pronouns:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcInput/properties\
@@ -3320,24 +3490,24 @@ components:
                     characterHook:
                       type: array
                       items:
-                        type: object
-                        properties:
-                          string:
-                            type: string
-                          type:
-                            $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                              ies/npc/properties/character/properties/race/prop\
-                              erties/subtypes/items/properties/type"
-                          id:
-                            type: number
-                        required:
-                          - string
-                        additionalProperties: false
+                        $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                          ies/npc/properties/statistics/properties/alignment/pr\
+                          operties/array/items"
                     level:
                       type: number
                     CR:
-                      $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/alignment"
+                      type: object
+                      properties:
+                        number:
+                          type: number
+                        string:
+                          type: string
+                        id:
+                          type: number
+                      required:
+                        - number
+                        - string
+                      additionalProperties: false
                     XP:
                       type: string
                     AC:
@@ -3347,12 +3517,12 @@ components:
                       type: number
                     size:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/alignment"
+                        ies/npc/properties/statistics/properties/CR"
                     isSwarm:
                       type: boolean
                     sizeSingleEntityOfSwarm:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/alignment"
+                        ies/npc/properties/statistics/properties/CR"
                     abilityScores:
                       type: object
                       properties:
@@ -3381,38 +3551,135 @@ components:
                         ies/npc/properties/statistics/properties/abilityScores"
                     HP:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/alignment"
+                        ies/npc/properties/statistics/properties/CR"
                     type:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/alignment"
+                        ies/npc/properties/statistics/properties/CR"
                     subtypes:
                       type: array
                       items:
                         $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                          ies/npc/properties/statistics/properties/characterHoo\
-                          k/items"
+                          ies/npc/properties/statistics/properties/alignment/pr\
+                          operties/array/items"
                     meta:
-                      type: string
-                    speeds:
                       type: object
                       properties:
-                        walk:
-                          type: number
-                        burrow:
-                          type: number
-                        climb:
-                          type: number
-                        fly:
-                          type: number
-                        hover:
-                          type: number
-                        swim:
-                          type: number
                         string:
                           type: string
+                        array:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                              ies/npc/properties/statistics/properties/alignmen\
+                              t/properties/array/items"
+                        id:
+                          type: number
                       required:
                         - string
+                        - array
                       additionalProperties: false
+                    speeds:
+                      $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                        ies/npc/properties/statistics/properties/meta"
+                    savingThrows:
+                      $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                        ies/npc/properties/statistics/properties/meta"
+                    skills:
+                      $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                        ies/npc/properties/statistics/properties/meta"
+                    resistances:
+                      $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                        ies/npc/properties/statistics/properties/meta"
+                    immunities:
+                      $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                        ies/npc/properties/statistics/properties/meta"
+                    vulnerabilities:
+                      $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                        ies/npc/properties/statistics/properties/meta"
+                    conditionImmunities:
+                      $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                        ies/npc/properties/statistics/properties/meta"
+                    senses:
+                      $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                        ies/npc/properties/statistics/properties/meta"
+                    languages:
+                      $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                        ies/npc/properties/statistics/properties/meta"
+                    isBlind:
+                      type: boolean
+                    canSpeak:
+                      type: boolean
+                    telepathy:
+                      type: number
+                    traits:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          tag:
+                            type: string
+                          priority:
+                            type: number
+                          string:
+                            type: string
+                          array:
+                            type: array
+                            items:
+                              $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                                ies/npc/properties/statistics/properties/alignm\
+                                ent/properties/array/items"
+                          name:
+                            type: string
+                          nameArray:
+                            type: array
+                            items:
+                              $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                                ies/npc/properties/statistics/properties/alignm\
+                                ent/properties/array/items"
+                          id:
+                            type: number
+                          recharge:
+                            $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                              ies/npc/properties/character/properties/race/prop\
+                              erties/actions/items/anyOf/0/properties/variants/\
+                              items/properties/recharge"
+                          cost:
+                            type: number
+                          charges:
+                            type: number
+                        required:
+                          - tag
+                          - priority
+                          - string
+                          - array
+                          - name
+                          - nameArray
+                        additionalProperties: false
+                    actions:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                          ies/npc/properties/statistics/properties/traits/items"
+                    bonusActions:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                          ies/npc/properties/statistics/properties/traits/items"
+                    reactions:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                          ies/npc/properties/statistics/properties/traits/items"
+                    legendaryActions:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                          ies/npc/properties/statistics/properties/traits/items"
+                    legendaryActionsIntro:
+                      $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                        ies/npc/properties/statistics/properties/meta"
+                    legendaryActionsMax:
+                      type: number
                   required:
                     - alignment
                     - pronouns
@@ -3431,6 +3698,8 @@ components:
                     - HP
                     - type
                     - meta
+                    - senses
+                    - languages
                   additionalProperties: false
                 variables:
                   type: object
@@ -3473,6 +3742,18 @@ components:
                       type: number
                     CHAVALUE:
                       type: number
+                    STRSAVE:
+                      type: number
+                    DEXSAVE:
+                      type: number
+                    CONSAVE:
+                      type: number
+                    INTSAVE:
+                      type: number
+                    WISSAVE:
+                      type: number
+                    CHASAVE:
+                      type: number
                     SPEED:
                       type: number
                     BURROW:
@@ -3484,6 +3765,54 @@ components:
                     HOVER:
                       type: number
                     SWIM:
+                      type: number
+                    ACROBATICS:
+                      type: number
+                    ANIMALHANDLING:
+                      type: number
+                    ARCANA:
+                      type: number
+                    ATHLETICS:
+                      type: number
+                    DECEPTION:
+                      type: number
+                    HISTORY:
+                      type: number
+                    INSIGHT:
+                      type: number
+                    INTIMIDATION:
+                      type: number
+                    INVESTIGATION:
+                      type: number
+                    MEDICINE:
+                      type: number
+                    NATURE:
+                      type: number
+                    PERCEPTION:
+                      type: number
+                    PERFORMANCE:
+                      type: number
+                    PERSUASION:
+                      type: number
+                    RELIGION:
+                      type: number
+                    SLEIGHTOFHAND:
+                      type: number
+                    STEALTH:
+                      type: number
+                    SURVIVAL:
+                      type: number
+                    BLINDSIGHT:
+                      type: number
+                    DARKVISION:
+                      type: number
+                    TREMORSENSE:
+                      type: number
+                    TRUESIGHT:
+                      type: number
+                    PASSIVEPERCEPTION:
+                      type: number
+                    TELEPATHY:
                       type: number
                   required:
                     - LVL
@@ -3505,12 +3834,42 @@ components:
                     - INTVALUE
                     - WISVALUE
                     - CHAVALUE
+                    - STRSAVE
+                    - DEXSAVE
+                    - CONSAVE
+                    - INTSAVE
+                    - WISSAVE
+                    - CHASAVE
                     - SPEED
                     - BURROW
                     - CLIMB
                     - FLY
                     - HOVER
                     - SWIM
+                    - ACROBATICS
+                    - ANIMALHANDLING
+                    - ARCANA
+                    - ATHLETICS
+                    - DECEPTION
+                    - HISTORY
+                    - INSIGHT
+                    - INTIMIDATION
+                    - INVESTIGATION
+                    - MEDICINE
+                    - NATURE
+                    - PERCEPTION
+                    - PERFORMANCE
+                    - PERSUASION
+                    - RELIGION
+                    - SLEIGHTOFHAND
+                    - STEALTH
+                    - SURVIVAL
+                    - BLINDSIGHT
+                    - DARKVISION
+                    - TREMORSENSE
+                    - TRUESIGHT
+                    - PASSIVEPERCEPTION
+                    - TELEPATHY
                   additionalProperties: false
                 tags:
                   type: object
@@ -3780,24 +4139,38 @@ components:
                       type:
                         type: string
                         enum:
+                          - alignment
+                          - armor
                           - background
-                          - spell
-                          - trait
-                          - race
                           - class
-                          - template
-                          - type
-                          - subtype
-                          - language
-                          - skill
-                          - savingThrow
                           - condition
-                          - resistance
-                          - immunity
-                          - vulnerability
                           - conditionImmunity
+                          - damageType
+                          - immunity
+                          - item
+                          - language
+                          - pronouns
+                          - race
+                          - resistance
+                          - savingThrow
+                          - sense
+                          - size
+                          - skill
+                          - speed
+                          - spell
+                          - subtype
+                          - template
+                          - trait
+                          - type
+                          - vulnerability
+                          - weapon
                       availableAt:
                         type: number
+                      availableUnit:
+                        type: string
+                        enum:
+                          - level
+                          - cr
                     required:
                       - value
                     additionalProperties: false
@@ -3863,8 +4236,6 @@ components:
                               type: string
                               enum:
                                 - random
-                            number:
-                              type: number
                             resultType:
                               type: string
                               enum:
@@ -3876,6 +4247,8 @@ components:
                                 - objects
                                 - languages
                                 - skills
+                            number:
+                              type: number
                             objectType:
                               type: number
                             filters:
@@ -4021,35 +4394,8 @@ components:
                         properties:
                           tag:
                             type: string
-                          actionType:
-                            type: string
-                            enum:
-                              - trait
-                              - legendary
-                              - action
-                              - reaction
-                              - bonus
-                              - attack
-                              - multiattack
-                              - mythic
-                              - lair
                           priority:
                             type: number
-                          availableUnit:
-                            type: string
-                            enum:
-                              - level
-                              - cr
-                          availableUntil:
-                            type: number
-                          subType:
-                            type: string
-                          source:
-                            type: string
-                          tags:
-                            type: array
-                            items:
-                              type: string
                           variants:
                             type: array
                             items:
@@ -4057,12 +4403,36 @@ components:
                               properties:
                                 name:
                                   type: string
+                                type:
+                                  type: string
+                                  enum:
+                                    - trait
+                                    - legendary
+                                    - action
+                                    - reaction
+                                    - bonus
+                                    - attack
+                                    - multiattack
+                                    - mythic
+                                    - lair
+                                charges:
+                                  type: string
+                                recharge:
+                                  type: string
+                                  enum:
+                                    - turn
+                                    - short
+                                    - day
+                                    - week
+                                    - month
+                                    - 3-6
+                                    - 4-6
+                                    - 5-6
+                                    - 6-6
+                                    - spellGroup
+                                    - spellSlot
                                 description:
                                   type: string
-                                type:
-                                  $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
-                                    roperties/actions/items/anyOf/0/properties/\
-                                    actionType"
                                 availableAt:
                                   type: number
                                 ability:
@@ -4074,18 +4444,60 @@ components:
                                     - INT
                                     - WIS
                                     - CHA
-                                charges:
-                                  type: string
-                                recharge:
-                                  type: string
                                 cost:
                                   type: string
                                 values:
                                   type: array
                                   items:
                                     anyOf:
-                                      - {}
-                                      - {}
+                                      - type: object
+                                        properties:
+                                          name:
+                                            type: string
+                                          type:
+                                            type: string
+                                          expression:
+                                            type: string
+                                          dice:
+                                            type: object
+                                            properties:
+                                              dice:
+                                                type: number
+                                              sides:
+                                                type: number
+                                              diceIncrement:
+                                                type: number
+                                              availableAt:
+                                                type: number
+                                              availableUntil:
+                                                type: number
+                                              availableUnit:
+                                                type: string
+                                                enum:
+                                                  - level
+                                                  - cr
+                                              unitInterval:
+                                                type: number
+                                            required:
+                                              - dice
+                                              - sides
+                                            additionalProperties: false
+                                        required:
+                                          - name
+                                          - dice
+                                        additionalProperties: false
+                                      - type: object
+                                        properties:
+                                          name:
+                                            type: string
+                                          type:
+                                            type: string
+                                          expression:
+                                            type: string
+                                        required:
+                                          - name
+                                          - expression
+                                        additionalProperties: false
                                       - type: object
                                         properties:
                                           name:
@@ -4096,20 +4508,20 @@ components:
                                             type: object
                                             properties:
                                               unitInterval:
-                                                type: string
+                                                type: number
                                               unitIncrement:
-                                                type: string
+                                                type: number
                                               availableAt:
-                                                type: string
+                                                type: number
                                               availableUnit:
                                                 type: string
                                                 enum:
                                                   - level
                                                   - cr
                                               valueBase:
-                                                type: string
+                                                type: number
                                               valueIncrement:
-                                                type: string
+                                                type: number
                                             required:
                                               - unitInterval
                                               - unitIncrement
@@ -4130,74 +4542,18 @@ components:
                                         type: string
                                       replaceName:
                                         type: boolean
-                                      attributes:
-                                        anyOf:
-                                          - type: object
-                                            properties:
-                                              reach:
-                                                type: string
-                                              targets:
-                                                type: string
-                                              name:
-                                                type: string
-                                              cost:
-                                                type: string
-                                              weight:
-                                                type: string
-                                              damageType:
-                                                type: string
-                                              special:
-                                                type: string
-                                              die:
-                                                type: string
-                                              diceNumber:
-                                                type: string
-                                              dieV:
-                                                type: string
-                                              diceNumberV:
-                                                type: string
-                                              range:
-                                                type: string
-                                              rangeMax:
-                                                type: string
-                                              properties:
-                                                type: array
-                                                items:
-                                                  type: string
-                                            required:
-                                              - properties
-                                            additionalProperties: false
-                                          - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
-                                              roperties/armor/anyOf/1"
+                                      attributes: {}
                                       enchantment:
                                         type: object
                                         properties:
                                           type:
                                             type: string
                                           dice:
-                                            type: object
-                                            properties:
-                                              die:
-                                                type: number
-                                              diceNumber:
-                                                type: number
-                                              diceIncrement:
-                                                type: number
-                                              availableAt:
-                                                type: number
-                                              availableUntil:
-                                                type: number
-                                              availableUnit:
-                                                type: string
-                                                enum:
-                                                  - level
-                                                  - cr
-                                              unitInterval:
-                                                type: number
-                                            required:
-                                              - die
-                                              - diceNumber
-                                            additionalProperties: false
+                                            $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                                              roperties/actions/items/anyOf/0/p\
+                                              roperties/variants/items/properti\
+                                              es/values/items/anyOf/0/propertie\
+                                              s/dice"
                                           expression:
                                             type: string
                                         required:
@@ -4205,12 +4561,30 @@ components:
                                         additionalProperties: false
                                     required:
                                       - name
-                                      - attributes
                                     additionalProperties: false
                               required:
                                 - name
                                 - description
                               additionalProperties: false
+                          actionType:
+                            $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                              roperties/actions/items/anyOf/0/properties/varian\
+                              ts/items/properties/type"
+                          availableUnit:
+                            type: string
+                            enum:
+                              - level
+                              - cr
+                          availableUntil:
+                            type: number
+                          subType:
+                            type: string
+                          source:
+                            type: string
+                          tags:
+                            type: array
+                            items:
+                              type: string
                         required:
                           - tag
                           - variants
@@ -4423,6 +4797,8 @@ components:
                           - spells
                         additionalProperties: false
                   additionalProperties: false
+                legendaryActionsMax:
+                  type: string
                 image:
                   type: object
                   properties:
