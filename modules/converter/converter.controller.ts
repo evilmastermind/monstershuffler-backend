@@ -95,7 +95,7 @@ async function convertObject(object) {
     // object.object = convertSpell(objectJSON);
     break;
   case 1001:
-    object.object = convertWeapon(objectJSON);
+    object.object = await convertWeapon(objectJSON);
     break;
   case 1002:
     object.object = await convertArmor(objectJSON);
@@ -607,7 +607,7 @@ async function convertAction(object, id) {
         }
       }
       if (Object.hasOwn(attack, 'attributes')) {
-        convertWeapon(attack.attributes);
+        attack.attributes = convertWeapon(attack.attributes);
       }
     }
   }
@@ -873,4 +873,5 @@ function convertWeapon(object) {
   if ('reach' in object && object.reach === '') {
     delete object.reach;
   }
+  return object;
 }
