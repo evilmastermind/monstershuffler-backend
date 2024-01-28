@@ -50,7 +50,7 @@ export async function saveObject(object: objects) {
   });
 }
 
-export async function getSpellIdFromName(name: string) {
+export async function getSpellDataFromName(name: string) {
   const spell = await prisma.objects.findFirst({
     where: {
       name: name,
@@ -59,10 +59,11 @@ export async function getSpellIdFromName(name: string) {
     },
     select: {
       id: true,
+      object: true,
     },
   });
 
-  return spell?.id;
+  return spell;
 }
 
 export async function getActionDetails(actionId: number) {
@@ -113,30 +114,30 @@ export async function getIdsFromNames(chosenAlready: string[], source: string) {
   let table = 'objects';
   let objectType = 0;
   switch (source) {
-    case 'actions':
-      objectType = 101;
-      break;
-    case 'armor':
-      objectType = 1002;
-      break;
-    case 'languages':
-      table = 'languages';
-      break;
-    case 'skills':
-      table = 'skills';
-      break;
-    case 'weapons':
-      objectType = 1001;
-      break;
-    case 'spells':
-      objectType = 102;
-      break;
-    case 'objects':
-      break;
-    default:
-      console.warn('UNDEFINED TYPE DETECTED: ' + source);
-      table = 'somethingwrongtomakethisfail';
-      break;
+  case 'actions':
+    objectType = 101;
+    break;
+  case 'armor':
+    objectType = 1002;
+    break;
+  case 'languages':
+    table = 'languages';
+    break;
+  case 'skills':
+    table = 'skills';
+    break;
+  case 'weapons':
+    objectType = 1001;
+    break;
+  case 'spells':
+    objectType = 102;
+    break;
+  case 'objects':
+    break;
+  default:
+    console.warn('UNDEFINED TYPE DETECTED: ' + source);
+    table = 'somethingwrongtomakethisfail';
+    break;
   }
 
   const newChosenAlready: Choice[] = [];
@@ -145,6 +146,7 @@ export async function getIdsFromNames(chosenAlready: string[], source: string) {
       const ids = await prisma.objects.findMany({
         select: {
           id: true,
+          object: true,
         },
         where: {
           name: {
@@ -156,7 +158,14 @@ export async function getIdsFromNames(chosenAlready: string[], source: string) {
         },
       });
       if (ids.length > 0) {
-        newChosenAlready.push({ id: ids[0].id, value: name });
+        if (source === 'spells') {
+          const object = ids[0].object as { level: string };
+          newChosenAlready.push({ id: ids[0].id, value: name, properties: {
+            level: parseInt(object.level ?? '1'),
+          } });
+        } else {
+          newChosenAlready.push({ id: ids[0].id, value: name });
+        }
       } else {
         newChosenAlready.push({ value: name });
       }

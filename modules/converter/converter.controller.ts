@@ -4,7 +4,7 @@ import {
   getFirstObjectId,
   getObjectsWithPagination,
   saveObject,
-  getSpellIdFromName,
+  getSpellDataFromName,
   getIdsFromNames,
   convertBackgroundPronouns,
 } from './converter.service';
@@ -413,13 +413,24 @@ async function addIdsToSpells(spellSlots) {
       spellSlot.availableAt = parseInt(spellSlot.levelMin);
       delete spellSlot.levelMin;
     }
+    if (Object.hasOwn(spellSlot, 'timesDay')) {
+      spellSlot.times = spellSlot.timesDay;
+      delete spellSlot.timesDay;
+    }
+    if (Object.hasOwn(spellSlot, 'timesDayMax')) {
+      spellSlot.timesMax = parseInt(spellSlot.timesDayMax);
+      delete spellSlot.timesDayMax;
+    }
     if (Object.hasOwn(spellSlot, 'spells') && Array.isArray(spellSlot.spells)) {
       const newArray = [];
       for (const spell of spellSlot.spells) {
-        const id = await getSpellIdFromName(spell);
+        const spellData = await getSpellDataFromName(spell);
         newArray.push({
-          id,
+          id: spellData?.id || null,
           value: spell,
+          properties: {
+            level: parseInt(spellData?.object?.level ?? '1'),
+          }
         });
       }
       spellSlot.spells = newArray;
