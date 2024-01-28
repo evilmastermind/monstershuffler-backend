@@ -24,11 +24,11 @@ async function spellRoutes(server: FastifyInstance) {
           'Returns a list of spells from the db, filtered by the values specified in the body.',
         description:
           'Returns a list of spells from the db, filtered by the values specified in the body. If authenticated, also returns the spells created by the user.',
-        body: $ref('getSpellListSchema'),
+        body: $ref('getSpellList'),
         headers: jwtHeaderOptional,
         tags: ['spells'],
         response: {
-          200: $ref('getSpellListResponseSchema'),
+          200: $ref('getSpellListResponse'),
         },
       },
     },
@@ -48,7 +48,7 @@ async function spellRoutes(server: FastifyInstance) {
         tags: ['spells'],
         // params: $ref('getSpellParamsSchema'),
         response: {
-          200: $ref('getSpellResponseSchema'),
+          200: $ref('getSpellResponse'),
         },
       },
     },
@@ -63,11 +63,11 @@ async function spellRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new spell to the db.',
         description: '[MS ONLY] Adds a new spell to the db.',
-        body: $ref('createSpellSchema'),
+        body: $ref('postSpell'),
         tags: ['spells'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('getSpellResponseSchema'),
+          201: $ref('getSpellResponse'),
         },
       },
     },
@@ -83,7 +83,7 @@ async function spellRoutes(server: FastifyInstance) {
         summary: '[MS ONLY] Updates the spell corresponding to the given id.',
         description:
           '[MS ONLY] Updates the spell corresponding to the given id.',
-        body: $ref('updateSpellSchema'),
+        body: $ref('putSpell'),
         tags: ['spells'],
         headers: jwtHeaderRequired,
         response: {

@@ -1,50 +1,23 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
+import {
+  postDamageType,
+  putDamageType,
+  getDamageTypeResponse,
+  getDamageTypeListResponse,
+} from 'monstershuffler-shared';
 
-const id = z.number();
-const userid = z.number();
-const name = z.string().min(2);
-const description = z.string().min(2);
-
-const createDamageTypeSchema = z.object({
-  name,
-  description,
-});
-
-const getDamageTypeResponseSchema = z.object({
-  id,
-  userid,
-  name,
-  description,
-});
-
-const updateDamageTypeSchema = z.object({
-  name,
-  description,
-});
-
-const getDamageTypeListResponseSchema = z.object({
-  list: z.array(
-    z.object({
-      id,
-      userid,
-      name,
-      description,
-    })
-  ),
-});
-
-export type createDamageTypeInput = z.infer<typeof createDamageTypeSchema>;
+export type createDamageTypeInput = z.infer<typeof postDamageType>;
 export type getDamageTypeListResponse = z.infer<
-  typeof getDamageTypeListResponseSchema
+  typeof getDamageTypeListResponse
 >;
 
 export const { schemas: damageTypeSchemas, $ref } = buildJsonSchemas(
   {
-    createDamageTypeSchema,
-    updateDamageTypeSchema,
-    getDamageTypeResponseSchema,
-    getDamageTypeListResponseSchema,
+    postDamageType,
+    putDamageType,
+    getDamageTypeResponse,
+    getDamageTypeListResponse,
   },
   { $id: 'damageTypeSchemas' }
 );

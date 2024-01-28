@@ -10,7 +10,7 @@ import { handleError } from '@/utils/errors';
 import { Race } from '@/modules/race/race.schema';
 import { Class } from '@/modules/class/class.schema';
 import { Template } from '@/modules/template/template.schema';
-import { Character } from '@/modules/character/character.schema';
+import { Character } from '@/types';
 
 function extractNegativeRatings(ratings: { value: number }[]) {
   return ratings.reduce((accumulator, currentValue) => {

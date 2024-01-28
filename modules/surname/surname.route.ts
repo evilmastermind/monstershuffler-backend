@@ -9,11 +9,11 @@ async function surnameRoutes(server: FastifyInstance) {
       schema: {
         summary: 'Returns a random surname.',
         description:
-          "Returns a random surname, which is a string like 'Aldric' or 'Aldric the Brave'.",
-        body: $ref('getRandomSurnameSchema'),
+          'Returns a random surname, which is a string like \'Aldric\' or \'Aldric the Brave\'.',
+        body: $ref('getRandomSurname'),
         tags: ['surnames'],
         response: {
-          200: $ref('getRandomSurnameResponseSchema'),
+          200: $ref('getRandomSurnameResponse'),
         },
       },
     },

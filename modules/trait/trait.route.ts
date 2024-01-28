@@ -14,10 +14,10 @@ async function traitRoutes(server: FastifyInstance) {
         summary: 'Returns a random trait.',
         description:
           'Returns a random trait which is usually an adjective describing a creature\'s state of mind, attitude, core beliefs or current feelings.',
-        body: $ref('getRandomTraitSchema'),
+        body: $ref('getRandomTrait'),
         tags: ['traits'],
         response: {
-          200: $ref('getRandomTraitResponseSchema'),
+          200: $ref('getRandomTraitResponse'),
         },
       },
     },
@@ -31,10 +31,10 @@ async function traitRoutes(server: FastifyInstance) {
         summary: 'Returns a random trait for the given age.',
         description:
           'Returns a random trait for the given age. The age must be one of the following: "child", "adolescent", "young adult", "adult", "middle-aged", "elderly", "venerable".',
-        body: $ref('getRandomTraitSchema'),
+        body: $ref('getRandomTrait'),
         tags: ['traits'],
         response: {
-          200: $ref('getRandomTraitResponseSchema'),
+          200: $ref('getRandomTraitResponse'),
         },
       },
     },
@@ -50,7 +50,7 @@ async function traitRoutes(server: FastifyInstance) {
           'Returns the description of a trait which is usually an adjective describing a creature\'s state of mind, attitude, core beliefs or current feelings.',
         tags: ['traits'],
         response: {
-          200: $ref('getTraitDescriptionResponseSchema'),
+          200: $ref('getTraitDescriptionResponse'),
         },
       },
     },

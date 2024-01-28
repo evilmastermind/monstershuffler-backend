@@ -12,7 +12,7 @@ async function characterhookRoutes(server: FastifyInstance) {
           'Returns a random short characterhook , which is a string like \'from an unusual family line\' or \'cursed with bad luck\'.',
         tags: ['characterhooks'],
         response: {
-          200: $ref('getRandomCharacterhookResponseSchema'),
+          200: $ref('getRandomCharacterhookResponse'),
         },
       },
     },
@@ -27,7 +27,7 @@ async function characterhookRoutes(server: FastifyInstance) {
           'Returns a random characterhook for the given age. The age must be one of the following: "child", "adolescent", "young adult", "adult", "middle-aged", "elderly", "venerable".',
         tags: ['characterhooks'],
         response: {
-          200: $ref('getRandomCharacterhookResponseSchema'),
+          200: $ref('getRandomCharacterhookResponse'),
         },
       },
     },

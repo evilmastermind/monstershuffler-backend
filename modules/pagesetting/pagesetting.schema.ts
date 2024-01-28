@@ -1,18 +1,12 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
 
-const pageSettings = z.object({
-  page: z.string(),
-  object: z.record(z.any()),
-});
-
-const Settings = z.record(z.any());
-
+import { pageSettings, settings } from 'monstershuffler-shared';
 
 export type PageSettings = z.infer<typeof pageSettings>; 
-export type Settings = z.infer<typeof Settings>;
+export type Settings = z.infer<typeof settings>;
 
 export const { schemas: pagesettingSchemas, $ref } = buildJsonSchemas({
   getPagesettingResponseSchema: pageSettings,
-  setPagesettingResponseSchema: Settings,
+  setPagesettingResponseSchema: settings,
 });

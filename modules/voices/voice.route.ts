@@ -10,10 +10,10 @@ async function voiceRoutes(server: FastifyInstance) {
         summary: 'Returns a random type of voice.',
         description:
           'Returns the name of a real person or a character from a movie, tv show, and the file name of its voice sample.',
-        body: $ref('getRandomVoiceSchema'),
+        body: $ref('getRandomVoice'),
         tags: ['voices'],
         response: {
-          200: $ref('getRandomVoiceResponseSchema'),
+          200: $ref('getRandomVoiceResponse'),
         },
       },
     },

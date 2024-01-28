@@ -23,7 +23,7 @@ async function raceRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['races'],
         response: {
-          200: $ref('getRaceListResponseSchema'),
+          200: $ref('getRaceListResponse'),
         },
       },
     },
@@ -42,7 +42,7 @@ async function raceRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['races'],
         response: {
-          200: $ref('getRaceWithVariantsListResponseSchema'),
+          200: $ref('getRaceWithVariantsListResponse'),
         },
       },
     },
@@ -62,7 +62,7 @@ async function raceRoutes(server: FastifyInstance) {
         tags: ['races'],
         // params: $ref('getRaceParamsSchema'),
         response: {
-          200: $ref('getRaceResponseSchema'),
+          200: $ref('getRaceResponse'),
         },
       },
     },
@@ -81,7 +81,7 @@ async function raceRoutes(server: FastifyInstance) {
         tags: ['races'],
         // params: $ref('getRaceParamsSchema'),
         response: {
-          200: $ref('getRaceResponseSchema'),
+          200: $ref('getRaceResponse'),
         },
       },
     },
@@ -96,11 +96,11 @@ async function raceRoutes(server: FastifyInstance) {
   //         hide: true,
   //         summary: '[MS ONLY] Adds a new race to the db.',
   //         description: '[MS ONLY] Adds a new race to the db.',
-  //         body: $ref('createRaceSchema'),
+  //         body: $ref('postRace'),
   //         tags: ['races'],
   //         headers: jwtHeaderRequired,
   //         response: {
-  //           201: $ref('getRaceResponseSchema')
+  //           201: $ref('getRaceResponse')
   //         }
   //       },
   //     },
@@ -115,7 +115,7 @@ async function raceRoutes(server: FastifyInstance) {
   //         hide: true,
   //         summary: '[MS ONLY] Updates the race corresponding to the given id.',
   //         description: '[MS ONLY] Updates the race corresponding to the given id.',
-  //         body: $ref('updateRaceSchema'),
+  //         body: $ref('putRace'),
   //         tags: ['races'],
   //         headers: jwtHeaderRequired,
   //         response: {

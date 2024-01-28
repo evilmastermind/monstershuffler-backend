@@ -1,13 +1,13 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createRandomNpc } from './npc.controller.generator';
-import { createRandomNpcInput } from './npc.schema';
+import { PostRandomNpcInput } from './npc.schema';
 import { handleError } from '@/utils/errors';
 import { getRaceWithVariantsList } from '../race/race.service';
 import { getClassWithVariantsList } from '../class/class.service';
 import { getBackgroundList } from '../background/background.service';
 
 export async function createRandomNpcHandler(
-  request: FastifyRequest<{ Body: createRandomNpcInput }>,
+  request: FastifyRequest<{ Body: PostRandomNpcInput }>,
   reply: FastifyReply
 ) {
   try {
@@ -19,7 +19,7 @@ export async function createRandomNpcHandler(
 }
 
 export async function createFourRandomNpcHandler(
-  request: FastifyRequest<{ Body: createRandomNpcInput }>,
+  request: FastifyRequest<{ Body: PostRandomNpcInput }>,
   reply: FastifyReply
 ) {
   try {
@@ -45,7 +45,6 @@ export async function getGeneratorDataHandler(
   try {
     const { id } = request.user || { id: 0 };
     const racesWithVariants = await getRaceWithVariantsList(id);
-    console.log('racesWithVariants', racesWithVariants);
     const classesWithVariants = await getClassWithVariantsList(id);
     const backgrounds = await getBackgroundList(id);
     return reply.code(200).send({

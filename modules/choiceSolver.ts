@@ -1,10 +1,5 @@
-import { z } from 'zod';
 import { AnyObject } from '@/schemas';
-import {
-  ChoiceListObject,
-  ChoiceRandomObject,
-  type Choice,
-} from '@/schemas/character/choices';
+import type { ChoiceListObject, ChoiceRandomObject, Choice } from '@/types';
 import { getChoiceObject } from '@/modules/object/object.service';
 import { random } from '@/utils/functions';
 import { getChoiceLanguage } from './language/language.service';
@@ -87,7 +82,7 @@ async function resolveListChoice(
       i++;
     }
   }
-  if(chosen.length > 0) {
+  if (chosen.length > 0) {
     father[fathersKey] = chosen;
   } else {
     delete father[fathersKey];
@@ -119,7 +114,7 @@ async function resolveRandomChoice(
   if (result && typeof result === 'object' && Object.keys(result).length > 0) {
     father[fathersKey] = result;
     // check if the result is an array and if it has any elements
-  } else if (result && Array.isArray(result) && result.length >0) {
+  } else if (result && Array.isArray(result) && result.length > 0) {
     father[fathersKey] = result;
     // if the result is null, delete the key from the father object
   } else {

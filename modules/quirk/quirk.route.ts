@@ -12,7 +12,7 @@ async function quirkRoutes(server: FastifyInstance) {
           "Returns a random quirk, which is a string like 'Cracks knuckles.' or 'Missing teeth.'.",
         tags: ['quirks'],
         response: {
-          200: $ref('getRandomQuirkResponseSchema'),
+          200: $ref('getRandomQuirkResponse'),
         },
       },
     },

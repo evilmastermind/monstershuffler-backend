@@ -1,15 +1,12 @@
 import { FastifyInstance } from 'fastify';
 import {
-  createBackgroundHandler,
   getBackgroundHandler,
   getRandomBackgroundHandler,
   getRandomBackgroundForAgeHandler,
   getBackgroundListHandler,
-  updateBackgroundHandler,
-  deleteBackgroundHandler,
 } from './background.controller';
 import { $ref } from './background.schema';
-import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { jwtHeaderOptional } from '@/schemas';
 
 // TODO: backgrounds have some random choices that choose a weapon based
 // on the weapon's name. This might cause issues if there are multiple
@@ -27,7 +24,7 @@ async function backgroundRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['backgrounds'],
         response: {
-          200: $ref('getBackgroundListResponseSchema'),
+          200: $ref('getBackgroundListResponse'),
         },
       },
     },
@@ -47,7 +44,7 @@ async function backgroundRoutes(server: FastifyInstance) {
         tags: ['backgrounds'],
         // params: $ref('getBackgroundParamsSchema'),
         response: {
-          200: $ref('getBackgroundResponseSchema'),
+          200: $ref('getBackgroundResponse'),
         },
       },
     },
@@ -67,7 +64,7 @@ async function backgroundRoutes(server: FastifyInstance) {
         tags: ['backgrounds'],
         // params: $ref('getBackgroundParamsSchema'),
         response: {
-          200: $ref('getBackgroundResponseSchema'),
+          200: $ref('getBackgroundResponse'),
         },
       },
     },
@@ -87,7 +84,7 @@ async function backgroundRoutes(server: FastifyInstance) {
         tags: ['backgrounds'],
         // params: $ref('getBackgroundParamsSchema'),
         response: {
-          200: $ref('getBackgroundResponseSchema'),
+          200: $ref('getBackgroundResponse'),
         },
       },
     },

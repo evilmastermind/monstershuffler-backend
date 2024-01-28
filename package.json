@@ -1,13 +1,14 @@
 {
   "name": "monstershuffler-backend",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "backend REST API for monstershuffler.com",
   "main": "app.ts",
   "scripts": {
     "dev": "tsnd --respawn --transpile-only --exit-child app.ts",
     "serve": "tsnd --respawn --transpile-only --exit-child app.ts",
     "build": "tsc -p tsconfig.json",
-    "unbuild": "tsc --build --clean"
+    "unbuild": "tsc --build --clean",
+    "schemas": "yarn upgrade monstershuffler-shared"
   },
   "_moduleAliases": {
     "@": "",
@@ -39,11 +40,11 @@
     "fastify-mailer": "^2.3.1",
     "fastify-zod": "^1.2.0",
     "module-alias": "^2.2.2",
+    "monstershuffler-shared": "git+https://github.com/evilmastermind/monstershuffler-shared#main",
     "node-php-password": "^0.1.2",
     "nodemailer": "^6.9.3",
     "prettier": "^2.8.8",
-    "zod": "^3.19.1",
-    "zod-to-json-schema": "^3.19.3"
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "@fastify/jwt": "^6.5.0",

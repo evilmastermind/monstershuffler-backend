@@ -1,53 +1,19 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
-import { armorObject } from '@/schemas/character/armor';
+import { armorObject, postArmor, putArmor, getArmorListResponse, getArmorParams, getArmorResponse } from 'monstershuffler-shared';
 
-const id = z.number();
-const game = z.number();
-const userid = z.number();
-const name = z.string().min(2);
-
-const createArmorSchema = z.object({
-  game,
-  name,
-  object: armorObject,
-});
-
-const updateArmorSchema = z.object({
-  name,
-  object: armorObject,
-});
-
-const getArmorParamsSchema = z.object({
-  id,
-});
-
-const getArmorResponseSchema = z.object({
-  object: armorObject,
-});
-
-const getArmorListResponseSchema = z.object({
-  list: z.array(
-    z.object({
-      id,
-      userid,
-      name,
-    })
-  ),
-});
-
-export type createArmorInput = z.infer<typeof createArmorSchema>;
-export type updateArmorInput = z.infer<typeof updateArmorSchema>;
-export type getArmorListResponse = z.infer<typeof getArmorListResponseSchema>;
+export type PostArmorInput = z.infer<typeof postArmor>;
+export type PutArmorInput = z.infer<typeof putArmor>;
+export type GetArmorListResponse = z.infer<typeof getArmorListResponse>;
 export type Armor = z.infer<typeof armorObject>;
 
 export const { schemas: armorSchemas, $ref } = buildJsonSchemas(
   {
-    createArmorSchema,
-    updateArmorSchema,
-    getArmorParamsSchema,
-    getArmorResponseSchema,
-    getArmorListResponseSchema,
+    postArmor,
+    putArmor,
+    getArmorParams,
+    getArmorResponse,
+    getArmorListResponse,
   },
   { $id: 'armorSchemas' }
 );

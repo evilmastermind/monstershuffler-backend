@@ -8,20 +8,20 @@ export default {
       version,
     },
     tags: [
-      { name: 'users', description: "The users' account. " },
+      { name: 'users', description: 'The users\' account. ' },
       // { name: 'actions', description: 'Retrieve the official actions of srd monsters, classes and races to build your creatures faster. Save your custom actions and share them with other users.' },
       // { name: 'armor', description: 'The different types of armor that can be worn by characters.' },
       {
         name: 'backgrounds',
         description:
-          "Backgrounds are a way to define a character's occupation, like a soldier, a merchant, a priest, etc. and give them minor abilities related to that occupation. They are usually given to NPCs in place of classes.",
+          'Backgrounds are a way to define a character\'s occupation, like a soldier, a merchant, a priest, etc. and give them minor abilities related to that occupation. They are usually given to NPCs in place of classes.',
       },
       // { name: 'characterhooks', description: 'Tiny snippets of lore to provide a snapshot of a character's identity or story.' },
       // { name: 'characters', description: 'Any type of Dungeons & Dragons creature, like Monsters, NPCs, Player Characters, etc.' },
       {
         name: 'classes',
         description:
-          "Classes are the main way to define a character's role in the game. They define what abilities the character has and how they can use them.",
+          'Classes are the main way to define a character\'s role in the game. They define what abilities the character has and how they can use them.',
       },
       // { name: 'class variants', description: 'Class variants can be subclasses, archetypes, variants or customizations that add new features on top of their base class.' },
       // { name: 'damage types', description: 'Damage types are the different types of damage that can be dealt by weapons, spells, and other effects.' },
@@ -36,7 +36,7 @@ export default {
       {
         name: 'races',
         description:
-          "A race defines the innate abilities derived from a character's fantasy ancestry.",
+          'A race defines the innate abilities derived from a character\'s fantasy ancestry.',
       },
       // { name: 'race variants', description: 'Race variants, or subraces, further define a character\'s ancestry by adding new features on top of their base race.' },
       // { name: 'reports', description: 'Suggestions, complaints or bug reports made by users.' },

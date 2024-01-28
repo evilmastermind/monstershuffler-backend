@@ -20,7 +20,7 @@ async function languageRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['languages'],
         response: {
-          200: $ref('getLanguageListResponseSchema'),
+          200: $ref('getLanguageListResponse'),
         },
       },
     },
@@ -35,11 +35,11 @@ async function languageRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new type of language to the db.',
         description: '[MS ONLY] Adds a new type of language to the db.',
-        body: $ref('createLanguageSchema'),
+        body: $ref('postLanguage'),
         tags: ['languages'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('getLanguageResponseSchema'),
+          201: $ref('getLanguageResponse'),
         },
       },
     },
@@ -56,11 +56,11 @@ async function languageRoutes(server: FastifyInstance) {
           '[MS ONLY] Updates the details of the language corresponding to the given id.',
         description:
           '[MS ONLY] Updates the details of the language corresponding to the given id.',
-        body: $ref('updateLanguageSchema'),
+        body: $ref('putLanguage'),
         tags: ['languages'],
         headers: jwtHeaderRequired,
         response: {
-          200: $ref('getLanguageResponseSchema'),
+          200: $ref('getLanguageResponse'),
         },
       },
     },

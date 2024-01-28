@@ -10,10 +10,10 @@ async function nameRoutes(server: FastifyInstance) {
         summary: 'Returns a random name.',
         description:
           "Returns a random name, which is a string like 'Aldric' or 'Aldric the Brave'.",
-        body: $ref('getRandomNameSchema'),
+        body: $ref('getRandomName'),
         tags: ['names'],
         response: {
-          200: $ref('getRandomNameResponseSchema'),
+          200: $ref('getRandomNameResponse'),
         },
       },
     },

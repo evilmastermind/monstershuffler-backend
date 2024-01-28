@@ -1,50 +1,17 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
-import { characterObject } from '@/schemas/character';
 
-const id = z.number();
-const userid = z.number();
-const game = z.number();
-const name = z.string().min(2);
+import { getCharacterListResponse, getCharacterResponse, postCharacter, putCharacter } from 'monstershuffler-shared';
 
-const getCharacterListResponseSchema = z.object({
-  list: z.array(
-    z.object({
-      id,
-      userid,
-      name,
-    })
-  ),
-});
-
-const getCharacterResponseSchema = z.object({
-  id,
-  object: characterObject,
-});
-
-// @ts-ignore
-const createCharacterSchema = z.object({
-  game,
-  name,
-  object: characterObject,
-});
-
-const updateCharacterSchema = z.object({
-  name,
-  game,
-  object: characterObject,
-});
-
-export type createCharacterInput = z.infer<typeof createCharacterSchema>;
-export type updateCharacterInput = z.infer<typeof updateCharacterSchema>;
-export type Character = z.infer<typeof characterObject>;
+export type CreateCharacterInput = z.infer<typeof postCharacter>;
+export type UpdateCharacterInput = z.infer<typeof putCharacter>;
 
 export const { schemas: characterSchemas, $ref } = buildJsonSchemas(
   {
-    createCharacterSchema,
-    updateCharacterSchema,
-    getCharacterListResponseSchema,
-    getCharacterResponseSchema,
+    postCharacter,
+    putCharacter,
+    getCharacterListResponse,
+    getCharacterResponse,
   },
   { $id: 'characterSchemas' }
 );

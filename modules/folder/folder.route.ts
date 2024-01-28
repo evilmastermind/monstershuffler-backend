@@ -19,7 +19,7 @@ async function folderRoutes(server: FastifyInstance) {
         // params: $ref('getFolderParamsSchema'),
         headers: jwtHeaderRequired,
         response: {
-          200: $ref('getFolderContentResponseSchema'),
+          200: $ref('getFolderContentResponse'),
         },
       },
     },
@@ -32,12 +32,12 @@ async function folderRoutes(server: FastifyInstance) {
       schema: {
         summary: 'Creates a new folder.',
         description: 'Creates a new folder.',
-        body: $ref('createFolderSchema'),
+        body: $ref('postFolder'),
         tags: ['folders'],
         // params: $ref('getFolderParamsSchema'),
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('createFolderResponseSchema'),
+          201: $ref('postFolderResponse'),
         },
       },
     },
@@ -50,7 +50,7 @@ async function folderRoutes(server: FastifyInstance) {
       schema: {
         summary: 'Renames a folder.',
         description: 'Renames a folder.',
-        body: $ref('createFolderSchema'),
+        body: $ref('postFolder'),
         tags: ['folders'],
         // params: $ref('getFolderParamsSchema'),
         headers: jwtHeaderRequired,

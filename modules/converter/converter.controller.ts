@@ -1,18 +1,15 @@
 // @ts-nocheck
-import { objectUtil } from 'zod';
 import {
   countObjects,
   getFirstObjectId,
   getObjectsWithPagination,
   saveObject,
-  getSpellIdFromName,
+  getSpellDataFromName,
   getIdsFromNames,
   convertBackgroundPronouns,
 } from './converter.service';
 import { handleError } from '@/utils/errors';
-import { validateHeaderName } from 'http';
 import prisma from '@/utils/prisma';
-
 
 ///////////////////////////////////
 // O B J E C T   T Y P E S
@@ -40,6 +37,7 @@ export async function convertObjectsHandler(request, reply) {
     await prisma.$queryRaw`ALTER TABLE objects ALTER COLUMN object TYPE JSONB USING object::JSONB;`;
     await prisma.$queryRaw`ALTER TABLE characterhooks ALTER COLUMN object TYPE JSONB USING object::JSONB;`;
     await prisma.$queryRaw`ALTER TABLE traits ALTER COLUMN object TYPE JSONB USING object::JSONB;`;
+    await prisma.$queryRaw`ALTER TABLE users ALTER COLUMN settings TYPE JSONB USING settings::JSONB;`;
     await prisma.$queryRaw`CREATE INDEX idx_gin_characterhooks ON characterhooks USING GIN(object);`;
     await prisma.$queryRaw`CREATE INDEX idx_gin_traits ON traits USING GIN(object);`;
 
@@ -94,10 +92,10 @@ async function convertObject(object) {
     object.object = await convertAction(objectJSON, object.id);
     break;
   case 102:
-    // convertSpell(object);
+    // object.object = convertSpell(objectJSON);
     break;
   case 1001:
-    // convertWeapon(object);
+    object.object = await convertWeapon(objectJSON);
     break;
   case 1002:
     object.object = await convertArmor(objectJSON);
@@ -118,7 +116,8 @@ async function convertCharacter(object, id) {
     await convertCharacterObject(object.user, id);
     // proficiencyCalculation moved to .character
     if (Object.hasOwn(object.user, 'proficiencyCalculation')) {
-      object.proficiencyCalculation = object.user.proficiencyCalculation === 'cr' ? 'CR' : 'level';
+      object.proficiencyCalculation =
+        object.user.proficiencyCalculation === 'cr' ? 'CR' : 'level';
       delete object.user.proficiencyCalculation;
     }
   }
@@ -144,7 +143,15 @@ async function convertCharacter(object, id) {
 }
 
 function addCompatibleAgesToBackground(background) {
-  background.compatibleAges = ['child', 'adolescent', 'young adult', 'adult', 'middle-aged', 'elderly', 'venerable'];
+  background.compatibleAges = [
+    'child',
+    'adolescent',
+    'young adult',
+    'adult',
+    'middle-aged',
+    'elderly',
+    'venerable',
+  ];
 }
 
 function renameStuff(object) {
@@ -254,12 +261,18 @@ async function convertCharacterObject(object, id) {
 
   convertAbilityScores(object);
 
+  if (Object.hasOwn(object, 'speeds')) {
+    if (Object.hasOwn(object.speeds, 'base')) {
+      object.speeds.walk = object.speeds.base;
+      delete object.speeds.base;
+    }
+  }
+
   // abilitiesLimit should be numeric, not strings
   if (Object.hasOwn(object, 'abilitiesLimit')) {
     object.abilityScoresLimit = parseInt(object.abilitiesLimit);
     delete object.abilitiesLimit;
   }
-
 
   // skills random choice fix
   if (
@@ -328,8 +341,38 @@ async function convertCharacterObject(object, id) {
       }
       bonuses[key] = bonus;
     }
+    if (Object.hasOwn(bonuses, 'speedBaseBonus')) {
+      bonuses.walkBonus = bonuses.speedBaseBonus;
+      delete bonuses.speedBaseBonus;
+    }
+    if (Object.hasOwn(bonuses, 'speedFlyBonus')) {
+      bonuses.flyBonus = bonuses.speedFlyBonus;
+      delete bonuses.speedFlyBonus;
+    }
+    if (Object.hasOwn(bonuses, 'speedBurrowBonus')) {
+      bonuses.burrowBonus = bonuses.speedBurrowBonus;
+      delete bonuses.speedBurrowBonus;
+    }
+    if (Object.hasOwn(bonuses, 'speedClimbBonus')) {
+      bonuses.climbBonus = bonuses.speedClimbBonus;
+      delete bonuses.speedClimbBonus;
+    }
+    if (Object.hasOwn(bonuses, 'speedSwimBonus')) {
+      bonuses.swimBonus = bonuses.speedSwimBonus;
+      delete bonuses.speedSwimBonus;
+    }
+    if (Object.hasOwn(bonuses, 'speedHoverBonus')) {
+      bonuses.hoverBonus = bonuses.speedHoverBonus;
+      delete bonuses.speedHoverBonus;
+    }
     delete object.bonuses;
     object.bonuses = bonuses;
+  }
+
+  // legendaryActionsAvailable => legendaryActionsMax
+  if (Object.hasOwn(object, 'legendaryActionsAvailable')) {
+    object.legendaryActionsMax = object.legendaryActionsAvailable;
+    delete object.legendaryActionsAvailable;
   }
 }
 
@@ -370,13 +413,24 @@ async function addIdsToSpells(spellSlots) {
       spellSlot.availableAt = parseInt(spellSlot.levelMin);
       delete spellSlot.levelMin;
     }
+    if (Object.hasOwn(spellSlot, 'timesDay')) {
+      spellSlot.times = spellSlot.timesDay;
+      delete spellSlot.timesDay;
+    }
+    if (Object.hasOwn(spellSlot, 'timesDayMax')) {
+      spellSlot.timesMax = parseInt(spellSlot.timesDayMax);
+      delete spellSlot.timesDayMax;
+    }
     if (Object.hasOwn(spellSlot, 'spells') && Array.isArray(spellSlot.spells)) {
       const newArray = [];
       for (const spell of spellSlot.spells) {
-        const id = await getSpellIdFromName(spell);
+        const spellData = await getSpellDataFromName(spell);
         newArray.push({
-          id,
+          id: spellData?.id || null,
           value: spell,
+          properties: {
+            level: parseInt(spellData?.object?.level ?? '1'),
+          }
         });
       }
       spellSlot.spells = newArray;
@@ -473,6 +527,23 @@ async function convertAction(object, id) {
     return object;
   }
 
+  if(Object.hasOwn(object, 'recharge')) {
+    switch (object.recharge) {
+    case '3–6':
+      object.recharge = '3-6';
+      break;
+    case '4–6':
+      object.recharge = '4-6';
+      break;
+    case '5–6':
+      object.recharge = '5-6';
+      break;
+    case '6–6':
+      object.recharge = '6-6';
+      break;
+    }
+  }
+
   // (random actions)
   if (Object.hasOwn(object, 'choice')) {
     await convertChoiceRandom(object, 'actions');
@@ -512,11 +583,17 @@ async function convertAction(object, id) {
 
   // levelMin/levelMax to availableAt/availableUntil/availableUnit
   action.availableUnit = 'level';
-  if (Object.hasOwn(action.variants[0], 'levelMin') && action.variants[0].levelMin) {
+  if (
+    Object.hasOwn(action.variants[0], 'levelMin') &&
+    action.variants[0].levelMin
+  ) {
     action.variants[0].availableAt = parseInt(action.variants[0].levelMin);
     delete action.variants[0].levelMin;
   }
-  if (Object.hasOwn(action.variants[0], 'levelMax') && action.variants[0].levelMax) {
+  if (
+    Object.hasOwn(action.variants[0], 'levelMax') &&
+    action.variants[0].levelMax
+  ) {
     action.availableUntil = parseInt(action.variants[0].levelMax);
     delete action.variants[0].levelMax;
   }
@@ -540,6 +617,9 @@ async function convertAction(object, id) {
           convertDiceObject(attack.enchantment.dice);
         }
       }
+      if (Object.hasOwn(attack, 'attributes')) {
+        attack.attributes = convertWeapon(attack.attributes);
+      }
     }
   }
   // values diceObject => levelMin/levelMax to availableAt/availableUntil/availableUnit
@@ -549,14 +629,20 @@ async function convertAction(object, id) {
         convertDiceObject(value.dice);
       }
       if (Object.hasOwn(value, 'incrProgression')) {
-        value.incrProgression.unitInterval = parseInt(value.incrProgression.levelInterval);
+        value.incrProgression.unitInterval = parseInt(
+          value.incrProgression.levelInterval
+        );
         delete value.incrProgression.levelInterval;
-        value.incrProgression.unitIncrement = parseInt(value.incrProgression.levelIncrement);
+        value.incrProgression.unitIncrement = parseInt(
+          value.incrProgression.levelIncrement
+        );
         delete value.incrProgression.levelIncrement;
         replaceLevelWithAvailable(value.incrProgression);
         value.incrProgression.valueBase = parseInt(value.incrProgression.base);
         delete value.incrProgression.base;
-        value.incrProgression.valueIncrement = parseInt(value.incrProgression.increment);
+        value.incrProgression.valueIncrement = parseInt(
+          value.incrProgression.increment
+        );
         delete value.incrProgression.increment;
       }
     });
@@ -569,8 +655,21 @@ function convertDiceObject(object) {
   stringToNumber(object, 'die');
   stringToNumber(object, 'diceNumber');
   stringToNumber(object, 'diceIncrement');
+  // die => sides and diceNumber => dice
+  if (Object.hasOwn(object, 'die')) {
+    object.sides = object.die;
+    delete object.die;
+  }
+  if (Object.hasOwn(object, 'diceNumber')) {
+    object.dice = object.diceNumber;
+    delete object.diceNumber;
+  }
   if (Object.hasOwn(object, 'levelInterval')) {
-    if (object.levelInterval !== null && object.levelInterval !== undefined && object.levelInterval !== '') {
+    if (
+      object.levelInterval !== null &&
+      object.levelInterval !== undefined &&
+      object.levelInterval !== ''
+    ) {
       object.unitInterval = parseInt(object.levelInterval);
     }
     delete object.levelInterval;
@@ -579,14 +678,22 @@ function convertDiceObject(object) {
 
 function replaceLevelWithAvailable(object) {
   if (Object.hasOwn(object, 'levelMin')) {
-    if (object.levelMin !== null && object.levelMin !== undefined && object.levelMin !== '') {
+    if (
+      object.levelMin !== null &&
+      object.levelMin !== undefined &&
+      object.levelMin !== ''
+    ) {
       object.availableUnit = 'level';
       object.availableAt = parseInt(object.levelMin);
     }
     delete object.levelMin;
   }
   if (Object.hasOwn(object, 'levelMax')) {
-    if (object.levelMax !== null && object.levelMax !== undefined && object.levelMax !== '') {
+    if (
+      object.levelMax !== null &&
+      object.levelMax !== undefined &&
+      object.levelMax !== ''
+    ) {
       object.availableUnit = 'level';
       object.availableUntil = parseInt(object.levelMax);
     }
@@ -730,7 +837,11 @@ function booleanEnumToBoolean(value) {
 
 function stringToNumber(object, key) {
   if (Object.hasOwn(object, key)) {
-    if(object[key] !== null && object[key] !== undefined && object[key] !== '') {
+    if (
+      object[key] !== null &&
+      object[key] !== undefined &&
+      object[key] !== ''
+    ) {
       object[key] = parseInt(object[key]);
     } else {
       delete object[key];
@@ -751,4 +862,27 @@ function convertAgeAndHeight(race) {
   if (Object.hasOwn(race, 'heightMax')) {
     race.heightMax = parseInt(race.heightMax);
   }
+}
+
+function convertWeapon(object) {
+  if (Object.hasOwn(object, 'die')) {
+    object.sides = object.die;
+    delete object.die;
+  }
+  if (Object.hasOwn(object, 'diceNumber')) {
+    object.dice = object.diceNumber;
+    delete object.diceNumber;
+  }
+  if (Object.hasOwn(object, 'dieV')) {
+    object.sidesV = object.dieV;
+    delete object.dieV;
+  }
+  if (Object.hasOwn(object, 'diceNumberV')) {
+    object.diceV = object.diceNumberV;
+    delete object.diceNumberV;
+  }
+  if ('reach' in object && object.reach === '') {
+    delete object.reach;
+  }
+  return object;
 }

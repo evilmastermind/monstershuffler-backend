@@ -23,7 +23,7 @@ async function classRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['classes'],
         response: {
-          200: $ref('getClassListResponseSchema'),
+          200: $ref('getClassListResponse'),
         },
       },
     },
@@ -41,7 +41,7 @@ async function classRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['classes'],
         response: {
-          200: $ref('getClassResponseSchema'),
+          200: $ref('getClassResponse'),
         },
       },
     },
@@ -60,7 +60,7 @@ async function classRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['classes'],
         response: {
-          200: $ref('getClassWithVariantsListResponseSchema'),
+          200: $ref('getClassWithVariantsListResponse'),
         },
       },
     },
@@ -80,7 +80,7 @@ async function classRoutes(server: FastifyInstance) {
         tags: ['classes'],
         // params: $ref('getClassParamsSchema'),
         response: {
-          200: $ref('getClassResponseSchema'),
+          200: $ref('getClassResponse'),
         },
       },
     },
@@ -95,11 +95,11 @@ async function classRoutes(server: FastifyInstance) {
   //       hide: true,
   //       summary: '[MS ONLY] Adds a new class to the db.',
   //       description: '[MS ONLY] Adds a new class to the db.',
-  //       body: $ref('createClassSchema'),
+  //       body: $ref('postClass'),
   //       tags: ['classes'],
   //       headers: jwtHeaderRequired,
   //       response: {
-  //         201: $ref('getClassResponseSchema')
+  //         201: $ref('getClassResponse')
   //       }
   //     },
   //   },
@@ -114,7 +114,7 @@ async function classRoutes(server: FastifyInstance) {
   //       hide: true,
   //       summary: '[MS ONLY] Updates the class corresponding to the given id.',
   //       description: '[MS ONLY] Updates the class corresponding to the given id.',
-  //       body: $ref('updateClassSchema'),
+  //       body: $ref('putClass'),
   //       tags: ['classes'],
   //       headers: jwtHeaderRequired,
   //       response: {

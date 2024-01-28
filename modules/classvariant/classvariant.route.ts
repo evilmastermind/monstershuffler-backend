@@ -24,7 +24,7 @@ async function classvariantRoutes(server: FastifyInstance) {
         tags: ['class variants'],
         // params: $ref('getClassvariantParamsSchema'),
         response: {
-          200: $ref('getClassvariantListResponseSchema'),
+          200: $ref('getClassvariantListResponse'),
         },
       },
     },
@@ -43,7 +43,7 @@ async function classvariantRoutes(server: FastifyInstance) {
         tags: ['class variants'],
         // params: $ref('getClassvariantParamsSchema'),
         response: {
-          200: $ref('getClassvariantClassListResponseSchema'),
+          200: $ref('getClassvariantClassListResponse'),
         },
       },
     },
@@ -63,7 +63,7 @@ async function classvariantRoutes(server: FastifyInstance) {
         tags: ['class variants'],
         // params: $ref('getClassvariantParamsSchema'),
         response: {
-          200: $ref('getClassvariantResponseSchema'),
+          200: $ref('getClassvariantResponse'),
         },
       },
     },
@@ -83,7 +83,7 @@ async function classvariantRoutes(server: FastifyInstance) {
         tags: ['class variants'],
         // params: $ref('getClassvariantParamsSchema'),
         response: {
-          200: $ref('getClassvariantResponseSchema'),
+          200: $ref('getClassvariantResponse'),
         },
       },
     },
@@ -98,12 +98,12 @@ async function classvariantRoutes(server: FastifyInstance) {
   //         hide: true,
   //         summary: '[MS ONLY] Adds a new class variant to the db.',
   //         description: '[MS ONLY] Adds a new class variant to the db.',
-  //         body: $ref('createClassvariantSchema'),
+  //         body: $ref('postClassvariant'),
   //         tags: ['class variants'],
   //         headers: jwtHeaderRequired,
   //         // params: $ref('getClassvariantParamsSchema'),
   //         response: {
-  //           201: $ref('getClassvariantResponseSchema')
+  //           201: $ref('getClassvariantResponse')
   //         }
   //       },
   //     },
@@ -118,7 +118,7 @@ async function classvariantRoutes(server: FastifyInstance) {
   //         hide: true,
   //         summary: '[MS ONLY] Updates the class variant corresponding to the given id.',
   //         description: '[MS ONLY] Updates the class variant corresponding to the given id.',
-  //         body: $ref('updateClassvariantSchema'),
+  //         body: $ref('putClassvariant'),
   //         tags: ['class variants'],
   //         headers: jwtHeaderRequired,
   //         response: {

@@ -1,11 +1,11 @@
 import prisma from '@/utils/prisma';
 import {
-  createActionInput,
-  getActionListInput,
-  updateActionInput,
+  PostActionInput,
+  GetActionListInput,
+  PutActionInput,
 } from './action.schema';
 
-export async function createAction(userid: number, input: createActionInput) {
+export async function createAction(userid: number, input: PostActionInput) {
   const { object, game, name, type, subtype, source, tags } = input;
 
   const newObject = await prisma.objects.create({
@@ -23,7 +23,7 @@ export async function createAction(userid: number, input: createActionInput) {
       objectid: newObject.id,
       name,
       actiontype: type,
-      subtype,
+      subtype: subtype || null,
       source,
     },
   });
@@ -42,7 +42,7 @@ export async function createAction(userid: number, input: createActionInput) {
 
 export async function getActionList(
   userid: number,
-  filters: getActionListInput
+  filters: GetActionListInput
 ) {
   const actionList = await prisma.objects.findMany({
     select: {
@@ -117,7 +117,7 @@ export async function getAction(userid: number, id: number) {
 export async function updateAction(
   userid: number,
   id: number,
-  input: updateActionInput
+  input: PutActionInput
 ) {
   const { object, name, type, subtype, source, tags } = input;
   const result = await prisma.objects.updateMany({
