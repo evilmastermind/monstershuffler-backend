@@ -315,7 +315,7 @@ function calculateHeight(race: Race, age: Age) {
 
 function calculateWeight(): Weight {
   const randomValue = random(1, 20);
-  if (randomValue <= 10) {
+  if (randomValue <= 14) {
     return 'average';
   }
   else if(randomValue <= 19 ) {

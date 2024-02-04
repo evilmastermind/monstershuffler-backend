@@ -139,7 +139,11 @@ export async function getSpellList(userid: number, filters: getSpellListInput) {
   return spellList;
 }
 
-export async function getSpell(userid: number, id: number) {
+export async function getSpell(userid: number, nameOrId: string) {
+  // if nameOrId is a number, it's an id, otherwise it's a name
+  // (Prisma ignores unefined fields)
+  const name = isNaN(parseInt(nameOrId)) ? nameOrId : undefined;
+  const id = isNaN(parseInt(nameOrId)) ? undefined : parseInt(nameOrId);
   const array = await prisma.objects.findMany({
     select: {
       id: true,
@@ -148,6 +152,10 @@ export async function getSpell(userid: number, id: number) {
     },
     where: {
       id,
+      name: {
+        contains: name,
+        mode: 'insensitive',
+      },
       userid,
       type: 102,
     },

@@ -5127,6 +5127,162 @@ components:
         - getRaceListResponse
         - getRaceResponse
       additionalProperties: false
+    spellSchemas:
+      type: object
+      properties:
+        getSpellList:
+          type: object
+          properties:
+            game:
+              type: number
+            name:
+              type: string
+              minLength: 2
+            level:
+              type: number
+            range:
+              type: string
+            ritual:
+              type: boolean
+            school:
+              type: string
+              minLength: 2
+            source:
+              type: string
+            className:
+              type: string
+              minLength: 2
+            duration:
+              type: string
+              minLength: 2
+            component:
+              type: string
+              minLength: 2
+            castingTime:
+              type: string
+              minLength: 2
+            description:
+              type: string
+              minLength: 2
+          required:
+            - game
+          additionalProperties: false
+        getSpellListResponse:
+          type: object
+          properties:
+            list:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  userid:
+                    type: number
+                  name:
+                    $ref: "#/components/schemas/spellSchemas/properties/getSpellList/properties/nam\
+                      e"
+                required:
+                  - id
+                  - userid
+                  - name
+                additionalProperties: false
+          required:
+            - list
+          additionalProperties: false
+        getSpellResponse:
+          type: object
+          properties:
+            id:
+              $ref: "#/components/schemas/spellSchemas/properties/getSpellListResponse/proper\
+                ties/list/items/properties/id"
+            userid:
+              $ref: "#/components/schemas/spellSchemas/properties/getSpellListResponse/proper\
+                ties/list/items/properties/userid"
+            object:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 2
+                level:
+                  type: number
+                range:
+                  type: string
+                ritual:
+                  type: boolean
+                school:
+                  type: string
+                  minLength: 2
+                source:
+                  type: string
+                classes:
+                  type: array
+                  items:
+                    type: string
+                duration:
+                  type: string
+                components:
+                  type: string
+                castingTime:
+                  type: string
+                description:
+                  type: string
+              required:
+                - name
+                - level
+                - range
+                - ritual
+                - school
+                - source
+                - classes
+                - duration
+                - components
+                - castingTime
+                - description
+              additionalProperties: false
+          required:
+            - id
+            - userid
+            - object
+          additionalProperties: false
+        postSpell:
+          type: object
+          properties:
+            game:
+              $ref: "#/components/schemas/spellSchemas/properties/getSpellList/properties/gam\
+                e"
+            name:
+              $ref: "#/components/schemas/spellSchemas/properties/getSpellList/properties/nam\
+                e"
+            object:
+              $ref: "#/components/schemas/spellSchemas/properties/getSpellResponse/properties\
+                /object"
+          required:
+            - game
+            - name
+            - object
+          additionalProperties: false
+        putSpell:
+          type: object
+          properties:
+            name:
+              $ref: "#/components/schemas/spellSchemas/properties/getSpellList/properties/nam\
+                e"
+            object:
+              $ref: "#/components/schemas/spellSchemas/properties/getSpellResponse/properties\
+                /object"
+          required:
+            - name
+            - object
+          additionalProperties: false
+      required:
+        - getSpellList
+        - getSpellListResponse
+        - getSpellResponse
+        - postSpell
+        - putSpell
+      additionalProperties: false
     traitSchemas:
       type: object
       properties:
@@ -5707,6 +5863,57 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/raceSchemas/properties/getRaceResponse"
+  /api/spells/filter:
+    post:
+      summary: Returns a list of spells from the db, filtered by the values specified
+        in the body.
+      tags:
+        - spells
+      description: Returns a list of spells from the db, filtered by the values
+        specified in the body. If authenticated, also returns the spells created
+        by the user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/spellSchemas/properties/getSpellList"
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: authorization
+          required: false
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/spellSchemas/properties/getSpellListResponse"
+  /api/spells/{spellId}:
+    get:
+      summary: Returns the details of the spell corresponding to the given id.
+      tags:
+        - spells
+      description: Returns the details of the spell corresponding to the given id.
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: authorization
+          required: false
+        - schema:
+            type: string
+          in: path
+          name: spellId
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/spellSchemas/properties/getSpellResponse"
   /api/traits/random:
     post:
       summary: Returns a random trait.

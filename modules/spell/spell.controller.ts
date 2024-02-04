@@ -36,7 +36,7 @@ export async function getSpellHandler(
   const { id } = request.user || { id: 0 };
   const spellId = request.params.spellId;
   try {
-    const spell = await getSpell(id, parseInt(spellId));
+    const spell = await getSpell(id, spellId);
     return handleResultFound(spell, reply);
   } catch (error) {
     return handleError(error, reply);

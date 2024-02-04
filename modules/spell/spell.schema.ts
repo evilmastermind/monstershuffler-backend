@@ -20,4 +20,4 @@ export const { schemas: spellSchemas, $ref } = buildJsonSchemas({
   getSpellResponse,
   postSpell,
   putSpell,
-});
+},{ $id: 'spellSchemas' });

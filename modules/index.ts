@@ -17,7 +17,7 @@ import { raceSchemas } from '@/modules/race/race.schema';
 // import { racevariantSchemas } from '@/modules/racevariant/racevariant.schema';
 // import { reportSchemas } from '@/modules/report/report.schema';
 // import { skillSchemas } from '@/modules/skill/skill.schema';
-// import { spellSchemas } from '@/modules/spell/spell.schema';
+import { spellSchemas } from '@/modules/spell/spell.schema';
 // import { surnameSchemas } from '@/modules/surname/surname.schema';
 // import { templateSchemas } from '@/modules/template/template.schema';
 import { traitSchemas } from '@/modules/trait/trait.schema';
@@ -43,7 +43,7 @@ import raceRoutes from '@/modules/race/race.route';
 // import racevariantRoutes from '@/modules/racevariant/racevariant.route';
 // import reportRoutes from '@/modules/report/report.route';
 // import skillRoutes from '@/modules/skill/skill.route';
-// import spellRoutes from '@/modules/spell/spell.route';
+import spellRoutes from '@/modules/spell/spell.route';
 // import surnameRoutes from '@/modules/surname/surname.route';
 // import templateRoutes from '@/modules/template/template.route';
 import traitRoutes from '@/modules/trait/trait.route';
@@ -72,7 +72,7 @@ export const schemas = [
   // ...racevariantSchemas,
   // ...reportSchemas,
   // ...skillSchemas,
-  // ...spellSchemas,
+  ...spellSchemas,
   // ...surnameSchemas,
   // ...templateSchemas,
   ...traitSchemas,
@@ -99,7 +99,7 @@ export const routes = [
   //  {routes: racevariantRoutes,  prefix: 'api/racevariants' },
   //  {routes: reportRoutes,  prefix: 'api/reports' },
   //  {routes: skillRoutes,  prefix: 'api/skills' },
-  //  {routes: spellRoutes,  prefix: 'api/spells' },
+  {routes: spellRoutes,  prefix: 'api/spells' },
   //  {routes: surnameRoutes,  prefix: 'api/surnames' },
   //  {routes: templateRoutes,  prefix: 'api/templates' },
   { routes: traitRoutes,  prefix: 'api/traits' },
