@@ -46,6 +46,7 @@ export async function createRandomNpc(
     pronounsChosen,
     addVoice,
     includeChildren,
+    includeBodyType,
   } = request.body;
 
   try {
@@ -144,8 +145,8 @@ export async function createRandomNpc(
     const feelingObject = await getRandomTraitForAge({ feeling: 1 }, age.string);
     const alignmentModifiers = calculateAlignment(traitObject?.category);
     const characterHook = await await getRandomCharacterhookForAge(age.string);
-    const height = race? calculateHeight(race, age) : 0;
-    const weight = calculateWeight();
+    const height = includeBodyType && race? calculateHeight(race, age) : 0;
+    const weight = includeBodyType ? calculateWeight() : undefined;
     const voice = addVoice ? await calculateVoice(pronouns) : undefined;
 
     const result: Character = {
@@ -157,9 +158,9 @@ export async function createRandomNpc(
         ...(feelingObject !== null && { feeling: feelingObject.name }),
         ...(characterHook !== null && { characterHook: characterHook.hook }),
         ...(voice !== null && { voice }),
+        ...(height !== null && { height }),
+        ...(weight !== null && { weight }),
         age,
-        height,
-        weight,
         alignmentModifiers,
       },
       variations: {

@@ -1550,19 +1550,56 @@ components:
                   additionalProperties: false
                 legendaryActionsMax:
                   type: string
-                image:
+                sheet:
                   type: object
                   properties:
-                    imgdir:
+                    images:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          artist:
+                            type: string
+                          artistUrl:
+                            type: string
+                          elementHeightPx:
+                            type: number
+                          backgroundHeightPerc:
+                            type: number
+                          backgroundPositionTopPx:
+                            type: number
+                          backgroundPositionLeftPx:
+                            type: number
+                          mask:
+                            type: string
+                          token:
+                            type: object
+                            properties:
+                              topPx:
+                                type: number
+                              leftPx:
+                                type: number
+                              widthPx:
+                                type: number
+                            required:
+                              - topPx
+                              - leftPx
+                              - widthPx
+                            additionalProperties: false
+                        required:
+                          - url
+                        additionalProperties: false
+                    layout:
                       type: string
-                    lastedited:
+                    decoration:
+                      type: string
+                    statBlockOffsetPx:
                       type: number
                   required:
-                    - imgdir
-                    - lastedited
+                    - images
                   additionalProperties: false
-                imageBackground:
-                  type: string
                 searchTags:
                   type: array
                   items:
@@ -1734,6 +1771,8 @@ components:
             addVoice:
               type: boolean
             includeChildren:
+              type: boolean
+            includeBodyType:
               type: boolean
             pronounsChosen:
               type: string
@@ -2584,19 +2623,56 @@ components:
                           additionalProperties: false
                         legendaryActionsMax:
                           type: string
-                        image:
+                        sheet:
                           type: object
                           properties:
-                            imgdir:
+                            images:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  url:
+                                    type: string
+                                  artist:
+                                    type: string
+                                  artistUrl:
+                                    type: string
+                                  elementHeightPx:
+                                    type: number
+                                  backgroundHeightPerc:
+                                    type: number
+                                  backgroundPositionTopPx:
+                                    type: number
+                                  backgroundPositionLeftPx:
+                                    type: number
+                                  mask:
+                                    type: string
+                                  token:
+                                    type: object
+                                    properties:
+                                      topPx:
+                                        type: number
+                                      leftPx:
+                                        type: number
+                                      widthPx:
+                                        type: number
+                                    required:
+                                      - topPx
+                                      - leftPx
+                                      - widthPx
+                                    additionalProperties: false
+                                required:
+                                  - url
+                                additionalProperties: false
+                            layout:
                               type: string
-                            lastedited:
+                            decoration:
+                              type: string
+                            statBlockOffsetPx:
                               type: number
                           required:
-                            - imgdir
-                            - lastedited
+                            - images
                           additionalProperties: false
-                        imageBackground:
-                          type: string
                         searchTags:
                           type: array
                           items:
@@ -2706,14 +2782,10 @@ components:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
                             ties/enableGenerator"
-                        image:
+                        sheet:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
-                            ties/image"
-                        imageBackground:
-                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/imageBackground"
+                            ties/sheet"
                         searchTags:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
@@ -2812,14 +2884,10 @@ components:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
                             ties/legendaryActionsMax"
-                        image:
+                        sheet:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
-                            ties/image"
-                        imageBackground:
-                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/imageBackground"
+                            ties/sheet"
                         searchTags:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
@@ -2918,14 +2986,10 @@ components:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
                             ties/enableGenerator"
-                        image:
+                        sheet:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
-                            ties/image"
-                        imageBackground:
-                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/imageBackground"
+                            ties/sheet"
                         searchTags:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
@@ -3198,14 +3262,10 @@ components:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
                             ties/legendaryActionsMax"
-                        image:
+                        sheet:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
-                            ties/image"
-                        imageBackground:
-                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/imageBackground"
+                            ties/sheet"
                         searchTags:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
@@ -3325,14 +3385,10 @@ components:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
                             ties/legendaryActionsMax"
-                        image:
+                        sheet:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
-                            ties/image"
-                        imageBackground:
-                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/imageBackground"
+                            ties/sheet"
                         searchTags:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
@@ -3551,10 +3607,13 @@ components:
                                   - text
                                   - translatableText
                                   - nextLine
-                                  - endOfParagraph
+                                  - paragraphEnd
+                                  - listStart
+                                  - listEnd
+                                  - listItemStart
+                                  - listItemEnd
                                   - numberAsWord
                                   - ordinal
-                                  - rollableNumberWithSign
                                   - feet
                                   - -feet
                                   - ft
@@ -3565,7 +3624,8 @@ components:
                                   - tag
                                   - value
                                   - valueAsWord
-                                  - rollableValue
+                                  - diceRoll
+                                  - d20Roll
                               format:
                                 type: array
                                 items:
@@ -3577,33 +3637,43 @@ components:
                                     - line-through
                                     - sups
                                     - subs
-                              dice:
-                                type: array
-                                items:
-                                  anyOf:
-                                    - type: object
-                                      properties:
-                                        dice:
-                                          type: number
-                                        sides:
-                                          type: number
-                                        bonus:
-                                          type: number
-                                        type:
-                                          type: string
-                                      required:
-                                        - dice
-                                        - sides
-                                      additionalProperties: false
-                                    - type: object
-                                      properties:
-                                        value:
-                                          type: number
-                                        type:
-                                          type: string
-                                      required:
-                                        - value
-                                      additionalProperties: false
+                              roll:
+                                type: object
+                                properties:
+                                  dice:
+                                    type: array
+                                    items:
+                                      anyOf:
+                                        - type: object
+                                          properties:
+                                            dice:
+                                              type: number
+                                            sides:
+                                              type: number
+                                            bonus:
+                                              type: number
+                                            type:
+                                              type: string
+                                          required:
+                                            - dice
+                                            - sides
+                                          additionalProperties: false
+                                        - type: object
+                                          properties:
+                                            value:
+                                              type: number
+                                            type:
+                                              type: string
+                                          required:
+                                            - value
+                                          additionalProperties: false
+                                  name:
+                                    type: string
+                                  translationKey:
+                                    type: string
+                                required:
+                                  - dice
+                                additionalProperties: false
                               id:
                                 type: number
                               translationKey:
@@ -3669,21 +3739,27 @@ components:
                     sizeSingleEntityOfSwarm:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                         ies/npc/properties/statistics/properties/CR"
-                    abilityScores:
+                    abilities:
                       type: object
                       properties:
                         STR:
-                          type: number
+                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                            ies/npc/properties/statistics/properties/alignment"
                         DEX:
-                          type: number
+                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                            ies/npc/properties/statistics/properties/alignment"
                         CON:
-                          type: number
+                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                            ies/npc/properties/statistics/properties/alignment"
                         INT:
-                          type: number
+                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                            ies/npc/properties/statistics/properties/alignment"
                         WIS:
-                          type: number
+                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                            ies/npc/properties/statistics/properties/alignment"
                         CHA:
-                          type: number
+                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                            ies/npc/properties/statistics/properties/alignment"
                       required:
                         - STR
                         - DEX
@@ -3692,9 +3768,6 @@ components:
                         - WIS
                         - CHA
                       additionalProperties: false
-                    abilityModifiers:
-                      $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/abilityScores"
                     HP:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                         ies/npc/properties/statistics/properties/CR"
@@ -3850,8 +3923,7 @@ components:
                     - AC
                     - proficiency
                     - size
-                    - abilityScores
-                    - abilityModifiers
+                    - abilities
                     - HP
                     - type
                     - meta
@@ -5000,19 +5072,56 @@ components:
                   additionalProperties: false
                 legendaryActionsMax:
                   type: string
-                image:
+                sheet:
                   type: object
                   properties:
-                    imgdir:
+                    images:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          artist:
+                            type: string
+                          artistUrl:
+                            type: string
+                          elementHeightPx:
+                            type: number
+                          backgroundHeightPerc:
+                            type: number
+                          backgroundPositionTopPx:
+                            type: number
+                          backgroundPositionLeftPx:
+                            type: number
+                          mask:
+                            type: string
+                          token:
+                            type: object
+                            properties:
+                              topPx:
+                                type: number
+                              leftPx:
+                                type: number
+                              widthPx:
+                                type: number
+                            required:
+                              - topPx
+                              - leftPx
+                              - widthPx
+                            additionalProperties: false
+                        required:
+                          - url
+                        additionalProperties: false
+                    layout:
                       type: string
-                    lastedited:
+                    decoration:
+                      type: string
+                    statBlockOffsetPx:
                       type: number
                   required:
-                    - imgdir
-                    - lastedited
+                    - images
                   additionalProperties: false
-                imageBackground:
-                  type: string
                 searchTags:
                   type: array
                   items:
@@ -5445,8 +5554,14 @@ components:
                             - feet
                             - meters
                             - squares
+                        heightUnit:
+                          type: string
+                          enum:
+                            - feet
+                            - meters
                       required:
                         - lengthUnit
+                        - heightUnit
                       additionalProperties: false
                     language:
                       type: string

@@ -10,6 +10,7 @@ import {
 } from './converter.service';
 import { handleError } from '@/utils/errors';
 import prisma from '@/utils/prisma';
+import { url } from 'inspector';
 
 ///////////////////////////////////
 // O B J E C T   T Y P E S
@@ -161,7 +162,68 @@ function renameStuff(object) {
     delete object.background;
   }
   // backgroundImage => imageBackground
-  if (Object.hasOwn(object, 'backgroundImage')) {
+  if (Object.hasOwn(object, 'backgroundImage') || Object.hasOwn(object, 'image')) {
+    object.sheet = {};
+    if ('image' in object) {
+      object.sheet.images = [
+        {
+          url: object.image?.imgdir,
+        }
+      ];
+      delete object.image;
+    }
+    if ('backgroundImage' in object) {
+      switch (object.backgroundImage) {
+      case 'background_dragon.jpg': 
+        object.sheet.decoration = 'dragon';
+        break;
+      case 'background_blood.jpg': 
+        object.sheet.decoration = 'blood';
+        break;
+      case 'background_bluedots.jpg': 
+        object.sheet.decoration = 'mana';
+        break;
+      case 'background_dunes.jpg': 
+        object.sheet.decoration = 'desert';
+        break;
+      case 'background_burn.jpg': 
+        object.sheet.decoration = 'fire';
+        break;
+      case 'background_candle.jpg': 
+        object.sheet.decoration = 'urban';
+        break;
+      case 'background_cavern.jpg': 
+        object.sheet.decoration = 'cavern';
+        break;
+      case 'background_cogs.jpg': 
+        object.sheet.decoration = 'construct';
+        break;
+      case 'background_creepy.jpg': 
+        object.sheet.decoration = 'creepy';
+        break;
+      case 'background_fairy.jpg': 
+        object.sheet.decoration = 'fey';
+        break;
+      case 'background_mountains.jpg': 
+        object.sheet.decoration = 'mountains';
+        break;
+      case 'background_ocean.jpg': 
+        object.sheet.decoration = 'ocean';
+        break;
+      case 'background_undergrowth.jpg': 
+        object.sheet.decoration = 'nature';
+        break;
+      case 'background_skulls.jpg': 
+        object.sheet.decoration = 'undead';
+        break;
+      case 'background_underwater.jpg': 
+        object.sheet.decoration = 'jungle';
+        break;
+      default:
+        object.sheet.decoration = 'default';
+        break;
+      }
+    }
     object.imageBackground = object.backgroundImage;
     delete object.backgroundImage;
   }
