@@ -676,8 +676,11 @@ async function convertAction(object, id) {
       // enchantment diceObject => levelMin/levelMax to availableAt/availableUntil/availableUnit
       if (Object.hasOwn(attack, 'enchantment')) {
         if (Object.hasOwn(attack.enchantment, 'dice')) {
+          attack.enchantment.name = 'enchantment';
           convertDiceObject(attack.enchantment.dice);
         }
+        attack.enchantments = [{...attack.enchantment}];
+        delete attack.enchantment;
       }
       if (Object.hasOwn(attack, 'attributes')) {
         attack.attributes = convertWeapon(attack.attributes);

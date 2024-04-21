@@ -284,11 +284,11 @@ function calculateAge(race: Race, includeChildren = false): Age {
 }
 
 function calculateHeight(race: Race, age: Age) {
-  const heightMin = race.heightMin || race.heightMax || 0;
-  const heightMax = race.heightMax || race.heightMin || 0;
+  let heightMin = race.heightMin || race.heightMax || 0;
+  let heightMax = race.heightMax || race.heightMin || 0;
   let height = 6;
   if (!heightMin && !heightMax) {
-    const variation = randomDecimal(0.8, 1.2, 'middle'); 
+    const variation = randomDecimal(0.8, 1.2, 'end'); 
     if (race.size === 1) {
       height = 1.75 * variation;
     } else if (race.size === 2) {
@@ -303,12 +303,34 @@ function calculateHeight(race: Race, age: Age) {
       height = 48 * variation;
     }
   } else {
-    height = randomDecimal(heightMin, heightMax, 'beginning');
+    if (!heightMin) {
+      heightMin = heightMax;
+    }
+    if (!heightMax) {
+      heightMax = heightMin;
+    }
+    if (heightMin > heightMax) {
+      const temp = heightMin;
+      heightMin = heightMax;
+      heightMax = temp;
+    }
+    if (heightMin === heightMax) {
+      // lower heightMin by 20% and increase heightMax by 20%
+      heightMin = heightMin * 0.8;
+      heightMax = heightMax * 1.2;
+    } else {
+      // lower heightMin by 10% and increase heightMax by 10%
+      heightMin = heightMin * 0.9;
+      heightMax = heightMax * 1.1;
+    }
+    height = randomDecimal(heightMin, heightMax, 'middle', 3);
     const ageAdult = race.ageAdult || 0;
-    if(ageAdult && age.number < ageAdult) {
-      height = height / 2 + height / 2  * (age.number/ageAdult);
-    } else if (age.string === 'child') {
-      height = height * randomDecimal(0.5, 0.8);
+    if((ageAdult && age.number < ageAdult) || age.string === 'child') {
+      // adolescents reach max height at around 15 years old 
+      const ageMaxHeight = (ageAdult / 6) * 5;
+      if (age.number < ageMaxHeight) {
+        height = (height / 4) + (height / 4) * 3  * (age.number/ageAdult);
+      }
     }
   }
   return round2Decimals(height);
