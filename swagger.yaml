@@ -3622,7 +3622,7 @@ components:
                                               type: number
                                             sides:
                                               type: number
-                                            average:
+                                            value:
                                               type: number
                                             string:
                                               type: string
@@ -3633,6 +3633,7 @@ components:
                                           required:
                                             - dice
                                             - sides
+                                            - value
                                           additionalProperties: false
                                         - type: object
                                           properties:

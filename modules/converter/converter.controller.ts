@@ -457,14 +457,14 @@ function convertAlignment(alignment) {
     [0, 0, 0],
   ];
   if (alignmentInt[0] > 0) {
-    newAligment[0][0] += alignmentInt[0];
+    newAligment[0][0] += alignmentInt[0] / 2;
   } else if (alignmentInt[0] < 0) {
-    newAligment[0][2] += Math.abs(alignmentInt[0]);
+    newAligment[0][2] += Math.abs(alignmentInt[0]) / 2;
   }
   if (alignmentInt[1] > 0) {
-    newAligment[1][0] += alignmentInt[0];
+    newAligment[1][0] += alignmentInt[0] / 2;
   } else if (alignmentInt[1] < 0) {
-    newAligment[1][2] += Math.abs(alignmentInt[0]);
+    newAligment[1][2] += Math.abs(alignmentInt[0]) / 2;
   }
   return newAligment;
 }
