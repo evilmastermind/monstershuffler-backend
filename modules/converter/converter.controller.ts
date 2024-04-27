@@ -686,6 +686,8 @@ async function convertAction(object, id) {
         attack.attributes = convertWeapon(attack.attributes);
       }
     }
+    action.attacks = action.variants[0].attacks;
+    delete action.variants[0].attacks;
   }
   // values diceObject => levelMin/levelMax to availableAt/availableUntil/availableUnit
   if (Object.hasOwn(action.variants[0], 'values')) {
@@ -711,6 +713,8 @@ async function convertAction(object, id) {
         delete value.incrProgression.increment;
       }
     });
+    action.values = action.variants[0].values;
+    delete action.variants[0].values;
   }
   return action;
 }

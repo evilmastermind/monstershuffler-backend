@@ -1639,7 +1639,7 @@ module-alias@^2.2.2:
 
 "monstershuffler-shared@git+https://github.com/evilmastermind/monstershuffler-shared#main":
   version "0.0.1"
-  resolved "git+https://github.com/evilmastermind/monstershuffler-shared#2ceaacf343ff7fa0857083fc50a146ea217cb0b8"
+  resolved "git+https://github.com/evilmastermind/monstershuffler-shared#20494b4b52e026011b60e60725e06d1ed6849bbe"
   dependencies:
     zod "^3.22.4"
 
