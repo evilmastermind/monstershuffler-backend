@@ -9,4 +9,5 @@ export type Settings = z.infer<typeof settings>;
 export const { schemas: pagesettingSchemas, $ref } = buildJsonSchemas({
   getPagesettingResponseSchema: pageSettings,
   setPagesettingResponseSchema: settings,
-});
+},
+{ $id: 'pagesettingSchemas' });

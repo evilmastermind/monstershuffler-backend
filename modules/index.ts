@@ -1,4 +1,6 @@
+//=======================================================
 // schemas
+//=======================================================
 // import { actionSchemas } from '@/modules/action/action.schema';
 // import { armorSchemas } from '@/modules/armor/armor.schema';
 // import { characterhookSchemas } from '@/modules/background/characterhook.schema';
@@ -12,6 +14,7 @@ import { classSchemas } from '@/modules/class/class.schema';
 // import { nameSchemas } from '@/modules/name/name.schema';
 import { npcSchemas } from '@/modules/npc/npc.schema';
 import { pagesettingSchemas } from '@/modules/pagesetting/pagesetting.schema';
+import { polygenSchemas } from '@/modules/polygen/polygen.schema';
 // import { quirkSchemas } from '@/modules/quirk/quirk.schema';
 import { raceSchemas } from '@/modules/race/race.schema';
 // import { racevariantSchemas } from '@/modules/racevariant/racevariant.schema';
@@ -24,7 +27,9 @@ import { traitSchemas } from '@/modules/trait/trait.schema';
 import { userSchemas } from '@/modules/user/user.schema';
 // import { weaponSchemas } from '@/modules/weapon/weapon.schema';
 
+//=======================================================
 // routes
+//=======================================================
 // import actionRoutes from '@/modules/action/action.route';
 // import armorRoutes from '@/modules/armor/armor.route';
 import backgroundRoutes from '@/modules/background/background.route';
@@ -38,6 +43,7 @@ import classRoutes from '@/modules/class/class.route';
 // import nameRoutes from '@/modules/name/name.route';
 import npcRoutes from '@/modules/npc/npc.route';
 import pagesettingRoutes from './pagesetting/pagesetting.route';
+import polygenRoutes from '@/modules/polygen/polygen.route';
 // import quirkRoutes from '@/modules/quirk/quirk.route';
 import raceRoutes from '@/modules/race/race.route';
 // import racevariantRoutes from '@/modules/racevariant/racevariant.route';
@@ -66,6 +72,7 @@ export const schemas = [
   // ...nameSchemas,
   ...npcSchemas,
   ...pagesettingSchemas,
+  ...polygenSchemas,
   //...characterhookSchemas,
   // ...quirkSchemas,
   ...raceSchemas,
@@ -93,6 +100,7 @@ export const routes = [
   //  {routes: nameRoutes,  prefix: 'api/names' },
   { routes: npcRoutes, prefix: 'api/npcs' },
   { routes: pagesettingRoutes, prefix: 'api/page-settings' },
+  { routes: polygenRoutes, prefix: 'api/polygen' },
   // { routes: backgroundRoutes,  prefix: "api/backgrounds" },
   //  {routes: quirkRoutes,  prefix: 'api/quirks' },
   { routes: raceRoutes, prefix: 'api/races' },

@@ -4265,7 +4265,7 @@ components:
         - postFourRandomNpcsResponse
         - getGeneratorDataResponse
       additionalProperties: false
-    Schema:
+    pagesettingSchemas:
       type: object
       properties:
         getPagesettingResponseSchema:
@@ -4286,6 +4286,20 @@ components:
       required:
         - getPagesettingResponseSchema
         - setPagesettingResponseSchema
+      additionalProperties: false
+    polygenSchemas:
+      type: object
+      properties:
+        parsePolygenResponseSchema:
+          type: object
+          properties:
+            result:
+              type: string
+          required:
+            - result
+          additionalProperties: false
+      required:
+        - parsePolygenResponseSchema
       additionalProperties: false
     raceSchemas:
       type: object
@@ -5825,7 +5839,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Schema/properties/getPagesettingResponseSchema"
+                $ref: "#/components/schemas/pagesettingSchemas/properties/getPagesettingRespons\
+                  eSchema"
         "404":
           description: Default Response
           content:
@@ -5841,7 +5856,8 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Schema/properties/setPagesettingResponseSchema"
+              $ref: "#/components/schemas/pagesettingSchemas/properties/setPagesettingRespons\
+                eSchema"
       parameters:
         - schema:
             type: string
@@ -5850,6 +5866,26 @@ paths:
           required: true
       responses:
         "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/polygen/parse:
+    post:
+      summary: Parses a Polygen grammar.
+      tags:
+        - polygen
+      description: Parses a Polygen grammar. https://polygen.org/it/manuale
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/polygenSchemas/properties/parsePolygenResponseSchem\
+                  a"
+        "404":
           description: Default Response
           content:
             application/json:
