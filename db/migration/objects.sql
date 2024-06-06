@@ -2190,6 +2190,7 @@ UPDATE traits SET object = '{"compatibleAges": ["child","adolescent","young adul
 UPDATE traits SET object = '{"compatibleAges": ["child","adolescent","young adult","adult","middle-aged","elderly","venerable"]}' WHERE name ='Zealous';
 update traits set description = "not concealing one''s thoughts or feelings; frank and communicative." where name = 'open';
 update traits set description = "engaging in or characterized by habitual violence and cruelty." where name = 'abusive';
+update traits set description = "not able to be imitated; so uniquely extraordinary as to not be copied or equaled." where name = 'inimitable';
 
 
 CREATE TABLE `pagesettings` (

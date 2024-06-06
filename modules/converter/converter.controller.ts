@@ -1,4 +1,12 @@
 // @ts-nocheck
+
+/**
+ * MADNESS AHEAD!!
+ * This file is a mess, but it's a one-time script to convert the database from the old format to the new one.
+ * We'll try to handle this with migrations in the future.
+ */
+
+
 import {
   countObjects,
   getFirstObjectId,
