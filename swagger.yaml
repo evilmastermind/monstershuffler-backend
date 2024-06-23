@@ -521,9 +521,15 @@ components:
                                 enchantments:
                                   type: array
                                   items:
-                                    $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
-                                      ies/object/properties/actions/items/anyOf\
-                                      /0/properties/values/items/anyOf/0"
+                                    anyOf:
+                                      - $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                                          ies/object/properties/actions/items/a\
+                                          nyOf/0/properties/values/items/anyOf/\
+                                          0"
+                                      - $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                                          ies/object/properties/actions/items/a\
+                                          nyOf/0/properties/values/items/anyOf/\
+                                          1"
                               required:
                                 - name
                               additionalProperties: false
@@ -746,6 +752,74 @@ components:
                   type: string
                 enableGenerator:
                   type: boolean
+                sheet:
+                  type: object
+                  properties:
+                    images:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                          artist:
+                            type: string
+                          artistUrl:
+                            type: string
+                          canvasHeightPx:
+                            type: number
+                          canvasWidthPx:
+                            type: number
+                          sheetWidthPx:
+                            type: number
+                          imageHeightPx:
+                            type: number
+                          imagePositionTopPx:
+                            type: number
+                          imagePositionLeftPx:
+                            type: number
+                          mask:
+                            type: string
+                          token:
+                            type: object
+                            properties:
+                              topPx:
+                                type: number
+                              leftPx:
+                                type: number
+                              widthPx:
+                                type: number
+                            required:
+                              - topPx
+                              - leftPx
+                              - widthPx
+                            additionalProperties: false
+                        required:
+                          - url
+                        additionalProperties: false
+                    layout:
+                      type: string
+                    showRoleplayStats:
+                      type: boolean
+                    decoration:
+                      type: string
+                    statBlockOffsetPx:
+                      type: number
+                  required:
+                    - images
+                  additionalProperties: false
+                searchTags:
+                  type: array
+                  items:
+                    type: string
+                environments:
+                  type: array
+                  items:
+                    type: string
+                backstory:
+                  type: object
+                  properties: {}
+                  additionalProperties: true
               required:
                 - name
                 - femaleName
@@ -1306,9 +1380,13 @@ components:
                                 enchantments:
                                   type: array
                                   items:
-                                    $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
-                                      properties/actions/items/anyOf/0/properti\
-                                      es/values/items/anyOf/0"
+                                    anyOf:
+                                      - $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                                          properties/actions/items/anyOf/0/prop\
+                                          erties/values/items/anyOf/0"
+                                      - $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                                          properties/actions/items/anyOf/0/prop\
+                                          erties/values/items/anyOf/1"
                               required:
                                 - name
                               additionalProperties: false
@@ -1543,13 +1621,17 @@ components:
                             type: string
                           artistUrl:
                             type: string
-                          elementHeightPx:
+                          canvasHeightPx:
                             type: number
-                          backgroundHeightPerc:
+                          canvasWidthPx:
                             type: number
-                          backgroundPositionTopPx:
+                          sheetWidthPx:
                             type: number
-                          backgroundPositionLeftPx:
+                          imageHeightPx:
+                            type: number
+                          imagePositionTopPx:
+                            type: number
+                          imagePositionLeftPx:
                             type: number
                           mask:
                             type: string
@@ -1572,6 +1654,8 @@ components:
                         additionalProperties: false
                     layout:
                       type: string
+                    showRoleplayStats:
+                      type: boolean
                     decoration:
                       type: string
                     statBlockOffsetPx:
@@ -2312,11 +2396,17 @@ components:
                                         enchantments:
                                           type: array
                                           items:
-                                            $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                              ies/npc/properties/character/prop\
-                                              erties/race/properties/actions/it\
-                                              ems/anyOf/0/properties/values/ite\
-                                              ms/anyOf/0"
+                                            anyOf:
+                                              - $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                                                  ies/npc/properties/character/\
+                                                  properties/race/properties/ac\
+                                                  tions/items/anyOf/0/propertie\
+                                                  s/values/items/anyOf/0"
+                                              - $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                                                  ies/npc/properties/character/\
+                                                  properties/race/properties/ac\
+                                                  tions/items/anyOf/0/propertie\
+                                                  s/values/items/anyOf/1"
                                       required:
                                         - name
                                       additionalProperties: false
@@ -2605,13 +2695,17 @@ components:
                                     type: string
                                   artistUrl:
                                     type: string
-                                  elementHeightPx:
+                                  canvasHeightPx:
                                     type: number
-                                  backgroundHeightPerc:
+                                  canvasWidthPx:
                                     type: number
-                                  backgroundPositionTopPx:
+                                  sheetWidthPx:
                                     type: number
-                                  backgroundPositionLeftPx:
+                                  imageHeightPx:
+                                    type: number
+                                  imagePositionTopPx:
+                                    type: number
+                                  imagePositionLeftPx:
                                     type: number
                                   mask:
                                     type: string
@@ -2634,6 +2728,8 @@ components:
                                 additionalProperties: false
                             layout:
                               type: string
+                            showRoleplayStats:
+                              type: boolean
                             decoration:
                               type: string
                             statBlockOffsetPx:
@@ -3080,6 +3176,22 @@ components:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/npc/properties/character/properties/race/proper\
                             ties/enableGenerator"
+                        sheet:
+                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                            ies/npc/properties/character/properties/race/proper\
+                            ties/sheet"
+                        searchTags:
+                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                            ies/npc/properties/character/properties/race/proper\
+                            ties/searchTags"
+                        environments:
+                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                            ies/npc/properties/character/properties/race/proper\
+                            ties/environments"
+                        backstory:
+                          $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                            ies/npc/properties/character/properties/race/proper\
+                            ties/backstory"
                       required:
                         - name
                         - femaleName
@@ -4827,9 +4939,13 @@ components:
                                 enchantments:
                                   type: array
                                   items:
-                                    $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
-                                      roperties/actions/items/anyOf/0/propertie\
-                                      s/values/items/anyOf/0"
+                                    anyOf:
+                                      - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                                          roperties/actions/items/anyOf/0/prope\
+                                          rties/values/items/anyOf/0"
+                                      - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                                          roperties/actions/items/anyOf/0/prope\
+                                          rties/values/items/anyOf/1"
                               required:
                                 - name
                               additionalProperties: false
@@ -5063,13 +5179,17 @@ components:
                             type: string
                           artistUrl:
                             type: string
-                          elementHeightPx:
+                          canvasHeightPx:
                             type: number
-                          backgroundHeightPerc:
+                          canvasWidthPx:
                             type: number
-                          backgroundPositionTopPx:
+                          sheetWidthPx:
                             type: number
-                          backgroundPositionLeftPx:
+                          imageHeightPx:
+                            type: number
+                          imagePositionTopPx:
+                            type: number
+                          imagePositionLeftPx:
                             type: number
                           mask:
                             type: string
@@ -5092,6 +5212,8 @@ components:
                         additionalProperties: false
                     layout:
                       type: string
+                    showRoleplayStats:
+                      type: boolean
                     decoration:
                       type: string
                     statBlockOffsetPx:

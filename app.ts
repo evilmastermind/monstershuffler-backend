@@ -13,7 +13,14 @@ import { schemas, routes } from '@/modules';
 import fs from 'fs';
 
 dotenv.config();
-export const server = Fastify({ logger: true });
+export const server = Fastify({
+    logger: true,
+    ajv: {
+      customOptions: {
+        allowUnionTypes: true,
+      }
+    } 
+  });
 // export const server = Fastify();
 
 const secret = process.env.JWT_SECRET;

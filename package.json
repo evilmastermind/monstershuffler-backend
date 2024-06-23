@@ -47,9 +47,8 @@
     "zod": "^3.19.1"
   },
   "devDependencies": {
-    "@fastify/jwt": "^6.5.0",
+    "@fastify/jwt": "^8.0.1",
     "@prisma/client": "^5.4.1",
-    "@types/fastify-jwt": "^0.8.1",
     "@types/node": "^18.11.11",
     "@types/nodemailer": "^6.4.8",
     "@typescript-eslint/eslint-plugin": "^5.46.0",
