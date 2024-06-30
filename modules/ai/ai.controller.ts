@@ -1,6 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { handleError } from '@/utils/errors';
 import { GenerateTextInput } from './ai.schema';
+import {on} from 'events';
+
 import OpenAI from 'openai';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -27,12 +29,24 @@ export async function generateTextHandler(
       stream: true,
     });
 
-    for await (const chunk of stream) {
-      reply.code(200).sse({
-        id: chunk.id,
-        data: chunk.choices[0]?.delta?.content || '',
-      });
-    }
+    reply.sse((async function * source () {
+      for await (const chunk of stream) {
+        console.log('chunk', chunk);
+        yield {
+          id: chunk.id,
+          data: chunk.choices[0]?.delta?.content || '',
+        };
+      }
+    })());
+
+    // for await (const chunk of stream) {
+    //   reply.sse({
+    //     id: chunk.id,
+    //     data: chunk.choices[0]?.delta?.content || '',
+    //   });
+    // }
+    // reply.sseContext.source.end();
+    return;
   }
   catch (error) {
     return handleError(error, reply);
