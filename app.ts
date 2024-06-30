@@ -1,9 +1,12 @@
-import 'module-alias/register';
 import * as dotenv from 'dotenv';
+dotenv.config();
+////
+import 'module-alias/register';
 import Fastify, { FastifyRequest, FastifyReply, FastifyError } from 'fastify';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import { withRefResolver } from 'fastify-zod';
+import {FastifySSEPlugin} from 'fastify-sse-v2';
 import Sensible from '@fastify/sensible';
 import fjwt from '@fastify/jwt';
 import cors from '@fastify/cors';
@@ -12,15 +15,14 @@ import mailerSettings from '@/plugins/mailer';
 import { schemas, routes } from '@/modules';
 import fs from 'fs';
 
-dotenv.config();
 export const server = Fastify({
-    logger: true,
-    ajv: {
-      customOptions: {
-        allowUnionTypes: true,
-      }
-    } 
-  });
+  logger: true,
+  ajv: {
+    customOptions: {
+      allowUnionTypes: true,
+    }
+  } 
+});
 // export const server = Fastify();
 
 const secret = process.env.JWT_SECRET;
@@ -41,7 +43,10 @@ server
   // default responses & other tools
   .register(Sensible)
   // mailer
+  // eslint-disable-next-line
   .register(require('fastify-mailer'), mailerSettings)
+  // SSE
+  .register(FastifySSEPlugin)
   // authentication with jwt
   .decorate(
     'authenticate',

@@ -3,7 +3,7 @@ function random(min: number, max: number) {
 }
 
 
-function randomDecimal(minValue: number, maxValue: number, distribution: 'beginning' | 'middle' | 'end' | undefined, samples = 12): number {
+function randomDecimal(minValue: number, maxValue: number, distribution: 'beginning' | 'middle' | 'end' | undefined = undefined, samples = 12): number {
   let result = 0;
   const range = maxValue - minValue;
 

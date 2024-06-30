@@ -5,6 +5,7 @@ import { handleError } from '@/utils/errors';
 import { getRaceWithVariantsList } from '../race/race.service';
 import { getClassWithVariantsList } from '../class/class.service';
 import { getBackgroundList } from '../background/background.service';
+import crypto from 'crypto';
 
 export async function createRandomNpcHandler(
   request: FastifyRequest<{ Body: PostRandomNpcInput }>,
@@ -12,7 +13,13 @@ export async function createRandomNpcHandler(
 ) {
   try {
     const npc = await createRandomNpc(request, reply);
-    return npc;
+    if (!npc?.npc) {
+      throw new Error('Failed to create npc');
+    }
+    return {
+      id: crypto.randomUUID(),
+      object: npc.npc,
+    };
   } catch (error) {
     return handleError(error, reply);
   }
@@ -27,7 +34,10 @@ export async function createFourRandomNpcHandler(
     for (let i = 0; i < 4; i++) {
       const npc = await createRandomNpc(request, reply);
       if (npc?.npc) {
-        npcs.push(npc.npc);
+        npcs.push({
+          id: crypto.randomUUID(),
+          object: npc.npc
+        });
       } else {
         throw new Error('Failed to create npc');
       }

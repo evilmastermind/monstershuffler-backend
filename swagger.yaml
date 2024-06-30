@@ -5,6 +5,64 @@ info:
   version: 0.0.2
 components:
   schemas:
+    aiSchemas:
+      type: object
+      properties:
+        generateTextSchema:
+          type: object
+          properties:
+            prompt:
+              type: string
+          required:
+            - prompt
+          additionalProperties: false
+        generateTextResponse:
+          type: object
+          properties:
+            id:
+              type: string
+            object:
+              type: string
+            created:
+              type: number
+            model:
+              type: string
+            choices:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      content:
+                        type: string
+                      index:
+                        type: number
+                    required:
+                      - content
+                      - index
+                    additionalProperties: false
+                  index:
+                    type: number
+                  completions:
+                    type: number
+                required:
+                  - message
+                  - index
+                  - completions
+                additionalProperties: false
+          required:
+            - id
+            - object
+            - created
+            - model
+            - choices
+          additionalProperties: false
+      required:
+        - generateTextSchema
+        - generateTextResponse
+      additionalProperties: false
     backgroundSchemas:
       type: object
       properties:
@@ -521,15 +579,20 @@ components:
                                 enchantments:
                                   type: array
                                   items:
-                                    anyOf:
-                                      - $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                      type:
+                                        type: string
+                                      expression:
+                                        type: string
+                                      dice:
+                                        $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
                                           ies/object/properties/actions/items/a\
                                           nyOf/0/properties/values/items/anyOf/\
-                                          0"
-                                      - $ref: "#/components/schemas/backgroundSchemas/properties/postBackground/propert\
-                                          ies/object/properties/actions/items/a\
-                                          nyOf/0/properties/values/items/anyOf/\
-                                          1"
+                                          0/properties/dice"
+                                    additionalProperties: false
                               required:
                                 - name
                               additionalProperties: false
@@ -1380,13 +1443,20 @@ components:
                                 enchantments:
                                   type: array
                                   items:
-                                    anyOf:
-                                      - $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                      type:
+                                        type: string
+                                      expression:
+                                        type: string
+                                      dice:
+                                        $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
                                           properties/actions/items/anyOf/0/prop\
-                                          erties/values/items/anyOf/0"
-                                      - $ref: "#/components/schemas/classSchemas/properties/putClass/properties/object/\
-                                          properties/actions/items/anyOf/0/prop\
-                                          erties/values/items/anyOf/1"
+                                          erties/values/items/anyOf/0/propertie\
+                                          s/dice"
+                                    additionalProperties: false
                               required:
                                 - name
                               additionalProperties: false
@@ -1848,7 +1918,9 @@ components:
         postRandomNpcResponse:
           type: object
           properties:
-            npc:
+            id:
+              type: string
+            object:
               type: object
               properties:
                 id:
@@ -1892,7 +1964,7 @@ components:
                           type: number
                         pronouns:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/pronouns"
+                            ies/object/properties/character/properties/pronouns"
                         size:
                           type: number
                         type:
@@ -2046,8 +2118,8 @@ components:
                                       type: array
                                       items:
                                         $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                          ies/npc/properties/character/properti\
-                                          es/race/properties/subtypes/items"
+                                          ies/object/properties/character/prope\
+                                          rties/race/properties/subtypes/items"
                                   required:
                                     - type
                                     - resultType
@@ -2080,18 +2152,18 @@ components:
                           type: array
                           items:
                             $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                              ies/npc/properties/character/properties/race/prop\
-                              erties/subtypes/items"
+                              ies/object/properties/character/properties/race/p\
+                              roperties/subtypes/items"
                         skills:
                           anyOf:
                             - type: array
                               items:
                                 $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                  ies/npc/properties/character/properties/race/\
-                                  properties/subtypes/items"
+                                  ies/object/properties/character/properties/ra\
+                                  ce/properties/subtypes/items"
                             - $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/armor/anyOf/1"
+                                ies/object/properties/character/properties/race\
+                                /properties/armor/anyOf/1"
                             - type: object
                               properties:
                                 choice:
@@ -2107,8 +2179,8 @@ components:
                                       type: array
                                       items:
                                         $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                          ies/npc/properties/character/properti\
-                                          es/race/properties/subtypes/items"
+                                          ies/object/properties/character/prope\
+                                          rties/race/properties/subtypes/items"
                                     isRepeatable:
                                       type: boolean
                                   required:
@@ -2123,26 +2195,26 @@ components:
                           type: array
                           items:
                             $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                              ies/npc/properties/character/properties/race/prop\
-                              erties/subtypes/items"
+                              ies/object/properties/character/properties/race/p\
+                              roperties/subtypes/items"
                         immunities:
                           type: array
                           items:
                             $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                              ies/npc/properties/character/properties/race/prop\
-                              erties/subtypes/items"
+                              ies/object/properties/character/properties/race/p\
+                              roperties/subtypes/items"
                         vulnerabilities:
                           type: array
                           items:
                             $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                              ies/npc/properties/character/properties/race/prop\
-                              erties/subtypes/items"
+                              ies/object/properties/character/properties/race/p\
+                              roperties/subtypes/items"
                         conditionImmunities:
                           type: array
                           items:
                             $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                              ies/npc/properties/character/properties/race/prop\
-                              erties/subtypes/items"
+                              ies/object/properties/character/properties/race/p\
+                              roperties/subtypes/items"
                         senses:
                           type: object
                           properties:
@@ -2166,14 +2238,14 @@ components:
                             - type: array
                               items:
                                 $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                  ies/npc/properties/character/properties/race/\
-                                  properties/subtypes/items"
+                                  ies/object/properties/character/properties/ra\
+                                  ce/properties/subtypes/items"
                             - $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/armor/anyOf/1"
+                                ies/object/properties/character/properties/race\
+                                /properties/armor/anyOf/1"
                             - $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/skills/anyOf/2"
+                                ies/object/properties/character/properties/race\
+                                /properties/skills/anyOf/2"
                         actions:
                           type: array
                           items:
@@ -2240,9 +2312,9 @@ components:
                                       additionalProperties: false
                                   actionType:
                                     $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                      ies/npc/properties/character/properties/r\
-                                      ace/properties/actions/items/anyOf/0/prop\
-                                      erties/variants/items/properties/type"
+                                      ies/object/properties/character/propertie\
+                                      s/race/properties/actions/items/anyOf/0/p\
+                                      roperties/variants/items/properties/type"
                                   availableUnit:
                                     type: string
                                     enum:
@@ -2390,23 +2462,28 @@ components:
                                                     type: string
                                               additionalProperties: false
                                             - $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                                ies/npc/properties/character/pr\
-                                                operties/race/properties/armor/\
-                                                anyOf/1"
+                                                ies/object/properties/character\
+                                                /properties/race/properties/arm\
+                                                or/anyOf/1"
                                         enchantments:
                                           type: array
                                           items:
-                                            anyOf:
-                                              - $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                                  ies/npc/properties/character/\
-                                                  properties/race/properties/ac\
-                                                  tions/items/anyOf/0/propertie\
-                                                  s/values/items/anyOf/0"
-                                              - $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                                  ies/npc/properties/character/\
-                                                  properties/race/properties/ac\
-                                                  tions/items/anyOf/0/propertie\
-                                                  s/values/items/anyOf/1"
+                                            type: object
+                                            properties:
+                                              name:
+                                                type: string
+                                              type:
+                                                type: string
+                                              expression:
+                                                type: string
+                                              dice:
+                                                $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                                                  ies/object/properties/charact\
+                                                  er/properties/race/properties\
+                                                  /actions/items/anyOf/0/proper\
+                                                  ties/values/items/anyOf/0/pro\
+                                                  perties/dice"
+                                            additionalProperties: false
                                       required:
                                         - name
                                       additionalProperties: false
@@ -2415,8 +2492,8 @@ components:
                                   - variants
                                 additionalProperties: false
                               - $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                  ies/npc/properties/character/properties/race/\
-                                  properties/armor/anyOf/1"
+                                  ies/object/properties/character/properties/ra\
+                                  ce/properties/armor/anyOf/1"
                         bonuses:
                           type: object
                           properties:
@@ -2432,204 +2509,204 @@ components:
                               additionalProperties: false
                             ACBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             sizeBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             walkBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             burrowBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             climbBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             flyBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             hoverBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             swimBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             STRBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             DEXBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             CONBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             INTBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             WISBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             CHABonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             STRSaveBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             DEXSaveBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             CONSaveBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             INTSaveBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             WISSaveBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             CHASaveBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             AthleticsBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             AcrobaticsBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             SleightOfHandBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             StealthBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             ArcanaBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             HistoryBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             InvestigationBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             NatureBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             ReligionBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             AnimalHandlingBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             InsightBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             MedicineBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             PerceptionBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             SurvivalBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             DeceptionBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             IntimidationBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             PerformanceBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             PersuasionBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             blindsightBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             darkvisionBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             tremorsenseBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             truesightBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             rangedAttackBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             rangedDamageBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             meleeAttackBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             meleeDamageBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             spellAttackBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             spellDamageBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             weaponAttackBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                             weaponDamageBonus:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/bonuses/properties/HPBonus"
+                                ies/object/properties/character/properties/race\
+                                /properties/bonuses/properties/HPBonus"
                           additionalProperties: false
                         spells:
                           type: object
@@ -2638,9 +2715,9 @@ components:
                               type: boolean
                             ability:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/race/pr\
-                                operties/actions/items/anyOf/0/properties/varia\
-                                nts/items/properties/ability"
+                                ies/object/properties/character/properties/race\
+                                /properties/actions/items/anyOf/0/properties/va\
+                                riants/items/properties/ability"
                             availableUnit:
                               type: string
                               enum:
@@ -2666,14 +2743,15 @@ components:
                                       - type: array
                                         items:
                                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                            ies/npc/properties/character/proper\
-                                            ties/race/properties/subtypes/items"
+                                            ies/object/properties/character/pro\
+                                            perties/race/properties/subtypes/it\
+                                            ems"
                                       - $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                          ies/npc/properties/character/properti\
-                                          es/race/properties/armor/anyOf/1"
+                                          ies/object/properties/character/prope\
+                                          rties/race/properties/armor/anyOf/1"
                                       - $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                          ies/npc/properties/character/properti\
-                                          es/race/properties/skills/anyOf/2"
+                                          ies/object/properties/character/prope\
+                                          rties/race/properties/skills/anyOf/2"
                                 required:
                                   - tag
                                   - spells
@@ -2761,107 +2839,107 @@ components:
                           type: string
                         pronouns:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/pronouns"
+                            ies/object/properties/character/properties/pronouns"
                         alignmentModifiers:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/alignmentModifiers"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/alignmentModifiers"
                         armor:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/armor"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/armor"
                         subtypes:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/subtypes"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/subtypes"
                         abilityScoresLimit:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/abilityScoresLimit"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/abilityScoresLimit"
                         speeds:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/speeds"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/speeds"
                         savingThrows:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/savingThrows"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/savingThrows"
                         skills:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/skills"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/skills"
                         resistances:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/resistances"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/resistances"
                         immunities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/immunities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/immunities"
                         vulnerabilities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/vulnerabilities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/vulnerabilities"
                         conditionImmunities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/conditionImmunities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/conditionImmunities"
                         senses:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/senses"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/senses"
                         isBlind:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/isBlind"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/isBlind"
                         canSpeak:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/canSpeak"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/canSpeak"
                         telepathy:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/telepathy"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/telepathy"
                         languages:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/languages"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/languages"
                         actions:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/actions"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/actions"
                         bonuses:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/bonuses"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/bonuses"
                         spells:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/spells"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/spells"
                         legendaryActionsMax:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/legendaryActionsMax"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/legendaryActionsMax"
                         enableGenerator:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/enableGenerator"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/enableGenerator"
                         sheet:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/sheet"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/sheet"
                         searchTags:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/searchTags"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/searchTags"
                         environments:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/environments"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/environments"
                         backstory:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/backstory"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/backstory"
                       required:
                         - name
                       additionalProperties: false
@@ -2874,96 +2952,96 @@ components:
                           type: string
                         enableGenerator:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/enableGenerator"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/enableGenerator"
                         armor:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/armor"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/armor"
                         subtypes:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/subtypes"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/subtypes"
                         speeds:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/speeds"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/speeds"
                         savingThrows:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/savingThrows"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/savingThrows"
                         skills:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/skills"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/skills"
                         resistances:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/resistances"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/resistances"
                         immunities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/immunities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/immunities"
                         vulnerabilities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/vulnerabilities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/vulnerabilities"
                         conditionImmunities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/conditionImmunities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/conditionImmunities"
                         senses:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/senses"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/senses"
                         isBlind:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/isBlind"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/isBlind"
                         canSpeak:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/canSpeak"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/canSpeak"
                         telepathy:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/telepathy"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/telepathy"
                         languages:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/languages"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/languages"
                         actions:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/actions"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/actions"
                         bonuses:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/bonuses"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/bonuses"
                         spells:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/spells"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/spells"
                         legendaryActionsMax:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/legendaryActionsMax"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/legendaryActionsMax"
                         sheet:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/sheet"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/sheet"
                         searchTags:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/searchTags"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/searchTags"
                         environments:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/environments"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/environments"
                         backstory:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/backstory"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/backstory"
                       required:
                         - name
                       additionalProperties: false
@@ -2976,96 +3054,96 @@ components:
                           type: string
                         armor:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/armor"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/armor"
                         subtypes:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/subtypes"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/subtypes"
                         speeds:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/speeds"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/speeds"
                         savingThrows:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/savingThrows"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/savingThrows"
                         skills:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/skills"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/skills"
                         resistances:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/resistances"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/resistances"
                         immunities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/immunities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/immunities"
                         vulnerabilities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/vulnerabilities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/vulnerabilities"
                         conditionImmunities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/conditionImmunities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/conditionImmunities"
                         senses:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/senses"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/senses"
                         isBlind:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/isBlind"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/isBlind"
                         canSpeak:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/canSpeak"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/canSpeak"
                         telepathy:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/telepathy"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/telepathy"
                         languages:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/languages"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/languages"
                         actions:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/actions"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/actions"
                         bonuses:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/bonuses"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/bonuses"
                         spells:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/spells"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/spells"
                         legendaryActionsMax:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/legendaryActionsMax"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/legendaryActionsMax"
                         enableGenerator:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/enableGenerator"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/enableGenerator"
                         sheet:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/sheet"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/sheet"
                         searchTags:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/searchTags"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/searchTags"
                         environments:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/environments"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/environments"
                         backstory:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/backstory"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/backstory"
                       required:
                         - name
                       additionalProperties: false
@@ -3094,104 +3172,104 @@ components:
                               - venerable
                         armor:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/armor"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/armor"
                         alignmentModifiers:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/alignmentModifiers"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/alignmentModifiers"
                         subtypes:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/subtypes"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/subtypes"
                         speeds:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/speeds"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/speeds"
                         abilityScoresLimit:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/abilityScoresLimit"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/abilityScoresLimit"
                         savingThrows:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/savingThrows"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/savingThrows"
                         skills:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/skills"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/skills"
                         resistances:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/resistances"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/resistances"
                         immunities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/immunities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/immunities"
                         vulnerabilities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/vulnerabilities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/vulnerabilities"
                         conditionImmunities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/conditionImmunities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/conditionImmunities"
                         senses:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/senses"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/senses"
                         isBlind:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/isBlind"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/isBlind"
                         canSpeak:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/canSpeak"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/canSpeak"
                         telepathy:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/telepathy"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/telepathy"
                         languages:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/languages"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/languages"
                         actions:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/actions"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/actions"
                         bonuses:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/bonuses"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/bonuses"
                         spells:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/spells"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/spells"
                         legendaryActionsMax:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/legendaryActionsMax"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/legendaryActionsMax"
                         enableGenerator:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/enableGenerator"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/enableGenerator"
                         sheet:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/sheet"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/sheet"
                         searchTags:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/searchTags"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/searchTags"
                         environments:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/environments"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/environments"
                         backstory:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/backstory"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/backstory"
                       required:
                         - name
                         - femaleName
@@ -3207,43 +3285,43 @@ components:
                           type: string
                         pronouns:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/pronouns"
+                            ies/object/properties/character/properties/pronouns"
                         size:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/size"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/size"
                         type:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/type"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/type"
                         subtypes:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/subtypes"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/subtypes"
                         isSwarm:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/isSwarm"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/isSwarm"
                         swarmSize:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/swarmSize"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/swarmSize"
                         alignmentModifiers:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/alignmentModifiers"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/alignmentModifiers"
                         armor:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/armor"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/armor"
                         HD:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/HD"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/HD"
                         speeds:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/speeds"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/speeds"
                         abilityScores:
                           type: object
                           properties:
@@ -3259,105 +3337,105 @@ components:
                               additionalProperties: false
                             DEX:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/templat\
-                                e/properties/abilityScores/properties/STR"
+                                ies/object/properties/character/properties/temp\
+                                late/properties/abilityScores/properties/STR"
                             CON:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/templat\
-                                e/properties/abilityScores/properties/STR"
+                                ies/object/properties/character/properties/temp\
+                                late/properties/abilityScores/properties/STR"
                             INT:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/templat\
-                                e/properties/abilityScores/properties/STR"
+                                ies/object/properties/character/properties/temp\
+                                late/properties/abilityScores/properties/STR"
                             WIS:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/templat\
-                                e/properties/abilityScores/properties/STR"
+                                ies/object/properties/character/properties/temp\
+                                late/properties/abilityScores/properties/STR"
                             CHA:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/templat\
-                                e/properties/abilityScores/properties/STR"
+                                ies/object/properties/character/properties/temp\
+                                late/properties/abilityScores/properties/STR"
                           additionalProperties: false
                         abilityScoresLimit:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/abilityScoresLimit"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/abilityScoresLimit"
                         savingThrows:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/savingThrows"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/savingThrows"
                         skills:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/skills"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/skills"
                         resistances:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/resistances"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/resistances"
                         immunities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/immunities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/immunities"
                         vulnerabilities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/vulnerabilities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/vulnerabilities"
                         conditionImmunities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/conditionImmunities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/conditionImmunities"
                         senses:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/senses"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/senses"
                         isBlind:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/isBlind"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/isBlind"
                         canSpeak:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/canSpeak"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/canSpeak"
                         telepathy:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/telepathy"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/telepathy"
                         languages:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/languages"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/languages"
                         actions:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/actions"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/actions"
                         bonuses:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/bonuses"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/bonuses"
                         spells:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/spells"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/spells"
                         legendaryActionsMax:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/legendaryActionsMax"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/legendaryActionsMax"
                         sheet:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/sheet"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/sheet"
                         searchTags:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/searchTags"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/searchTags"
                         environments:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/environments"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/environments"
                         backstory:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/backstory"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/backstory"
                       required:
                         - name
                       additionalProperties: false
@@ -3368,119 +3446,119 @@ components:
                           type: string
                         pronouns:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/pronouns"
+                            ies/object/properties/character/properties/pronouns"
                         size:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/size"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/size"
                         isSwarm:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/isSwarm"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/isSwarm"
                         swarmSize:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/swarmSize"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/swarmSize"
                         type:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/type"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/type"
                         subtypes:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/subtypes"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/subtypes"
                         armor:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/armor"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/armor"
                         HD:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/HD"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/HD"
                         abilityScores:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/template/pr\
-                            operties/abilityScores"
+                            ies/object/properties/character/properties/template\
+                            /properties/abilityScores"
                         abilityScoresLimit:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/abilityScoresLimit"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/abilityScoresLimit"
                         speeds:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/speeds"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/speeds"
                         skills:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/skills"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/skills"
                         resistances:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/resistances"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/resistances"
                         immunities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/immunities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/immunities"
                         vulnerabilities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/vulnerabilities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/vulnerabilities"
                         conditionImmunities:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/conditionImmunities"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/conditionImmunities"
                         senses:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/senses"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/senses"
                         isBlind:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/isBlind"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/isBlind"
                         canSpeak:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/canSpeak"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/canSpeak"
                         telepathy:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/telepathy"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/telepathy"
                         languages:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/languages"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/languages"
                         actions:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/actions"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/actions"
                         bonuses:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/bonuses"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/bonuses"
                         spells:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/spells"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/spells"
                         legendaryActionsMax:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/legendaryActionsMax"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/legendaryActionsMax"
                         sheet:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/sheet"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/sheet"
                         searchTags:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/searchTags"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/searchTags"
                         environments:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/environments"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/environments"
                         backstory:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/character/properties/race/proper\
-                            ties/backstory"
+                            ies/object/properties/character/properties/race/pro\
+                            perties/backstory"
                         characterHook:
                           type: string
                         trait:
@@ -3494,8 +3572,8 @@ components:
                               type: number
                             string:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/character/properties/backgro\
-                                und/properties/compatibleAges/items"
+                                ies/object/properties/character/properties/back\
+                                ground/properties/compatibleAges/items"
                           required:
                             - number
                             - string
@@ -3529,15 +3607,15 @@ components:
                       type: array
                       items:
                         $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                          ies/npc/properties/character/properties/user"
+                          ies/object/properties/character/properties/user"
                     abilityScores:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/character/properties/template/proper\
-                        ties/abilityScores"
+                        ies/object/properties/character/properties/template/pro\
+                        perties/abilityScores"
                     alignmentModifiers:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/character/properties/race/properties\
-                        /alignmentModifiers"
+                        ies/object/properties/character/properties/race/propert\
+                        ies/alignmentModifiers"
                     alignmentEthical:
                       type: string
                       enum:
@@ -3555,36 +3633,36 @@ components:
                         - Any
                     skills:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/character/properties/race/properties\
-                        /skills"
+                        ies/object/properties/character/properties/race/propert\
+                        ies/skills"
                     characterHook:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/character/properties/user/properties\
-                        /characterHook"
+                        ies/object/properties/character/properties/user/propert\
+                        ies/characterHook"
                     trait:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/character/properties/user/properties\
-                        /trait"
+                        ies/object/properties/character/properties/user/propert\
+                        ies/trait"
                     feeling:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/character/properties/user/properties\
-                        /feeling"
+                        ies/object/properties/character/properties/user/propert\
+                        ies/feeling"
                     age:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/character/properties/user/properties\
-                        /age"
+                        ies/object/properties/character/properties/user/propert\
+                        ies/age"
                     height:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/character/properties/user/properties\
-                        /height"
+                        ies/object/properties/character/properties/user/propert\
+                        ies/height"
                     weight:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/character/properties/user/properties\
-                        /weight"
+                        ies/object/properties/character/properties/user/propert\
+                        ies/weight"
                     voice:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/character/properties/user/properties\
-                        /voice"
+                        ies/object/properties/character/properties/user/propert\
+                        ies/voice"
                     CRCalculation:
                       anyOf:
                         - type: object
@@ -3792,8 +3870,8 @@ components:
                       type: array
                       items:
                         $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                          ies/npc/properties/statistics/properties/alignment/pr\
-                          operties/array/items"
+                          ies/object/properties/statistics/properties/alignment\
+                          /properties/array/items"
                     level:
                       type: number
                     CR:
@@ -3813,38 +3891,44 @@ components:
                       type: string
                     AC:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/alignment"
+                        ies/object/properties/statistics/properties/alignment"
                     proficiency:
                       type: number
                     size:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/CR"
+                        ies/object/properties/statistics/properties/CR"
                     isSwarm:
                       type: boolean
                     sizeSingleEntityOfSwarm:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/CR"
+                        ies/object/properties/statistics/properties/CR"
                     abilities:
                       type: object
                       properties:
                         STR:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/statistics/properties/alignment"
+                            ies/object/properties/statistics/properties/alignme\
+                            nt"
                         DEX:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/statistics/properties/alignment"
+                            ies/object/properties/statistics/properties/alignme\
+                            nt"
                         CON:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/statistics/properties/alignment"
+                            ies/object/properties/statistics/properties/alignme\
+                            nt"
                         INT:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/statistics/properties/alignment"
+                            ies/object/properties/statistics/properties/alignme\
+                            nt"
                         WIS:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/statistics/properties/alignment"
+                            ies/object/properties/statistics/properties/alignme\
+                            nt"
                         CHA:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                            ies/npc/properties/statistics/properties/alignment"
+                            ies/object/properties/statistics/properties/alignme\
+                            nt"
                       required:
                         - STR
                         - DEX
@@ -3855,16 +3939,16 @@ components:
                       additionalProperties: false
                     HP:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/CR"
+                        ies/object/properties/statistics/properties/CR"
                     type:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/CR"
+                        ies/object/properties/statistics/properties/CR"
                     subtypes:
                       type: array
                       items:
                         $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                          ies/npc/properties/statistics/properties/alignment/pr\
-                          operties/array/items"
+                          ies/object/properties/statistics/properties/alignment\
+                          /properties/array/items"
                     meta:
                       type: object
                       properties:
@@ -3874,8 +3958,8 @@ components:
                           type: array
                           items:
                             $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                              ies/npc/properties/statistics/properties/alignmen\
-                              t/properties/array/items"
+                              ies/object/properties/statistics/properties/align\
+                              ment/properties/array/items"
                         id:
                           type: number
                       required:
@@ -3884,31 +3968,31 @@ components:
                       additionalProperties: false
                     speeds:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/meta"
+                        ies/object/properties/statistics/properties/meta"
                     savingThrows:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/meta"
+                        ies/object/properties/statistics/properties/meta"
                     skills:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/meta"
+                        ies/object/properties/statistics/properties/meta"
                     resistances:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/meta"
+                        ies/object/properties/statistics/properties/meta"
                     immunities:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/meta"
+                        ies/object/properties/statistics/properties/meta"
                     vulnerabilities:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/meta"
+                        ies/object/properties/statistics/properties/meta"
                     conditionImmunities:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/meta"
+                        ies/object/properties/statistics/properties/meta"
                     senses:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/meta"
+                        ies/object/properties/statistics/properties/meta"
                     languages:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/meta"
+                        ies/object/properties/statistics/properties/meta"
                     isBlind:
                       type: boolean
                     canSpeak:
@@ -3930,23 +4014,23 @@ components:
                             type: array
                             items:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/statistics/properties/alignm\
-                                ent/properties/array/items"
+                                ies/object/properties/statistics/properties/ali\
+                                gnment/properties/array/items"
                           name:
                             type: string
                           nameArray:
                             type: array
                             items:
                               $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                                ies/npc/properties/statistics/properties/alignm\
-                                ent/properties/array/items"
+                                ies/object/properties/statistics/properties/ali\
+                                gnment/properties/array/items"
                           id:
                             type: number
                           recharge:
                             $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                              ies/npc/properties/character/properties/race/prop\
-                              erties/actions/items/anyOf/0/properties/variants/\
-                              items/properties/recharge"
+                              ies/object/properties/character/properties/race/p\
+                              roperties/actions/items/anyOf/0/properties/varian\
+                              ts/items/properties/recharge"
                           cost:
                             type: number
                           charges:
@@ -3963,38 +4047,43 @@ components:
                       type: array
                       items:
                         $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                          ies/npc/properties/statistics/properties/traits/items"
+                          ies/object/properties/statistics/properties/traits/it\
+                          ems"
                     bonusActions:
                       type: array
                       items:
                         $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                          ies/npc/properties/statistics/properties/traits/items"
+                          ies/object/properties/statistics/properties/traits/it\
+                          ems"
                     reactions:
                       type: array
                       items:
                         $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                          ies/npc/properties/statistics/properties/traits/items"
+                          ies/object/properties/statistics/properties/traits/it\
+                          ems"
                     legendaryActions:
                       type: array
                       items:
                         $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                          ies/npc/properties/statistics/properties/traits/items"
+                          ies/object/properties/statistics/properties/traits/it\
+                          ems"
                     legendaryActionsIntro:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                        ies/npc/properties/statistics/properties/meta"
+                        ies/object/properties/statistics/properties/meta"
                     legendaryActionsMax:
                       type: number
                     spellcasting:
                       type: array
                       items:
                         $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                          ies/npc/properties/statistics/properties/alignment/pr\
-                          operties/array/items"
+                          ies/object/properties/statistics/properties/alignment\
+                          /properties/array/items"
                     spells:
                       type: array
                       items:
                         $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                          ies/npc/properties/statistics/properties/traits/items"
+                          ies/object/properties/statistics/properties/traits/it\
+                          ems"
                   required:
                     - alignment
                     - pronouns
@@ -4293,7 +4382,8 @@ components:
                 - character
               additionalProperties: false
           required:
-            - npc
+            - id
+            - object
           additionalProperties: false
         postFourRandomNpcsResponse:
           type: object
@@ -4301,8 +4391,7 @@ components:
             npcs:
               type: array
               items:
-                $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                  ies/npc"
+                $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse"
           required:
             - npcs
           additionalProperties: false
@@ -4939,13 +5028,20 @@ components:
                                 enchantments:
                                   type: array
                                   items:
-                                    anyOf:
-                                      - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                      type:
+                                        type: string
+                                      expression:
+                                        type: string
+                                      dice:
+                                        $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
                                           roperties/actions/items/anyOf/0/prope\
-                                          rties/values/items/anyOf/0"
-                                      - $ref: "#/components/schemas/raceSchemas/properties/postRace/properties/object/p\
-                                          roperties/actions/items/anyOf/0/prope\
-                                          rties/values/items/anyOf/1"
+                                          rties/values/items/anyOf/0/properties\
+                                          /dice"
+                                    additionalProperties: false
                               required:
                                 - name
                               additionalProperties: false

@@ -241,9 +241,9 @@ function calculateAge(race: Race, includeChildren = false): Age {
   } else if (!ageMax) {
     const childLimit = ageAdult*0.22;
     if (includeChildren) {
-      age.number = Math.ceil(randomDecimal(childLimit, ageAdult*7, 'middle'));
+      age.number = Math.ceil(randomDecimal(childLimit, ageAdult*7));
     } else {
-      age.number = Math.ceil(randomDecimal(ageAdult, ageAdult*7, 'middle'));
+      age.number = Math.ceil(randomDecimal(ageAdult, ageAdult*7, 'beginning'));
     }
     if (age.number < childLimit) {
       age.string = 'child';
@@ -260,9 +260,9 @@ function calculateAge(race: Race, includeChildren = false): Age {
     const middleAgedLimit = ageAdult + yearsAsGrownUp*0.66; // 45-64 for humans
     const elderlyLimit = ageAdult + yearsAsGrownUp*0.94; // 65-85 for humans
     if (includeChildren) {
-      age.number = Math.ceil(randomDecimal(childLimit/3, ageMax*1.15, 'middle'));
+      age.number = Math.ceil(randomDecimal(childLimit/3, ageMax*1.15));
     } else {
-      age.number = Math.ceil(randomDecimal(ageAdult, ageMax*1.15, 'middle'));
+      age.number = Math.ceil(randomDecimal(ageAdult, ageMax*1.15, 'beginning'));
     }
     if (age.number < childLimit) {
       age.string = 'child';

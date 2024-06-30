@@ -38,11 +38,13 @@
     "eslint-plugin-prettier": "^4.2.1",
     "fastify": "^4.10.2",
     "fastify-mailer": "^2.3.1",
+    "fastify-sse-v2": "^4.0.0",
     "fastify-zod": "^1.2.0",
     "module-alias": "^2.2.2",
     "monstershuffler-shared": "git+https://github.com/evilmastermind/monstershuffler-shared#main",
     "node-php-password": "^0.1.2",
     "nodemailer": "^6.9.3",
+    "openai": "^4.52.0",
     "prettier": "^2.8.8",
     "zod": "^3.19.1"
   },
