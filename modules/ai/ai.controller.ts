@@ -25,7 +25,7 @@ export async function generateTextHandler(
 
     const stream = await openai.chat.completions.create({
       messages: [{ role: 'system', content: prompt }],
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-3.5-turbo-0125',
       stream: true,
     });
 
@@ -38,14 +38,7 @@ export async function generateTextHandler(
         };
       }
     })());
-
-    // for await (const chunk of stream) {
-    //   reply.sse({
-    //     id: chunk.id,
-    //     data: chunk.choices[0]?.delta?.content || '',
-    //   });
-    // }
-    // reply.sseContext.source.end();
+    
     return;
   }
   catch (error) {
