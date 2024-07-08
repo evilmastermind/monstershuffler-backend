@@ -25,7 +25,9 @@ export async function generateTextHandler(
 
     const stream = await openai.chat.completions.create({
       messages: [{ role: 'system', content: prompt }],
-      model: 'gpt-3.5-turbo-0125',
+      // https://openai.com/api/pricing/
+      // model: 'gpt-3.5-turbo-0125',
+      model: 'gpt-4o',
       stream: true,
     });
 
