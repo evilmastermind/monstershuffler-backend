@@ -1,7 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { handleError } from '@/utils/errors';
 import { GenerateTextInput } from './ai.schema';
-import {on} from 'events';
+// @ts-expect-error old school import here
+import plugin = require('@/plugins/polygen.js');
 
 import OpenAI from 'openai';
 
@@ -21,7 +22,15 @@ export async function generateTextHandler(
 ) {
   try {
     const body = request.body;
-    const { prompt } = body;
+    let { prompt } = body;
+
+    // check if the prompt is a Polygen grammar (starts with "S ::=")
+    if (prompt.startsWith('S ::= ')) {
+      prompt = await plugin.Polygen.generate(prompt)();
+      if (prompt.startsWith('error:')) {
+        return reply.code(400).send(prompt);
+      }
+    }
 
     const stream = await openai.chat.completions.create({
       messages: [{ role: 'system', content: prompt }],

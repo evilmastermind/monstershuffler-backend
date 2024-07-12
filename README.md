@@ -54,6 +54,9 @@ SMTP_PORT=25
 AUTH_USER="user"
 AUTH_PASSWORD="super secret password"
 
+#OPENAI
+OPENAI_API_KEY="sk-s3Cr3tK3y"
+
 ```
 
 You can now run the project using npm or yarn:
