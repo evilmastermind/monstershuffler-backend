@@ -16,21 +16,35 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
  * Client side EventSource: https://www.npmjs.com/package/@microsoft/fetch-event-source
  */
 
+async function parsePolygenGrammar(grammar: string) {
+  if (grammar.startsWith('S ::=')) {
+    let parsedGrammar = grammar.trim();
+    // replace next line with a space
+    parsedGrammar = grammar.replace(/\n/g, ' ');
+    console.log('Calling Polygen plugin...', parsedGrammar);
+    return await plugin.Polygen.generate(parsedGrammar)();
+  }
+  return grammar;
+}
+
 export async function generateTextHandler(
   request: FastifyRequest<{ Body: GenerateTextInput }>,
   reply: FastifyReply
 ) {
   try {
     const body = request.body;
-    let { prompt } = body;
+    let prompt = body?.prompt?.trim();
 
     // check if the prompt is a Polygen grammar (starts with "S ::=")
-    if (prompt.startsWith('S ::= ')) {
-      prompt = await plugin.Polygen.generate(prompt)();
-      if (prompt.startsWith('error:')) {
-        return reply.code(400).send(prompt);
-      }
+    console.log('Received prompt:', prompt.substring(0,10));
+    prompt = await parsePolygenGrammar(prompt);
+    console.log('plugin response:', prompt.substring(0,10));
+    if (prompt.startsWith('error:')) {
+      console.log('Polygen error:', prompt);
+      return reply.code(400).send(prompt);
     }
+
+    console.log('Parsed prompt:', prompt.substring(0,10));
 
     const stream = await openai.chat.completions.create({
       messages: [{ role: 'system', content: prompt }],
@@ -42,7 +56,6 @@ export async function generateTextHandler(
 
     reply.sse((async function * source () {
       for await (const chunk of stream) {
-        console.log('chunk', chunk);
         yield {
           id: chunk.id,
           data: chunk.choices[0]?.delta?.content || '',
@@ -53,6 +66,7 @@ export async function generateTextHandler(
     return;
   }
   catch (error) {
+    console.log('Error:', error);
     return handleError(error, reply);
   }
 }
