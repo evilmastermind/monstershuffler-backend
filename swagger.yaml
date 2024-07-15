@@ -4084,6 +4084,18 @@ components:
                         $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                           ies/object/properties/statistics/properties/traits/it\
                           ems"
+                    race:
+                      type: string
+                    class:
+                      type: string
+                    age:
+                      type: string
+                    personality:
+                      type: string
+                    voice:
+                      type: string
+                    bodyType:
+                      type: string
                   required:
                     - alignment
                     - pronouns

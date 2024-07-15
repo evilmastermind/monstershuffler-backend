@@ -21,7 +21,6 @@ async function parsePolygenGrammar(grammar: string) {
     let parsedGrammar = grammar.trim();
     // replace next line with a space
     parsedGrammar = grammar.replace(/\n/g, ' ');
-    console.log('Calling Polygen plugin...', parsedGrammar);
     return await plugin.Polygen.generate(parsedGrammar)();
   }
   return grammar;
@@ -36,15 +35,12 @@ export async function generateTextHandler(
     let prompt = body?.prompt?.trim();
 
     // check if the prompt is a Polygen grammar (starts with "S ::=")
-    console.log('Received prompt:', prompt.substring(0,10));
     prompt = await parsePolygenGrammar(prompt);
-    console.log('plugin response:', prompt.substring(0,10));
     if (prompt.startsWith('error:')) {
-      console.log('Polygen error:', prompt);
+      console.log('Error:', prompt);
       return reply.code(400).send(prompt);
     }
 
-    console.log('Parsed prompt:', prompt.substring(0,10));
 
     const stream = await openai.chat.completions.create({
       messages: [{ role: 'system', content: prompt }],
