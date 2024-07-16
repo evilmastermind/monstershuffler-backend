@@ -63,6 +63,23 @@ async function npcRoutes(server: FastifyInstance) {
     },
     getGeneratorDataHandler
   );
+  server.post(
+    '/backstory',
+    {
+      preHandler: [server.authenticateOptional, server.MSOnly],
+      schema: {
+        summary: '[MS ONLY] Generates a random backstory for an NPC.',
+        description: 'Generates a random backstory for an NPC. Only accessible through monstershuffler.com',
+        headers: jwtHeaderOptional,
+        tags: ['npcs'],
+        body: $ref('postBackstoryInput'),
+        response: {
+          200: $ref('postBackstoryResponse'),
+        },
+      },
+    },
+    generateBackstoryHandler
+  );
 }
 
 export default npcRoutes;

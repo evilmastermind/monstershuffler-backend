@@ -1617,6 +1617,11 @@ json-stable-stringify-without-jsonify@^1.0.1:
   resolved "https://registry.yarnpkg.com/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz#9db7b59496ad3f3cfef30a75142d2d930ad72651"
   integrity sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==
 
+jspath@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/jspath/-/jspath-0.4.0.tgz#2f5fd1808ff2249a88a3c45e642288a226f85e1d"
+  integrity sha512-2/R8wkot8NCXrppBT/onp+4mcAUAZqtPxsW6aSJU3hrFAVqKqtFYcat2XJZ7inN4RtATUxfv0UQSYOmvJKiIGA==
+
 keyv@^4.5.3:
   version "4.5.4"
   resolved "https://registry.yarnpkg.com/keyv/-/keyv-4.5.4.tgz#a879a99e29452f942439f2a405e3af8b31d4de93"
@@ -1784,8 +1789,9 @@ module-alias@^2.2.2:
 
 "monstershuffler-shared@git+https://github.com/evilmastermind/monstershuffler-shared#main":
   version "0.0.1"
-  resolved "git+https://github.com/evilmastermind/monstershuffler-shared#6d2620c85854380e93fbfa11c54febdb3be98937"
+  resolved "git+https://github.com/evilmastermind/monstershuffler-shared#13095912ec44bc84003154a86eec7656f13a1872"
   dependencies:
+    jspath "^0.4.0"
     zod "^3.22.4"
 
 ms@2.1.2:

@@ -1,3 +1,4 @@
+import { Character } from '@/types';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createRandomNpc } from './npc.controller.generator';
 import { PostRandomNpcInput } from './npc.schema';
@@ -18,6 +19,7 @@ export async function createRandomNpcHandler(
     }
     return {
       id: crypto.randomUUID(),
+      token: createNpcToken(npc.npc),
       object: npc.npc,
     };
   } catch (error) {
@@ -36,6 +38,7 @@ export async function createFourRandomNpcHandler(
       if (npc?.npc) {
         npcs.push({
           id: crypto.randomUUID(),
+          token: createNpcToken(npc.npc),
           object: npc.npc
         });
       } else {
@@ -62,6 +65,22 @@ export async function getGeneratorDataHandler(
       classes: classesWithVariants?.list || [],
       backgrounds: backgrounds || [],
     });
+  } catch (error) {
+    return handleError(error, reply);
+  }
+}
+
+function createNpcToken(npc: Character) {
+  const npcString = JSON.stringify(npc, Object.keys(npc).sort());
+  const secretKey = process.env.JSON_SECRET;
+  if (!secretKey) {
+    throw new Error('Missing JSON_SECRET in .env');
+  }
+  return crypto.createHmac('sha256', secretKey).update(npcString).digest('hex');
+}
+
+export async function generateBackstoryHandler(request: FastifyRequest, reply: FastifyReply) {
+  try {
   } catch (error) {
     return handleError(error, reply);
   }
