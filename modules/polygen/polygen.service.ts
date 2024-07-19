@@ -11,3 +11,8 @@ export async function parsePolygenGrammar(grammar: string) {
   parsedGrammar = grammar.replace(/\n/g, ' ');
   return await plugin.Polygen.generate(parsedGrammar)();
 }
+
+export function sanitizePolygenString(input: string) {
+  const allowedCharacters = /[^A-Za-z0-9\s()\-_?.,!:\\&#+*/%$�[\]{}~@;:|<>=^'""]/g;
+  return input.replace(allowedCharacters, '');
+}

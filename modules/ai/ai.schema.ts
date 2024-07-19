@@ -5,7 +5,7 @@ const generateTextSchema = z.object({
   prompt: z.string()
 });
 
-const generateTextResponse = z.object({
+export const generateTextResponse = z.object({
   id: z.string(),
   object: z.string(),
   created: z.number(),

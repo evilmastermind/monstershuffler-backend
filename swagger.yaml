@@ -4475,11 +4475,68 @@ components:
             - classes
             - backgrounds
           additionalProperties: false
+        postBackstoryInput:
+          type: object
+          properties:
+            token:
+              type: string
+            object:
+              $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
+                ies/object"
+          required:
+            - token
+            - object
+          additionalProperties: false
+        generateTextResponse:
+          type: object
+          properties:
+            id:
+              type: string
+            object:
+              type: string
+            created:
+              type: number
+            model:
+              type: string
+            choices:
+              type: array
+              items:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      content:
+                        type: string
+                      index:
+                        type: number
+                    required:
+                      - content
+                      - index
+                    additionalProperties: false
+                  index:
+                    type: number
+                  completions:
+                    type: number
+                required:
+                  - message
+                  - index
+                  - completions
+                additionalProperties: false
+          required:
+            - id
+            - object
+            - created
+            - model
+            - choices
+          additionalProperties: false
       required:
         - postRandomNpcInput
         - postRandomNpcResponse
         - postFourRandomNpcsResponse
         - getGeneratorDataResponse
+        - postBackstoryInput
+        - generateTextResponse
       additionalProperties: false
     pagesettingSchemas:
       type: object
@@ -6054,6 +6111,31 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/npcSchemas/properties/getGeneratorDataResponse"
+  /api/npcs/backstory:
+    post:
+      summary: "[MS ONLY] Generates a random backstory for an NPC."
+      tags:
+        - npcs
+      description: Generates a random backstory for an NPC. Only accessible through
+        monstershuffler.com
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/npcSchemas/properties/postBackstoryInput"
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: authorization
+          required: false
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/npcSchemas/properties/generateTextResponse"
   /api/page-settings/{page}:
     get:
       summary: Returns the user's settings for a specific page.

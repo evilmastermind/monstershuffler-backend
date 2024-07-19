@@ -3,6 +3,7 @@ import {
   createFourRandomNpcHandler,
   createRandomNpcHandler,
   getGeneratorDataHandler,
+  generateBackstoryHandler,
 } from './npc.controller';
 import { $ref } from './npc.schema';
 // schemas
@@ -74,7 +75,7 @@ async function npcRoutes(server: FastifyInstance) {
         tags: ['npcs'],
         body: $ref('postBackstoryInput'),
         response: {
-          200: $ref('postBackstoryResponse'),
+          200: $ref('generateTextResponse'),
         },
       },
     },
