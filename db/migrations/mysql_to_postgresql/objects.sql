@@ -999,7 +999,7 @@ VALUES
 ('who is a gifted artist struggling to make a name for [them]self', '{"compatibleAges": ["adolescent", "young adult","adult", "middle-aged", "elderly", "venerable"]}'),
 ('surviving in a harsh, post-apocalyptic wasteland', '{"compatibleAges": ["child", "adolescent", "young adult","adult", "middle-aged", "elderly", "venerable"]}'),
 ('working [their] way to the top through cunning and charisma', '{"compatibleAges": ["adolescent", "young adult","adult", "middle-aged", "elderly", "venerable"]}'),
-('who seems to have it all figured out, but [their] is just putting on a front', '{"compatibleAges": ["child", "adolescent", "young adult","adult", "middle-aged", "elderly", "venerable"]}'),
+('who seems to have it all figured out, but [they] is just putting on a front', '{"compatibleAges": ["child", "adolescent", "young adult","adult", "middle-aged", "elderly", "venerable"]}'),
 ('who was transformed by a magical artifact', '{"compatibleAges": ["child", "adolescent", "young adult","adult", "middle-aged", "elderly", "venerable"]}'),
 ('who''s known for [their] incredible agility', '{"compatibleAges": ["child", "adolescent", "young adult","adult", "middle-aged", "elderly", "venerable"]}'),
 ('who''s in hiding from [their] enemies', '{"compatibleAges": ["child", "adolescent", "young adult","adult", "middle-aged", "elderly", "venerable"]}'),
@@ -2191,12 +2191,3 @@ UPDATE traits SET object = '{"compatibleAges": ["child","adolescent","young adul
 update traits set description = "not concealing one''s thoughts or feelings; frank and communicative." where name = 'open';
 update traits set description = "engaging in or characterized by habitual violence and cruelty." where name = 'abusive';
 update traits set description = "not able to be imitated; so uniquely extraordinary as to not be copied or equaled." where name = 'inimitable';
-
-
-CREATE TABLE `pagesettings` (
-  `userid` int(11) NOT NULL,
-  `page` varchar(255) NOT NULL,
-  `object` json NOT NULL,
-  FOREIGN KEY (`userid`) REFERENCES `users`(`id`) ON DELETE CASCADE,
-  PRIMARY KEY (`userid`, `page`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;

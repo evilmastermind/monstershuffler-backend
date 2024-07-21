@@ -43,8 +43,6 @@ function createNpcToken(npc: Character) {
 
 function validateNpcToken(npc: Character, receivedToken: string) {
   const regeneratedToken = createNpcToken(npc);
-  console.log('Regenerated token:', regeneratedToken);
-  console.log('Received token:', receivedToken);
   return crypto.timingSafeEqual(Buffer.from(regeneratedToken), Buffer.from(receivedToken));
 }
 

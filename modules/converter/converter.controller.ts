@@ -43,13 +43,6 @@ import { url } from 'inspector';
 export async function convertObjectsHandler(request, reply) {
   const { id } = request.user;
   try {
-    await prisma.$queryRaw`ALTER TABLE objects ALTER COLUMN object TYPE JSONB USING object::JSONB;`;
-    await prisma.$queryRaw`ALTER TABLE characterhooks ALTER COLUMN object TYPE JSONB USING object::JSONB;`;
-    await prisma.$queryRaw`ALTER TABLE traits ALTER COLUMN object TYPE JSONB USING object::JSONB;`;
-    await prisma.$queryRaw`ALTER TABLE users ALTER COLUMN settings TYPE JSONB USING settings::JSONB;`;
-    await prisma.$queryRaw`CREATE INDEX idx_gin_characterhooks ON characterhooks USING GIN(object);`;
-    await prisma.$queryRaw`CREATE INDEX idx_gin_traits ON traits USING GIN(object);`;
-
     // OBJECTS
     let cursor = await getFirstObjectId();
     const pageSize = 100;

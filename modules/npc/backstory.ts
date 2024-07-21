@@ -166,7 +166,7 @@ function getArchetypeDescription(archetype: string) {
   return '';
 }
 
-function parseRoleplayStats(character: Character) {
+async function parseRoleplayStats(character: Character) {
   const s = character.statistics!;
   const name = `${s.fullName}`;
   let gender = '';
@@ -193,6 +193,10 @@ function parseRoleplayStats(character: Character) {
   const personality = s.personality || '';
   const voice = s.voice || '';
   const involvment = getInvolvmentInTheAdventure(s.alignment.string);
+  const cause = await parsePolygenGrammar(`S ::=
+    (--enchanted armor |-- enchanted shield | enchanted weapon | magical anomaly | magical item | ^n artifact | a monster from the game "Dungeons and Dragons 5th edition" | a social event | an otherwordly location | a building of impressive features | a social interaction | a secret cult | a secret | a curse | a secret organization | a deity );
+    `);
+  console.log(cause);
   return {
     name,
     gender,
@@ -204,6 +208,7 @@ function parseRoleplayStats(character: Character) {
     personality,
     voice,
     involvment,
+    cause,
   };
 }
 
@@ -220,43 +225,42 @@ export async function getBackstory(character: Character) {
   switch (backstoryType) {
   case 1:
   case 2:
+    backstory = await getExcerptPrompt(character);
+    break;
   default:
-    backstory = getTabloidPrompt(character);
+    backstory = await getTabloidPrompt(character);
   }
   return await parsePolygenGrammar(backstory);
 }
 
-function getTabloidPrompt(character: Character) {
-  const stats = parseRoleplayStats(character);
+async function getTabloidPrompt(character: Character) {
+  const stats = await parseRoleplayStats(character);
   const backstory = `S ::=
 "Write an excerpt from an imaginary fantasy medieval gossip tabloid."
 "- do not write any title"
 "- start with ... a truncated sentence, as if the excerpt was extracted randomly from the article"
-("- also end with a truncated sentence" | "- finish with a cliffhanger")
+"- also end with a truncated sentence..."
 "- only write the excerpt, no other text must be included (no title, no author, no ending line, etc.)"
-"- write in the style of " ("a Fox News special report" | a police detective | "Edgar Allan Poe" | "J. R. R. Tolkien" | "H. P. Lovecraft" | "a fantasy novel" | "Charles Dickens" | "Jane Austen" | Arthur Conan Doyle | "Emilio Salgari" | "Julies Verne" )
+"- write in the style of a Fox News special report"
 "- make the excerpt at least 100 words long"
 "- do not use the word 'shadow'."
 "- Imagine this excerpt to be extracted from an article that talks about a character"
 "- This character is defined, by the community, by the following character hook: ${sanitizePolygenString(stats.characterHook)}"
 "- the tabloid will speculate about why people think that way about the character"
-"- provide one possible cause, which is tied to a " Cause ", and give proof of it in the excerpt"
+"- provide one possible cause, which is tied to a ${stats.cause}, and give proof of it in the excerpt"
 "- do not mention the character hook directly, or the character's traits but hint at them, just be inspired by them"
 "- additional details about the character: "
 "[His] name is ${sanitizePolygenString(stats.name)}, "
 "[He] is a ${stats.age} ${stats.gender} ${stats.race}."
 "[His] defining personality trait is '${stats.personality}', and ${stats.alignment}. ";
-
-Cause ::= (--enchanted armor |-- enchanted shield | enchanted weapon | magical anomaly | magical item | ^n artifact | a monster from the game "Dungeons and Dragons 5th edition" | a social event | an otherwordly location | a building of impressive features | a social interaction | a secret cult | a secret | a curse | a secret organization | a deity );
-
 `;
   return parsePromptTags(backstory, character);
 }
 
 export async function getDnDAdventurePrompt(character: Character, excerpt = '') {
-  const stats = parseRoleplayStats(character);
+  const stats = await parseRoleplayStats(character);
   let backstory = `S ::=
-"Write the description of a Dungeons & Dragons adventure, as if extracted from a module."
+"Write the description of a Dungeons and Dragons adventure, as if extracted from a module."
 "The adventure is set in a fantasy medieval world, and will revolve around an NPC, which will be defined by the following character hook: '${stats.characterHook}'."
 "[His] name is ${sanitizePolygenString(stats.name)}, "
 "[He] is a ${stats.age} ${stats.gender} ${stats.race}."
@@ -264,7 +268,7 @@ export async function getDnDAdventurePrompt(character: Character, excerpt = '') 
 "Do not use the word 'shadow'."
 "Do not mention the NPC's traits directly, just be inspired by them to shape the adventure."
 "The adventure should have a title that goes like this: ## Adventure idea: (the name of the adventure), an introduction, and a list of steps we could call 'secrets'. These steps define a linear path that the player characters playing the adventure will follow to complete the adventure, by discovering pieces of the story until they reach the final climax."
-"Use the NPC's traits and backstory to fabricate a story where" (+ lives are | the balance of nature is | the fate of the kingdom is |- the future of the world is | the wellbeing of the player characters is ) " at stake, and the NPC ${stats.involvment}."
+"Use the NPC's traits and backstory to fabricate a story where" (+ "the life of another NPC is" | "the life of many NPCs is" | "the life of someone close to the NPC is" | the life of innocent people is | the life of a "good-aligned" monster from the dungeons and dragons 5th edition books is | the forces stopping an "evil-aligned" monster from the game dungeons and dragons 5th edition from hurting people are | the life of a local ruler is | the political balance of the local area is | the equilibrium between two political forces is | the equilibrium between two secret factions is |- the borders between the material plane and another plane of existence from the dungeons and dragons books is | the balance of nature is | the fate of the kingdom is |- the future of the world is | the life of the player characters is ) " at stake, and the NPC ${stats.involvment}."
   `;
 
   if (excerpt) {
@@ -275,30 +279,29 @@ export async function getDnDAdventurePrompt(character: Character, excerpt = '') 
   // backstory += '"Include a Dungeons & Dragons monster from the open-source 5th edition material in the adventure, and don \'t worry about its statistics or its Challenge Rating compatibility"';
   backstory += ';';
   backstory = parsePromptTags(backstory, character);
-  console.log(backstory);
   backstory = await parsePolygenGrammar(backstory);
-  console.log(backstory);
   return backstory;
 }
 
-function getExcerptPrompt(character: Character) {
-  const stats = parseRoleplayStats(character);
-  const backstory = `
-  Write an excerpt from an imaginary fantasy novel.
-  - do not write any title
-  - start with ... a truncated sentence, as if the excerpt was extracted randomly from the novel
-  - also end with a truncated sentence...
-  - only write the excerpt, no other text must be included (no title, no author, no ending line, etc.)
-  - make the excerpt at least 200 words long
-  - this excerpt comes from a chapter in which a character of 
-the book has an ordinary boring moment in their life
-  - This moment, and the character, are defined by the following character hook: ${sanitizePolygenString(stats.characterHook)}
-  - do not mention the character hook directly,
-  or the character's traits, but hint at them, just be inspired by them
-  - additional details about the character: 
-  [His] name is ${sanitizePolygenString(stats.name)}, 
-  [He] is a ${stats.age} ${stats.gender} ${stats.race}.
-  [His] defining personality trait is "${stats.personality}", and ${stats.alignment}.
+async function getExcerptPrompt(character: Character) {
+  const stats = await parseRoleplayStats(character);
+  console.log(stats.cause);
+  const backstory = `S ::=
+  "Write an excerpt from an imaginary fantasy novel."
+  "- do not write any title"
+  "- start with ...a truncated sentence, as if the excerpt was extracted randomly from the novel"
+  "- also end with a truncated sentence..."
+  "- only write the excerpt, no other text must be included (no title, no author, no ending line, etc.)"
+  "- make the excerpt around 100 words long"
+  "- this excerpt comes from a chapter in which a character of the book has" ([his] most defining moment in the novel | a significative interaction with another character | an ordinary moment in [his] life | a moment in [his] daily job | a moment where [he] makes an important decision )
+  "- This moment, and the character, are defined by the following character hook: ${sanitizePolygenString(stats.characterHook)}"
+  "- Tie the character to a ${stats.cause} in the excerpt, and make it the reason for the character's actions or feelings or thoughts"
+  "- do not mention the character hook directly,"
+  "or the character's traits, but hint at them, just be inspired by them"
+  "- additional details about the character: "
+  "[His] name is ${sanitizePolygenString(stats.name)}, "
+  "[He] is a ${stats.age} ${stats.gender} ${stats.race}."
+  "[His] defining personality trait is ${stats.personality}, and ${stats.alignment}.";
   `;
   return parsePromptTags(backstory, character);
 }
