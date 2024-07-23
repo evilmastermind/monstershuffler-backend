@@ -137,7 +137,7 @@ model npcgeneratorblacklist {
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model npcs {
   id               String            @id @db.Uuid
-  object           Json              @db.Json
+  object           Json
   userid           Int?
   sessionid        String?           @db.VarChar(250)
   race             String            @db.VarChar(255)
@@ -418,4 +418,10 @@ model voices {
   character  String? @db.VarChar(255)
   production String? @db.VarChar(255)
   filename   String  @db.VarChar(255)
+}
+
+model schema_migrations {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique @db.VarChar(255)
+  applied_at DateTime @default(now()) @db.Timestamp(6)
 }

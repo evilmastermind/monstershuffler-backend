@@ -157,11 +157,13 @@ export async function generateBackstoryHandler(
 
     })());
 
+    const c = character.character;
 
+    if (!c.user) {
+      c.user = {};
+    }
+    c.user.backstory = { string: backstory };
 
-
-    // TODO: merge backstory and adventure module and add it to the npc object
-    // TODO: save the npc in the database
 
     return;
     

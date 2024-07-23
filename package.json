@@ -54,6 +54,7 @@
     "@prisma/client": "^5.4.1",
     "@types/node": "^18.11.11",
     "@types/nodemailer": "^6.4.8",
+    "@types/pg": "^8.11.6",
     "@typescript-eslint/eslint-plugin": "^5.46.0",
     "@typescript-eslint/parser": "^5.46.0",
     "eslint": "^8.29.0",

@@ -9,7 +9,7 @@ CREATE INDEX idx_gin_characterhooks ON characterhooks USING GIN(object);
 CREATE INDEX idx_gin_traits ON traits USING GIN(object);
 
 -- NPCs: recycle backstories generated with the AI in order to save money
-CREATE TABLE npcs (
+CREATE TABLE IF NOT EXISTS npcs (
   id UUID NOT NULL PRIMARY KEY,
   object JSONB NOT NULL,
   userid INT DEFAULT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE npcs (
   CHECK (userid IS NOT NULL OR sessionid IS NOT NULL),
   CHECK (userid IS NULL OR sessionid IS NULL)
 );
-CREATE TABLE npcssenttousers (
+CREATE TABLE IF NOT EXISTS npcssenttousers (
   npcid UUID NOT NULL,
   userid INT DEFAULT NULL,
   sessionid VARCHAR(250) DEFAULT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE npcssenttousers (
   CHECK (userid IS NOT NULL OR sessionid IS NOT NULL),
   CHECK (userid IS NULL OR sessionid IS NULL)
 );
-CREATE TABLE npcsrating (
+CREATE TABLE IF NOT EXISTS npcsrating (
   npcid UUID NOT NULL,
   userid INT DEFAULT NULL,
   sessionid VARCHAR(250) DEFAULT NULL,

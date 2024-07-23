@@ -3,6 +3,7 @@ dotenv.config();
 ////
 import 'module-alias/register';
 import Fastify, { FastifyRequest, FastifyReply, FastifyError } from 'fastify';
+import { runMigrations } from '@/db';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import { withRefResolver } from 'fastify-zod';
@@ -97,7 +98,10 @@ server
   });
 
 async function main() {
+
   try {
+    await runMigrations();
+    
     for (const schema of schemas) {
       server.addSchema(schema);
     }
