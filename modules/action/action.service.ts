@@ -1,9 +1,12 @@
+import { Prisma } from '@prisma/client';
+
 import prisma from '@/utils/prisma';
 import {
   PostActionInput,
   GetActionListInput,
   PutActionInput,
 } from './action.schema';
+import { Action, ChosenAction } from 'monstershuffler-shared';
 
 export async function createAction(userid: number, input: PostActionInput) {
   const { object, game, name, type, subtype, source, tags } = input;
@@ -109,6 +112,11 @@ export async function getAction(userid: number, id: number) {
     },
   });
   if (action.length) {
+    // add id inside object for each action
+    const object = action[0].object as ChosenAction;
+    if (object) {
+      object.id = action[0].id;
+    }
     return action[0];
   }
   return null;

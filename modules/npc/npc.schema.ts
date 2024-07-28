@@ -13,13 +13,32 @@ export type PostRandomNpcInput = z.infer<typeof postRandomNpcInput>;
 export type PostRandomNpcResponse = z.infer<typeof postRandomNpcResponse>;
 export type PostFourRandomNpcsResponse = z.infer<typeof postFourRandomNpcsResponse>;
 
-export const postBackstoryInput = z.object({
-  token: z.string(),
+export const generateBackstoryInput = z.object({
+  id: z.number(),
+});
+
+export const postNpc = z.object({
+  object: characterObject,
+  userid: z.number().optional(),
+  sessionid: z.string().optional(),
+});
+
+export const postNpcToSentAlreadyListInput = z.object({
+  npcid: z.number(),
+  userid: z.number().optional(),
+  sessionid: z.string().optional(),
+});
+
+export const addBackstoryToNpcInput = z.object({
+  id: z.number(),
+  backstory: z.string(),
   object: characterObject,
 });
 
-export type PostBackstoryInput = z.infer<typeof postBackstoryInput>;
-
+export type GenerateBackstoryInput = z.infer<typeof generateBackstoryInput>;
+export type PostNpc = z.infer<typeof postNpc>;
+export type PostNpcToSentAlreadyListInput = z.infer<typeof postNpcToSentAlreadyListInput>;
+export type AddBackstoryToNpcInput = z.infer<typeof addBackstoryToNpcInput>;
 
 export const { schemas: npcSchemas, $ref } = buildJsonSchemas(
   {
@@ -27,7 +46,7 @@ export const { schemas: npcSchemas, $ref } = buildJsonSchemas(
     postRandomNpcResponse,
     postFourRandomNpcsResponse,
     getGeneratorDataResponse,
-    postBackstoryInput,
+    generateBackstoryInput,
     generateTextResponse,
   },
   { $id: 'npcSchemas' }

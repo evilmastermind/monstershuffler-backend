@@ -1,5 +1,6 @@
 import prisma from '@/utils/prisma';
 import { createWeaponInput } from './weapon.schema';
+import { Weapon } from 'monstershuffler-shared';
 
 export async function createWeapon(userid: number, input: createWeaponInput) {
   const { object, game } = input;
@@ -19,6 +20,7 @@ export async function getWeapon(userid: number, id: number) {
   const array = await prisma.objects.findMany({
     select: {
       object: true,
+      id: true,
     },
     where: {
       id,
@@ -33,11 +35,15 @@ export async function getWeapon(userid: number, id: number) {
       ],
     },
   });
-  if (array.length === 0) {
-    return null;
+  if (array.length) {
+    // add id inside object for each action
+    const object = array[0].object as Weapon;
+    if (object) {
+      object.id = array[0].id;
+    }
+    return array[0];
   }
-  const result = array[0];
-  return result;
+  return null;
 }
 
 export async function getWeaponList(userid: number) {

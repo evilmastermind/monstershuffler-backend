@@ -1,50 +1,14 @@
 import { Character } from '@/types';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createRandomNpc } from './npc.controller.generator';
-import type { PostBackstoryInput, PostRandomNpcInput } from './npc.schema';
+import type { GenerateBackstoryInput, PostRandomNpcInput, PostRandomNpcResponse } from './npc.schema';
 import { handleError } from '@/utils/errors';
 import { getRaceWithVariantsList } from '../race/race.service';
 import { getClassWithVariantsList } from '../class/class.service';
 import { getBackgroundList } from '../background/background.service';
 import { getBackstory, getDnDAdventurePrompt } from './backstory';
 import { generateTextStream } from '@/modules/ai/ai.service';
-import crypto from 'crypto';
-
-//////////////////////////////////////////////
-// NPC TOKEN GENERATION AND VALIDATION
-// This is used to verify that the NPC object
-// hasn't been tampered with by the client,
-// so that we can safely generate a backstory
-// for it, save it to the database, and recycle
-// it for other users.
-//////////////////////////////////////////////
-
-function createNpcToken(npc: Character) {
-  const tokenProperties = { 
-    race: npc.character?.race?.name,
-    racevariant: npc.character?.racevariant?.name,
-    class: npc.character?.class?.name,
-    classvariant: npc.character?.classvariant?.name,
-    background: npc.character?.background?.name,
-    pronouns: npc.character?.pronouns,
-    characterHook: npc.character?.characterHook,
-    age: npc.character?.age,
-    personality: npc.character?.trait,
-    voice: npc.character?.voice,
-  };
-
-  const npcString = JSON.stringify(tokenProperties, Object.keys(tokenProperties).sort());
-  const secretKey = process.env.JSON_SECRET;
-  if (!secretKey) {
-    throw new Error('Missing JSON_SECRET in .env');
-  }
-  return crypto.createHmac('sha256', secretKey).update(npcString).digest('hex');
-}
-
-function validateNpcToken(npc: Character, receivedToken: string) {
-  const regeneratedToken = createNpcToken(npc);
-  return crypto.timingSafeEqual(Buffer.from(regeneratedToken), Buffer.from(receivedToken));
-}
+import { getRecycledNpcsForUser, getNpc, postNpc, addNpcToSentAlreadyList, addBackstoryToNpc } from './npc.service';
 
 //////////////////////////////////////////////
 // CONTROLLER FUNCTIONS
@@ -60,8 +24,7 @@ export async function createRandomNpcHandler(
       throw new Error('Failed to create npc');
     }
     return {
-      id: crypto.randomUUID(),
-      token: createNpcToken(npc.npc),
+      id: new Date().getTime(), // TODO: replace this with a real id
       object: npc.npc,
     };
   } catch (error) {
@@ -74,19 +37,53 @@ export async function createFourRandomNpcHandler(
   reply: FastifyReply
 ) {
   try {
-    const npcs = [];
-    for (let i = 0; i < 4; i++) {
+    let npcs: PostRandomNpcResponse[] = [];
+    const id = request.user?.id;
+    const sessionid = request.body?.sessionId;
+
+    const NPCS_TO_GENERATE = 4;
+
+    // get recycled npcs for the user
+    npcs = npcs.concat(await getRecycledNpcsForUser(request, NPCS_TO_GENERATE, id, sessionid));
+    const npcsRemaining = NPCS_TO_GENERATE - npcs.length;
+
+    for (let i = 0; i < npcsRemaining; i++) {
       const npc = await createRandomNpc(request, reply);
       if (npc?.npc) {
+        /*
+        Saving the npc into the database.
+        If the user wants to generate a backstory for the npc,
+        we will retrieve the "clean" npc object from the database,
+        to avoid malicious tampering with the object's data
+        */
+        const result = await postNpc({
+          userid: id,
+          sessionid,
+          object: npc.npc
+        });
+        // user's choices
+        if (!request.body.addVoice) {
+          delete npc.npc.character.voice;
+        }
+        if (!request.body.includeBodyType) {
+          delete npc.npc.character.weight;
+          delete npc.npc.character.height;
+        }
         npcs.push({
-          id: crypto.randomUUID(),
-          token: createNpcToken(npc.npc),
+          id: result.id,
           object: npc.npc
         });
       } else {
         throw new Error('Failed to create npc');
       }
     }
+    npcs.forEach((npc)=> {
+      addNpcToSentAlreadyList({
+        npcid: npc.id,
+        userid: id,
+        sessionid
+      });
+    });
     return { npcs };
   } catch (error) {
     return handleError(error, reply);
@@ -113,21 +110,27 @@ export async function getGeneratorDataHandler(
 }
 
 export async function generateBackstoryHandler(
-  request: FastifyRequest<{ Body: PostBackstoryInput }>, 
+  request: FastifyRequest<{ Body: GenerateBackstoryInput }>, 
   reply: FastifyReply
 ) {
   try {
     const body = request.body;
-    const character = body.object;
-    const token = body.token;
+    const npcid = body.id;
 
-    // verify that the character hasn't been modified by the client
-    if (!validateNpcToken(character, token)) {
-      throw new Error('Invalid token');
+    const { id } = request.user || { id: undefined };
+
+    // retrieving the "clean" npc object from the database
+    const npc = await getNpc(npcid);
+
+    if (!npc) {
+      throw new Error('NPC not found');
+    }
+    if (npc.hasbackstory === true) {
+      throw new Error('It\'s currently possible to generate a backstory only once for an NPC');
     }
 
     // generate the backstory
-    const backstoryPrompt = await getBackstory(character);
+    const backstoryPrompt = await getBackstory(npc.object as Character);
     let backstory = '';
 
 
@@ -143,7 +146,7 @@ export async function generateBackstoryHandler(
         };
       }
 
-      const adventurePrompt = await getDnDAdventurePrompt(character, backstory);
+      const adventurePrompt = await getDnDAdventurePrompt(npc.object as Character, backstory);
       // start the stream for the adventure module
       const adventureStream = await generateTextStream(adventurePrompt, 'gpt-4o');
 
@@ -155,15 +158,13 @@ export async function generateBackstoryHandler(
         };
       }
 
+      addBackstoryToNpc({
+        id: npcid,
+        backstory,
+        object: npc.object as Character
+      });
+
     })());
-
-    const c = character.character;
-
-    if (!c.user) {
-      c.user = {};
-    }
-    c.user.backstory = { string: backstory };
-
 
     return;
     

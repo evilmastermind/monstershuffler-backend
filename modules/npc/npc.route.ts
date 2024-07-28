@@ -73,7 +73,7 @@ async function npcRoutes(server: FastifyInstance) {
         description: 'Generates a random backstory for an NPC. Only accessible through monstershuffler.com',
         headers: jwtHeaderOptional,
         tags: ['npcs'],
-        body: $ref('postBackstoryInput'),
+        body: $ref('generateBackstoryInput'),
         response: {
           200: $ref('generateTextResponse'),
         },

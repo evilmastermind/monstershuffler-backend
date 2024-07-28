@@ -1,4 +1,4 @@
-import { replaceTags, random } from 'monstershuffler-shared';
+import { replaceTags, random, createStats } from 'monstershuffler-shared';
 import { parsePolygenGrammar, sanitizePolygenString } from '@/modules/polygen/polygen.service';
 import type { Character } from 'monstershuffler-shared';
 
@@ -196,7 +196,6 @@ async function parseRoleplayStats(character: Character) {
   const cause = await parsePolygenGrammar(`S ::=
     (--enchanted armor |-- enchanted shield | enchanted weapon | magical anomaly | magical item | ^n artifact | a monster from the game "Dungeons and Dragons 5th edition" | a social event | an otherwordly location | a building of impressive features | a social interaction | a secret cult | a secret | a curse | a secret organization | a deity );
     `);
-  console.log(cause);
   return {
     name,
     gender,
@@ -220,6 +219,9 @@ async function parseRoleplayStats(character: Character) {
 // }
 
 export async function getBackstory(character: Character) {
+  if (!character.statistics) {
+    createStats(character);
+  }
   const backstoryType = random(1, 3);
   let backstory = '';
   switch (backstoryType) {
@@ -258,6 +260,9 @@ async function getTabloidPrompt(character: Character) {
 }
 
 export async function getDnDAdventurePrompt(character: Character, excerpt = '') {
+  if (!character.statistics) {
+    createStats(character);
+  }
   const stats = await parseRoleplayStats(character);
   let backstory = `S ::=
 "Write the description of a Dungeons and Dragons adventure, as if extracted from a module."
@@ -285,7 +290,6 @@ export async function getDnDAdventurePrompt(character: Character, excerpt = '') 
 
 async function getExcerptPrompt(character: Character) {
   const stats = await parseRoleplayStats(character);
-  console.log(stats.cause);
   const backstory = `S ::=
   "Write an excerpt from an imaginary fantasy novel."
   "- do not write any title"

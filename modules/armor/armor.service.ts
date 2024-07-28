@@ -1,5 +1,6 @@
 import prisma from '@/utils/prisma';
 import { PostArmorInput, PutArmorInput } from './armor.schema';
+import { Armor } from 'monstershuffler-shared';
 
 export async function createArmor(userid: number, input: PostArmorInput) {
   const { object, game } = input;
@@ -19,6 +20,7 @@ export async function getArmor(userid: number, id: number) {
   const array = await prisma.objects.findMany({
     select: {
       object: true,
+      id: true,
     },
     where: {
       id,
@@ -35,10 +37,14 @@ export async function getArmor(userid: number, id: number) {
   });
 
   if (array.length) {
+    // add id inside object for each action
+    const object = array[0].object as Armor;
+    if (object) {
+      object.id = array[0].id;
+    }
     return array[0];
-  } else {
-    return null;
   }
+  return null;
 }
 
 export async function getArmorList(userid: number) {

@@ -40,7 +40,7 @@ export async function runMigrations() {
         await client.query(sql);
         await client.query('INSERT INTO schema_migrations (name) VALUES ($1)', [file]);
         await client.query('COMMIT');
-        console.log(`Applied migration: ${file}`);
+        console.info(`Applied migration: ${file}`);
       } catch (err) {
         await client.query('ROLLBACK');
         console.error(`Failed to apply migration: ${file}`, err);

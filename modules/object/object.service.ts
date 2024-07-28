@@ -65,7 +65,7 @@ export async function getChoiceObject(
     WHERE type = $1
       AND userid IN (0, $2)
       ${additionalFilters}
-    ORDER BY RANDOM() LIMIT $${parameters.length};
+    ORDER BY RANDOM() LIMIT $${choice.number || 1};
   `,
     ...parameters
   );

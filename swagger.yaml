@@ -96,6 +96,8 @@ components:
                   anyOf:
                     - type: object
                       properties:
+                        id:
+                          type: number
                         AC:
                           type: string
                         name:
@@ -366,6 +368,8 @@ components:
                     anyOf:
                       - type: object
                         properties:
+                          id:
+                            type: number
                           tag:
                             type: string
                           priority:
@@ -543,6 +547,8 @@ components:
                                   anyOf:
                                     - type: object
                                       properties:
+                                        id:
+                                          type: number
                                         name:
                                           type: string
                                         cost:
@@ -981,6 +987,8 @@ components:
                   anyOf:
                     - type: object
                       properties:
+                        id:
+                          type: number
                         AC:
                           type: string
                         name:
@@ -1230,6 +1238,8 @@ components:
                     anyOf:
                       - type: object
                         properties:
+                          id:
+                            type: number
                           tag:
                             type: string
                           priority:
@@ -1407,6 +1417,8 @@ components:
                                   anyOf:
                                     - type: object
                                       properties:
+                                        id:
+                                          type: number
                                         name:
                                           type: string
                                         cost:
@@ -1855,6 +1867,8 @@ components:
         postRandomNpcInput:
           type: object
           properties:
+            sessionId:
+              type: string
             levelType:
               type: string
               enum:
@@ -1914,14 +1928,29 @@ components:
                 - female
                 - neutral
                 - thing
+            alignmentEthicalChosen:
+              type: string
+              enum:
+                - Lawful
+                - Neutral
+                - Chaotic
+                - Any
+                - Unaligned
+            alignmentMoralChosen:
+              type: string
+              enum:
+                - Good
+                - Neutral
+                - Evil
+                - Any
+            CRChosen:
+              type: number
           additionalProperties: false
         postRandomNpcResponse:
           type: object
           properties:
             id:
-              type: string
-            token:
-              type: string
+              type: number
             object:
               type: object
               properties:
@@ -2051,6 +2080,8 @@ components:
                           anyOf:
                             - type: object
                               properties:
+                                id:
+                                  type: number
                                 AC:
                                   type: string
                                 name:
@@ -2254,6 +2285,8 @@ components:
                             anyOf:
                               - type: object
                                 properties:
+                                  id:
+                                    type: number
                                   tag:
                                     type: string
                                   priority:
@@ -2432,6 +2465,8 @@ components:
                                           anyOf:
                                             - type: object
                                               properties:
+                                                id:
+                                                  type: number
                                                 name:
                                                   type: string
                                                 cost:
@@ -3619,20 +3654,11 @@ components:
                         ies/object/properties/character/properties/race/propert\
                         ies/alignmentModifiers"
                     alignmentEthical:
-                      type: string
-                      enum:
-                        - Lawful
-                        - Neutral
-                        - Chaotic
-                        - Any
-                        - Unaligned
+                      $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcInput/properties\
+                        /alignmentEthicalChosen"
                     alignmentMoral:
-                      type: string
-                      enum:
-                        - Good
-                        - Neutral
-                        - Evil
-                        - Any
+                      $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcInput/properties\
+                        /alignmentMoralChosen"
                     skills:
                       $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                         ies/object/properties/character/properties/race/propert\
@@ -4397,7 +4423,6 @@ components:
               additionalProperties: false
           required:
             - id
-            - token
             - object
           additionalProperties: false
         postFourRandomNpcsResponse:
@@ -4475,17 +4500,13 @@ components:
             - classes
             - backgrounds
           additionalProperties: false
-        postBackstoryInput:
+        generateBackstoryInput:
           type: object
           properties:
-            token:
-              type: string
-            object:
-              $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
-                ies/object"
+            id:
+              type: number
           required:
-            - token
-            - object
+            - id
           additionalProperties: false
         generateTextResponse:
           type: object
@@ -4535,7 +4556,7 @@ components:
         - postRandomNpcResponse
         - postFourRandomNpcsResponse
         - getGeneratorDataResponse
-        - postBackstoryInput
+        - generateBackstoryInput
         - generateTextResponse
       additionalProperties: false
     pagesettingSchemas:
@@ -4696,6 +4717,8 @@ components:
                   anyOf:
                     - type: object
                       properties:
+                        id:
+                          type: number
                         AC:
                           type: string
                         name:
@@ -4887,6 +4910,8 @@ components:
                     anyOf:
                       - type: object
                         properties:
+                          id:
+                            type: number
                           tag:
                             type: string
                           priority:
@@ -5064,6 +5089,8 @@ components:
                                   anyOf:
                                     - type: object
                                       properties:
+                                        id:
+                                          type: number
                                         name:
                                           type: string
                                         cost:
@@ -5578,6 +5605,8 @@ components:
             object:
               type: object
               properties:
+                id:
+                  type: number
                 name:
                   type: string
                   minLength: 2
@@ -6122,7 +6151,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/npcSchemas/properties/postBackstoryInput"
+              $ref: "#/components/schemas/npcSchemas/properties/generateBackstoryInput"
       parameters:
         - schema:
             type: string

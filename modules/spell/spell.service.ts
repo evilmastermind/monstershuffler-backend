@@ -4,6 +4,7 @@ import {
   getSpellListInput,
   updateSpellInput,
 } from './spell.schema';
+import { Spell } from 'monstershuffler-shared';
 
 // TODO: spells will be stored with their id and name inside objects
 // this means that if the spell's name changes, it will have to be updated in every object that uses it
@@ -160,11 +161,15 @@ export async function getSpell(userid: number, nameOrId: string) {
       type: 102,
     },
   });
-  if (array.length === 0) {
-    return null;
+  if (array.length) {
+    // add id inside object for each action
+    const object = array[0].object as Spell;
+    if (object) {
+      object.id = array[0].id;
+    }
+    return array[0];
   }
-  const result = array[0];
-  return result;
+  return null;
 }
 
 export async function updateSpell(

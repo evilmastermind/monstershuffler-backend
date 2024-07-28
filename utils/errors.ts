@@ -14,11 +14,13 @@ export function handleError(error: unknown, reply: FastifyReply) {
   if (typeof error === 'string') {
     return reply.code(400).send(createErrorJSON(400, 'Bad request'));
   } else if (error instanceof PrismaClientKnownRequestError) {
+    console.error(error.code);
+    console.error(error.stack);
     return reply
       .code(400)
       .send(createErrorJSON(400, handlePrismaErrors(error.code)));
   } else if (error instanceof Error) {
-    console.warn(error);
+    console.error(error);
     return reply.code(400).send(createErrorJSON(400, error.name));
   }
 }

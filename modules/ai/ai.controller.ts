@@ -23,7 +23,7 @@ export async function generateTextHandler(
     // check if the prompt is a Polygen grammar (starts with "S ::=")
     prompt = await parsePolygenGrammar(prompt);
     if (prompt.startsWith('error:')) {
-      console.log('Error:', prompt);
+      console.error('Error:', prompt);
       return reply.code(400).send(prompt);
     }
 
@@ -41,7 +41,7 @@ export async function generateTextHandler(
     return;
   }
   catch (error) {
-    console.log('Error:', error);
+    console.error('Error:', error);
     return handleError(error, reply);
   }
 }

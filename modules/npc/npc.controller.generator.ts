@@ -24,6 +24,7 @@ import { handleError } from '@/utils/errors';
 import { random, randomDecimal, round2Decimals } from '@/utils/functions';
 import { findChoices } from '@/modules/choiceSolver';
 import { getRandomVoice } from '../voices/voice.service';
+import { adjustLevel, createStats } from 'monstershuffler-shared';
 
 export async function createRandomNpc(
   request: FastifyRequest<{ Body: PostRandomNpcInput }>,
@@ -43,10 +44,13 @@ export async function createRandomNpc(
     secondaryRacePercentage = 0,
     primaryRacevariantId,
     secondaryRacevariantId,
-    pronounsChosen,
     addVoice,
     includeChildren,
     includeBodyType,
+    pronounsChosen,
+    alignmentEthicalChosen,
+    alignmentMoralChosen,
+    CRChosen
   } = request.body;
 
   try {
@@ -144,27 +148,33 @@ export async function createRandomNpc(
     const traitObject = await getRandomTraitForAge({ feeling: 0 }, age.string);
     const feelingObject = await getRandomTraitForAge({ feeling: 1 }, age.string);
     const alignmentModifiers = calculateAlignment(traitObject?.category);
-    const characterHook = await await getRandomCharacterhookForAge(age.string);
-    const height = includeBodyType && race? calculateHeight(race, age) : 0;
-    const weight = includeBodyType ? calculateWeight() : undefined;
-    const voice = addVoice ? await calculateVoice(pronouns) : undefined;
+    const alignmentEthical = alignmentEthicalChosen;
+    const alignmentMoral = alignmentMoralChosen;
+    const characterHook = await getRandomCharacterhookForAge(age.string);
+    const height = race? calculateHeight(race, age) : 0;
+    const weight = calculateWeight();
+    const voice = await calculateVoice(pronouns);
+
 
     const result: Character = {
       character: {
         name,
         pronouns,
+        age,
+        weight,
+        alignmentModifiers,
         ...(surname !== null && { surname }),
         ...(traitObject !== null && { trait: traitObject.name }),
         ...(feelingObject !== null && { feeling: feelingObject.name }),
         ...(characterHook !== null && { characterHook: characterHook.hook }),
         ...(voice !== null && { voice }),
-        ...(height !== null && { height }),
-        ...(weight !== null && { weight }),
-        age,
-        alignmentModifiers,
+        ...(height > 0 && { height }),
+        ...(alignmentEthical !== null && { alignmentEthical }),
+        ...(alignmentMoral !== null && { alignmentMoral }),
       },
       variations: {
-        currentHD: level,
+        ...(CRChosen !== undefined && { currentCR: CRChosen }),
+        ...(CRChosen === undefined && { currentHD: level }),
       }
     };
 
@@ -197,6 +207,11 @@ export async function createRandomNpc(
     }
 
     character.CRCalculation =  { name: 'npcstandard'};
+
+    adjustLevel(result);
+    console.log(result.variations);
+
+    createStats(result);
 
     return {
       npc: result,
