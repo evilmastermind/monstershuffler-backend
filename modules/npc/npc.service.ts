@@ -35,9 +35,9 @@ export async function getRecycledNpcsForUser(
   // additional query filters
   const classFilter = getClassFilter(request);
   const backgroundFilter = getBackgroundFilter(request);
-  const alignmentEthicalFilter = alignmentEthicalChosen ? `n.alignmentethical = '${alignmentEthicalChosen}'` : '';
-  const alignmentMoralFilter = alignmentMoralChosen ? `n.alignmentmoral = '${alignmentMoralChosen}'` : '';
-  const pronounsFilter = pronounsChosen ? `n.gender = '${pronounsChosen}'` : '';
+  const alignmentEthicalFilter = alignmentEthicalChosen ? `n.alignmentethical = '${alignmentEthicalChosen.toLowerCase()}'` : '';
+  const alignmentMoralFilter = alignmentMoralChosen ? `n.alignmentmoral = '${alignmentMoralChosen.toLowerCase()}'` : '';
+  const pronounsFilter = pronounsChosen ? `n.gender = '${pronounsChosen.toLowerCase()}'` : '';
   const childrenFilter = includeChildren === true ? '' : 'n.ischild = false';
 
   // merging all filters
@@ -146,6 +146,7 @@ function getClassFilter(request: FastifyRequest<{ Body: PostRandomNpcInput }>) {
           WHEN RANDOM() > 0.05 THEN n.classid IS NOT NULL
           ELSE n.classid IS NULL
       END
+    )
     `;
   }
   if (classType === 'specific' && classId) {

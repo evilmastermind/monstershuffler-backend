@@ -45,6 +45,7 @@ export async function getClassvariant(userid: number, id: number) {
     select: {
       object: true,
       id: true,
+      description: true,
     },
     where: {
       id,
@@ -68,6 +69,7 @@ export async function getClassvariant(userid: number, id: number) {
     id: result.id,
   };
   response.object.id = result.id;
+  response.object.description = result.description || '';
   return response;
 }
 

@@ -76,6 +76,8 @@ components:
                   type: number
                 name:
                   type: string
+                description:
+                  type: string
                 femaleName:
                   type: string
                 workplace:
@@ -980,6 +982,8 @@ components:
                 id:
                   type: number
                 name:
+                  type: string
+                description:
                   type: string
                 enableGenerator:
                   type: boolean
@@ -1956,6 +1960,8 @@ components:
               properties:
                 id:
                   type: number
+                description:
+                  type: string
                 character:
                   type: object
                   properties:
@@ -1976,6 +1982,8 @@ components:
                         id:
                           type: number
                         name:
+                          type: string
+                        description:
                           type: string
                         enableGenerator:
                           type: boolean
@@ -2874,6 +2882,8 @@ components:
                           type: number
                         name:
                           type: string
+                        description:
+                          type: string
                         pronouns:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/object/properties/character/properties/pronouns"
@@ -2987,6 +2997,8 @@ components:
                           type: number
                         name:
                           type: string
+                        description:
+                          type: string
                         enableGenerator:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/object/properties/character/properties/race/pro\
@@ -3089,6 +3101,8 @@ components:
                           type: number
                         name:
                           type: string
+                        description:
+                          type: string
                         armor:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
                             ies/object/properties/character/properties/race/pro\
@@ -3190,6 +3204,8 @@ components:
                         id:
                           type: number
                         name:
+                          type: string
+                        description:
                           type: string
                         femaleName:
                           type: string
@@ -3319,6 +3335,8 @@ components:
                         id:
                           type: number
                         name:
+                          type: string
+                        description:
                           type: string
                         pronouns:
                           $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse/propert\
@@ -4609,6 +4627,8 @@ components:
                 id:
                   type: number
                 name:
+                  type: string
+                description:
                   type: string
                 enableGenerator:
                   type: boolean

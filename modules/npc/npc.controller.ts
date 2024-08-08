@@ -6,7 +6,7 @@ import { handleError } from '@/utils/errors';
 import { getRaceWithVariantsList } from '../race/race.service';
 import { getClassWithVariantsList } from '../class/class.service';
 import { getBackgroundList } from '../background/background.service';
-import { getBackstory, getDnDAdventurePrompt } from './backstory';
+import { getBackstory, getDnDAdventurePrompt, parseRoleplayStats } from './backstory';
 import { generateTextStream } from '@/modules/ai/ai.service';
 import { getRecycledNpcsForUser, getNpc, postNpc, addNpcToSentAlreadyList, addBackstoryToNpc } from './npc.service';
 
@@ -129,8 +129,10 @@ export async function generateBackstoryHandler(
       throw new Error('It\'s currently possible to generate a backstory only once for an NPC');
     }
 
+    const roleplayStats = await parseRoleplayStats(npc.object as Character);
+
     // generate the backstory
-    const backstoryPrompt = await getBackstory(npc.object as Character);
+    const backstoryPrompt = await getBackstory(npc.object as Character, roleplayStats);
     let backstory = '';
 
 
@@ -146,7 +148,7 @@ export async function generateBackstoryHandler(
         };
       }
 
-      const adventurePrompt = await getDnDAdventurePrompt(npc.object as Character, backstory);
+      const adventurePrompt = await getDnDAdventurePrompt(npc.object as Character, roleplayStats, backstory);
       // start the stream for the adventure module
       const adventureStream = await generateTextStream(adventurePrompt, 'gpt-4o');
 

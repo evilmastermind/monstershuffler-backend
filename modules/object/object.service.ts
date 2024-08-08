@@ -58,6 +58,7 @@ export async function getChoiceObject(
     object: AnyObject;
   };
 
+  // note to self: LIMIT $${parameters.length} is correct (note the double $)
   const result = await prisma.$queryRawUnsafe(
     `
     SELECT ${fields}
@@ -65,7 +66,7 @@ export async function getChoiceObject(
     WHERE type = $1
       AND userid IN (0, $2)
       ${additionalFilters}
-    ORDER BY RANDOM() LIMIT $${choice.number || 1};
+    ORDER BY RANDOM() LIMIT $${parameters.length};
   `,
     ...parameters
   );

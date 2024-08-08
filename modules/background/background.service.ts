@@ -33,6 +33,8 @@ export async function getBackground(userid: number, id: number) {
     select: {
       object: true,
       id: true,
+      description: true,
+      backgroundsdetails: true
     },
     where: {
       id,
@@ -52,16 +54,16 @@ export async function getBackground(userid: number, id: number) {
     return null;
   }
   const result = backgrounds[0];
-  const details = await getBackgroundDetails(id);
   const response = {
     object: result.object as Background,
     id: result.id,
-    name: details?.name || '',
-    femaleName: details?.femalename || '',
-    age: details?.age || '',
-    description: details?.description || '',
+    name: result.backgroundsdetails?.name || '',
+    femaleName: result.backgroundsdetails?.femalename || '',
+    age: result.backgroundsdetails?.age || '',
+    description: result.backgroundsdetails?.description || '',
   };
   response.object.id = result.id;
+  response.object.description = result.backgroundsdetails?.description || '';
   return response;
 }
 
@@ -97,6 +99,12 @@ export async function getRandomBackground(userid: number) {
     select: {
       object: true,
       id: true,
+      description: true,
+      backgroundsdetails: {
+        select: {
+          description: true
+        }
+      }
     },
     where: {
       type: 5,
@@ -119,6 +127,7 @@ export async function getRandomBackground(userid: number) {
     id: result.id,
   };
   response.object.id = result.id;
+  response.object.description = result.backgroundsdetails?.description || '';
   return response;
 }
 
@@ -153,6 +162,12 @@ export async function getRandomBackgroundForAge(userid: number, age: string) {
     select: {
       object: true,
       id: true,
+      description: true,
+      backgroundsdetails: {
+        select: {
+          description: true
+        }
+      }
     },
     where: filter,
   });
@@ -165,6 +180,7 @@ export async function getRandomBackgroundForAge(userid: number, age: string) {
     id: result.id,
   };
   response.object.id = result.id;
+  response.object.description = result.backgroundsdetails?.description || '';
   return response;
 }
 

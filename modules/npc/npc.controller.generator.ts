@@ -169,8 +169,8 @@ export async function createRandomNpc(
         ...(characterHook !== null && { characterHook: characterHook.hook }),
         ...(voice !== null && { voice }),
         ...(height > 0 && { height }),
-        ...(alignmentEthical !== null && { alignmentEthical }),
-        ...(alignmentMoral !== null && { alignmentMoral }),
+        ...(alignmentEthical !== undefined && { alignmentEthical }),
+        ...(alignmentMoral !== undefined && { alignmentMoral }),
       },
       variations: {
         ...(CRChosen !== undefined && { currentCR: CRChosen }),
@@ -209,8 +209,6 @@ export async function createRandomNpc(
     character.CRCalculation =  { name: 'npcstandard'};
 
     adjustLevel(result);
-    console.log(result.variations);
-
     createStats(result);
 
     return {
