@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { createReportHandler, getReportListHandler } from './report.controller';
-import { $ref } from './report.schema';
+import { sPostReportBody, sPostReportResponse, sGetReportListResponse } from './report.schema';
 import { jwtHeaderRequired } from '@/schemas';
 
 async function reportRoutes(server: FastifyInstance) {
@@ -11,11 +11,11 @@ async function reportRoutes(server: FastifyInstance) {
       schema: {
         summary: 'Report a bug or malicious activities in the website.',
         description: 'Report a bug or malicious activities in the website.',
-        body: $ref('createReportSchema'),
+        body: sPostReportBody,
         tags: ['reports'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('createReportResponseSchema'),
+          201: sPostReportResponse,
         },
       },
     },
@@ -32,7 +32,7 @@ async function reportRoutes(server: FastifyInstance) {
         headers: jwtHeaderRequired,
         tags: ['reports'],
         response: {
-          200: $ref('getReportListResponseSchema'),
+          200: sGetReportListResponse,
         },
       },
     },

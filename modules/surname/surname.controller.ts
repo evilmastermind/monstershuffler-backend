@@ -1,15 +1,15 @@
-import { getRandomSurnameInput } from './surname.schema';
+import { GetRandomSurnameBody } from './surname.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { getRandomSurname } from './surname.service';
+import { sGetRandomSurname } from './surname.service';
 import { handleError, handleResultFound } from '@/utils/errors';
 
-export async function getRandomSurnameHandler(
-  request: FastifyRequest<{ Body: getRandomSurnameInput }>,
+export async function sGetRandomSurnameHandler(
+  request: FastifyRequest<{ Body: GetRandomSurnameBody }>,
   reply: FastifyReply
 ) {
   try {
     const { body } = request;
-    const surname = await getRandomSurname(body);
+    const surname = await sGetRandomSurname(body);
     return handleResultFound(surname, reply);
   } catch (error) {
     return handleError(error, reply);

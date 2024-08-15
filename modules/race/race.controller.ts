@@ -1,4 +1,4 @@
-import { createRaceInput, updateRaceInput } from './race.schema';
+import { PostRaceBody, PutRaceBody } from './race.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createRace,
@@ -71,7 +71,7 @@ export async function getRandomRaceHandler(
 }
 
 export async function createRaceHandler(
-  request: FastifyRequest<{ Body: createRaceInput }>,
+  request: FastifyRequest<{ Body: PostRaceBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -89,7 +89,7 @@ export async function updateRaceHandler(
     Params: {
       raceId: string;
     };
-    Body: updateRaceInput;
+    Body: PutRaceBody;
   }>,
   reply: FastifyReply
 ) {

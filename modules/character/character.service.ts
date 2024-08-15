@@ -1,11 +1,14 @@
 import prisma from '@/utils/prisma';
-import { CreateCharacterInput, UpdateCharacterInput, Character } from './character.schema';
+import { PostCharacterBody, PutCharacterBody } from './character.schema';
+import { Character } from 'monstershuffler-shared';
 
 export async function createCharacter(
   userid: number,
-  input: CreateCharacterInput
+  input: PostCharacterBody
 ) {
-  const { object, game, name } = input;
+  const { object, game } = input;
+
+  const name = getCharacterName(object);
 
   const character = await prisma.objects.create({
     data: {
@@ -25,7 +28,7 @@ export async function createCharacter(
       cr: object?.statistics?.CR?.number || 0,
       alignment: object?.statistics?.alignment?.number || 0,
       size: object?.statistics?.size?.number || 0,
-      meta: object?.statistics?.meta || '',
+      meta: object?.statistics?.meta?.string || '',
     },
   });
 
@@ -95,9 +98,11 @@ export async function getCharacterList(userid: number) {
 export async function updateCharacter(
   userid: number,
   id: number,
-  input: UpdateCharacterInput
+  input: PutCharacterBody
 ) {
-  const { object, game, name } = input;
+  const { object, game } = input;
+
+  const name = getCharacterName(object);
 
   const result = await prisma.objects.updateMany({
     where: {
@@ -123,7 +128,7 @@ export async function updateCharacter(
       cr: object?.statistics?.CR?.number || 0,
       alignment: object?.statistics?.alignment?.number || 0,
       size: object?.statistics?.size?.number || 0,
-      meta: object?.statistics?.meta || '',
+      meta: object?.statistics?.meta?.string || '',
     },
   });
 
@@ -138,4 +143,10 @@ export async function deleteCharacter(userid: number, id: number) {
       type: 1,
     },
   });
+}
+
+
+function getCharacterName(object: Character) {
+  const c = object.character;
+  return `${c?.prename || ''} ${c.name} ${c.surname || ''}`.trim();
 }

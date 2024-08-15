@@ -1,15 +1,15 @@
-import { getRandomNameInput } from './name.schema';
+import { GetRandomName } from './name.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { getRandomName } from './name.service';
+import { sGetRandomName } from './name.service';
 import { handleError, handleResultFound } from '@/utils/errors';
 
-export async function getRandomNameHandler(
-  request: FastifyRequest<{ Body: getRandomNameInput }>,
+export async function sGetRandomNameHandler(
+  request: FastifyRequest<{ Body: GetRandomName }>,
   reply: FastifyReply
 ) {
   try {
     const { body } = request;
-    const name = await getRandomName(body);
+    const name = await sGetRandomName(body);
     return handleResultFound(name, reply);
   } catch (error) {
     return handleError(error, reply);

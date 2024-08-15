@@ -6,7 +6,6 @@ import Fastify, { FastifyRequest, FastifyReply, FastifyError } from 'fastify';
 import { runMigrations } from '@/db';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
-import { withRefResolver } from 'fastify-zod';
 import {FastifySSEPlugin} from 'fastify-sse-v2';
 import Sensible from '@fastify/sensible';
 import fjwt from '@fastify/jwt';
@@ -17,6 +16,8 @@ import swaggerSettings from '@/plugins/swagger';
 import mailerSettings from '@/plugins/mailer';
 import { schemas, routes } from '@/modules';
 import fs from 'fs';
+//
+import { serializerCompiler, validatorCompiler, ZodTypeProvider } from 'fastify-type-provider-zod';
 
 export const server = Fastify({
   logger: true,
@@ -37,6 +38,9 @@ if (secret === undefined) {
 }
 
 server
+  // json schema transform
+  .setValidatorCompiler(validatorCompiler)
+  .setSerializerCompiler(serializerCompiler)
   // cors
   .register(cors, {
     origin: true,
@@ -87,7 +91,7 @@ server
       const ip = request.ip;
 
       if (!whitelist.includes(ip)) {
-        reply.status(403).send({ error: 'Not allowed' });
+        reply.status(403).send({ error: 'This request is available only to specific ip addresses.' });
       } else {
         done();
       }
@@ -116,7 +120,7 @@ async function main() {
       server.addSchema(schema);
     }
 
-    server.register(swagger, withRefResolver(swaggerSettings));
+    server.register(swagger, swaggerSettings);
 
     server.register(swaggerUi, {
       routePrefix: 'api/docs',
@@ -124,7 +128,7 @@ async function main() {
     });
 
     for (const route of routes) {
-      server.register(route.routes, { prefix: route.prefix });
+      server.withTypeProvider<ZodTypeProvider>().register(route.routes, { prefix: route.prefix });
     }
 
     await server.listen({ port: 3000, host: '0.0.0.0' });

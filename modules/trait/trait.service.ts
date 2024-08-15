@@ -1,7 +1,7 @@
 import prisma from '@/utils/prisma';
-import { getRandomTraitInput } from './trait.schema';
+import { sGetRandomTraitBodyInput } from './trait.schema';
 
-export async function getRandomTrait(input: getRandomTraitInput) {
+export async function sGetRandomTraitBody(input: sGetRandomTraitBodyInput) {
   const traitCount = await prisma.traits.count({
     where: {
       type: input.type,
@@ -27,8 +27,8 @@ export async function getRandomTrait(input: getRandomTraitInput) {
   return result;
 }
 
-export async function getRandomTraitForAge(
-  input: getRandomTraitInput,
+export async function sGetRandomTraitBodyForAge(
+  input: sGetRandomTraitBodyInput,
   age: string
 ) {
   const filter = {

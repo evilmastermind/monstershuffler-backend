@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
-import { getRandomNameHandler } from './name.controller';
-import { $ref } from './name.schema';
+import { sGetRandomNameHandler } from './name.controller';
+import { sGetRandomNameResponse, sGetRandomNameBody } from 'monstershuffler-shared';
 
 async function nameRoutes(server: FastifyInstance) {
   server.post(
@@ -9,15 +9,15 @@ async function nameRoutes(server: FastifyInstance) {
       schema: {
         summary: 'Returns a random name.',
         description:
-          "Returns a random name, which is a string like 'Aldric' or 'Aldric the Brave'.",
-        body: $ref('getRandomName'),
+          'Returns a random name, which is a string like \'Aldric\' or \'Aldric the Brave\'.',
+        body: sGetRandomNameBody,
         tags: ['names'],
         response: {
-          200: $ref('getRandomNameResponse'),
+          200: sGetRandomNameResponse,
         },
       },
     },
-    getRandomNameHandler
+    sGetRandomNameHandler
   );
 }
 

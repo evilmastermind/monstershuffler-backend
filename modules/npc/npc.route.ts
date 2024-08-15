@@ -6,7 +6,22 @@ import {
   generateBackstoryHandler,
   postNpcRatingController,
 } from './npc.controller';
-import { $ref } from './npc.schema';
+
+import {
+  sPostRandomNpcBody,
+  sPostRandomNpcResponse,
+  sPostFourRandomNpcsResponse,
+  sGetGeneratorDataResponse,
+  sGenerateBackstoryBody,
+  sPostNpcBody,
+  sPostNpcToSentAlreadyListBody,
+  sAddBackstoryToNpcBody,
+  sPostNpcRatingBody,
+  sPostNpcRatingResponse,
+} from 'monstershuffler-shared';
+import { sGenerateTextResponse } from '@/modules/ai/ai.schema';
+
+
 // schemas
 import { jwtHeaderOptional } from '@/schemas';
 
@@ -20,9 +35,9 @@ async function npcRoutes(server: FastifyInstance) {
   //       description: 'Creates a new random npc using the settings provided.',
   //       headers: jwtHeaderOptional,
   //       tags: ['npcs'],
-  //       body: $ref('postRandomNpcInput'),
+  //       body: $ref('sPostRandomNpcBody'),
   //       response: {
-  //         200: $ref('postRandomNpcResponse'),
+  //         200: $ref('sPostRandomNpcResponse'),
   //       },
   //     },
   //   },
@@ -46,9 +61,9 @@ async function npcRoutes(server: FastifyInstance) {
           'Creates four new random npcs using the settings provided. Only accessible through monstershuffler.com',
         headers: jwtHeaderOptional,
         tags: ['npcs'],
-        body: $ref('postRandomNpcInput'),
+        body: sPostRandomNpcBody,
         response: {
-          200: $ref('postFourRandomNpcsResponse'),
+          200: sPostFourRandomNpcsResponse,
         },
       },
     },
@@ -65,7 +80,7 @@ async function npcRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['npcs'],
         response: {
-          200: $ref('getGeneratorDataResponse'),
+          200: sGetGeneratorDataResponse,
         },
       },
     },
@@ -86,9 +101,9 @@ async function npcRoutes(server: FastifyInstance) {
         description: 'Generates a random backstory for an NPC. Only accessible through monstershuffler.com',
         headers: jwtHeaderOptional,
         tags: ['npcs'],
-        body: $ref('generateBackstoryInput'),
+        body: sGenerateBackstoryBody,
         response: {
-          200: $ref('generateTextResponse'),
+          200: sGenerateTextResponse,
         },
       },
     },
@@ -102,9 +117,9 @@ async function npcRoutes(server: FastifyInstance) {
         summary: '[MS Only] Rate an NPC',
         description: 'Rate an NPC',
         headers: jwtHeaderOptional,
-        body: $ref('postNpcRatingInput'),
+        body: sPostNpcRatingBody,
         response: {
-          200: $ref('postNpcRatingResponse'),
+          200: sPostNpcRatingResponse,
         },
       },
     },

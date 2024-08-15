@@ -1,7 +1,7 @@
 import { Character } from '@/types';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createRandomNpc } from './npc.controller.generator';
-import type { GenerateBackstoryInput, PostRandomNpcInput, PostRandomNpcResponse, PostNpcRatingInput } from './npc.schema';
+import type { GenerateBackstoryBody, PostRandomNpcBody, PostRandomNpcResponse, PostNpcRatingBody } from './npc.schema';
 import { handleError } from '@/utils/errors';
 import { getRaceWithVariantsList } from '../race/race.service';
 import { getClassWithVariantsList } from '../class/class.service';
@@ -17,7 +17,7 @@ import { calculateCharacterHook } from 'monstershuffler-shared';
 //////////////////////////////////////////////
 
 // export async function createRandomNpcHandler(
-//   request: FastifyRequest<{ Body: PostRandomNpcInput }>,
+//   request: FastifyRequest<{ Body: PostRandomNpcBody }>,
 //   reply: FastifyReply
 // ) {
 //   try {
@@ -35,7 +35,7 @@ import { calculateCharacterHook } from 'monstershuffler-shared';
 // }
 
 export async function createFourRandomNpcHandler(
-  request: FastifyRequest<{ Body: PostRandomNpcInput }>,
+  request: FastifyRequest<{ Body: PostRandomNpcBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -112,7 +112,7 @@ export async function getGeneratorDataHandler(
 }
 
 export async function generateBackstoryHandler(
-  request: FastifyRequest<{ Body: GenerateBackstoryInput }>, 
+  request: FastifyRequest<{ Body: GenerateBackstoryBody }>, 
   reply: FastifyReply
 ) {
   try {
@@ -203,7 +203,7 @@ async function generateCharacterHookAndSaveBackstory(id: number, backstory: stri
 };
 
 export async function postNpcRatingController(
-  request: FastifyRequest<{ Body: PostNpcRatingInput }>,
+  request: FastifyRequest<{ Body: PostNpcRatingBody }>,
   reply: FastifyReply
 ) {
   try {

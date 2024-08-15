@@ -1,7 +1,9 @@
 import { version } from '../package.json';
+import { jsonSchemaTransform} from 'fastify-type-provider-zod';
 
 export default {
   openapi: {
+    transform: jsonSchemaTransform,
     info: {
       title: 'Monstershuffler API',
       description: 'REST API for monstershuffler.com',

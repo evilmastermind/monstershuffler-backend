@@ -6,7 +6,7 @@ import {
   updateWeaponHandler,
   deleteWeaponHandler,
 } from './weapon.controller';
-import { $ref } from './weapon.schema';
+import { sPostWeaponBody, sPutWeaponBody, sGetWeaponListResponse, sGetWeaponResponse, sGetWeaponParams } from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
 
 async function weaponRoutes(server: FastifyInstance) {
@@ -21,7 +21,7 @@ async function weaponRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['weapons'],
         response: {
-          200: $ref('getWeaponListResponse'),
+          200: sGetWeaponListResponse,
         },
       },
     },
@@ -40,7 +40,7 @@ async function weaponRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['weapons'],
         response: {
-          200: $ref('getWeaponResponse'),
+          200: sGetWeaponResponse,
         },
       },
     },
@@ -55,11 +55,11 @@ async function weaponRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new type of weapon to the db.',
         description: '[MS ONLY] Adds a new type of weapon to the db.',
-        body: $ref('postWeapon'),
+        body: sPostWeaponBody,
         tags: ['weapons'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('getWeaponResponse'),
+          201: sGetWeaponResponse,
         },
       },
     },
@@ -75,10 +75,10 @@ async function weaponRoutes(server: FastifyInstance) {
         summary: '[MS ONLY] Updates the weapon corresponding to the given id.',
         description:
           '[MS ONLY] Updates the weapon corresponding to the given id.',
-        body: $ref('putWeapon'),
+        body: sPutWeaponBody,
         tags: ['weapons'],
         headers: jwtHeaderRequired,
-        // params: $ref('getWeaponParams'),
+        // params: $ref('sGetWeaponParams'),
         response: {
           200: BatchPayload,
         },
@@ -98,7 +98,7 @@ async function weaponRoutes(server: FastifyInstance) {
           '[MS ONLY] Deletes the weapon corresponding to the given id.',
         tags: ['weapons'],
         headers: jwtHeaderRequired,
-        // params: $ref('getWeaponParams'),
+        // params: $ref('sGetWeaponParams'),
         response: {
           200: BatchPayload,
         },

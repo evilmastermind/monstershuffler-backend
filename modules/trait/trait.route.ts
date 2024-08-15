@@ -1,8 +1,8 @@
 import { FastifyInstance } from 'fastify';
-import { $ref } from './trait.schema';
+import { sGetRandomTraitBody, sGetRandomTraitResponse, sGetTraitDescriptionResponse } from 'monstershuffler-shared';
 import {
-  getRandomTraitHandler,
-  getRandomTraitForAgeHandler,
+  sGetRandomTraitBodyHandler,
+  sGetRandomTraitBodyForAgeHandler,
   getTraitDescriptionHandler,
 } from './trait.controller';
 
@@ -14,14 +14,14 @@ async function traitRoutes(server: FastifyInstance) {
         summary: 'Returns a random trait.',
         description:
           'Returns a random trait which is usually an adjective describing a creature\'s state of mind, attitude, core beliefs or current feelings.',
-        body: $ref('getRandomTrait'),
+        body: sGetRandomTraitBody,
         tags: ['traits'],
         response: {
-          200: $ref('getRandomTraitResponse'),
+          200: sGetRandomTraitResponse,
         },
       },
     },
-    getRandomTraitHandler
+    sGetRandomTraitBodyHandler
   );
 
   server.post(
@@ -31,14 +31,14 @@ async function traitRoutes(server: FastifyInstance) {
         summary: 'Returns a random trait for the given age.',
         description:
           'Returns a random trait for the given age. The age must be one of the following: "child", "adolescent", "young adult", "adult", "middle-aged", "elderly", "venerable".',
-        body: $ref('getRandomTrait'),
+        body: sGetRandomTraitBody,
         tags: ['traits'],
         response: {
-          200: $ref('getRandomTraitResponse'),
+          200: sGetRandomTraitResponse,
         },
       },
     },
-    getRandomTraitForAgeHandler
+    sGetRandomTraitBodyForAgeHandler
   );
 
   server.get(
@@ -50,7 +50,7 @@ async function traitRoutes(server: FastifyInstance) {
           'Returns the description of a trait which is usually an adjective describing a creature\'s state of mind, attitude, core beliefs or current feelings.',
         tags: ['traits'],
         response: {
-          200: $ref('getTraitDescriptionResponse'),
+          200: sGetTraitDescriptionResponse,
         },
       },
     },

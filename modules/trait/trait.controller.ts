@@ -1,26 +1,26 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { getRandomTrait, getRandomTraitForAge, getTraitDescription } from './trait.service';
+import { sGetRandomTraitBody, sGetRandomTraitBodyForAge, getTraitDescription } from './trait.service';
 import { handleError, handleResultFound } from '@/utils/errors';
-import { getRandomTraitInput } from './trait.schema';
+import { sGetRandomTraitBodyInput } from './trait.schema';
 
-export async function getRandomTraitHandler(
+export async function sGetRandomTraitBodyHandler(
   request: FastifyRequest<{
-    Body: getRandomTraitInput;
+    Body: sGetRandomTraitBodyInput;
   }>,
   reply: FastifyReply
 ) {
   try {
     const { body } = request;
-    const trait = await getRandomTrait(body);
+    const trait = await sGetRandomTraitBody(body);
     return handleResultFound(trait, reply);
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-export async function getRandomTraitForAgeHandler(
+export async function sGetRandomTraitBodyForAgeHandler(
   request: FastifyRequest<{
-    Body: getRandomTraitInput;
+    Body: sGetRandomTraitBodyInput;
     Params: {
       age: string;
     };
@@ -29,7 +29,7 @@ export async function getRandomTraitForAgeHandler(
 ) {
   try {
     const { body, params } = request;
-    const trait = await getRandomTraitForAge(body, params.age);
+    const trait = await sGetRandomTraitBodyForAge(body, params.age);
     return handleResultFound(trait, reply);
   } catch (error) {
     return handleError(error, reply);

@@ -1,8 +1,8 @@
 import prisma from '@/utils/prisma';
-import { PostArmorInput, PutArmorInput } from './armor.schema';
+import { PostArmorBody, PutArmorInput } from './armor.schema';
 import { Armor } from 'monstershuffler-shared';
 
-export async function createArmor(userid: number, input: PostArmorInput) {
+export async function createArmor(userid: number, input: PostArmorBody) {
   const { object, game } = input;
 
   return await prisma.objects.create({

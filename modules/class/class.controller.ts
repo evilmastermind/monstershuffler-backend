@@ -1,4 +1,4 @@
-import { createClassInput, updateClassInput } from './class.schema';
+import { PostClassBody, PutClassBody } from './class.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createClass,
@@ -71,7 +71,7 @@ export async function getRandomClassHandler(
 }
 
 export async function createClassHandler(
-  request: FastifyRequest<{ Body: createClassInput }>,
+  request: FastifyRequest<{ Body: PostClassBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -89,7 +89,7 @@ export async function updateClassHandler(
     Params: {
       classId: string;
     };
-    Body: updateClassInput;
+    Body: PutClassBody;
   }>,
   reply: FastifyReply
 ) {

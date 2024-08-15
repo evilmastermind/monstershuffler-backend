@@ -1,4 +1,4 @@
-import { createBackgroundInput } from './background.schema';
+import { PostBackgroundBody } from './background.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createBackground,
@@ -76,7 +76,7 @@ export async function getRandomBackgroundForAgeHandler(
 }
 
 export async function createBackgroundHandler(
-  request: FastifyRequest<{ Body: createBackgroundInput }>,
+  request: FastifyRequest<{ Body: PostBackgroundBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -94,7 +94,7 @@ export async function updateBackgroundHandler(
     Params: {
       backgroundId: string;
     };
-    Body: createBackgroundInput;
+    Body: PostBackgroundBody;
   }>,
   reply: FastifyReply
 ) {

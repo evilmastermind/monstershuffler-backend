@@ -1,4 +1,4 @@
-import { createWeaponInput } from './weapon.schema';
+import { PostWeaponBody } from './weapon.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createWeapon,
@@ -43,7 +43,7 @@ export async function getWeaponHandler(
 }
 
 export async function createWeaponHandler(
-  request: FastifyRequest<{ Body: createWeaponInput }>,
+  request: FastifyRequest<{ Body: PostWeaponBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -61,7 +61,7 @@ export async function updateWeaponHandler(
     Params: {
       weaponId: string;
     };
-    Body: createWeaponInput;
+    Body: PostWeaponBody;
   }>,
   reply: FastifyReply
 ) {

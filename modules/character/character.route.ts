@@ -6,7 +6,7 @@ import {
   updateCharacterHandler,
   deleteCharacterHandler,
 } from './character.controller';
-import { $ref } from './character.schema';
+import { sGetCharacterListResponse, sGetCharacterResponse, sPostCharacterBody, sPutCharacterBody  } from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
 
 async function characterRoutes(server: FastifyInstance) {
@@ -21,7 +21,7 @@ async function characterRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['characters'],
         response: {
-          200: $ref('getCharacterListResponse'),
+          200: sGetCharacterListResponse,
         },
       },
     },
@@ -41,7 +41,7 @@ async function characterRoutes(server: FastifyInstance) {
         tags: ['characters'],
         // params: $ref('getCharacterParamsSchema'),
         response: {
-          200: $ref('getCharacterResponse'),
+          200: sGetCharacterResponse,
         },
       },
     },
@@ -56,11 +56,11 @@ async function characterRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new character to the db.',
         description: '[MS ONLY] Adds a new character to the db.',
-        body: $ref('postCharacter'),
+        body: sPostCharacterBody,
         tags: ['characters'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('getCharacterResponse'),
+          201: sGetCharacterResponse,
         },
       },
     },
@@ -77,7 +77,7 @@ async function characterRoutes(server: FastifyInstance) {
           '[MS ONLY] Updates the character corresponding to the given id.',
         description:
           '[MS ONLY] Updates the character corresponding to the given id.',
-        body: $ref('putCharacter'),
+        body: sPutCharacterBody,
         tags: ['characters'],
         headers: jwtHeaderRequired,
         response: {

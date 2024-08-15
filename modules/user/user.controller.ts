@@ -1,30 +1,30 @@
 import { server } from '@/app';
 import { comparePassword } from '@/utils/hash';
 import {
-  CreateUserInput,
-  LoginInput,
-  UpdateUserInput,
-  ActivateUserInput,
-  ReactivateUserInput,
-  ResetPasswordInput,
+  PostUserBody,
+  LoginBody,
+  PutUserBody,
+  ActivateUserBody,
+  ReactivateUserBodyInput,
+  ResetPasswordBody,
 } from './user.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createUser,
   getUserByToken,
-  activateUser,
+  sActivateUserBody,
   findUserByEmail,
   getUsers,
   getUser,
   updateUser,
   getUserLevel,
   createTokenPwd,
-  resetPassword,
+  sResetPasswordBody,
 } from './user.service';
 import { handleError } from '@/utils/errors';
 
 export async function registerUserHandler(
-  request: FastifyRequest<{ Body: CreateUserInput }>,
+  request: FastifyRequest<{ Body: PostUserBody }>,
   reply: FastifyReply
 ) {
   const body = request.body;
@@ -78,7 +78,7 @@ export async function registerUserHandler(
 }
 
 export async function loginHandler(
-  request: FastifyRequest<{ Body: LoginInput }>,
+  request: FastifyRequest<{ Body: LoginBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -110,7 +110,7 @@ export async function loginHandler(
 }
 
 export async function activationHandler(
-  request: FastifyRequest<{ Body: ActivateUserInput }>,
+  request: FastifyRequest<{ Body: ActivateUserBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -121,7 +121,7 @@ export async function activationHandler(
         message: 'Invalid token',
       });
     }
-    await activateUser(user[0].id);
+    await sActivateUserBody(user[0].id);
     return { accessToken: server.jwt.sign({ id: user[0].id }) };
   } catch (error) {
     return handleError(error, reply);
@@ -129,12 +129,12 @@ export async function activationHandler(
 }
 
 export async function pwdResetHandler(
-  request: FastifyRequest<{ Body: ResetPasswordInput }>,
+  request: FastifyRequest<{ Body: ResetPasswordBody }>,
   reply: FastifyReply
 ) {
   try {
     const { token, password } = request.body;
-    const user = await resetPassword(token, password);
+    const user = await sResetPasswordBody(token, password);
     return { accessToken: server.jwt.sign({ id: user.id }) };
   } catch (error) {
     return handleError(error, reply);
@@ -142,7 +142,7 @@ export async function pwdResetHandler(
 }
 
 export async function reactivationHandler(
-  request: FastifyRequest<{ Body: ReactivateUserInput }>,
+  request: FastifyRequest<{ Body: ReactivateUserBodyInput }>,
   reply: FastifyReply
 ) {
   try {
@@ -213,7 +213,7 @@ export async function getUserHandler(
 }
 
 export async function updateUserHandler(
-  request: FastifyRequest<{ Body: UpdateUserInput }>,
+  request: FastifyRequest<{ Body: PutUserBody }>,
   reply: FastifyReply
 ) {
   const { id } = request.user;

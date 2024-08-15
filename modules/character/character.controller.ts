@@ -1,4 +1,4 @@
-import { CreateCharacterInput } from './character.schema';
+import { PostCharacterBody } from './character.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createCharacter,
@@ -43,7 +43,7 @@ export async function getCharacterHandler(
 }
 
 export async function createCharacterHandler(
-  request: FastifyRequest<{ Body: CreateCharacterInput }>,
+  request: FastifyRequest<{ Body: PostCharacterBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -61,7 +61,7 @@ export async function updateCharacterHandler(
     Params: {
       characterId: string;
     };
-    Body: CreateCharacterInput;
+    Body: PostCharacterBody;
   }>,
   reply: FastifyReply
 ) {

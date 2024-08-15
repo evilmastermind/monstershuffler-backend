@@ -1,13 +1,13 @@
 import prisma from '@/utils/prisma';
 import {
   Classvariant,
-  createClassvariantInput,
-  updateClassvariantInput,
+  PostClassvariantBody,
+  PutClassvariantBody,
 } from './classvariant.schema';
 
 export async function createClassvariant(
   userid: number,
-  input: createClassvariantInput
+  input: PostClassvariantBody
 ) {
   const { object, classId, game } = input;
 
@@ -197,7 +197,7 @@ export async function getClassvariantClassList(
 export async function updateClassvariant(
   userid: number,
   id: number,
-  input: updateClassvariantInput
+  input: PutClassvariantBody
 ) {
   const { object } = input;
 

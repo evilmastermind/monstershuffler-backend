@@ -1,4 +1,4 @@
-import { PostActionInput, GetActionListInput } from './action.schema';
+import { PostActionBody, GetActionListBody } from './action.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createAction,
@@ -10,7 +10,7 @@ import {
 import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getActionListHandler(
-  request: FastifyRequest<{ Body: GetActionListInput }>,
+  request: FastifyRequest<{ Body: GetActionListBody }>,
   reply: FastifyReply
 ) {
   const { body } = request;
@@ -44,7 +44,7 @@ export async function getActionHandler(
 }
 
 export async function createActionHandler(
-  request: FastifyRequest<{ Body: PostActionInput }>,
+  request: FastifyRequest<{ Body: PostActionBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -62,7 +62,7 @@ export async function updateActionHandler(
     Params: {
       actionId: string;
     };
-    Body: PostActionInput;
+    Body: PostActionBody;
   }>,
   reply: FastifyReply
 ) {

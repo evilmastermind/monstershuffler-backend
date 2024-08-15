@@ -5,7 +5,12 @@ import {
   updateDamageTypeHandler,
   deleteDamageTypeHandler,
 } from './damagetype.controller';
-import { $ref } from './damagetype.schema';
+import {
+  sPostDamageTypeBody,
+  sPutDamageTypeBody,
+  sGetDamageTypeResponse,
+  sGetDamageTypeListResponse,
+} from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
 
 async function damageTypeRoutes(server: FastifyInstance) {
@@ -20,7 +25,7 @@ async function damageTypeRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['damage types'],
         response: {
-          200: $ref('getDamageTypeListResponse'),
+          200: sGetDamageTypeListResponse,
         },
       },
     },
@@ -35,11 +40,11 @@ async function damageTypeRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new type of damage to the db.',
         description: '[MS ONLY] Adds a new type of damage to the db.',
-        body: $ref('postDamageType'),
+        body: sPostDamageTypeBody,
         tags: ['damage types'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('getDamageTypeResponse'),
+          201: sGetDamageTypeResponse,
         },
       },
     },
@@ -56,11 +61,11 @@ async function damageTypeRoutes(server: FastifyInstance) {
           '[MS ONLY] Updates the details of the damage type corresponding to the given id.',
         description:
           '[MS ONLY] Updates the details of the damage type corresponding to the given id.',
-        body: $ref('putDamageType'),
+        body: sPutDamageTypeBody,
         tags: ['damage types'],
         headers: jwtHeaderRequired,
         response: {
-          200: $ref('getDamageTypeResponse'),
+          200: sGetDamageTypeResponse,
         },
       },
     },

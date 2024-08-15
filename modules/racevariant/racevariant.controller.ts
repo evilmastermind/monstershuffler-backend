@@ -1,6 +1,6 @@
 import {
-  createRacevariantInput,
-  updateRacevariantInput,
+  PostRacevariantBody,
+  PutRacevariantBody,
 } from './racevariant.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
@@ -70,7 +70,7 @@ export async function getRandomRacevariantHandler(
 }
 
 export async function createRacevariantHandler(
-  request: FastifyRequest<{ Body: createRacevariantInput }>,
+  request: FastifyRequest<{ Body: PostRacevariantBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -88,7 +88,7 @@ export async function updateRacevariantHandler(
     Params: {
       racevariantId: string;
     };
-    Body: updateRacevariantInput;
+    Body: PutRacevariantBody;
   }>,
   reply: FastifyReply
 ) {

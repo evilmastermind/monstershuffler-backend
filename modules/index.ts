@@ -5,27 +5,27 @@
 // import { aiSchemas } from '@/modules/ai/ai.schema';
 // import { armorSchemas } from '@/modules/armor/armor.schema';
 // import { characterhookSchemas } from '@/modules/background/characterhook.schema';
-import { backgroundSchemas } from '@/modules/background/background.schema';
+// import { backgroundSchemas } from '@/modules/background/background.schema';
 // import { characterSchemas } from '@/modules/character/character.schema';
-import { classSchemas } from '@/modules/class/class.schema';
+// import { classSchemas } from '@/modules/class/class.schema';
 // import { classvariantSchemas } from '@/modules/classvariant/classvariant.schema';
 // import { damageTypeSchemas } from '@/modules/damagetype/damagetype.schema';
 // import { folderSchemas } from '@/modules/folder/folder.schema';
 // import { languageSchemas } from '@/modules/language/language.schema';
 // import { nameSchemas } from '@/modules/name/name.schema';
-import { npcSchemas } from '@/modules/npc/npc.schema';
-import { pagesettingSchemas } from '@/modules/pagesetting/pagesetting.schema';
-import { polygenSchemas } from '@/modules/polygen/polygen.schema';
+// import { npcSchemas } from '@/modules/npc/npc.schema';
+// import { pagesettingSchemas } from '@/modules/pagesetting/pagesetting.schema';
+// import { polygenSchemas } from '@/modules/polygen/polygen.schema';
 // import { quirkSchemas } from '@/modules/quirk/quirk.schema';
-import { raceSchemas } from '@/modules/race/race.schema';
+// import { raceSchemas } from '@/modules/race/race.schema';
 // import { racevariantSchemas } from '@/modules/racevariant/racevariant.schema';
 // import { reportSchemas } from '@/modules/report/report.schema';
 // import { skillSchemas } from '@/modules/skill/skill.schema';
-import { spellSchemas } from '@/modules/spell/spell.schema';
+// import { spellSchemas } from '@/modules/spell/spell.schema';
 // import { surnameSchemas } from '@/modules/surname/surname.schema';
 // import { templateSchemas } from '@/modules/template/template.schema';
-import { traitSchemas } from '@/modules/trait/trait.schema';
-import { userSchemas } from '@/modules/user/user.schema';
+// import { traitSchemas } from '@/modules/trait/trait.schema';
+// import { userSchemas } from '@/modules/user/user.schema';
 // import { weaponSchemas } from '@/modules/weapon/weapon.schema';
 
 //=======================================================
@@ -65,28 +65,28 @@ export const schemas = [
   // ...actionSchemas,
   // ...aiSchemas,
   // ...armorSchemas,
-  ...backgroundSchemas,
+  // ...backgroundSchemas,
   // ...characterSchemas,
-  ...classSchemas,
+  // ...classSchemas,
   // ...classvariantSchemas,
   // ...damageTypeSchemas,
   // ...folderSchemas,
   // ...languageSchemas,
   // ...nameSchemas,
-  ...npcSchemas,
-  ...pagesettingSchemas,
-  ...polygenSchemas,
+  // ...npcSchemas,
+  // ...pagesettingSchemas,
+  // ...polygenSchemas,
   //...characterhookSchemas,
   // ...quirkSchemas,
-  ...raceSchemas,
+  // ...raceSchemas,
   // ...racevariantSchemas,
   // ...reportSchemas,
   // ...skillSchemas,
-  ...spellSchemas,
+  // ...spellSchemas,
   // ...surnameSchemas,
   // ...templateSchemas,
-  ...traitSchemas,
-  ...userSchemas,
+  // ...traitSchemas,
+  // ...userSchemas,
   // ...weaponSchemas
 ];
 

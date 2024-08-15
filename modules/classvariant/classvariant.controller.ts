@@ -1,6 +1,6 @@
 import {
-  createClassvariantInput,
-  updateClassvariantInput,
+  PostClassvariantBody,
+  PutClassvariantBody,
 } from './classvariant.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
@@ -95,7 +95,7 @@ export async function getRandomClassvariantHandler(
 }
 
 export async function createClassvariantHandler(
-  request: FastifyRequest<{ Body: createClassvariantInput }>,
+  request: FastifyRequest<{ Body: PostClassvariantBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -113,7 +113,7 @@ export async function updateClassvariantHandler(
     Params: {
       classvariantId: string;
     };
-    Body: updateClassvariantInput;
+    Body: PutClassvariantBody;
   }>,
   reply: FastifyReply
 ) {

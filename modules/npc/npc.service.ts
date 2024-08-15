@@ -1,6 +1,6 @@
 import prisma from '@/utils/prisma';
 import { Prisma } from '@prisma/client';
-import type { PostNpc, PostNpcToSentAlreadyListInput, PostRandomNpcInput, PostRandomNpcResponse, AddBackstoryToNpcInput, PostNpcRating } from './npc.schema';
+import type { PostNpc, PostNpcToSentAlreadyListBody, PostRandomNpcBody, PostRandomNpcResponse, AddBackstoryToNpcBody, PostNpcRatingServiceParams } from './npc.schema';
 import { FastifyRequest } from 'fastify';
 import { random } from '@/utils/functions';
 
@@ -10,7 +10,7 @@ import { random } from '@/utils/functions';
  * average rating.
  */
 export async function getRecycledNpcsForUser(
-  request: FastifyRequest<{ Body: PostRandomNpcInput }>,
+  request: FastifyRequest<{ Body: PostRandomNpcBody }>,
   quantity = 1,
   userid?: number,
   sessionid?: string
@@ -76,7 +76,7 @@ export async function getRecycledNpcsForUser(
   return npcs;
 }
 
-function getRaceFilters(request: FastifyRequest<{ Body: PostRandomNpcInput }>, quantity = 1) {
+function getRaceFilters(request: FastifyRequest<{ Body: PostRandomNpcBody }>, quantity = 1) {
   const {
     primaryRaceId,
     secondaryRaceId,
@@ -126,7 +126,7 @@ function getRaceFilters(request: FastifyRequest<{ Body: PostRandomNpcInput }>, q
   return filters.filter((filter) => filter.quantity > 0);
 }
 
-function getClassFilter(request: FastifyRequest<{ Body: PostRandomNpcInput }>) {
+function getClassFilter(request: FastifyRequest<{ Body: PostRandomNpcBody }>) {
   const {
     classType,
     classId,
@@ -160,7 +160,7 @@ function getClassFilter(request: FastifyRequest<{ Body: PostRandomNpcInput }>) {
   return filter;
 }
 
-function getBackgroundFilter(request: FastifyRequest<{ Body: PostRandomNpcInput }>) {
+function getBackgroundFilter(request: FastifyRequest<{ Body: PostRandomNpcBody }>) {
   const {
     backgroundType,
     backgroundId,
@@ -212,7 +212,7 @@ export async function postNpc(input: PostNpc) {
   });
 }
 
-export async function addNpcToSentAlreadyList(input: PostNpcToSentAlreadyListInput) {
+export async function addNpcToSentAlreadyList(input: PostNpcToSentAlreadyListBody) {
   const { npcid, userid, sessionid } = input;
   return await prisma.npcssenttousers.create({
     data: {
@@ -223,7 +223,7 @@ export async function addNpcToSentAlreadyList(input: PostNpcToSentAlreadyListInp
   });
 }
 
-export async function addBackstoryToNpc(input: AddBackstoryToNpcInput) {
+export async function addBackstoryToNpc(input: AddBackstoryToNpcBody) {
   const { id, backstory, object } = input;
   if (!object.character.user) {
     object.character.user = {};
@@ -235,7 +235,7 @@ export async function addBackstoryToNpc(input: AddBackstoryToNpcInput) {
   });
 }
 
-export async function postNpcRating(input: PostNpcRating) {
+export async function postNpcRating(input: PostNpcRatingServiceParams) {
   const { npcid, rating, userid, sessionid } = input;
   /**
    * Prisma's upsert method limitations:

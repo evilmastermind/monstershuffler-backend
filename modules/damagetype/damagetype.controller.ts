@@ -1,4 +1,4 @@
-import { createDamageTypeInput } from './damagetype.schema';
+import { PostDamageTypeInput } from './damagetype.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createDamageType,
@@ -24,7 +24,7 @@ export async function getDamageTypeListHandler(
 }
 
 export async function createDamageTypeHandler(
-  request: FastifyRequest<{ Body: createDamageTypeInput }>,
+  request: FastifyRequest<{ Body: PostDamageTypeInput }>,
   reply: FastifyReply
 ) {
   try {
@@ -42,7 +42,7 @@ export async function updateDamageTypeHandler(
     Params: {
       damageTypeId: string;
     };
-    Body: createDamageTypeInput;
+    Body: PostDamageTypeInput;
   }>,
   reply: FastifyReply
 ) {

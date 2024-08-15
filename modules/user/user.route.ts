@@ -9,7 +9,19 @@ import {
   pwdResetHandler,
 } from './user.controller';
 import { jwtHeaderRequired } from '@/schemas';
-import { $ref } from './user.schema';
+
+import {
+  sPostUserBody,
+  sPostUserResponse,
+  sLoginBody,
+  sLoginResponse,
+  sGetUserResponse,
+  sPutUserBody,
+  sActivateUserBody,
+  sReactivateUserBody,
+  sResetPasswordBody,
+} from 'monstershuffler-shared';
+
 
 async function userRoutes(server: FastifyInstance) {
   server.post(
@@ -20,9 +32,9 @@ async function userRoutes(server: FastifyInstance) {
         description:
           'Logs in a user and returns an access token. Logged users can then receive their creations through other routes, and access other protected routes.',
         tags: ['users'],
-        body: $ref('loginSchema'),
+        body: sLoginBody,
         response: {
-          200: $ref('loginResponse'),
+          200: sLoginResponse
         },
       },
     },
@@ -40,9 +52,9 @@ async function userRoutes(server: FastifyInstance) {
         description:
           'Registers a new user in the database. Only accessible through monstershuffler.com',
         tags: ['users'],
-        body: $ref('postUser'),
+        body: sPostUserBody,
         response: {
-          201: $ref('postUserResponse'),
+          201: sPostUserResponse,
         },
       },
     },
@@ -60,9 +72,9 @@ async function userRoutes(server: FastifyInstance) {
         description:
           'Activates an account by providing the validation token sent via email. Only accessible through monstershuffler.com',
         tags: ['users'],
-        body: $ref('activateUser'),
+        body: sActivateUserBody,
         response: {
-          200: $ref('loginResponse'),
+          200: sLoginResponse,
         },
       },
     },
@@ -79,7 +91,7 @@ async function userRoutes(server: FastifyInstance) {
         description:
           'Resends the activation email to the user. The user will have to reset their password as well. Only accessible through monstershuffler.com',
         tags: ['users'],
-        body: $ref('reactivateUser'),
+        body: sReactivateUserBody,
         response: {
           200: { type: 'string' },
           404: { type: 'string' },
@@ -99,9 +111,9 @@ async function userRoutes(server: FastifyInstance) {
         description:
           'Resets the user\'s password. Only accessible through monstershuffler.com',
         tags: ['users'],
-        body: $ref('resetPassword'),
+        body: sResetPasswordBody,
         response: {
-          200: $ref('loginResponse'),
+          200: sLoginResponse,
           404: { type: 'string' },
         },
       },
@@ -122,7 +134,7 @@ async function userRoutes(server: FastifyInstance) {
         tags: ['users'],
         headers: jwtHeaderRequired,
         response: {
-          200: $ref('getUserResponse'),
+          200: sGetUserResponse,
         },
       },
     },
@@ -138,9 +150,9 @@ async function userRoutes(server: FastifyInstance) {
   //       description: 'Updates the user info corresponding to the given token. Only accessible through monstershuffler.com.',
   //       tags: ['users'],
   //       headers: jwtHeaderRequired,
-  //       body: $ref('putUser'),
+  //       body: $ref('sPutUserBody'),
   //       response: {
-  //         200: $ref('getUserResponse')
+  //         200: $ref('sGetUserResponse')
   //       },
   //     }
   //   },

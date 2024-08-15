@@ -1,36 +1,20 @@
 import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
 import {
-  postUser,
-  postUserResponse,
-  loginSchema,
-  loginResponse,
-  getUserResponse,
-  putUser,
-  activateUser,
-  reactivateUser,
-  resetPassword,
+  sPostUserBody,
+  sPostUserResponse,
+  sLoginBody,
+  sLoginResponse,
+  sGetUserResponse,
+  sPutUserBody,
+  sActivateUserBody,
+  sReactivateUserBody,
+  sResetPasswordBody,
 } from 'monstershuffler-shared';
 
 
-export type CreateUserInput = z.infer<typeof postUser>;
-export type LoginInput = z.infer<typeof loginSchema>;
-export type UpdateUserInput = z.infer<typeof putUser>;
-export type ActivateUserInput = z.infer<typeof activateUser>;
-export type ReactivateUserInput = z.infer<typeof reactivateUser>;
-export type ResetPasswordInput = z.infer<typeof resetPassword>;
-
-export const { schemas: userSchemas, $ref } = buildJsonSchemas(
-  {
-    postUser,
-    postUserResponse,
-    activateUser,
-    reactivateUser,
-    loginSchema,
-    loginResponse,
-    getUserResponse,
-    putUser,
-    resetPassword,
-  },
-  { $id: 'userSchemas' }
-);
+export type PostUserBody = z.infer<typeof sPostUserBody>;
+export type LoginBody = z.infer<typeof sLoginBody>;
+export type PutUserBody = z.infer<typeof sPutUserBody>;
+export type ActivateUserBody = z.infer<typeof sActivateUserBody>;
+export type ReactivateUserBodyInput = z.infer<typeof sReactivateUserBody>;
+export type ResetPasswordBody = z.infer<typeof sResetPasswordBody>;

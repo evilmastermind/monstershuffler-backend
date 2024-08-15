@@ -1,23 +1,12 @@
 import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
 import {
-  postLanguage,
-  putLanguage,
-  getLanguageResponse,
-  getLanguageListResponse,
+  sPostLanguageBody,
+  sPutLanguageBody,
+  sGetLanguageResponse,
+  sGetLanguageListResponse,
 } from 'monstershuffler-shared';
 
-export type createLanguageInput = z.infer<typeof postLanguage>;
-export type getLanguageListResponse = z.infer<
-  typeof getLanguageListResponse
+export type PostLanguageBody = z.infer<typeof sPostLanguageBody>;
+export type GetLanguageListResponse = z.infer<
+  typeof sGetLanguageListResponse
 >;
-
-export const { schemas: languageSchemas, $ref } = buildJsonSchemas(
-  {
-    postLanguage,
-    putLanguage,
-    getLanguageResponse,
-    getLanguageListResponse,
-  },
-  { $id: 'languageSchemas' }
-);

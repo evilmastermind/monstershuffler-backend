@@ -40,7 +40,7 @@
     "fastify": "^4.10.2",
     "fastify-mailer": "^2.3.1",
     "fastify-sse-v2": "^4.0.0",
-    "fastify-zod": "^1.2.0",
+    "fastify-type-provider-zod": "^2.0.0",
     "module-alias": "^2.2.2",
     "monstershuffler-shared": "git+https://github.com/evilmastermind/monstershuffler-shared#main",
     "node-php-password": "^0.1.2",

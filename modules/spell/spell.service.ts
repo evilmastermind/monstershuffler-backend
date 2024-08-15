@@ -1,8 +1,8 @@
 import prisma from '@/utils/prisma';
 import {
-  createSpellInput,
-  getSpellListInput,
-  updateSpellInput,
+  PostSpellBody,
+  GetSpellListBody,
+  PutSpellBody,
 } from './spell.schema';
 import { Spell } from 'monstershuffler-shared';
 
@@ -11,7 +11,7 @@ import { Spell } from 'monstershuffler-shared';
 // I need to create an "update spell names" button in the editor, and maybe retrieve the new spell names from the database
 // when an object is loaded... and maybe allow users to use shared spells only if they copy them into their own folders
 
-export async function createSpell(userid: number, input: createSpellInput) {
+export async function createSpell(userid: number, input: PostSpellBody) {
   const { object, game, name } = input;
 
   const newObject = await prisma.objects.create({
@@ -27,7 +27,7 @@ export async function createSpell(userid: number, input: createSpellInput) {
   return newObject;
 }
 
-export async function getSpellList(userid: number, filters: getSpellListInput) {
+export async function getSpellList(userid: number, filters: GetSpellListBody) {
   const {
     game,
     name,
@@ -175,7 +175,7 @@ export async function getSpell(userid: number, nameOrId: string) {
 export async function updateSpell(
   userid: number,
   id: number,
-  input: updateSpellInput
+  input: PutSpellBody
 ) {
   const { name, object } = input;
 

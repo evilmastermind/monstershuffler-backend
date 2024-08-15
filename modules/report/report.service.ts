@@ -1,8 +1,8 @@
 import prisma from '@/utils/prisma';
-import { createReportInput } from './report.schema';
+import { PostReportBody } from './report.schema';
 import { isAdmin } from '@/modules/user/user.service';
 
-export async function createReport(userid: number, input: createReportInput) {
+export async function createReport(userid: number, input: PostReportBody) {
   const { objectid, reason, report } = input;
 
   return await prisma.reports.create({

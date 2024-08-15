@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { $ref } from './polygen.schema';
+import { result } from './polygen.schema';
 import {
   parsePolygenHandler,
 } from './polygen.controller';
@@ -15,7 +15,7 @@ async function polygenRoutes(server: FastifyInstance) {
           'Parses a Polygen grammar. https://polygen.org/it/manuale',
         tags: ['polygen'],
         response: {
-          200: $ref('parsePolygenResponseSchema'),
+          200: result,
           404: { type: 'string' },
         },
       },

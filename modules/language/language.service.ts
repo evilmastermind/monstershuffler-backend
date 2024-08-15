@@ -1,10 +1,10 @@
 import prisma from '@/utils/prisma';
-import { createLanguageInput } from './language.schema';
+import { PostLanguageBody } from './language.schema';
 import { ChoiceRandomObject, Choice } from '@/types';
 
 export async function createLanguage(
   userid: number,
-  input: createLanguageInput
+  input: PostLanguageBody
 ) {
   const { name, script } = input;
 
@@ -43,7 +43,7 @@ export async function getLanguageList(userid: number) {
 export async function updateLanguage(
   userid: number,
   id: number,
-  input: createLanguageInput
+  input: PostLanguageBody
 ) {
   const { name, script } = input;
 

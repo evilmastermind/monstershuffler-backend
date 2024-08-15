@@ -1,8 +1,8 @@
 import { FastifyInstance } from 'fastify';
-import { getRandomVoiceHandler } from './voice.controller';
-import { $ref } from './voice.schema';
+import { sGetRandomVoiceHandler } from './voice.controller';
+import { sGetRandomVoiceResponse, sGetRandomVoiceBody } from 'monstershuffler-shared';
 
-async function voiceRoutes(server: FastifyInstance) {
+export async function voiceRoutes(server: FastifyInstance) {
   server.get(
     '/random',
     {
@@ -10,13 +10,13 @@ async function voiceRoutes(server: FastifyInstance) {
         summary: 'Returns a random type of voice.',
         description:
           'Returns the name of a real person or a character from a movie, tv show, and the file name of its voice sample.',
-        body: $ref('getRandomVoice'),
+        body: sGetRandomVoiceBody,
         tags: ['voices'],
         response: {
-          200: $ref('getRandomVoiceResponse'),
+          200: sGetRandomVoiceResponse,
         },
       },
     },
-    getRandomVoiceHandler
+    sGetRandomVoiceHandler
   );
 }

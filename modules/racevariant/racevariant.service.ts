@@ -1,13 +1,13 @@
 import prisma from '@/utils/prisma';
 import {
   Racevariant,
-  createRacevariantInput,
-  updateRacevariantInput,
+  PostRacevariantBody,
+  PutRacevariantBody,
 } from './racevariant.schema';
 
 export async function createRacevariant(
   userid: number,
-  input: createRacevariantInput
+  input: PostRacevariantBody
 ) {
   const { object, game, raceId } = input;
 
@@ -156,7 +156,7 @@ export async function getRacevariantList(userid: number, variantof: number) {
 export async function updateRacevariant(
   userid: number,
   id: number,
-  input: updateRacevariantInput
+  input: PutRacevariantBody
 ) {
   const { object } = input;
 

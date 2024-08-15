@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { $ref } from './pagesetting.schema';
+import { pageSettings, settings } from 'monstershuffler-shared';
 import {
   getPagesettingHandler,
   setPagesettingHandler,
@@ -16,7 +16,7 @@ async function pagesettingRoutes(server: FastifyInstance) {
           'Returns the user\'s settings for a specific page.',
         tags: ['pagesettings'],
         response: {
-          200: $ref('getPagesettingResponseSchema'),
+          200: pageSettings,
           404: { type: 'string' },
         },
       },
@@ -33,7 +33,7 @@ async function pagesettingRoutes(server: FastifyInstance) {
         description:
           'Saves the user\'s settings for a specific page.',
         tags: ['pagesettings'],
-        body: $ref('setPagesettingResponseSchema'),
+        body: settings,
         response: {
           200: { type: 'string' },
         },

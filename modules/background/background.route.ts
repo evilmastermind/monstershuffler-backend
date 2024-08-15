@@ -5,8 +5,8 @@ import {
   getRandomBackgroundForAgeHandler,
   getBackgroundListHandler,
 } from './background.controller';
-import { $ref } from './background.schema';
 import { jwtHeaderOptional } from '@/schemas';
+import { sGetBackgroundListResponse, sGetBackgroundResponse } from 'monstershuffler-shared';
 
 // TODO: backgrounds have some random choices that choose a weapon based
 // on the weapon's name. This might cause issues if there are multiple
@@ -24,7 +24,7 @@ async function backgroundRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['backgrounds'],
         response: {
-          200: $ref('getBackgroundListResponse'),
+          200: sGetBackgroundListResponse,
         },
       },
     },
@@ -44,7 +44,7 @@ async function backgroundRoutes(server: FastifyInstance) {
         tags: ['backgrounds'],
         // params: $ref('getBackgroundParamsSchema'),
         response: {
-          200: $ref('getBackgroundResponse'),
+          200: sGetBackgroundResponse,
         },
       },
     },
@@ -64,7 +64,7 @@ async function backgroundRoutes(server: FastifyInstance) {
         tags: ['backgrounds'],
         // params: $ref('getBackgroundParamsSchema'),
         response: {
-          200: $ref('getBackgroundResponse'),
+          200: sGetBackgroundResponse,
         },
       },
     },
@@ -84,7 +84,7 @@ async function backgroundRoutes(server: FastifyInstance) {
         tags: ['backgrounds'],
         // params: $ref('getBackgroundParamsSchema'),
         response: {
-          200: $ref('getBackgroundResponse'),
+          200: sGetBackgroundResponse,
         },
       },
     },
@@ -103,7 +103,7 @@ async function backgroundRoutes(server: FastifyInstance) {
   //       tags: ['backgrounds'],
   //       headers: jwtHeaderRequired,
   //       response: {
-  //         201: $ref('getBackgroundResponseSchema')
+  //         201: $ref('sGetBackgroundResponseSchema')
   //       }
   //     },
   //   },

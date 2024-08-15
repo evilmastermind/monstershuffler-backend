@@ -1,15 +1,14 @@
 import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
 
 export const CURRENT_GOOD_MODEL= 'gpt-4o-2024-08-06';
 export const CURRENT_CHEAP_MODEL= 'gpt-4o-mini';
 
-const generateTextSchema = z.object({
+const sGenerateTextBody = z.object({
   prompt: z.string(),
   model: z.string().optional()
 });
 
-export const generateTextResponse = z.object({
+export const sGenerateTextResponse = z.object({
   id: z.string(),
   object: z.string(),
   created: z.number(),
@@ -24,13 +23,5 @@ export const generateTextResponse = z.object({
   }))
 });
 
-export type GenerateTextInput = z.infer<typeof generateTextSchema>;
-export type GenerateTextResponse = z.infer<typeof generateTextResponse>;
-
-export const { schemas: aiSchemas, $ref } = buildJsonSchemas(
-  {
-    generateTextSchema,
-    generateTextResponse
-  },
-  { $id: 'aiSchemas' }
-);
+export type GenerateTextInput = z.infer<typeof sGenerateTextBody>;
+export type GenerateTextResponse = z.infer<typeof sGenerateTextResponse>;

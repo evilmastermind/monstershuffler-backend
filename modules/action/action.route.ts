@@ -6,8 +6,8 @@ import {
   updateActionHandler,
   deleteActionHandler,
 } from './action.controller';
-import { $ref } from './action.schema';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { sGetActionListBody, sGetActionListResponse, sGetActionResponse, sPostActionBody, sPutActionBody } from 'monstershuffler-shared';
 
 async function actionRoutes(server: FastifyInstance) {
   server.post(
@@ -19,11 +19,11 @@ async function actionRoutes(server: FastifyInstance) {
           'Returns a list of actions from the db, filtered by the values specified in the body.',
         description:
           'Returns a list of actions from the db, filtered by the values specified in the body. If authenticated, also returns the actions created by the user.',
-        body: $ref('getActionList'),
+        body: sGetActionListBody,
         headers: jwtHeaderOptional,
         tags: ['actions'],
         response: {
-          200: $ref('getActionListResponse'),
+          200: sGetActionListResponse,
         },
       },
     },
@@ -43,7 +43,7 @@ async function actionRoutes(server: FastifyInstance) {
         tags: ['actions'],
         // params: $ref('getActionParamsSchema'),
         response: {
-          200: $ref('getActionResponse'),
+          200: sGetActionResponse,
         },
       },
     },
@@ -58,11 +58,11 @@ async function actionRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new action to the db.',
         description: '[MS ONLY] Adds a new action to the db.',
-        body: $ref('postAction'),
+        body: sPostActionBody,
         tags: ['actions'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('getActionResponse'),
+          201: sGetActionResponse,
         },
       },
     },
@@ -78,7 +78,7 @@ async function actionRoutes(server: FastifyInstance) {
         summary: '[MS ONLY] Updates the action corresponding to the given id.',
         description:
           '[MS ONLY] Updates the action corresponding to the given id.',
-        body: $ref('putAction'),
+        body: sPutActionBody,
         tags: ['actions'],
         headers: jwtHeaderRequired,
         response: {

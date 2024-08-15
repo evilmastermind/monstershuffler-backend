@@ -1,14 +1,12 @@
-import { Prisma } from '@prisma/client';
-
 import prisma from '@/utils/prisma';
 import {
-  PostActionInput,
-  GetActionListInput,
-  PutActionInput,
+  PostActionBody,
+  GetActionListBody,
+  PutActionBody,
 } from './action.schema';
-import { Action, ChosenAction } from 'monstershuffler-shared';
+import { ChosenAction } from 'monstershuffler-shared';
 
-export async function createAction(userid: number, input: PostActionInput) {
+export async function createAction(userid: number, input: PostActionBody) {
   const { object, game, name, type, subtype, source, tags } = input;
 
   const newObject = await prisma.objects.create({
@@ -45,7 +43,7 @@ export async function createAction(userid: number, input: PostActionInput) {
 
 export async function getActionList(
   userid: number,
-  filters: GetActionListInput
+  filters: GetActionListBody
 ) {
   const actionList = await prisma.objects.findMany({
     select: {
@@ -125,7 +123,7 @@ export async function getAction(userid: number, id: number) {
 export async function updateAction(
   userid: number,
   id: number,
-  input: PutActionInput
+  input: PutActionBody
 ) {
   const { object, name, type, subtype, source, tags } = input;
   const result = await prisma.objects.updateMany({

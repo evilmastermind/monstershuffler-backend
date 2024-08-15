@@ -1,4 +1,4 @@
-import { PostRandomNpcInput } from './npc.schema';
+import { PostRandomNpcBody } from './npc.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { getRace, getRandomRace } from '@/modules/race/race.service';
 import {
@@ -16,18 +16,18 @@ import {
   getRandomBackgroundForAge,
 } from '@/modules/background/background.service';
 import { getRandomSkill } from '@/modules/skill/skill.service';
-import { getRandomName } from '@/modules/name/name.service';
-import { getRandomSurname } from '@/modules/surname/surname.service';
-import { getRandomTraitForAge } from '@/modules/trait/trait.service';
+import { sGetRandomName } from '@/modules/name/name.service';
+import { sGetRandomSurname } from '@/modules/surname/surname.service';
+import { sGetRandomTraitBodyForAge } from '@/modules/trait/trait.service';
 import { getRandomCharacterhookForAge } from '@/modules/characterhook/characterhook.service';
 import { handleError } from '@/utils/errors';
 import { random, randomDecimal, round2Decimals } from '@/utils/functions';
 import { findChoices } from '@/modules/choiceSolver';
-import { getRandomVoice } from '../voices/voice.service';
+import { sGetRandomVoice } from '../voices/voice.service';
 import { adjustLevel, createStats } from 'monstershuffler-shared';
 
 export async function createRandomNpc(
-  request: FastifyRequest<{ Body: PostRandomNpcInput }>,
+  request: FastifyRequest<{ Body: PostRandomNpcBody }>,
   reply: FastifyReply
 ) {
   const { id } = request.user || { id: 0 };
@@ -145,8 +145,8 @@ export async function createRandomNpc(
     const name = await calculateName(pronouns, race) || 'Character Name';
     const surname = await calculateSurname(pronouns, race);
     const favouriteSkill = await getRandomSkill();
-    const traitObject = await getRandomTraitForAge({ feeling: 0 }, age.string);
-    const feelingObject = await getRandomTraitForAge({ feeling: 1 }, age.string);
+    const traitObject = await sGetRandomTraitBodyForAge({ feeling: 0 }, age.string);
+    const feelingObject = await sGetRandomTraitBodyForAge({ feeling: 1 }, age.string);
     const alignmentModifiers = calculateAlignment(traitObject?.category);
     const alignmentEthical = alignmentEthicalChosen;
     const alignmentMoral = alignmentMoralChosen;
@@ -434,7 +434,7 @@ function calculateName(pronouns: string, race: Race | null) {
   if (gender === 'neutral') {
     gender = random(1, 2) === 1 ? 'male' : 'female';
   }
-  return getRandomName({ race: nameType, gender });
+  return sGetRandomName({ race: nameType, gender });
 }
 
 async function calculateSurname(pronouns: string, race: Race | null) {
@@ -450,7 +450,7 @@ async function calculateSurname(pronouns: string, race: Race | null) {
   if (gender === 'neutral') {
     gender = random(1, 2) === 1 ? 'male' : 'female';
   }
-  return await getRandomSurname({ race: surnameType, gender });
+  return await sGetRandomSurname({ race: surnameType, gender });
 }
 
 function calculatePronouns(race: Race | null, racevariant: Racevariant | null) {
@@ -476,7 +476,7 @@ async function calculateVoice(pronouns: string) {
   } else {
     options = {};
   }
-  const randomVoice = await getRandomVoice(options);
+  const randomVoice = await sGetRandomVoice(options);
   if(!randomVoice) {
     return null;
   }

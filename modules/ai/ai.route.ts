@@ -22,7 +22,7 @@ async function aiRoutes(server: FastifyInstance) {
         tags: ['ai'],
         body: $ref('generateTextSchema'),
         response: {
-          200: $ref('generateTextResponse'),
+          200: $ref('sGenerateTextResponse'),
         },
       }
     },

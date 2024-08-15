@@ -6,7 +6,12 @@ import {
   updateTemplateHandler,
   deleteTemplateHandler,
 } from './template.controller';
-import { $ref } from './template.schema';
+import {
+  sGetTemplateListResponse,
+  sGetTemplateResponse,
+  sPostTemplateBody,
+  sPutTemplateBody,
+} from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
 
 async function templateRoutes(server: FastifyInstance) {
@@ -21,7 +26,7 @@ async function templateRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['templates'],
         response: {
-          200: $ref('getTemplateListResponse'),
+          200: sGetTemplateListResponse,
         },
       },
     },
@@ -41,7 +46,7 @@ async function templateRoutes(server: FastifyInstance) {
         tags: ['templates'],
         // params: $ref('getTemplateParamsSchema'),
         response: {
-          200: $ref('getTemplateResponse'),
+          200: sGetTemplateResponse,
         },
       },
     },
@@ -56,11 +61,11 @@ async function templateRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new template to the db.',
         description: '[MS ONLY] Adds a new template to the db.',
-        body: $ref('postTemplate'),
+        body: sPostTemplateBody,
         tags: ['templates'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('getTemplateResponse'),
+          201: sGetTemplateResponse,
         },
       },
     },
@@ -77,7 +82,7 @@ async function templateRoutes(server: FastifyInstance) {
           '[MS ONLY] Updates the template corresponding to the given id.',
         description:
           '[MS ONLY] Updates the template corresponding to the given id.',
-        body: $ref('putTemplate'),
+        body: sPutTemplateBody,
         tags: ['templates'],
         headers: jwtHeaderRequired,
         response: {

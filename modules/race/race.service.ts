@@ -1,7 +1,7 @@
 import prisma from '@/utils/prisma';
-import { Race, createRaceInput, updateRaceInput } from './race.schema';
+import { Race, PostRaceBody, PutRaceBody } from './race.schema';
 
-export async function createRace(userid: number, input: createRaceInput) {
+export async function createRace(userid: number, input: PostRaceBody) {
   const { object, game } = input;
 
   return await prisma.objects.create({
@@ -183,7 +183,7 @@ export async function getRaceWithVariantsList(userid: number) {
 export async function updateRace(
   userid: number,
   id: number,
-  input: updateRaceInput
+  input: PutRaceBody
 ) {
   const { object, game } = input;
 

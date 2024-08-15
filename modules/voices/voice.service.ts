@@ -1,7 +1,7 @@
 import prisma from '@/utils/prisma';
-import { getRandomVoiceInput } from './voice.schema';
+import { GetRandomVoiceInput } from './voice.schema';
 
-export async function getRandomVoice(input: getRandomVoiceInput) {
+export async function sGetRandomVoice(input: GetRandomVoiceInput) {
   const voiceCount = await prisma.voices.count({
     where: {
       gender: input.gender,

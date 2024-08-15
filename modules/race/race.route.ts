@@ -8,7 +8,13 @@ import {
   updateRaceHandler,
   deleteRaceHandler,
 } from './race.controller';
-import { $ref } from './race.schema';
+import {
+  sGetRaceListResponse,
+  sGetRaceResponse,
+  sGetRaceWithVariantsListResponse,
+  sPostRaceBody,
+  sPutRaceBody,
+} from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
 
 async function raceRoutes(server: FastifyInstance) {
@@ -23,7 +29,7 @@ async function raceRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['races'],
         response: {
-          200: $ref('getRaceListResponse'),
+          200: sGetRaceListResponse,
         },
       },
     },
@@ -42,7 +48,7 @@ async function raceRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['races'],
         response: {
-          200: $ref('getRaceWithVariantsListResponse'),
+          200: sGetRaceWithVariantsListResponse,
         },
       },
     },
@@ -62,7 +68,7 @@ async function raceRoutes(server: FastifyInstance) {
         tags: ['races'],
         // params: $ref('getRaceParamsSchema'),
         response: {
-          200: $ref('getRaceResponse'),
+          200: sGetRaceResponse,
         },
       },
     },
@@ -81,7 +87,7 @@ async function raceRoutes(server: FastifyInstance) {
         tags: ['races'],
         // params: $ref('getRaceParamsSchema'),
         response: {
-          200: $ref('getRaceResponse'),
+          200: sGetRaceResponse,
         },
       },
     },
@@ -96,11 +102,11 @@ async function raceRoutes(server: FastifyInstance) {
   //         hide: true,
   //         summary: '[MS ONLY] Adds a new race to the db.',
   //         description: '[MS ONLY] Adds a new race to the db.',
-  //         body: $ref('postRace'),
+  //         body: $ref('sPostRaceBody'),
   //         tags: ['races'],
   //         headers: jwtHeaderRequired,
   //         response: {
-  //           201: $ref('getRaceResponse')
+  //           201: $ref('sGetRaceResponse')
   //         }
   //       },
   //     },
@@ -115,7 +121,7 @@ async function raceRoutes(server: FastifyInstance) {
   //         hide: true,
   //         summary: '[MS ONLY] Updates the race corresponding to the given id.',
   //         description: '[MS ONLY] Updates the race corresponding to the given id.',
-  //         body: $ref('putRace'),
+  //         body: $ref('sPutRaceBody'),
   //         tags: ['races'],
   //         headers: jwtHeaderRequired,
   //         response: {

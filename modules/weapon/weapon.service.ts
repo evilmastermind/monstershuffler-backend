@@ -1,8 +1,8 @@
 import prisma from '@/utils/prisma';
-import { createWeaponInput } from './weapon.schema';
+import { PostWeaponBody } from './weapon.schema';
 import { Weapon } from 'monstershuffler-shared';
 
-export async function createWeapon(userid: number, input: createWeaponInput) {
+export async function createWeapon(userid: number, input: PostWeaponBody) {
   const { object, game } = input;
 
   return await prisma.objects.create({
@@ -78,7 +78,7 @@ export async function getWeaponList(userid: number) {
 export async function updateWeapon(
   userid: number,
   id: number,
-  input: createWeaponInput
+  input: PostWeaponBody
 ) {
   const { object } = input;
 

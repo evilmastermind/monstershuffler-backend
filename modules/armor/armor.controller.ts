@@ -1,4 +1,4 @@
-import { PostArmorInput } from './armor.schema';
+import { PostArmorBody } from './armor.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createArmor,
@@ -43,7 +43,7 @@ export async function getArmorHandler(
 }
 
 export async function createArmorHandler(
-  request: FastifyRequest<{ Body: PostArmorInput }>,
+  request: FastifyRequest<{ Body: PostArmorBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -61,7 +61,7 @@ export async function updateArmorHandler(
     Params: {
       armorId: string;
     };
-    Body: PostArmorInput;
+    Body: PostArmorBody;
   }>,
   reply: FastifyReply
 ) {

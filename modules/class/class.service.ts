@@ -1,5 +1,5 @@
 import prisma from '@/utils/prisma';
-import { createClassInput, Class, updateClassInput } from './class.schema';
+import { PostClassBody, Class, PutClassBody } from './class.schema';
 
 ///////////////////////////////////
 // O B J E C T   T Y P E S
@@ -21,7 +21,7 @@ import { createClassInput, Class, updateClassInput } from './class.schema';
 //
 ///////////////////////////////////
 
-export async function createClass(userid: number, input: createClassInput) {
+export async function createClass(userid: number, input: PostClassBody) {
   const { object, game } = input;
 
   return await prisma.objects.create({
@@ -205,7 +205,7 @@ export async function getClassList(userid: number) {
 export async function updateClass(
   userid: number,
   id: number,
-  input: updateClassInput
+  input: PutClassBody
 ) {
   const { object, game } = input;
 

@@ -1,4 +1,4 @@
-import { createTemplateInput, updateTemplateInput } from './template.schema';
+import { PostTemplateBody, PutTemplateBody } from './template.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createTemplate,
@@ -43,7 +43,7 @@ export async function getTemplateHandler(
 }
 
 export async function createTemplateHandler(
-  request: FastifyRequest<{ Body: createTemplateInput }>,
+  request: FastifyRequest<{ Body: PostTemplateBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -61,7 +61,7 @@ export async function updateTemplateHandler(
     Params: {
       templateId: string;
     };
-    Body: updateTemplateInput;
+    Body: PutTemplateBody;
   }>,
   reply: FastifyReply
 ) {

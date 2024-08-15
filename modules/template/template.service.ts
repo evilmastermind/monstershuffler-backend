@@ -1,9 +1,9 @@
 import prisma from '@/utils/prisma';
-import { Template, createTemplateInput } from './template.schema';
+import { Template, PostTemplateBody, PutTemplateBody } from './template.schema';
 
 export async function createTemplate(
   userid: number,
-  input: createTemplateInput
+  input: PostTemplateBody
 ) {
   const { object, game } = input;
 
@@ -83,7 +83,7 @@ export async function getTemplateList(userid: number) {
 export async function updateTemplate(
   userid: number,
   id: number,
-  input: createTemplateInput
+  input: PutTemplateBody
 ) {
   const { object, game } = input;
 

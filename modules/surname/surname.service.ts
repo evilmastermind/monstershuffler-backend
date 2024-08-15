@@ -1,7 +1,7 @@
 import prisma from '@/utils/prisma';
-import { getRandomSurnameInput } from './surname.schema';
+import { GetRandomSurnameBody } from './surname.schema';
 
-export async function getRandomSurname(input: getRandomSurnameInput) {
+export async function sGetRandomSurname(input: GetRandomSurnameBody) {
   const surnameCount = await prisma.surnames.count({
     where: {
       race: input.race,

@@ -6,7 +6,8 @@ import {
   deleteFolderHandler,
 } from './folder.controller';
 import { BatchPayload, jwtHeaderRequired } from '@/schemas';
-import { $ref } from './folder.schema';
+import { sPostFolderBody, sPostFolderResponse, sGetFolderContentResponse } from 'monstershuffler-shared';
+
 
 async function folderRoutes(server: FastifyInstance) {
   server.get(
@@ -19,7 +20,7 @@ async function folderRoutes(server: FastifyInstance) {
         // params: $ref('getFolderParamsSchema'),
         headers: jwtHeaderRequired,
         response: {
-          200: $ref('getFolderContentResponse'),
+          200: sGetFolderContentResponse,
         },
       },
     },
@@ -32,12 +33,12 @@ async function folderRoutes(server: FastifyInstance) {
       schema: {
         summary: 'Creates a new folder.',
         description: 'Creates a new folder.',
-        body: $ref('postFolder'),
+        body: sPostFolderBody,
         tags: ['folders'],
         // params: $ref('getFolderParamsSchema'),
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('postFolderResponse'),
+          201: sPostFolderResponse,
         },
       },
     },
@@ -50,7 +51,7 @@ async function folderRoutes(server: FastifyInstance) {
       schema: {
         summary: 'Renames a folder.',
         description: 'Renames a folder.',
-        body: $ref('postFolder'),
+        body: sPostFolderBody,
         tags: ['folders'],
         // params: $ref('getFolderParamsSchema'),
         headers: jwtHeaderRequired,

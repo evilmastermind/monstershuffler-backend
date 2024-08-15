@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { getSkillListHandler, getRandomSkillHandler } from './skill.controller';
-import { $ref } from './skill.schema';
+import { sGetSkillListResponse, sGetSkillResponse } from 'monstershuffler-shared';
 import { jwtHeaderOptional } from '@/schemas';
 
 async function skillRoutes(server: FastifyInstance) {
@@ -14,7 +14,7 @@ async function skillRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['skills'],
         response: {
-          200: $ref('getSkillListResponse'),
+          200: sGetSkillListResponse,
         },
       },
     },
@@ -31,7 +31,7 @@ async function skillRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['skills'],
         response: {
-          200: $ref('getSkillResponse'),
+          200: sGetSkillResponse,
         },
       },
     },

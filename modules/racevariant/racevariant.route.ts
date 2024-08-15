@@ -7,7 +7,12 @@ import {
   updateRacevariantHandler,
   deleteRacevariantHandler,
 } from './racevariant.controller';
-import { $ref } from './racevariant.schema';
+import {
+  sGetRacevariantListResponse,
+  sGetRacevariantResponse,
+  sPostRacevariantBody,
+  sPutRacevariantBody,
+} from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
 
 async function racevariantRoutes(server: FastifyInstance) {
@@ -24,7 +29,7 @@ async function racevariantRoutes(server: FastifyInstance) {
         tags: ['race variants'],
         // params: $ref('getRacevariantParamsSchema'),
         response: {
-          200: $ref('getRacevariantListResponse'),
+          200: sGetRacevariantListResponse,
         },
       },
     },
@@ -44,7 +49,7 @@ async function racevariantRoutes(server: FastifyInstance) {
         tags: ['race variants'],
         // params: $ref('getRacevariantParamsSchema'),
         response: {
-          200: $ref('getRacevariantResponse'),
+          200: sGetRacevariantResponse,
         },
       },
     },
@@ -64,7 +69,7 @@ async function racevariantRoutes(server: FastifyInstance) {
         tags: ['race variants'],
         // params: $ref('getRacevariantParamsSchema'),
         response: {
-          200: $ref('getRacevariantResponse'),
+          200: sGetRacevariantResponse,
         },
       },
     },
@@ -79,12 +84,12 @@ async function racevariantRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new race variant to the db.',
         description: '[MS ONLY] Adds a new race variant to the db.',
-        body: $ref('postRacevariant'),
+        body: sPostRacevariantBody,
         tags: ['race variants'],
         headers: jwtHeaderRequired,
         // params: $ref('getRacevariantParamsSchema'),
         response: {
-          201: $ref('getRacevariantResponse'),
+          201: sGetRacevariantResponse,
         },
       },
     },
@@ -101,7 +106,7 @@ async function racevariantRoutes(server: FastifyInstance) {
           '[MS ONLY] Updates the race variant corresponding to the given id.',
         description:
           '[MS ONLY] Updates the race variant corresponding to the given id.',
-        body: $ref('putRacevariant'),
+        body: sPutRacevariantBody,
         tags: ['race variants'],
         headers: jwtHeaderRequired,
         response: {
