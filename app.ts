@@ -11,6 +11,8 @@ import {FastifySSEPlugin} from 'fastify-sse-v2';
 import Sensible from '@fastify/sensible';
 import fjwt from '@fastify/jwt';
 import cors from '@fastify/cors';
+import events from 'events';
+import rateLimiter from '@fastify/rate-limit';
 import swaggerSettings from '@/plugins/swagger';
 import mailerSettings from '@/plugins/mailer';
 import { schemas, routes } from '@/modules';
@@ -26,6 +28,8 @@ export const server = Fastify({
 });
 // export const server = Fastify();
 
+events.EventEmitter.defaultMaxListeners = parseInt(process.env.MAX_LISTENERS || '100');
+
 const secret = process.env.JWT_SECRET;
 if (secret === undefined) {
   console.error('Missing JWT_SECRET in .env');
@@ -36,6 +40,12 @@ server
   // cors
   .register(cors, {
     origin: true,
+  })
+  // rate limiter
+  .register(rateLimiter, {
+    global : true,
+    max: 100,
+    timeWindow: '1 minute',
   })
   // jwt
   .register(fjwt, {

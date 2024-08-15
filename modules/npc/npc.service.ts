@@ -1,6 +1,6 @@
 import prisma from '@/utils/prisma';
 import { Prisma } from '@prisma/client';
-import type { PostNpc, PostNpcToSentAlreadyListInput, PostRandomNpcInput, PostRandomNpcResponse, AddBackstoryToNpcInput } from './npc.schema';
+import type { PostNpc, PostNpcToSentAlreadyListInput, PostRandomNpcInput, PostRandomNpcResponse, AddBackstoryToNpcInput, PostNpcRating } from './npc.schema';
 import { FastifyRequest } from 'fastify';
 import { random } from '@/utils/functions';
 
@@ -55,7 +55,7 @@ export async function getRecycledNpcsForUser(
   for (let i = 0; i < raceFilters.length; i++) {
     const racefilter = raceFilters[i].filter ? `AND ${raceFilters[i].filter}` : '';
     npcs = npcs.concat(await prisma.$queryRaw`
-      SELECT n.id, n.object, AVG(r.rating) as rating
+      SELECT n.id, n.object, AVG(r.rating) as rating, COUNT(r.rating) as ratingcount
       FROM
         npcs n
         LEFT JOIN npcsrating r on n.id = r.npcid
@@ -69,7 +69,7 @@ export async function getRecycledNpcsForUser(
         ${Prisma.raw(filters)}
         ${Prisma.raw(racefilter)}
       GROUP BY n.id, n.object
-      ORDER BY rating DESC
+      ORDER BY COALESCE(AVG(rating), '-Infinity')::float DESC, ratingcount DESC
       LIMIT ${raceFilters[i].quantity}
     `);
   }
@@ -106,7 +106,7 @@ function getRaceFilters(request: FastifyRequest<{ Body: PostRandomNpcInput }>, q
   }
 
   if (secondaryRacevariantId) {
-    filters[0].filter += ` AND n.racevariantid = ${secondaryRacevariantId}`;
+    filters[1].filter += ` AND n.racevariantid = ${secondaryRacevariantId}`;
   }
 
   for (let i = 0; i < quantity; i++) {
@@ -120,6 +120,8 @@ function getRaceFilters(request: FastifyRequest<{ Body: PostRandomNpcInput }>, q
       filters[2].quantity += 1;
     }
   }
+
+  console.log(JSON.stringify(filters, null, 2));
 
   return filters.filter((filter) => filter.quantity > 0);
 }
@@ -143,8 +145,8 @@ function getClassFilter(request: FastifyRequest<{ Body: PostRandomNpcInput }>) {
     filter += `
       (
       CASE
-          WHEN RANDOM() > 0.05 THEN n.classid IS NOT NULL
-          ELSE n.classid IS NULL
+          WHEN RANDOM() > 0.05 THEN n.classid IS NULL
+          ELSE n.classid IS NOT NULL
       END
     )
     `;
@@ -231,4 +233,23 @@ export async function addBackstoryToNpc(input: AddBackstoryToNpcInput) {
     where: { id },
     data: { object, hasbackstory: true },
   });
+}
+
+export async function postNpcRating(input: PostNpcRating) {
+  const { npcid, rating, userid, sessionid } = input;
+  /**
+   * Prisma's upsert method limitations:
+   * (https://www.prisma.io/docs/orm/prisma-client/queries/crud#update-or-create-records)
+   * "Prisma Client does not have a findOrCreate() query.
+   * A limitation to using upsert() as a workaround for findOrCreate() is that upsert() 
+   * will only accept unique model fields in the where condition. So it's not possible 
+   * to use upsert() to emulate findOrCreate() if the where condition contains non-unique fields.""
+   */
+
+  return await prisma.$queryRaw`
+    INSERT INTO npcsrating (npcid, userid, sessionid, rating)
+    VALUES (${npcid}, ${userid !== undefined ? userid : null}, ${sessionid !== undefined ? sessionid : null}, ${rating})
+    ON CONFLICT (npcid, userid, sessionid)
+    DO UPDATE SET rating = EXCLUDED.rating, datecreated = CURRENT_TIMESTAMP;
+  `;
 }

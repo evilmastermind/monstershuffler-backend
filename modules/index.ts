@@ -2,7 +2,7 @@
 // schemas
 //=======================================================
 // import { actionSchemas } from '@/modules/action/action.schema';
-import { aiSchemas } from '@/modules/ai/ai.schema';
+// import { aiSchemas } from '@/modules/ai/ai.schema';
 // import { armorSchemas } from '@/modules/armor/armor.schema';
 // import { characterhookSchemas } from '@/modules/background/characterhook.schema';
 import { backgroundSchemas } from '@/modules/background/background.schema';
@@ -32,7 +32,7 @@ import { userSchemas } from '@/modules/user/user.schema';
 // routes
 //=======================================================
 // import actionRoutes from '@/modules/action/action.route';
-import aiRoutes from '@/modules/ai/ai.route';
+// import aiRoutes from '@/modules/ai/ai.route';
 // import armorRoutes from '@/modules/armor/armor.route';
 import backgroundRoutes from '@/modules/background/background.route';
 // import characterhookRoutes from '@/modules/characterhook/characterhook.route';
@@ -63,7 +63,7 @@ import converterRoutes from '@/modules/converter/converter.route';
 
 export const schemas = [
   // ...actionSchemas,
-  ...aiSchemas,
+  // ...aiSchemas,
   // ...armorSchemas,
   ...backgroundSchemas,
   // ...characterSchemas,
@@ -92,7 +92,7 @@ export const schemas = [
 
 export const routes = [
   //  {routes: actionRoutes,  prefix: 'api/actions' },
-  { routes: aiRoutes, prefix: 'api/ai' },
+  // { routes: aiRoutes, prefix: 'api/ai' },
   //  {routes: armorRoutes,  prefix: 'api/armor' },
   { routes: backgroundRoutes, prefix: 'api/backgrounds' },
   //  {routes: characterRoutes,  prefix: 'api/characters' },

@@ -5,64 +5,6 @@ info:
   version: 0.0.2
 components:
   schemas:
-    aiSchemas:
-      type: object
-      properties:
-        generateTextSchema:
-          type: object
-          properties:
-            prompt:
-              type: string
-          required:
-            - prompt
-          additionalProperties: false
-        generateTextResponse:
-          type: object
-          properties:
-            id:
-              type: string
-            object:
-              type: string
-            created:
-              type: number
-            model:
-              type: string
-            choices:
-              type: array
-              items:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      content:
-                        type: string
-                      index:
-                        type: number
-                    required:
-                      - content
-                      - index
-                    additionalProperties: false
-                  index:
-                    type: number
-                  completions:
-                    type: number
-                required:
-                  - message
-                  - index
-                  - completions
-                additionalProperties: false
-          required:
-            - id
-            - object
-            - created
-            - model
-            - choices
-          additionalProperties: false
-      required:
-        - generateTextSchema
-        - generateTextResponse
-      additionalProperties: false
     backgroundSchemas:
       type: object
       properties:
@@ -1949,6 +1891,30 @@ components:
                 - Any
             CRChosen:
               type: number
+          additionalProperties: false
+        postNpcRatingInput:
+          type: object
+          properties:
+            id:
+              type: number
+            rating:
+              type: number
+            sessionid:
+              type: string
+          required:
+            - id
+            - rating
+          additionalProperties: false
+        postNpcRatingResponse:
+          type: object
+          properties:
+            id:
+              type: number
+            rating:
+              type: number
+          required:
+            - id
+            - rating
           additionalProperties: false
         postRandomNpcResponse:
           type: object
@@ -4571,6 +4537,8 @@ components:
           additionalProperties: false
       required:
         - postRandomNpcInput
+        - postNpcRatingInput
+        - postNpcRatingResponse
         - postRandomNpcResponse
         - postFourRandomNpcsResponse
         - getGeneratorDataResponse
@@ -6115,30 +6083,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/classSchemas/properties/getClassResponse"
-  /api/npcs/:
-    post:
-      summary: Creates a new random npc using the settings provided.
-      tags:
-        - npcs
-      description: Creates a new random npc using the settings provided.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcInput"
-      parameters:
-        - schema:
-            type: string
-          in: header
-          name: authorization
-          required: false
-      responses:
-        "200":
-          description: Default Response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/npcSchemas/properties/postRandomNpcResponse"
   /api/npcs/generator-data:
     get:
       summary: "[MS ONLY] Gets the data used by the NPC Generator on the frontend."
@@ -6185,6 +6129,28 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/npcSchemas/properties/generateTextResponse"
+  /api/npcs/rating:
+    post:
+      summary: "[MS Only] Rate an NPC"
+      description: Rate an NPC
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/npcSchemas/properties/postNpcRatingInput"
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: authorization
+          required: false
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/npcSchemas/properties/postNpcRatingResponse"
   /api/page-settings/{page}:
     get:
       summary: Returns the user's settings for a specific page.

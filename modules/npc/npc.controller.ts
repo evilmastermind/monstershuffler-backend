@@ -1,36 +1,38 @@
 import { Character } from '@/types';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createRandomNpc } from './npc.controller.generator';
-import type { GenerateBackstoryInput, PostRandomNpcInput, PostRandomNpcResponse } from './npc.schema';
+import type { GenerateBackstoryInput, PostRandomNpcInput, PostRandomNpcResponse, PostNpcRatingInput } from './npc.schema';
 import { handleError } from '@/utils/errors';
 import { getRaceWithVariantsList } from '../race/race.service';
 import { getClassWithVariantsList } from '../class/class.service';
 import { getBackgroundList } from '../background/background.service';
-import { getBackstory, getDnDAdventurePrompt, parseRoleplayStats } from './backstory';
-import { generateTextStream } from '@/modules/ai/ai.service';
-import { getRecycledNpcsForUser, getNpc, postNpc, addNpcToSentAlreadyList, addBackstoryToNpc } from './npc.service';
+import { getBackstory, getDnDAdventurePrompt, parseRoleplayStats, type RoleplayStats, getCharacterHookPrompt } from './backstory';
+import { generateTextStream, generateText } from '@/modules/ai/ai.service';
+import { CURRENT_CHEAP_MODEL, CURRENT_GOOD_MODEL } from '@/modules/ai/ai.schema';
+import { getRecycledNpcsForUser, getNpc, postNpc, addNpcToSentAlreadyList, addBackstoryToNpc, postNpcRating } from './npc.service';
+import { calculateCharacterHook } from 'monstershuffler-shared';
 
 //////////////////////////////////////////////
 // CONTROLLER FUNCTIONS
 //////////////////////////////////////////////
 
-export async function createRandomNpcHandler(
-  request: FastifyRequest<{ Body: PostRandomNpcInput }>,
-  reply: FastifyReply
-) {
-  try {
-    const npc = await createRandomNpc(request, reply);
-    if (!npc?.npc) {
-      throw new Error('Failed to create npc');
-    }
-    return {
-      id: new Date().getTime(), // TODO: replace this with a real id
-      object: npc.npc,
-    };
-  } catch (error) {
-    return handleError(error, reply);
-  }
-}
+// export async function createRandomNpcHandler(
+//   request: FastifyRequest<{ Body: PostRandomNpcInput }>,
+//   reply: FastifyReply
+// ) {
+//   try {
+//     const npc = await createRandomNpc(request, reply);
+//     if (!npc?.npc) {
+//       throw new Error('Failed to create npc');
+//     }
+//     return {
+//       id: new Date().getTime(), // TODO: replace this with a real id
+//       object: npc.npc,
+//     };
+//   } catch (error) {
+//     return handleError(error, reply);
+//   }
+// }
 
 export async function createFourRandomNpcHandler(
   request: FastifyRequest<{ Body: PostRandomNpcInput }>,
@@ -61,14 +63,6 @@ export async function createFourRandomNpcHandler(
           sessionid,
           object: npc.npc
         });
-        // user's choices
-        if (!request.body.addVoice) {
-          delete npc.npc.character.voice;
-        }
-        if (!request.body.includeBodyType) {
-          delete npc.npc.character.weight;
-          delete npc.npc.character.height;
-        }
         npcs.push({
           id: result.id,
           object: npc.npc
@@ -78,6 +72,14 @@ export async function createFourRandomNpcHandler(
       }
     }
     npcs.forEach((npc)=> {
+      // user's choices
+      if (!request.body.addVoice) {
+        delete npc.object.character.voice;
+      }
+      if (!request.body.includeBodyType) {
+        delete npc.object.character.weight;
+        delete npc.object.character.height;
+      }
       addNpcToSentAlreadyList({
         npcid: npc.id,
         userid: id,
@@ -138,38 +140,78 @@ export async function generateBackstoryHandler(
 
     reply.sse((async function * source () {
       // start the stream for the backstory
-      const excerptStream = await generateTextStream(backstoryPrompt, 'gpt-4o');
+      const excerptStream = await generateTextStream(backstoryPrompt, CURRENT_GOOD_MODEL);
     
       for await (const chunk of excerptStream) {
         backstory += chunk.choices[0]?.delta?.content || '';
         yield {
           id: chunk.id,
-          data: chunk.choices[0]?.delta?.content || '',
+          data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
         };
       }
 
       const adventurePrompt = await getDnDAdventurePrompt(npc.object as Character, roleplayStats, backstory);
       // start the stream for the adventure module
-      const adventureStream = await generateTextStream(adventurePrompt, 'gpt-4o');
+      const adventureStream = await generateTextStream(adventurePrompt, CURRENT_GOOD_MODEL);
+
+      backstory += '\n\n';
+      // return \n\n as a separator between the backstory and the adventure
+      yield {
+        id: '69',
+        data: JSON.stringify('\n\n'),
+      };
 
       for await (const chunk of adventureStream) {
         backstory += chunk.choices[0]?.delta?.content || '';
         yield {
           id: chunk.id,
-          data: chunk.choices[0]?.delta?.content || '',
+          data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
         };
       }
 
-      addBackstoryToNpc({
-        id: npcid,
+      generateCharacterHookAndSaveBackstory(
+        npcid,
         backstory,
-        object: npc.object as Character
-      });
+        npc.object as Character,
+        roleplayStats,
+      );
 
     })());
 
     return;
     
+  } catch (error) {
+    return handleError(error, reply);
+  }
+}
+
+async function generateCharacterHookAndSaveBackstory(id: number, backstory: string, object: Character, roleplayStats: RoleplayStats) {
+
+  const characterHookPrompt = getCharacterHookPrompt(roleplayStats, backstory);
+  const characterHook = await generateText(characterHookPrompt, CURRENT_CHEAP_MODEL);
+
+  object.character.characterHook = characterHook.choices[0].message.content || '';
+  console.log('characterHook', object.character.characterHook);
+  calculateCharacterHook(object);
+
+  addBackstoryToNpc({
+    id,
+    backstory,
+    object,
+  });
+  
+};
+
+export async function postNpcRatingController(
+  request: FastifyRequest<{ Body: PostNpcRatingInput }>,
+  reply: FastifyReply
+) {
+  try {
+    const { id, rating } = request.body;
+    const userid = request?.user?.id;
+    const sessionid = request.body?.sessionid;
+    await postNpcRating ({ npcid: id, userid, rating, sessionid });
+    return reply.code(200).send({ id, rating });
   } catch (error) {
     return handleError(error, reply);
   }

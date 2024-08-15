@@ -15,3 +15,11 @@ export async function generateTextStream(prompt: string, model = 'gpt-3.5-turbo-
     temperature: temperature,
   });
 }
+
+export async function generateText(prompt: string, model = 'gpt-3.5-turbo-0125', temperature = 1) {
+  return await openai.chat.completions.create({
+    messages: [{ role: 'system', content: prompt,  }],
+    model: model,
+    temperature: temperature,
+  });
+}

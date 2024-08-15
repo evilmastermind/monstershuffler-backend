@@ -29,6 +29,7 @@
   "homepage": "https://github.com/evilmastermind/monstershuffler-backend#readme",
   "dependencies": {
     "@fastify/cors": "^8.2.1",
+    "@fastify/rate-limit": "^9.1.0",
     "@fastify/sensible": "^5.2.0",
     "@fastify/swagger": "^8.2.1",
     "@fastify/swagger-ui": "^1.3.0",

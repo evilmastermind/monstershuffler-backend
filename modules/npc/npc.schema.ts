@@ -23,6 +23,24 @@ export const postNpc = z.object({
   sessionid: z.string().optional(),
 });
 
+export const postNpcRatingInput = z.object({
+  id: z.number(),
+  rating: z.number(),
+  sessionid: z.string().optional(),
+});
+
+export const postNpcRating = z.object({
+  userid: z.number().optional(),
+  sessionid: z.string().optional(),
+  npcid: z.number(),
+  rating: z.number(),
+});
+
+export const postNpcRatingResponse = z.object({
+  id: z.number(),
+  rating: z.number()
+});
+
 export const postNpcToSentAlreadyListInput = z.object({
   npcid: z.number(),
   userid: z.number().optional(),
@@ -39,10 +57,14 @@ export type GenerateBackstoryInput = z.infer<typeof generateBackstoryInput>;
 export type PostNpc = z.infer<typeof postNpc>;
 export type PostNpcToSentAlreadyListInput = z.infer<typeof postNpcToSentAlreadyListInput>;
 export type AddBackstoryToNpcInput = z.infer<typeof addBackstoryToNpcInput>;
+export type PostNpcRatingInput = z.infer<typeof postNpcRatingInput>;
+export type PostNpcRating = z.infer<typeof postNpcRating>;
 
 export const { schemas: npcSchemas, $ref } = buildJsonSchemas(
   {
     postRandomNpcInput,
+    postNpcRatingInput,
+    postNpcRatingResponse,
     postRandomNpcResponse,
     postFourRandomNpcsResponse,
     getGeneratorDataResponse,

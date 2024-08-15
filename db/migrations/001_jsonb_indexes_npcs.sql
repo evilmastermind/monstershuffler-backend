@@ -58,8 +58,10 @@ CREATE TABLE IF NOT EXISTS npcsrating (
   datecreated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (npcid) REFERENCES npcs (id) ON DELETE CASCADE,
   CONSTRAINT user_session_unique_npcsrating UNIQUE (npcid, userid, sessionid),
-  CONSTRAINT user_fk_npcsrating FOREIGN KEY (userid) REFERENCES users(id),
+  CONSTRAINT user_fk_npcsrating FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE,
   CHECK (userid IS NOT NULL OR sessionid IS NOT NULL),
   CHECK (userid IS NULL OR sessionid IS NULL)
 );
-create index idx_npcsrating_npcid on npcsrating(npcid);
+CREATE INDEX idx_npcsrating_npcid on npcsrating(npcid);
+CREATE UNIQUE INDEX user_session_unique_npcsrating_idx
+ON npcsrating (npcid, userid, sessionid) NULLS NOT DISTINCT;

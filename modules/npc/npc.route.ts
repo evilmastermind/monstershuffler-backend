@@ -1,35 +1,42 @@
 import { FastifyInstance } from 'fastify';
 import {
   createFourRandomNpcHandler,
-  createRandomNpcHandler,
+  // createRandomNpcHandler,
   getGeneratorDataHandler,
   generateBackstoryHandler,
+  postNpcRatingController,
 } from './npc.controller';
 import { $ref } from './npc.schema';
 // schemas
 import { jwtHeaderOptional } from '@/schemas';
 
 async function npcRoutes(server: FastifyInstance) {
-  server.post(
-    '/',
-    {
-      preHandler: [server.authenticateOptional],
-      schema: {
-        summary: 'Creates a new random npc using the settings provided.',
-        description: 'Creates a new random npc using the settings provided.',
-        headers: jwtHeaderOptional,
-        tags: ['npcs'],
-        body: $ref('postRandomNpcInput'),
-        response: {
-          200: $ref('postRandomNpcResponse'),
-        },
-      },
-    },
-    createRandomNpcHandler
-  );
+  // server.post(
+  //   '/',
+  //   {
+  //     preHandler: [server.authenticateOptional],
+  //     schema: {
+  //       summary: 'Creates a new random npc using the settings provided.',
+  //       description: 'Creates a new random npc using the settings provided.',
+  //       headers: jwtHeaderOptional,
+  //       tags: ['npcs'],
+  //       body: $ref('postRandomNpcInput'),
+  //       response: {
+  //         200: $ref('postRandomNpcResponse'),
+  //       },
+  //     },
+  //   },
+  //   createRandomNpcHandler
+  // );
   server.post(
     '/four',
     {
+      config: {
+        rateLimit: {
+          max: 15,
+          timeWindow: '1 minute',
+        },
+      },
       preHandler: [server.authenticateOptional, server.MSOnly],
       schema: {
         hide: true,
@@ -67,6 +74,12 @@ async function npcRoutes(server: FastifyInstance) {
   server.post(
     '/backstory',
     {
+      config: {
+        rateLimit: {
+          max: 6,
+          timeWindow: '1 minute',
+        },
+      },
       preHandler: [server.authenticateOptional, server.MSOnly],
       schema: {
         summary: '[MS ONLY] Generates a random backstory for an NPC.',
@@ -80,6 +93,22 @@ async function npcRoutes(server: FastifyInstance) {
       },
     },
     generateBackstoryHandler
+  );
+  server.post(
+    '/rating',
+    {
+      preHandler: [server.authenticateOptional, server.MSOnly],
+      schema: {
+        summary: '[MS Only] Rate an NPC',
+        description: 'Rate an NPC',
+        headers: jwtHeaderOptional,
+        body: $ref('postNpcRatingInput'),
+        response: {
+          200: $ref('postNpcRatingResponse'),
+        },
+      },
+    },
+    postNpcRatingController
   );
 }
 

@@ -240,7 +240,7 @@ function getArchetypeDescription(archetype: string) {
   }
   return '';
 }
-type RoleplayStats = {
+export type RoleplayStats = {
   name: string;
   gender: string;
   race: string;
@@ -254,12 +254,11 @@ type RoleplayStats = {
   voice: string;
   involvment: string;
   cause: string;
-  means: string;
 };
 
-export async function parseRoleplayStats(character: Character) {
+export async function parseRoleplayStats(character: Character): Promise<RoleplayStats> {
   const s = character.statistics!;
-  const name = sanitizePolygenString(`${s.fullName}`);
+  const name = s.fullName;
   let gender = '';
   if (s.pronouns === 'neutral') {
     gender = 'nonbinary';
@@ -303,7 +302,7 @@ Socialevent ::= ( festival | celebration | ritual | ceremony | battle | war | sk
 Naturalevent ::= ( aurora | avalanche | blizzard | cold snap | comet | drought | earthquake | eclipse | flood | fog | hailstorm | heatwave | hurricane | meteor shower | mist | rainbow | rainstorm | sandstorm | snowfall | storm | thunderstorm | tornado | tsunami | volcanic eruption | wildfire );
 Event ::= ( Naturalevent | Socialevent );
 Organization ::= ( guild | order | brotherhood | sisterhood | cult | sect | cabal | coven | circle | society | club | association | league | alliance | coalition | confederation | federation | corporation | company | business | firm | enterprise | consortium | syndicate | cartel | foundation | charity | institute | academy | university | school | college | seminary | fraternity | sorority | council | committee | board of directors | commission | agency | bureau | department | administration | government | regime | political authority | business corporation | company | bandit gang | criminal organization | thieves guild | assassins guild | mercenary company | military order | knightly order | religious order | secret society);
-Relationship ::= ( betrayal | (unrequited | forbidden | secret) love | love triangle | (arranged | political | forced) marriage | (estranged | lost) family | rival | enemy );
+Relationship ::= ( betrayal | (unrequited | forbidden | secret) love | love triangle | (arranged | political | forced) marriage | (estranged | lost) family | rival | enemy | gamble | loan | kidnapping | extortion | blackmail | torture);
   `);
   console.log('---cause:', cause);
 
@@ -320,7 +319,7 @@ Locationtype ::= ( castle | fortress | tower | keep | palace | temple | shrine |
 S ::= (+(city | town | village | hamlet) | arctic | forest | underdark | desert | mountain | swamp | jungle |-- (sea | ocean)| coastal | grassland | savannah | wasteland | tundra );
 `);
 
-  return {
+  const roleplayStats: { [key: string]: string } = {
     name,
     gender,
     race,
@@ -334,8 +333,12 @@ S ::= (+(city | town | village | hamlet) | arctic | forest | underdark | desert 
     cause,
     location,
     environment,
-    // means,
   };
+
+  for (const key in roleplayStats) {
+    roleplayStats[key] = sanitizePolygenString(roleplayStats[key]);
+  }
+  return roleplayStats as RoleplayStats; 
 }
 
 // function testPolygenCapabilities(character: Character) {
@@ -366,13 +369,13 @@ export async function getBackstory(character: Character, stats: RoleplayStats) {
 
 async function getTabloidPrompt(character: Character, stats: RoleplayStats) {
   const backstory = `S ::=
-"Write an excerpt from an imaginary fantasy medieval gossip tabloid."
+"Write an excerpt from an imaginary fantasy medieval gossip tabloid, in markdown format."
 "- do not write any title"
 "- start with ... a truncated sentence, as if the excerpt was extracted randomly from the article"
 "- also end with a truncated sentence..."
 "- only write the excerpt, no other text must be included (no title, no author, no ending line, etc.)"
 "- write in the style of a Fox News special report"
-"- make the excerpt at least 100 words long"
+"- make the excerpt around 100 words long"
 "- do not use the word 'shadow'."
 "- Imagine this excerpt to be extracted from an article that talks about a character"
 "- This character is defined, by the community, by the following character hook: ${sanitizePolygenString(stats.characterHook)}"
@@ -391,7 +394,7 @@ async function getTabloidPrompt(character: Character, stats: RoleplayStats) {
 
 async function getExcerptPrompt(character: Character, stats: RoleplayStats) {
   const backstory = `S ::=
-  "Write an excerpt from an imaginary fantasy novel."
+  "Write an excerpt from an imaginary fantasy novel, in markdown format."
   "- do not write any title"
   "- start with ...a truncated sentence, as if the excerpt was extracted randomly from the novel"
   "- also end with a truncated sentence..."
@@ -417,10 +420,18 @@ export async function getDnDAdventurePrompt(character: Character, stats: Rolepla
   }
   let backstory = `
 S ::=
-  "Write a Dungeons and Dragons adventure."
+  "Write a Dungeons and Dragons adventure in markdown format."
   "The adventure should be held in a" ("${stats.location}" | "${stats.environment}" environment).
-  "The adventure should have a title that goes like this: ## Adventure idea: (the name of the adventure), an introduction, and a list of steps we could call 'secrets'. These steps define a linear path that the player characters playing the adventure will follow to complete the adventure, by discovering pieces of the story until they reach the final climax."
-  "The adventure must revolve around a ${stats.cause}, which is a threat to" (+ "the life of another NPC is" | "the life of many NPCs is" | "the life of someone close to the NPC is" | the life of innocent people is | the life of a "good-aligned" monster from the dungeons and dragons 5th edition books is | the forces stopping an "evil-aligned" monster from the game dungeons and dragons 5th edition from hurting people are | the life of a local ruler is | the political balance of the local area is | the equilibrium between two political forces is | the equilibrium between two secret factions is |- the borders between the material plane and another plane of existence from the dungeons and dragons books is | the balance of nature is | the fate of the kingdom is |- the future of the world is | the life of the player characters is )
+  "The adventure should have this markdown format: 
+  ## Adventure idea: {write a name of the adventure}
+  {write an introduction}
+  ### Secret 1: {write asecret name}
+  {write a description of the secret}.
+  {repeat for as many secrets as you want}
+  ### Climax: {write a climax name}
+  {write the climax description and conclusion}."
+  "Secrets are steps which define a linear path that the player characters playing the adventure will follow to complete the adventure, by discovering pieces of the story until they reach the final climax."
+  "The adventure must revolve around a ${stats.cause}, which is a threat to" ("the life of another NPC" | "the life of many NPCs" | "the life of someone close to the NPC" | the life of innocent people| the life of a "good-aligned" monster from the dungeons and dragons 5th edition books | forces stopping an "evil-aligned" monster from the game dungeons and dragons 5th edition from hurting people | the life of a local ruler | the life of a local ( hero | villain) | the political balance of the local area | the equilibrium between two political forces | the equilibrium between two secret factions |- the borders between the material plane and another plane of existence from the dungeons and dragons books | the balance of nature | the fate of the kingdom |- the future of the world | the life of the player characters).
   "The cause of the threat (${stats.cause}) is never mentioned at the beginning of the adventure, and will be revealed towards the end of the adventure, through investigation or by being revealed by an NPC."
   "A NPC, ${stats.name}, is going to be present, at some point, in the adventure."
   "Whatever situation the player characters are trying to solve, ${stats.name} ${stats.involvment}."
@@ -472,7 +483,7 @@ S ::=
 
 
   if (excerpt) {
-    backstory += `"Here\'s an excerpt from a story where ${stats.name} is mentioned:"`;
+    backstory += `"Here's an excerpt from a story where ${stats.name} is mentioned:"`;
     const sanitizedExcerpt = excerpt.replace(/"/g, '\\"');
     backstory += `"${sanitizePolygenString(sanitizedExcerpt)}"`;
   }
@@ -480,10 +491,26 @@ S ::=
   backstory += ';';
   backstory = parsePromptTags(backstory, character);
   backstory = await parsePolygenGrammar(backstory);
-  console.log('---backstory:', backstory);
-
   return backstory;
 }
+
+export function getCharacterHookPrompt(stats: RoleplayStats, backstory: string) {
+  return `
+Read the following D&D adventure about an NPC called ${stats.name}, and create a one-line description about that character.
+Here are some examples of other one-line descriptions I have written already for other NPCs, to give you an idea of the format I need:
+
+whose heart is broken
+who is in search of a lost friend
+who prefers to work naked
+with a lot of friends
+who experienced a trauma that scarred [them] profoundly
+who is losing faith in [their] cause.
+
+Use [their], [them] between square brackets to write pronouns related to the NPC. Use neutral pronouns all the times.
+
+Here's the adventure: ${backstory}`;
+}
+// Start the sentence with "who", "whose" or "with", in lowercase, and then write rest of the description.
 
 
 function parsePromptTags(prompt: string, character: Character) {

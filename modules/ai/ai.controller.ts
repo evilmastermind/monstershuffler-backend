@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { handleError } from '@/utils/errors';
-import { GenerateTextInput } from './ai.schema';
+import { GenerateTextInput, CURRENT_CHEAP_MODEL } from './ai.schema';
 import { generateTextStream } from './ai.service';
 import { parsePolygenGrammar } from '@/modules/polygen/polygen.service';
 
@@ -18,6 +18,7 @@ export async function generateTextHandler(
 ) {
   try {
     const body = request.body;
+    const model = body?.model || CURRENT_CHEAP_MODEL;
     let prompt = body?.prompt?.trim();
 
     // check if the prompt is a Polygen grammar (starts with "S ::=")
@@ -27,7 +28,7 @@ export async function generateTextHandler(
       return reply.code(400).send(prompt);
     }
 
-    const stream = await generateTextStream(prompt, 'gpt-4o');
+    const stream = await generateTextStream(prompt, model);
 
     reply.sse((async function * source () {
       for await (const chunk of stream) {

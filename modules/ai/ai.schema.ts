@@ -1,8 +1,12 @@
 import { z } from 'zod';
 import { buildJsonSchemas } from 'fastify-zod';
 
+export const CURRENT_GOOD_MODEL= 'gpt-4o-2024-08-06';
+export const CURRENT_CHEAP_MODEL= 'gpt-4o-mini';
+
 const generateTextSchema = z.object({
-  prompt: z.string()
+  prompt: z.string(),
+  model: z.string().optional()
 });
 
 export const generateTextResponse = z.object({
