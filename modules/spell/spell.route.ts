@@ -14,13 +14,14 @@ import {
   sPutSpellBody,
 } from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
 // TODO: a /random route that returns a random spell from the db, filtered by the values specified in the body.
 // TODO: spells should have variants and be structured like the new version of actions.
 // TODO: spells should have dynamic values, and be exactly like actions... spells should be actions?
 // TODO: it would be cool if spells could be used as actions, and actions could be used as spells.
 //       this is in line with the new way of creating monsters by WotC, like the ones in Monsters of the Multiverse
-async function spellRoutes(server: FastifyInstance) {
+const spellRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.post(
     '/filter',
     {
@@ -118,6 +119,6 @@ async function spellRoutes(server: FastifyInstance) {
     },
     deleteSpellHandler
   );
-}
+};
 
 export default spellRoutes;

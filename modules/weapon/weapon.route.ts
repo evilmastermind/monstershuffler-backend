@@ -8,8 +8,9 @@ import {
 } from './weapon.controller';
 import { sPostWeaponBody, sPutWeaponBody, sGetWeaponListResponse, sGetWeaponResponse, sGetWeaponParams } from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function weaponRoutes(server: FastifyInstance) {
+const weaponRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/',
     {
@@ -106,6 +107,6 @@ async function weaponRoutes(server: FastifyInstance) {
     },
     deleteWeaponHandler
   );
-}
+};
 
 export default weaponRoutes;

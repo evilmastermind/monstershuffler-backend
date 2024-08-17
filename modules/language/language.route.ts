@@ -12,8 +12,9 @@ import {
   sGetLanguageListResponse,
 } from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function languageRoutes(server: FastifyInstance) {
+const languageRoutes:FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/',
     {
@@ -91,6 +92,6 @@ async function languageRoutes(server: FastifyInstance) {
     },
     deleteLanguageHandler
   );
-}
+};
 
 export default languageRoutes;

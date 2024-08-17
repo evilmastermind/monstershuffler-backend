@@ -8,8 +8,9 @@ import {
 } from './character.controller';
 import { sGetCharacterListResponse, sGetCharacterResponse, sPostCharacterBody, sPutCharacterBody  } from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function characterRoutes(server: FastifyInstance) {
+const characterRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/',
     {
@@ -107,6 +108,6 @@ async function characterRoutes(server: FastifyInstance) {
     },
     deleteCharacterHandler
   );
-}
+};
 
 export default characterRoutes;

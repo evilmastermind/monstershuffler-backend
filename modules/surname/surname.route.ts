@@ -1,9 +1,9 @@
 import { FastifyInstance } from 'fastify';
 import { sGetRandomSurnameHandler } from './surname.controller';
 import { sGetRandomSurnameBody, sGetRandomSurnameResponse } from 'monstershuffler-shared';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-
-async function surnameRoutes(server: FastifyInstance) {
+const surnameRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.post(
     '/random',
     {
@@ -20,6 +20,6 @@ async function surnameRoutes(server: FastifyInstance) {
     },
     sGetRandomSurnameHandler
   );
-}
+};
 
 export default surnameRoutes;

@@ -1,8 +1,9 @@
 import { FastifyInstance } from 'fastify';
 import { getRandomCharacterhookHandler, getRandomCharacterhookForAgeHandler } from './characterhook.controller';
 import { sGetRandomCharacterhookResponse } from 'monstershuffler-shared';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function characterhookRoutes(server: FastifyInstance) {
+const characterhookRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/random',
     {
@@ -33,6 +34,6 @@ async function characterhookRoutes(server: FastifyInstance) {
     },
     getRandomCharacterhookForAgeHandler,
   );
-}
+};
 
 export default characterhookRoutes;

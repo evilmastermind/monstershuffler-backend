@@ -13,8 +13,9 @@ import {
   sPutTemplateBody,
 } from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function templateRoutes(server: FastifyInstance) {
+const templateRoutes: FastifyPluginAsyncZod = async function templateRoutes(server: FastifyInstance) {
   server.get(
     '/',
     {
@@ -112,6 +113,6 @@ async function templateRoutes(server: FastifyInstance) {
     },
     deleteTemplateHandler
   );
-}
+};
 
 export default templateRoutes;

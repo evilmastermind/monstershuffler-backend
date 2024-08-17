@@ -1,8 +1,9 @@
 import { FastifyInstance } from 'fastify';
 import { sGetRandomVoiceHandler } from './voice.controller';
 import { sGetRandomVoiceResponse, sGetRandomVoiceBody } from 'monstershuffler-shared';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-export async function voiceRoutes(server: FastifyInstance) {
+const voiceRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/random',
     {
@@ -19,4 +20,6 @@ export async function voiceRoutes(server: FastifyInstance) {
     },
     sGetRandomVoiceHandler
   );
-}
+};
+
+export default voiceRoutes;

@@ -14,8 +14,9 @@ import {
   sPutRacevariantBody,
 } from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function racevariantRoutes(server: FastifyInstance) {
+const racevariantRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/race/:raceId',
     {
@@ -136,6 +137,6 @@ async function racevariantRoutes(server: FastifyInstance) {
     },
     deleteRacevariantHandler
   );
-}
+};
 
 export default racevariantRoutes;

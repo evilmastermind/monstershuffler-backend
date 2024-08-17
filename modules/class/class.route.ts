@@ -10,8 +10,9 @@ import {
 } from './class.controller';
 import { sGetClassWithVariantsListResponse, sGetClassListResponse, sGetClassResponse } from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function classRoutes(server: FastifyInstance) {
+const classRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/',
     {
@@ -142,6 +143,6 @@ async function classRoutes(server: FastifyInstance) {
   //   },
   //   deleteClassHandler
   // );
-}
+};
 
 export default classRoutes;

@@ -1,8 +1,9 @@
 import { FastifyInstance } from 'fastify';
 import { convertObjectsHandler } from './converter.controller';
 import { jwtHeaderRequired } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function converterRoutes(server: FastifyInstance) {
+const converterRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/converter',
     {
@@ -20,6 +21,6 @@ async function converterRoutes(server: FastifyInstance) {
     },
     convertObjectsHandler
   );
-}
+};
 
 export default converterRoutes;

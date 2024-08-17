@@ -3,8 +3,9 @@ import { result } from './polygen.schema';
 import {
   parsePolygenHandler,
 } from './polygen.controller';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function polygenRoutes(server: FastifyInstance) {
+const polygenRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.post(
     '/parse',
     {
@@ -22,6 +23,6 @@ async function polygenRoutes(server: FastifyInstance) {
     },
     parsePolygenHandler
   );
-}
+};
 
 export default polygenRoutes;

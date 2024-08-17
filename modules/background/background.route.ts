@@ -7,12 +7,13 @@ import {
 } from './background.controller';
 import { jwtHeaderOptional } from '@/schemas';
 import { sGetBackgroundListResponse, sGetBackgroundResponse } from 'monstershuffler-shared';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
 // TODO: backgrounds have some random choices that choose a weapon based
 // on the weapon's name. This might cause issues if there are multiple
 // weapons with the same name.
 
-async function backgroundRoutes(server: FastifyInstance) {
+const backgroundRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/',
     {
@@ -146,6 +147,6 @@ async function backgroundRoutes(server: FastifyInstance) {
   //   },
   //   deleteBackgroundHandler
   // );
-}
+};
 
 export default backgroundRoutes;

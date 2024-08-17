@@ -8,8 +8,9 @@ import {
 } from './action.controller';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
 import { sGetActionListBody, sGetActionListResponse, sGetActionResponse, sPostActionBody, sPutActionBody } from 'monstershuffler-shared';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function actionRoutes(server: FastifyInstance) {
+const actionRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.post(
     '/filter',
     {
@@ -107,6 +108,6 @@ async function actionRoutes(server: FastifyInstance) {
     },
     deleteActionHandler
   );
-}
+};
 
 export default actionRoutes;

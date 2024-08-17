@@ -20,12 +20,13 @@ import {
   sPostNpcRatingResponse,
 } from 'monstershuffler-shared';
 import { sGenerateTextResponse } from '@/modules/ai/ai.schema';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
 
 // schemas
 import { jwtHeaderOptional } from '@/schemas';
 
-async function npcRoutes(server: FastifyInstance) {
+const npcRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   // server.post(
   //   '/',
   //   {
@@ -125,6 +126,6 @@ async function npcRoutes(server: FastifyInstance) {
     },
     postNpcRatingController
   );
-}
+};
 
 export default npcRoutes;

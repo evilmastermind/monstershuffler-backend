@@ -2,8 +2,9 @@ import { FastifyInstance } from 'fastify';
 import { createReportHandler, getReportListHandler } from './report.controller';
 import { sPostReportBody, sPostReportResponse, sGetReportListResponse } from './report.schema';
 import { jwtHeaderRequired } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function reportRoutes(server: FastifyInstance) {
+const reportRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.post(
     '/',
     {
@@ -38,6 +39,6 @@ async function reportRoutes(server: FastifyInstance) {
     },
     getReportListHandler
   );
-}
+};
 
 export default reportRoutes;

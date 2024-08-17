@@ -1,8 +1,9 @@
 import { FastifyInstance } from 'fastify';
 import { getRandomQuirkHandler } from './quirk.controller';
 import { sGetRandomQuirkResponse } from 'monstershuffler-shared';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function quirkRoutes(server: FastifyInstance) {
+const quirkRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/random',
     {
@@ -18,6 +19,6 @@ async function quirkRoutes(server: FastifyInstance) {
     },
     getRandomQuirkHandler
   );
-}
+};
 
 export default quirkRoutes;

@@ -5,8 +5,9 @@ import {
   sGetRandomTraitBodyForAgeHandler,
   getTraitDescriptionHandler,
 } from './trait.controller';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function traitRoutes(server: FastifyInstance) {
+const traitRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.post(
     '/random',
     {
@@ -56,6 +57,6 @@ async function traitRoutes(server: FastifyInstance) {
     },
     getTraitDescriptionHandler
   );
-}
+};
 
 export default traitRoutes;

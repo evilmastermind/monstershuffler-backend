@@ -9,6 +9,7 @@ export default {
       description: 'REST API for monstershuffler.com',
       version,
     },
+    servers: [],
     tags: [
       { name: 'users', description: 'The users\' account. ' },
       // { name: 'actions', description: 'Retrieve the official actions of srd monsters, classes and races to build your creatures faster. Save your custom actions and share them with other users.' },

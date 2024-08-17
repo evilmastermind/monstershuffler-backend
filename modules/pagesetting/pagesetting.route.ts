@@ -4,8 +4,9 @@ import {
   getPagesettingHandler,
   setPagesettingHandler,
 } from './pagesetting.controller';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function pagesettingRoutes(server: FastifyInstance) {
+const pagesettingRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/:page',
     {
@@ -41,6 +42,6 @@ async function pagesettingRoutes(server: FastifyInstance) {
     },
     setPagesettingHandler
   );
-}
+};
 
 export default pagesettingRoutes;

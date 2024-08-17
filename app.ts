@@ -14,10 +14,10 @@ import events from 'events';
 import rateLimiter from '@fastify/rate-limit';
 import swaggerSettings from '@/plugins/swagger';
 import mailerSettings from '@/plugins/mailer';
-import { schemas, routes } from '@/modules';
+import { routes } from '@/modules';
 import fs from 'fs';
 //
-import { serializerCompiler, validatorCompiler, ZodTypeProvider } from 'fastify-type-provider-zod';
+import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 
 export const server = Fastify({
   logger: true,
@@ -28,6 +28,7 @@ export const server = Fastify({
   } 
 });
 // export const server = Fastify();
+
 
 events.EventEmitter.defaultMaxListeners = parseInt(process.env.MAX_LISTENERS || '100');
 
@@ -111,34 +112,33 @@ server
     }
   });
 
+
 async function main() {
 
   try {
     await runMigrations();
-    
-    for (const schema of schemas) {
-      server.addSchema(schema);
-    }
 
     server.register(swagger, swaggerSettings);
-
     server.register(swaggerUi, {
       routePrefix: 'api/docs',
       staticCSP: true,
     });
 
-    for (const route of routes) {
-      server.withTypeProvider<ZodTypeProvider>().register(route.routes, { prefix: route.prefix });
-    }
+
+    server.after(() => { for (const route of routes) {
+      server.register(route.routes, { prefix: route.prefix });
+    }});  
+
+    await server.ready();
 
     await server.listen({ port: 3000, host: '0.0.0.0' });
     console.info('///////////////////////////////////////////');
     console.info('// M O N S T E R S H U F F L E R   A P I');
     console.info('// ✓ Server ready at http://localhost:3000');
     console.info('// ✓ Docs at http://localhost:3000/api/docs');
-    const swaggerYAML = server.swagger({ yaml: true });
-    fs.writeFileSync('./swagger.yaml', swaggerYAML);
-    console.info('// ✓ swagger.yaml written!');
+    // const swaggerYAML = server.swagger({ yaml: true });
+    // fs.writeFileSync('./swagger.yaml', swaggerYAML);
+    // console.info('// ✓ swagger.yaml written!');
     console.info('///////////////////////////////////////////');
   } catch (error) {
     console.info(error);

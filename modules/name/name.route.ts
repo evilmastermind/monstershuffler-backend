@@ -1,8 +1,9 @@
 import { FastifyInstance } from 'fastify';
 import { sGetRandomNameHandler } from './name.controller';
 import { sGetRandomNameResponse, sGetRandomNameBody } from 'monstershuffler-shared';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function nameRoutes(server: FastifyInstance) {
+const nameRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.post(
     '/random',
     {
@@ -19,6 +20,6 @@ async function nameRoutes(server: FastifyInstance) {
     },
     sGetRandomNameHandler
   );
-}
+};
 
 export default nameRoutes;

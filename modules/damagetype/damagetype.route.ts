@@ -12,8 +12,9 @@ import {
   sGetDamageTypeListResponse,
 } from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function damageTypeRoutes(server: FastifyInstance) {
+const damageTypeRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/',
     {
@@ -91,6 +92,6 @@ async function damageTypeRoutes(server: FastifyInstance) {
     },
     deleteDamageTypeHandler
   );
-}
+};
 
 export default damageTypeRoutes;

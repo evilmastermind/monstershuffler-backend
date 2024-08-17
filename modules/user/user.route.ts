@@ -21,9 +21,9 @@ import {
   sReactivateUserBody,
   sResetPasswordBody,
 } from 'monstershuffler-shared';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-
-async function userRoutes(server: FastifyInstance) {
+const userRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.post(
     '/login',
     {
@@ -169,6 +169,6 @@ async function userRoutes(server: FastifyInstance) {
   //   }
   //   ,getUsersHandler
   // );
-}
+};
 
 export default userRoutes;

@@ -241,6 +241,7 @@ function renameStuff(object) {
 }
 
 async function convertCharacterObject(object, id) {
+  renameStuff(object);
   addStatObjects(object);
   // enums
   if (Object.hasOwn(object, 'swarm')) {
@@ -391,6 +392,15 @@ async function convertCharacterObject(object, id) {
       typeof nameType === 'string' ? nameType : nameType.toString(),
     ];
   }
+  // addSurname (for races)
+  if (Object.hasOwn(object, 'addSurname')) {
+    if (typeof object.addSurname === 'string') {
+      object.addSurname = parseInt(object.addSurname);
+      if (isNaN(object.addSurname)) {
+        delete object.addSurname;
+      }
+    }
+  }
   // bonuses (all values must be strings)
   if (Object.hasOwn(object, 'bonuses')) {
     const bonuses = {};
@@ -473,15 +483,21 @@ function convertAlignment(alignment) {
 async function addIdsToSpells(spellSlots) {
   for (const spellSlot of spellSlots) {
     if (Object.hasOwn(spellSlot, 'levelMin')) {
-      spellSlot.availableAt = parseInt(spellSlot.levelMin);
+      if (spellSlot.availableAt !== null && spellSlot.availableAt !== undefined) {
+        spellSlot.availableAt = parseInt(spellSlot.levelMin);
+      }
       delete spellSlot.levelMin;
     }
     if (Object.hasOwn(spellSlot, 'timesDay')) {
-      spellSlot.times = spellSlot.timesDay;
+      if (spellSlot.times !== null && spellSlot.times !== undefined) {
+        spellSlot.times = spellSlot.timesDay;
+      }
       delete spellSlot.timesDay;
     }
     if (Object.hasOwn(spellSlot, 'timesDayMax')) {
-      spellSlot.timesMax = parseInt(spellSlot.timesDayMax);
+      if (spellSlot.timesMax !== null && spellSlot.timesMax !== undefined) {
+        spellSlot.timesMax = parseInt(spellSlot.timesDayMax);
+      }
       delete spellSlot.timesDayMax;
     }
     if (Object.hasOwn(spellSlot, 'spells') && Array.isArray(spellSlot.spells)) {

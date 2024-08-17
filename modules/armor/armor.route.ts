@@ -8,8 +8,9 @@ import {
 } from './armor.controller';
 import { armorObject, sPostArmorBody, sPutArmorBody, sGetArmorListResponse, sGetArmorParams, sGetArmorResponse } from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function armorRoutes(server: FastifyInstance) {
+const armorRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/',
     {
@@ -106,6 +107,6 @@ async function armorRoutes(server: FastifyInstance) {
     },
     deleteArmorHandler
   );
-}
+};
 
 export default armorRoutes;

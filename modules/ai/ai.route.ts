@@ -1,7 +1,8 @@
 import { FastifyInstance } from 'fastify';
 import { generateTextHandler } from './ai.controller';
 import { jwtHeaderRequired } from '@/schemas';
-import { $ref } from './ai.schema';
+import { sGenerateTextBody, sGenerateTextResponse } from './ai.schema';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
 // frontend: 
 // - https://www.npmjs.com/package/@microsoft/fetch-event-source
@@ -10,7 +11,7 @@ import { $ref } from './ai.schema';
 // backend
 // - https://github.com/mpetrunic/fastify-sse-v2
 
-async function aiRoutes(server: FastifyInstance) {
+const aiRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.post(
     '/generate-text',
     {
@@ -20,14 +21,14 @@ async function aiRoutes(server: FastifyInstance) {
         summary: '[MS ONLY] Generates text from a prompt using the AI model.',
         description: 'Generates text from a prompt using the AI model.',
         tags: ['ai'],
-        body: $ref('generateTextSchema'),
+        body: sGenerateTextBody,
         response: {
-          200: $ref('sGenerateTextResponse'),
+          200: sGenerateTextResponse,
         },
       }
     },
     generateTextHandler
   );
-}
+};
 
 export default aiRoutes;

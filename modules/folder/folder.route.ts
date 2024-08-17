@@ -7,9 +7,10 @@ import {
 } from './folder.controller';
 import { BatchPayload, jwtHeaderRequired } from '@/schemas';
 import { sPostFolderBody, sPostFolderResponse, sGetFolderContentResponse } from 'monstershuffler-shared';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
 
-async function folderRoutes(server: FastifyInstance) {
+const folderRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/:folderId',
     {
@@ -81,6 +82,6 @@ async function folderRoutes(server: FastifyInstance) {
     },
     deleteFolderHandler
   );
-}
+};
 
 export default folderRoutes;
