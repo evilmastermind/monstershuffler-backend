@@ -19,6 +19,7 @@ import {
 import { handleError } from '@/utils/errors';
 import prisma from '@/utils/prisma';
 import { url } from 'inspector';
+import { createUserObjectIfNotExists } from 'monstershuffler-shared';
 
 ///////////////////////////////////
 // O B J E C T   T Y P E S
@@ -122,6 +123,30 @@ async function convertCharacter(object, id) {
         object.user.proficiencyCalculation === 'cr' ? 'CR' : 'level';
       delete object.user.proficiencyCalculation;
     }
+  }
+  // removing abilityScores from character and adding them to character.user
+  if ('abilityScores' in object) {
+    if (!'user' in object) {
+      object.user = {};
+    }
+    if (!'abilityScores' in object.user) {
+      object.user.abilityScores = object.abilityScores;
+    }
+    delete object.abilityScores;
+  }
+  // removing skills from character and adding them to character.user
+  if ('skills' in object) {
+    if (!'user' in object) {
+      object.user = {};
+    }
+    if (!'skills' in object.user) {
+      object.user.skills = object.skills;
+    } else if (Array.isArray(object.skills) && Array.isArray(object.user.skills)) {
+      object.user.skills.push(...object.skills);
+    } else {
+      object.user.skills = object.skills;
+    }
+    delete object.skills;
   }
   if (Object.hasOwn(object, 'race')) {
     await convertCharacterObject(object.race, id);

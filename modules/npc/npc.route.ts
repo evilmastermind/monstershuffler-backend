@@ -100,8 +100,8 @@ const npcRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance
       schema: {
         summary: '[MS ONLY] Generates a random backstory for an NPC.',
         description: 'Generates a random backstory for an NPC. Only accessible through monstershuffler.com',
-        headers: jwtHeaderOptional,
         tags: ['npcs'],
+        headers: jwtHeaderOptional,
         body: sGenerateBackstoryBody,
         response: {
           200: sGenerateTextResponse,
@@ -117,6 +117,7 @@ const npcRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance
       schema: {
         summary: '[MS Only] Rate an NPC',
         description: 'Rate an NPC',
+        tags: ['npcs'],
         headers: jwtHeaderOptional,
         body: sPostNpcRatingBody,
         response: {

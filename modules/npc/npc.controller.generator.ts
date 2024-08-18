@@ -24,7 +24,7 @@ import { handleError } from '@/utils/errors';
 import { random, randomDecimal, round2Decimals } from '@/utils/functions';
 import { findChoices } from '@/modules/choiceSolver';
 import { sGetRandomVoice } from '../voices/voice.service';
-import { adjustLevel, createStats } from 'monstershuffler-shared';
+import { adjustLevel, createStats, createUserObjectIfNotExists } from 'monstershuffler-shared';
 
 export async function createRandomNpc(
   request: FastifyRequest<{ Body: PostRandomNpcBody }>,
@@ -179,7 +179,8 @@ export async function createRandomNpc(
     };
 
     if (favouriteSkill) {
-      result.character.skills = [{
+      createUserObjectIfNotExists(result);
+      result.character.user!.skills = [{
         value: favouriteSkill.name,
       }];
     }
@@ -210,6 +211,8 @@ export async function createRandomNpc(
 
     adjustLevel(result);
     createStats(result);
+
+    console.log(result.character);
 
     return {
       npc: result,
