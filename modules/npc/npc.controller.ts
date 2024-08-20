@@ -185,7 +185,7 @@ export async function generateBackstoryHandler(
   }
 }
 
-async function generateCharacterHookAndSaveBackstory(id: number, backstory: string, object: Character, roleplayStats: RoleplayStats) {
+async function generateCharacterHookAndSaveBackstory(id: string, backstory: string, object: Character, roleplayStats: RoleplayStats) {
 
   const characterHookPrompt = getCharacterHookPrompt(roleplayStats, backstory);
   const characterHook = await generateText(characterHookPrompt, CURRENT_CHEAP_MODEL);

@@ -136,7 +136,7 @@ model npcgeneratorblacklist {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model npcs {
-  id               Int               @id @default(autoincrement())
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   object           Json
   userid           Int?
   sessionid        String?           @db.VarChar(250)
@@ -145,8 +145,8 @@ model npcs {
   backgroundid     Int?
   classid          Int?
   classvariantid   Int?
-  alignmentmoral   String            @db.VarChar(255)
   alignmentethical String            @db.VarChar(255)
+  alignmentmoral   String?           @db.VarChar(255)
   gender           String            @db.VarChar(255)
   ischild          Boolean           @default(false)
   hasbackstory     Boolean           @default(false)
@@ -163,7 +163,7 @@ model npcs {
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model npcsrating {
   id          Int      @id @default(autoincrement())
-  npcid       Int
+  npcid       String   @db.Uuid
   userid      Int?
   sessionid   String?  @db.VarChar(250)
   rating      Int
@@ -172,13 +172,14 @@ model npcsrating {
   users       users?   @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user_fk_npcsrating")
 
   @@unique([npcid, userid, sessionid], map: "user_session_unique_npcsrating")
+  @@unique([npcid, userid, sessionid], map: "user_session_unique_npcsrating_idx")
   @@index([npcid], map: "idx_npcsrating_npcid")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model npcssenttousers {
   id          Int      @id @default(autoincrement())
-  npcid       Int
+  npcid       String   @db.Uuid
   userid      Int?
   sessionid   String?  @db.VarChar(250)
   datecreated DateTime @default(now()) @db.Timestamp(6)

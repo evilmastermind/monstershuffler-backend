@@ -176,7 +176,7 @@ function getBackgroundFilter(request: FastifyRequest<{ Body: PostRandomNpcBody }
   return filter;
 }
 
-export async function getNpc(id: number) {
+export async function getNpc(id: string) {
   return await prisma.npcs.findUnique({
     where: { id },
   });

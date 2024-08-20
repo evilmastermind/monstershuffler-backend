@@ -8,9 +8,9 @@ ALTER TABLE users ALTER COLUMN settings TYPE JSONB USING settings::JSONB;
 CREATE INDEX idx_gin_characterhooks ON characterhooks USING GIN(object);
 CREATE INDEX idx_gin_traits ON traits USING GIN(object);
 
--- NPCs: recycle backstories generated with the AI in order to save money
+-- NPCs: recycle backstories generated with the AI to save money
 CREATE TABLE IF NOT EXISTS npcs (
-  id SERIAL PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   object JSONB NOT NULL,
   userid INT DEFAULT NULL,
   sessionid VARCHAR(250) DEFAULT NULL,
@@ -35,7 +35,7 @@ CREATE INDEX idx_npcs_sessionid ON npcs(sessionid);
 
 CREATE TABLE IF NOT EXISTS npcssenttousers (
   id SERIAL PRIMARY KEY,
-  npcid INT NOT NULL,
+  npcid UUID NOT NULL,
   userid INT DEFAULT NULL,
   sessionid VARCHAR(250) DEFAULT NULL,
   datecreated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -51,7 +51,7 @@ CREATE INDEX idx_npcssenttousers_sessionid ON npcssenttousers(sessionid);
 
 CREATE TABLE IF NOT EXISTS npcsrating (
   id SERIAL PRIMARY KEY,
-  npcid INT NOT NULL,
+  npcid UUID NOT NULL,
   userid INT DEFAULT NULL,
   sessionid VARCHAR(250) DEFAULT NULL,
   rating INT NOT NULL,

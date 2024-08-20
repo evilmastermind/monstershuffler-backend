@@ -14,7 +14,7 @@ import {
 export const sPostNpcRatingServiceParams = z.object({
   userid: z.number().optional(),
   sessionid: z.string().optional(),
-  npcid: z.number(),
+  npcid: z.string().uuid(),
   rating: z.number(),
 });
 
