@@ -121,8 +121,6 @@ function getRaceFilters(request: FastifyRequest<{ Body: PostRandomNpcBody }>, qu
     }
   }
 
-  console.log(JSON.stringify(filters, null, 2));
-
   return filters.filter((filter) => filter.quantity > 0);
 }
 

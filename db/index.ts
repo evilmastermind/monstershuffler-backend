@@ -32,7 +32,7 @@ export async function runMigrations() {
 
   for (const file of migrationFiles) {
     if (!appliedMigrationNames.includes(file)) {
-      console.log(` ===> Applying migration: ${file}`);
+      console.info(` ===> Applying migration: ${file}`);
       const filePath = path.join(migrationsDir, file);
       const sql = fs.readFileSync(filePath, 'utf8');
       

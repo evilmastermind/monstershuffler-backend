@@ -212,7 +212,6 @@ export async function createRandomNpc(
     adjustLevel(result);
     createStats(result);
 
-    console.log(result.character);
 
     return {
       npc: result,

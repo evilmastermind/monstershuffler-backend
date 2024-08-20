@@ -191,7 +191,6 @@ async function generateCharacterHookAndSaveBackstory(id: number, backstory: stri
   const characterHook = await generateText(characterHookPrompt, CURRENT_CHEAP_MODEL);
 
   object.character.characterHook = characterHook.choices[0].message.content || '';
-  console.log('characterHook', object.character.characterHook);
   calculateCharacterHook(object);
 
   addBackstoryToNpc({

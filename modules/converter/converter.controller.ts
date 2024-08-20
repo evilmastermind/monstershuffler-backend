@@ -79,7 +79,12 @@ async function convertObject(object) {
     await convertCharacter(objectJSON, object.id);
     break;
   case 2:
+    await convertNonCharacter(objectJSON, object.id);
+    break;
   case 3:
+    removeAbilityScoresLimit(objectJSON);
+    await convertNonCharacter(objectJSON, object.id);
+    break;
   case 4:
     await convertNonCharacter(objectJSON, object.id);
     break;
@@ -88,8 +93,11 @@ async function convertObject(object) {
     await convertNonCharacter(objectJSON, object.id);
     break;
   case 10002:
+    await convertNonCharacter(objectJSON, object.id);
+    break;
   case 10003:
     await convertNonCharacter(objectJSON, object.id);
+    removeAbilityScoresLimit(objectJSON);
     break;
   case 101:
     object.object = await convertAction(objectJSON, object.id);
@@ -123,6 +131,9 @@ async function convertCharacter(object, id) {
         object.user.proficiencyCalculation === 'cr' ? 'CR' : 'level';
       delete object.user.proficiencyCalculation;
     }
+  }
+  if (Object.hasOwn(object, 'classvariant')) {
+    removeAbilityScoresLimit(object.classvariant);
   }
   // removing abilityScores from character and adding them to character.user
   if ('abilityScores' in object) {
@@ -996,4 +1007,10 @@ function convertWeapon(object) {
     delete object.reach;
   }
   return object;
+}
+
+function removeAbilityScoresLimit(object) {
+  if (Object.hasOwn(object, 'abilityScoresLimit')) {
+    delete object.abilityScoresLimit;
+  }
 }
