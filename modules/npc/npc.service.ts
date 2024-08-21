@@ -1,5 +1,5 @@
 import prisma from '@/utils/prisma';
-import { Prisma } from '@prisma/client';
+import { Prisma, type PrismaClient, npcs } from '@prisma/client';
 import type { PostNpc, PostNpcToSentAlreadyListBody, PostRandomNpcBody, PostRandomNpcResponse, AddBackstoryToNpcBody, PostNpcRatingServiceParams } from './npc.schema';
 import { FastifyRequest } from 'fastify';
 import { random } from '@/utils/functions';
@@ -176,10 +176,10 @@ function getBackgroundFilter(request: FastifyRequest<{ Body: PostRandomNpcBody }
   return filter;
 }
 
-export async function getNpc(id: string) {
-  return await prisma.npcs.findUnique({
-    where: { id },
-  });
+export async function getNpcForUpdate(prisma: PrismaClient, id: string) {
+  return await prisma.$queryRaw<npcs>`
+    SELECT * FROM npcs WHERE id = ${id} FOR UPDATE;
+  `;
 }
 
 export async function postNpc(input: PostNpc) {
@@ -222,7 +222,7 @@ export async function addNpcToSentAlreadyList(input: PostNpcToSentAlreadyListBod
 }
 
 export async function addBackstoryToNpc(input: AddBackstoryToNpcBody) {
-  const { id, backstory, object } = input;
+  const { prisma as PrismaClient, id, backstory, object } = input;
   if (!object.character.user) {
     object.character.user = {};
   }

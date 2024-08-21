@@ -355,7 +355,7 @@ S ::= (+(city | town | village | hamlet) | arctic | forest | underdark | desert 
 //   `;
 // }
 
-export async function getBackstory(character: Character, stats: RoleplayStats) {
+export async function getBackstoryPrompt(character: Character, stats: RoleplayStats) {
   if (!character.statistics) {
     createStats(character);
   }

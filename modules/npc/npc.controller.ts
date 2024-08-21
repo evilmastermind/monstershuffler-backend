@@ -1,3 +1,4 @@
+import { PrismaClient } from '@prisma/client';
 import { Character } from '@/types';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createRandomNpc } from './npc.controller.generator';
@@ -6,11 +7,12 @@ import { handleError } from '@/utils/errors';
 import { getRaceWithVariantsList } from '../race/race.service';
 import { getClassWithVariantsList } from '../class/class.service';
 import { getBackgroundList } from '../background/background.service';
-import { getBackstory, getDnDAdventurePrompt, parseRoleplayStats, type RoleplayStats, getCharacterHookPrompt } from './backstory';
+import { getBackstoryPrompt, getDnDAdventurePrompt, parseRoleplayStats, type RoleplayStats, getCharacterHookPrompt } from './backstory';
 import { generateTextStream, generateText } from '@/modules/ai/ai.service';
 import { CURRENT_CHEAP_MODEL, CURRENT_GOOD_MODEL } from '@/modules/ai/ai.schema';
-import { getRecycledNpcsForUser, getNpc, postNpc, addNpcToSentAlreadyList, addBackstoryToNpc, postNpcRating } from './npc.service';
+import { getRecycledNpcsForUser, getNpcForUpdate, postNpc, addNpcToSentAlreadyList, addBackstoryToNpc, postNpcRating } from './npc.service';
 import { calculateCharacterHook } from 'monstershuffler-shared';
+import prisma from '@/utils/prisma';
 
 //////////////////////////////////////////////
 // CONTROLLER FUNCTIONS
@@ -121,71 +123,76 @@ export async function generateBackstoryHandler(
 
     const { id } = request.user || { id: undefined };
 
-    // retrieving the "clean" npc object from the database
-    const npc = await getNpc(npcid);
+    const result = await prisma.$transaction(async () => {
+      const npc = await getNpcForUpdate(prisma, npcid); // TODO: manually assign Prisma's table type
 
-    if (!npc) {
-      throw new Error('NPC not found');
-    }
-    if (npc.hasbackstory === true) {
-      throw new Error('It\'s currently possible to generate a backstory only once for an NPC');
-    }
+      if (!npc) {
+        throw new Error('NPC not found');
+      }
+      if (npc.hasbackstory === true) {
+        throw new Error('It\'s currently possible to generate a backstory only once for an NPC');
+      }
+      if (npc.hasbackstory === false) {
+        throw new Error('A backstory is already being generated for this npc.');
+      }
 
-    const roleplayStats = await parseRoleplayStats(npc.object as Character);
+      const roleplayStats = await parseRoleplayStats(npc.object as Character);
 
-    // generate the backstory
-    const backstoryPrompt = await getBackstory(npc.object as Character, roleplayStats);
-    let backstory = '';
+      // generate the backstory
+      const backstoryPrompt = await getBackstoryPrompt(npc.object as Character, roleplayStats);
+      let backstory = '';
 
 
-    reply.sse((async function * source () {
+      reply.sse((async function * source () {
       // start the stream for the backstory
-      const excerptStream = await generateTextStream(backstoryPrompt, CURRENT_GOOD_MODEL);
+        const excerptStream = await generateTextStream(backstoryPrompt, CURRENT_GOOD_MODEL);
     
-      for await (const chunk of excerptStream) {
-        backstory += chunk.choices[0]?.delta?.content || '';
+        for await (const chunk of excerptStream) {
+          backstory += chunk.choices[0]?.delta?.content || '';
+          yield {
+            id: chunk.id,
+            data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
+          };
+        }
+
+        const adventurePrompt = await getDnDAdventurePrompt(npc.object as Character, roleplayStats, backstory);
+        // start the stream for the adventure module
+        const adventureStream = await generateTextStream(adventurePrompt, CURRENT_GOOD_MODEL);
+
+        backstory += '\n\n';
+        // return \n\n as a separator between the backstory and the adventure
         yield {
-          id: chunk.id,
-          data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
+          id: '69',
+          data: JSON.stringify('\n\n'),
         };
-      }
 
-      const adventurePrompt = await getDnDAdventurePrompt(npc.object as Character, roleplayStats, backstory);
-      // start the stream for the adventure module
-      const adventureStream = await generateTextStream(adventurePrompt, CURRENT_GOOD_MODEL);
+        for await (const chunk of adventureStream) {
+          backstory += chunk.choices[0]?.delta?.content || '';
+          yield {
+            id: chunk.id,
+            data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
+          };
+        }
 
-      backstory += '\n\n';
-      // return \n\n as a separator between the backstory and the adventure
-      yield {
-        id: '69',
-        data: JSON.stringify('\n\n'),
-      };
-
-      for await (const chunk of adventureStream) {
-        backstory += chunk.choices[0]?.delta?.content || '';
-        yield {
-          id: chunk.id,
-          data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
-        };
-      }
-
-      generateCharacterHookAndSaveBackstory(
-        npcid,
-        backstory,
+        generateCharacterHookAndSaveBackstory(
+          prisma,
+          npcid,
+          backstory,
         npc.object as Character,
         roleplayStats,
-      );
+        );
 
-    })());
+      })());
 
-    return;
+      return;
+    });
     
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-async function generateCharacterHookAndSaveBackstory(id: string, backstory: string, object: Character, roleplayStats: RoleplayStats) {
+async function generateCharacterHookAndSaveBackstory(prisma: PrismaClient, id: string, backstory: string, object: Character, roleplayStats: RoleplayStats) {
 
   const characterHookPrompt = getCharacterHookPrompt(roleplayStats, backstory);
   const characterHook = await generateText(characterHookPrompt, CURRENT_CHEAP_MODEL);
@@ -194,6 +201,7 @@ async function generateCharacterHookAndSaveBackstory(id: string, backstory: stri
   calculateCharacterHook(object);
 
   addBackstoryToNpc({
+    prisma,
     id,
     backstory,
     object,
