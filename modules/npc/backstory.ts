@@ -261,7 +261,7 @@ export async function parseRoleplayStats(character: Character): Promise<Roleplay
   const name = s.fullName;
   let gender = '';
   if (s.pronouns === 'neutral') {
-    gender = 'nonbinary';
+    gender = 'nonbinary (use they/them pronouns)';
   } else if (s.pronouns === 'thing') {
     gender = 'No gender (the character is a thing)';
   } else {

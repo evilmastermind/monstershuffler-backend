@@ -177,8 +177,8 @@ function getBackgroundFilter(request: FastifyRequest<{ Body: PostRandomNpcBody }
 }
 
 export async function getNpcForUpdate(prisma: PrismaClient, id: string) {
-  return await prisma.$queryRaw<npcs>`
-    SELECT * FROM npcs WHERE id = ${id} FOR UPDATE;
+  return await prisma.$queryRaw<npcs[]>`
+    SELECT * FROM npcs WHERE id = ${id}::uuid FOR UPDATE;
   `;
 }
 
@@ -222,12 +222,12 @@ export async function addNpcToSentAlreadyList(input: PostNpcToSentAlreadyListBod
 }
 
 export async function addBackstoryToNpc(input: AddBackstoryToNpcBody) {
-  const { prisma as PrismaClient, id, backstory, object } = input;
+  const { prisma, id, backstory, object } = input;
   if (!object.character.user) {
     object.character.user = {};
   }
   object.character.user.backstory = { string: backstory };
-  return await prisma.npcs.update({
+  return await (prisma as PrismaClient).npcs.update({
     where: { id },
     data: { object, hasbackstory: true },
   });

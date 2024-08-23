@@ -123,17 +123,14 @@ export async function generateBackstoryHandler(
 
     const { id } = request.user || { id: undefined };
 
-    const result = await prisma.$transaction(async () => {
-      const npc = await getNpcForUpdate(prisma, npcid); // TODO: manually assign Prisma's table type
-
-      if (!npc) {
+    await prisma.$transaction(async () => {
+      const npcs = await getNpcForUpdate(prisma, npcid); // TODO: manually assign Prisma's table type
+      if (!npcs.length) {
         throw new Error('NPC not found');
       }
+      const npc = npcs[0];
       if (npc.hasbackstory === true) {
         throw new Error('It\'s currently possible to generate a backstory only once for an NPC');
-      }
-      if (npc.hasbackstory === false) {
-        throw new Error('A backstory is already being generated for this npc.');
       }
 
       const roleplayStats = await parseRoleplayStats(npc.object as Character);
@@ -146,7 +143,11 @@ export async function generateBackstoryHandler(
       reply.sse((async function * source () {
       // start the stream for the backstory
         const excerptStream = await generateTextStream(backstoryPrompt, CURRENT_GOOD_MODEL);
-    
+        backstory += '“';
+        yield {
+          id: '00',
+          data: JSON.stringify('“'),
+        };
         for await (const chunk of excerptStream) {
           backstory += chunk.choices[0]?.delta?.content || '';
           yield {
@@ -159,11 +160,11 @@ export async function generateBackstoryHandler(
         // start the stream for the adventure module
         const adventureStream = await generateTextStream(adventurePrompt, CURRENT_GOOD_MODEL);
 
-        backstory += '\n\n';
+        backstory += '”\n\n';
         // return \n\n as a separator between the backstory and the adventure
         yield {
           id: '69',
-          data: JSON.stringify('\n\n'),
+          data: JSON.stringify('”\n\n'),
         };
 
         for await (const chunk of adventureStream) {
