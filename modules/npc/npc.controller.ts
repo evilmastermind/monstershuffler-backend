@@ -143,11 +143,11 @@ export async function generateBackstoryHandler(
       reply.sse((async function * source () {
       // start the stream for the backstory
         const excerptStream = await generateTextStream(backstoryPrompt, CURRENT_GOOD_MODEL);
-        backstory += '“';
-        yield {
-          id: '00',
-          data: JSON.stringify('“'),
-        };
+        // backstory += '“';
+        // yield {
+        //   id: '00',
+        //   data: JSON.stringify('“'),
+        // };
         for await (const chunk of excerptStream) {
           backstory += chunk.choices[0]?.delta?.content || '';
           yield {
@@ -160,11 +160,11 @@ export async function generateBackstoryHandler(
         // start the stream for the adventure module
         const adventureStream = await generateTextStream(adventurePrompt, CURRENT_GOOD_MODEL);
 
-        backstory += '”\n\n';
+        backstory += '\n\n';
         // return \n\n as a separator between the backstory and the adventure
         yield {
           id: '69',
-          data: JSON.stringify('”\n\n'),
+          data: JSON.stringify('\n\n'),
         };
 
         for await (const chunk of adventureStream) {
