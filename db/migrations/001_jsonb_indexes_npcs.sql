@@ -65,3 +65,31 @@ CREATE TABLE IF NOT EXISTS npcsrating (
 CREATE INDEX idx_npcsrating_npcid on npcsrating(npcid);
 CREATE UNIQUE INDEX user_session_unique_npcsrating_idx
 ON npcsrating (npcid, userid, sessionid) NULLS NOT DISTINCT;
+
+-- FEEDBACK Q&A TABLES
+CREATE TABLE IF NOT EXISTS feedbackquestions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  topic VARCHAR(255) NOT NULL, -- e.g. "npcgenerator"
+  question JSONB NOT NULL,
+  datecreated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS feedbackanswers (
+  id SERIAL PRIMARY KEY,
+  questionid UUID NOT NULL,
+  answer JSONB NOT NULL,
+  userid INT DEFAULT NULL,
+  sessionid VARCHAR(250) DEFAULT NULL,
+  datecreated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (questionid) REFERENCES feedbackquestions (id) ON DELETE CASCADE,
+  CONSTRAINT user_session_unique_feedbackanswers UNIQUE (questionid, userid, sessionid),
+  CONSTRAINT user_fk_feedbackanswers FOREIGN KEY (userid) REFERENCES users(id),
+  CHECK (userid IS NOT NULL OR sessionid IS NOT NULL),
+  CHECK (userid IS NULL OR sessionid IS NULL)
+);
+CREATE INDEX idx_feedbackanswers_questionid ON feedbackanswers(questionid);
+CREATE INDEX idx_feedbackanswers_userid ON feedbackanswers(userid);
+CREATE INDEX idx_feedbackanswers_sessionid ON feedbackanswers(sessionid);
+
+INSERT INTO feedbackquestions (id, topic, question) VALUES
+('f1a73150-7c20-429e-93a0-12efbd6f3b03', 'npcgenerator_prompt_words', '{"question": "Which words didn''t find a match in the prompt?"}');

@@ -1,5 +1,6 @@
 // @ts-expect-error old school import here
 import plugin = require('@/plugins/polygen.js');
+import crypto from 'crypto';
 
 
 export async function parsePolygenGrammar(grammar: string) {
@@ -9,7 +10,11 @@ export async function parsePolygenGrammar(grammar: string) {
   }
   // replace next line with a space
   parsedGrammar = grammar.replace(/\n/g, ' ');
-  return await plugin.Polygen.generate(parsedGrammar)();
+  try {
+    return await plugin.Polygen.generate(parsedGrammar)();
+  } catch (error) {
+    throw new Error(`error: ${error}`);
+  }
 }
 
 export function sanitizePolygenString(input: string) {

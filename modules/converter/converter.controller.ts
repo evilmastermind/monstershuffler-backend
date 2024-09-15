@@ -41,6 +41,8 @@ import { createUserObjectIfNotExists } from 'monstershuffler-shared';
 //
 ///////////////////////////////////
 
+const testRun = false;
+
 export async function convertObjectsHandler(request, reply) {
   const { id } = request.user;
   try {
@@ -55,11 +57,15 @@ export async function convertObjectsHandler(request, reply) {
       cursor = objects[objects.length - 1]?.id;
       for (const object of objects) {
         await convertObject(object);
-        await saveObject(object);
+        if (!testRun) {
+          await saveObject(object);
+        }
       }
     }
+    if (!testRun) {
     // BACKGROUNDS
-    await convertBackgroundPronouns();
+      await convertBackgroundPronouns();
+    }
     return reply.code(200).send('OK');
   } catch (error) {
     console.warn(error);
@@ -75,40 +81,40 @@ async function convertObject(object) {
   }
 
   switch (object.type) {
-  case 1:
+  case 1: // character
     await convertCharacter(objectJSON, object.id);
     break;
-  case 2:
+  case 2: // race
     await convertNonCharacter(objectJSON, object.id);
     break;
-  case 3:
+  case 3: // class
     removeAbilityScoresLimit(objectJSON);
     await convertNonCharacter(objectJSON, object.id);
     break;
-  case 4:
+  case 4: // template
     await convertNonCharacter(objectJSON, object.id);
     break;
-  case 5:
+  case 5: // background
     addCompatibleAgesToBackground(objectJSON);
     await convertNonCharacter(objectJSON, object.id);
     break;
-  case 10002:
+  case 10002: // racevariant
     await convertNonCharacter(objectJSON, object.id);
     break;
-  case 10003:
+  case 10003: // classvariant
     await convertNonCharacter(objectJSON, object.id);
     removeAbilityScoresLimit(objectJSON);
     break;
-  case 101:
+  case 101: // action
     object.object = await convertAction(objectJSON, object.id);
     break;
-  case 102:
+  case 102: // spell
     // object.object = convertSpell(objectJSON);
     break;
-  case 1001:
+  case 1001: // weapon
     object.object = await convertWeapon(objectJSON);
     break;
-  case 1002:
+  case 1002: // armor
     object.object = await convertArmor(objectJSON);
     break;
   default:
@@ -518,21 +524,29 @@ function convertAlignment(alignment) {
 
 async function addIdsToSpells(spellSlots) {
   for (const spellSlot of spellSlots) {
-    if (Object.hasOwn(spellSlot, 'levelMin')) {
-      if (spellSlot.availableAt !== null && spellSlot.availableAt !== undefined) {
+    if ('levelMin' in spellSlot) {
+      if (spellSlot.levelMin !== null && spellSlot.levelMin !== undefined) {
         spellSlot.availableAt = parseInt(spellSlot.levelMin);
+        if (isNaN(spellSlot.availableAt)) {
+          delete spellSlot.availableAt;
+        }
       }
       delete spellSlot.levelMin;
     }
-    if (Object.hasOwn(spellSlot, 'timesDay')) {
-      if (spellSlot.times !== null && spellSlot.times !== undefined) {
+    if ('timesDay' in spellSlot) {
+      if (spellSlot.timesDay !== null && spellSlot.timesDay !== undefined) {
         spellSlot.times = spellSlot.timesDay;
       }
       delete spellSlot.timesDay;
     }
-    if (Object.hasOwn(spellSlot, 'timesDayMax')) {
-      if (spellSlot.timesMax !== null && spellSlot.timesMax !== undefined) {
-        spellSlot.timesMax = parseInt(spellSlot.timesDayMax);
+    if ('timesDayMax' in spellSlot) {
+      if (spellSlot.timesDayMax !== null && spellSlot.timesDayMax !== undefined) {
+        spellSlot.timesMax = spellSlot.timesDayMax.trim();
+        if (isNaN(parseInt(spellSlot.timesMax))) {
+          if (spellSlot.timesMax.toLowerCase().trim().replace(/[^a-z]/g, '') !== 'atwill') {
+            delete spellSlot.timesMax;
+          }
+        }
       }
       delete spellSlot.timesDayMax;
     }

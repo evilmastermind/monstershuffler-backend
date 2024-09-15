@@ -430,13 +430,14 @@ S ::=
   "Write a Dungeons and Dragons adventure in markdown format."
   "The adventure should be held in a" ("${stats.location}" | "${stats.environment}" environment).
   "The adventure should have this markdown format: 
-  ## Adventure idea: {write a name of the adventure}
-  {write an introduction}
-  ### Secret 1: {write asecret name}
-  {write a description of the secret}.
-  {repeat for as many secrets as you want}
-  ### Climax: {write a climax name}
-  {write the climax description and conclusion}."
+  (start directly with the following line, don't write \`\`\`markdown or other syntax)
+  ## Adventure idea: [write the name of the adventure]
+  [write an introduction]
+  ### Secret 1: [write a title for the secret]
+  [write a description of the secret].
+  [repeat for at least 4 secrets]
+  ### Climax: [write a name for the climax of the adventure]
+  [write the climax description and conclusion]."
   "Secrets are steps which define a linear path that the player characters playing the adventure will follow to complete the adventure, by discovering pieces of the story until they reach the final climax."
   "The adventure must revolve around a ${stats.cause}, which is a threat to" ("the life of another NPC" | "the life of many NPCs" | "the life of someone close to the NPC" | the life of innocent people| the life of a "good-aligned" monster from the dungeons and dragons 5th edition books | forces stopping an "evil-aligned" monster from the game dungeons and dragons 5th edition from hurting people | the life of a local ruler | the life of a local ( hero | villain) | the political balance of the local area | the equilibrium between two political forces | the equilibrium between two secret factions |- the borders between the material plane and another plane of existence from the dungeons and dragons books | the balance of nature | the fate of the kingdom |- the future of the world | the life of the player characters).
   "The cause of the threat (${stats.cause}) is never mentioned at the beginning of the adventure, and will be revealed towards the end of the adventure, through investigation or by being revealed by an NPC."

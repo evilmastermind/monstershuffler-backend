@@ -9,6 +9,7 @@ import { getClassWithVariantsList } from '../class/class.service';
 import { getBackgroundList } from '../background/background.service';
 import { getBackstoryPrompt, getDnDAdventurePrompt, parseRoleplayStats, type RoleplayStats, getCharacterHookPrompt } from './backstory';
 import { generateTextStream, generateText } from '@/modules/ai/ai.service';
+import { postAnswer } from '../feedback/feedback.service';
 import { CURRENT_CHEAP_MODEL, CURRENT_GOOD_MODEL } from '@/modules/ai/ai.schema';
 import { getRecycledNpcsForUser, getNpcForUpdate, postNpc, addNpcToSentAlreadyList, addBackstoryToNpc, postNpcRating } from './npc.service';
 import { calculateCharacterHook } from 'monstershuffler-shared';
@@ -44,6 +45,9 @@ export async function createFourRandomNpcHandler(
     let npcs: PostRandomNpcResponse[] = [];
     const id = request.user?.id;
     const sessionid = request.body?.sessionId;
+
+    // check if the generator (prompt mode) couldn't find some keywords written by the user
+    reportWordsNotFound(id, sessionid,request.body.wordsNotFound || []);
 
     const NPCS_TO_GENERATE = 4;
 
@@ -142,7 +146,7 @@ export async function generateBackstoryHandler(
 
       reply.sse((async function * source () {
       // start the stream for the backstory
-        const excerptStream = await generateTextStream(backstoryPrompt, CURRENT_GOOD_MODEL);
+        const excerptStream = await generateTextStream(backstoryPrompt, CURRENT_CHEAP_MODEL);
         // backstory += '“';
         // yield {
         //   id: '00',
@@ -222,5 +226,19 @@ export async function postNpcRatingController(
     return reply.code(200).send({ id, rating });
   } catch (error) {
     return handleError(error, reply);
+  }
+}
+
+
+function reportWordsNotFound(userid: number, sessionid: string, wordsNotFound: string[]) {
+  if (wordsNotFound.length) {
+    postAnswer({
+      answer: {
+        data: wordsNotFound,
+      },
+      questionid: 'f1a73150-7c20-429e-93a0-12efbd6f3b03',
+      userid,
+      sessionid,
+    });
   }
 }

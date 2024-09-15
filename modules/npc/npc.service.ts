@@ -246,7 +246,7 @@ export async function postNpcRating(input: PostNpcRatingServiceParams) {
 
   return await prisma.$queryRaw`
     INSERT INTO npcsrating (npcid, userid, sessionid, rating)
-    VALUES (${npcid}, ${userid !== undefined ? userid : null}, ${sessionid !== undefined ? sessionid : null}, ${rating})
+    VALUES (${npcid}::uuid, ${userid !== undefined ? userid : null}, ${sessionid !== undefined ? sessionid : null}, ${rating})
     ON CONFLICT (npcid, userid, sessionid)
     DO UPDATE SET rating = EXCLUDED.rating, datecreated = CURRENT_TIMESTAMP;
   `;

@@ -406,6 +406,7 @@ model users {
   avatar                           String?                 @db.VarChar(255)
   settings                         Json?
   damagetypes                      damagetypes[]
+  feedbackanswers                  feedbackanswers[]
   folders                          folders[]
   languages                        languages[]
   npcgeneratorblacklist            npcgeneratorblacklist[]
@@ -435,4 +436,29 @@ model schema_migrations {
   id         Int      @id @default(autoincrement())
   name       String   @unique @db.VarChar(255)
   applied_at DateTime @default(now()) @db.Timestamp(6)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model feedbackanswers {
+  id                Int               @id @default(autoincrement())
+  questionid        String            @db.Uuid
+  answer            Json
+  userid            Int?
+  sessionid         String?           @db.VarChar(250)
+  datecreated       DateTime          @default(now()) @db.Timestamp(6)
+  feedbackquestions feedbackquestions @relation(fields: [questionid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users             users?            @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_fk_feedbackanswers")
+
+  @@unique([questionid, userid, sessionid], map: "user_session_unique_feedbackanswers")
+  @@index([questionid], map: "idx_feedbackanswers_questionid")
+  @@index([sessionid], map: "idx_feedbackanswers_sessionid")
+  @@index([userid], map: "idx_feedbackanswers_userid")
+}
+
+model feedbackquestions {
+  id              String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  topic           String            @db.VarChar(255)
+  question        Json
+  datecreated     DateTime          @default(now()) @db.Timestamp(6)
+  feedbackanswers feedbackanswers[]
 }

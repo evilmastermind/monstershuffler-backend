@@ -3,6 +3,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { handleError } from '@/utils/errors';
 // @ts-expect-error old school import here
 import plugin = require('@/plugins/polygen.js');
+import crypto from 'crypto';
 
 export async function parsePolygenHandler(
   request: FastifyRequest<{

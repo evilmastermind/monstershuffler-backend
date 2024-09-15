@@ -10,6 +10,7 @@
 // import { classSchemas } from '@/modules/class/class.schema';
 // import { classvariantSchemas } from '@/modules/classvariant/classvariant.schema';
 // import { damageTypeSchemas } from '@/modules/damagetype/damagetype.schema';
+// import { feedbackSchemas } from '@/modules/feedback/feedback.schema';
 // import { folderSchemas } from '@/modules/folder/folder.schema';
 // import { languageSchemas } from '@/modules/language/language.schema';
 // import { nameSchemas } from '@/modules/name/name.schema';
@@ -40,6 +41,7 @@ import backgroundRoutes from '@/modules/background/background.route';
 import classRoutes from '@/modules/class/class.route';
 // import classvariantRoutes from '@/modules/classvariant/classvariant.route';
 // import damageTypeRoutes from '@/modules/damagetype/damagetype.route';
+import feedbackRoutes from './feedback/feedback.route';
 // import folderRoutes from '@/modules/folder/folder.route';
 // import languageRoutes from '@/modules/language/language.route';
 // import nameRoutes from '@/modules/name/name.route';
@@ -70,6 +72,7 @@ export const schemas = [
   // ...classSchemas,
   // ...classvariantSchemas,
   // ...damageTypeSchemas,
+  // ...feedbackSchemas,
   // ...folderSchemas,
   // ...languageSchemas,
   // ...nameSchemas,
@@ -99,6 +102,7 @@ export const routes = [
   { routes: classRoutes, prefix: 'api/classes' },
   //  {routes: classvariantRoutes,  prefix: 'api/classvariants' },
   //  {routes: damageTypeRoutes,  prefix: 'api/damagetypes' },
+  { routes: feedbackRoutes, prefix: 'api/feedback' },
   //  {routes: folderRoutes,  prefix: 'api/folders' },
   //  {routes: languageRoutes,  prefix: 'api/languages' },
   //  {routes: nameRoutes,  prefix: 'api/names' },

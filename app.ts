@@ -3,7 +3,7 @@ dotenv.config();
 ////
 import 'module-alias/register';
 import Fastify, { FastifyRequest, FastifyReply, FastifyError } from 'fastify';
-import { runMigrations } from '@/db';
+import { runMigrations, scheduleDbMaintenance } from '@/db';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import {FastifySSEPlugin} from 'fastify-sse-v2';
@@ -15,8 +15,6 @@ import rateLimiter from '@fastify/rate-limit';
 import swaggerSettings from '@/plugins/swagger';
 import mailerSettings from '@/plugins/mailer';
 import { routes } from '@/modules';
-import fs from 'fs';
-//
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 
 export const server = Fastify({
@@ -117,6 +115,7 @@ async function main() {
 
   try {
     await runMigrations();
+    await scheduleDbMaintenance();
 
     server.register(swagger, swaggerSettings);
     server.register(swaggerUi, {

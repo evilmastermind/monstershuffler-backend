@@ -4,7 +4,7 @@ import { FastifyReply } from 'fastify';
 export function handleResultFound(object: any, reply: FastifyReply) {
   if (!object) {
     return reply.code(404).send({
-      message: 'Action not found',
+      message: 'The resource requested was not found',
     });
   }
   return reply.code(200).send(object);
@@ -21,7 +21,7 @@ export function handleError(error: unknown, reply: FastifyReply) {
       .send(createErrorJSON(400, handlePrismaErrors(error.code)));
   } else if (error instanceof Error) {
     console.error(error);
-    return reply.code(400).send(createErrorJSON(400, error.name));
+    return reply.code(400).send(createErrorJSON(400, error.name + error.message + error.cause || ''));
   }
 }
 

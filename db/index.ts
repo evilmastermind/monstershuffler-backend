@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import cron from 'node-cron';
 import { Client } from 'pg';
 
 const client = new Client({
@@ -8,13 +9,17 @@ const client = new Client({
 
 const migrationsDir = path.join(__dirname, 'migrations');
 
-export async function runMigrations() {
-  await client.connect();
-
+async function setSearchPath() {
   const schema = process.env.DATABASE_URL?.split('=').pop();
   if (schema) {
     await client.query(`SET search_path TO ${schema}`);
   }
+}
+
+export async function runMigrations() {
+  await client.connect();
+
+  await setSearchPath();
 
   // Ensure the schema_migrations table exists
   await client.query(`
@@ -51,4 +56,17 @@ export async function runMigrations() {
   }
 
   await client.end();
+}
+
+
+export async function scheduleDbMaintenance() {
+  // Run this every Sunday at midnight '0 0 * * Sunday'
+  cron.schedule('0 0 * * Sunday', async () => {
+    await client.connect();
+    await setSearchPath();
+    // Delete NPCs without a backstory that are older than a month
+    await client.query('DELETE FROM npcs WHERE hasbackstory = false AND datecreated < NOW() - INTERVAL \'1 month\'');
+    console.log('----MAINTENANCE: Deleted old NPCs without a backstory');
+    await client.end();
+  });
 }
