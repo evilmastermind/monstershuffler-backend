@@ -47,7 +47,8 @@ export async function createFourRandomNpcHandler(
     const sessionid = request.body?.sessionId;
 
     // check if the generator (prompt mode) couldn't find some keywords written by the user
-    reportWordsNotFound(id, sessionid,request.body.wordsNotFound || []);
+    const wordsNotFound = [...new Set(request.body.wordsNotFound || [])].filter((word) => word.length > 0);
+    reportWordsNotFound(wordsNotFound, id, sessionid,);
 
     const NPCS_TO_GENERATE = 4;
 
@@ -230,7 +231,7 @@ export async function postNpcRatingController(
 }
 
 
-function reportWordsNotFound(userid: number, sessionid: string, wordsNotFound: string[]) {
+function reportWordsNotFound(wordsNotFound: string[], userid?: number, sessionid?: string) {
   if (wordsNotFound.length) {
     postAnswer({
       answer: {
