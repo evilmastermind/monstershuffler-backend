@@ -245,8 +245,13 @@ export type RoleplayStats = {
   gender: string;
   race: string;
   characterHook: string;
-  professionDetails: string;
+  classDetails?: string;
+  professionDetails?: string;
+  bodyType: string;
+  height: string;
   age: string;
+  weapons: string;
+  armor: string;
   alignment: string;
   location: string;
   environment: string;
@@ -272,15 +277,18 @@ export async function parseRoleplayStats(character: Character): Promise<Roleplay
   if ('characterHook' in s && s.characterHook) {
     characterHook = s.characterHook.map((hook) => hook.string).join('');
   }
-  let professionDetails = '';
-  if (character.character.classvariant) {
-    professionDetails = getArchetypeDescription(
-      character.character.classvariant?.name
-    );
-  } else {
-    professionDetails = character.character?.background?.description || '';
+  const classDetails = character.character.classvariant? getArchetypeDescription(
+    character.character.classvariant?.name
+  ) : '';
+  let professionDetails = ''; 
+  if (character.character?.background) {
+    professionDetails = `${character.character?.background?.name} (${character.character?.background?.description})`;
   }
+  const armor = s?.AC?.name || '';
+  const weapons = s?.actions?.filter((action)=> action.string.includes('Attack'))?.map((action)=> action.name).join(', ') || '';
   const age = `${s.age || 'unspecified'}`;
+  const bodyType = s.bodyType || '';
+  const height = character.character?.height?.toString() || '';
   const simpleAlignment = `${getSimpleAlignmentDescription(s.alignment.string)}`;
   const alignment = await getAlignmentDescription(s.alignment.string, character);
   const personality = s.personality || '';
@@ -331,8 +339,13 @@ S ::= (+(city | town | village | hamlet) | arctic | forest | underdark | desert 
     gender,
     race,
     characterHook,
+    classDetails,
     professionDetails,
     age,
+    bodyType,
+    height,
+    armor,
+    weapons,
     alignment: random(1, 2) === 1 ? alignment : simpleAlignment,
     personality,
     voice,
@@ -354,6 +367,39 @@ S ::= (+(city | town | village | hamlet) | arctic | forest | underdark | desert 
 //     "Explain fission in layman's terms" | "Write a short story") ;
 //   `;
 // }
+
+
+export async function getPhysicalAppearancePrompt(character: Character, stats: RoleplayStats) {
+  if (!character.statistics) {
+    createStats(character);
+  }
+  const prompt = `
+  Write the physical description of the following NPC from a Dungeons & Dragons adventure, as if you were the Dungeon Master describing it to the players.
+  Write maximum 70 words. Write about the NPC's physical appearance, expression, clothing, and any other details that might be relevant. Don't include the NPC's name or any other information not apparent from the NPC's appearance.
+  [His] name is ${stats.name}, 
+  [He] is a ${stats.age} ${stats.gender} ${stats.race}.
+  ${stats.bodyType? `[His] body type is ${stats.bodyType}, [his] height is ${stats.height || 'average'}.` : ''}
+  ${stats.armor? `[His] armor is ${stats.armor}.` : ''}
+  ${stats.weapons? `[He] fights using ${stats.weapons}.` : ''}
+  Profession details: ${describeCharacterProfession(stats.classDetails, stats.professionDetails)}.
+  [His] defining personality trait is ${stats.personality}, and ${stats.alignment}.;
+  `;
+  return parsePromptTags(prompt, character);
+}
+
+function describeCharacterProfession(classDetails?: string, professionDetails?: string): string {
+  let output = '';
+  if (classDetails) {
+    output += classDetails;
+    if (professionDetails) {
+      output += '. [He] is also a ';
+    }
+  }
+  if (professionDetails) {
+    output += professionDetails;
+  }
+  return output;
+}
 
 export async function getBackstoryPrompt(character: Character, stats: RoleplayStats) {
   if (!character.statistics) {
@@ -393,7 +439,7 @@ async function getTabloidPrompt(character: Character, stats: RoleplayStats) {
 "- additional details about the character: "
 "[His] name is ${stats.name}, "
 "[He] is a ${stats.age} ${stats.gender} ${stats.race}."
-"Profession details: ${stats.professionDetails}."
+"Profession details: ${describeCharacterProfession(stats.classDetails, stats.professionDetails)}."
 "[His] defining personality trait is '${stats.personality}', and ${stats.alignment}. ";
 `;
   return parsePromptTags(backstory, character);
@@ -415,7 +461,7 @@ async function getExcerptPrompt(character: Character, stats: RoleplayStats) {
   "- additional details about the character: "
   "[His] name is ${stats.name}, "
   "[He] is a ${stats.age} ${stats.gender} ${stats.race}."
-  "Profession details: ${stats.professionDetails}."
+  "Profession details: ${describeCharacterProfession(stats.classDetails, stats.professionDetails)}."
   "[His] defining personality trait is ${stats.personality}, and ${stats.alignment}.";
   `;
   return parsePromptTags(backstory, character);
@@ -444,7 +490,7 @@ S ::=
   "A NPC, ${stats.name}, is going to be present, at some point, in the adventure."
   "Whatever situation the player characters are trying to solve, ${stats.name} ${stats.involvment}."
   "${stats.name} is a ${stats.age} ${stats.gender} ${stats.race}."
-  "Profession details: ${stats.professionDetails}."
+  "Profession details: ${describeCharacterProfession(stats.classDetails, stats.professionDetails)}."
   "[His] defining personality trait is '${stats.personality}', and ${stats.alignment}. "
   "Include other NPCs if necessary"
   "Avoid including rituals or similar elements in the adventure. Simply focus on the ${stats.cause}."

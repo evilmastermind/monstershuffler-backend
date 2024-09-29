@@ -222,10 +222,11 @@ export async function addNpcToSentAlreadyList(input: PostNpcToSentAlreadyListBod
 }
 
 export async function addBackstoryToNpc(input: AddBackstoryToNpcBody) {
-  const { prisma, id, backstory, object } = input;
+  const { prisma, id, backstory, physicalAppearance, object } = input;
   if (!object.character.user) {
     object.character.user = {};
   }
+  object.character.physicalAppearance = physicalAppearance;
   object.character.user.backstory = { string: backstory };
   return await (prisma as PrismaClient).npcs.update({
     where: { id },

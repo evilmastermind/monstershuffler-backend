@@ -7,7 +7,7 @@ import { handleError } from '@/utils/errors';
 import { getRaceWithVariantsList } from '../race/race.service';
 import { getClassWithVariantsList } from '../class/class.service';
 import { getBackgroundList } from '../background/background.service';
-import { getBackstoryPrompt, getDnDAdventurePrompt, parseRoleplayStats, type RoleplayStats, getCharacterHookPrompt } from './backstory';
+import { getBackstoryPrompt, getDnDAdventurePrompt, parseRoleplayStats, type RoleplayStats, getCharacterHookPrompt, getPhysicalAppearancePrompt } from './backstory';
 import { generateTextStream, generateText } from '@/modules/ai/ai.service';
 import { postAnswer } from '../feedback/feedback.service';
 import { CURRENT_CHEAP_MODEL, CURRENT_GOOD_MODEL } from '@/modules/ai/ai.schema';
@@ -163,7 +163,7 @@ export async function generateBackstoryHandler(
 
         const adventurePrompt = await getDnDAdventurePrompt(npc.object as Character, roleplayStats, backstory);
         // start the stream for the adventure module
-        const adventureStream = await generateTextStream(adventurePrompt, CURRENT_GOOD_MODEL);
+        const adventureStream = await generateTextStream(adventurePrompt, CURRENT_CHEAP_MODEL);
 
         backstory += '\n\n';
         // return \n\n as a separator between the backstory and the adventure
@@ -180,10 +180,30 @@ export async function generateBackstoryHandler(
           };
         }
 
+        const physicalAppearancePrompt = await getPhysicalAppearancePrompt(npc.object as Character, roleplayStats);
+        const physicalAppearanceStream = await generateTextStream(physicalAppearancePrompt, CURRENT_CHEAP_MODEL);
+
+        yield {
+          id: 'appearance_incoming',
+          data: '',
+        };
+
+        let physicalAppearance = '';
+
+        for await (const chunk of physicalAppearanceStream) {
+          backstory += chunk.choices[0]?.delta?.content || '';
+          physicalAppearance += chunk.choices[0]?.delta?.content || '';
+          yield {
+            id: chunk.id,
+            data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
+          };
+        }
+
         generateCharacterHookAndSaveBackstory(
           prisma,
           npcid,
           backstory,
+          physicalAppearance,
         npc.object as Character,
         roleplayStats,
         );
@@ -198,7 +218,7 @@ export async function generateBackstoryHandler(
   }
 }
 
-async function generateCharacterHookAndSaveBackstory(prisma: PrismaClient, id: string, backstory: string, object: Character, roleplayStats: RoleplayStats) {
+async function generateCharacterHookAndSaveBackstory(prisma: PrismaClient, id: string, backstory: string, physicalAppearance: string, object: Character, roleplayStats: RoleplayStats) {
 
   const characterHookPrompt = getCharacterHookPrompt(roleplayStats, backstory);
   const characterHook = await generateText(characterHookPrompt, CURRENT_CHEAP_MODEL);
@@ -210,6 +230,7 @@ async function generateCharacterHookAndSaveBackstory(prisma: PrismaClient, id: s
     prisma,
     id,
     backstory,
+    physicalAppearance,
     object,
   });
   
