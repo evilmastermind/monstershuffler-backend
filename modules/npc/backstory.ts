@@ -250,6 +250,7 @@ export type RoleplayStats = {
   bodyType: string;
   height: string;
   age: string;
+  stats: string;
   weapons: string;
   armor: string;
   alignment: string;
@@ -287,16 +288,17 @@ export async function parseRoleplayStats(character: Character): Promise<Roleplay
   const armor = s?.AC?.name || '';
   const weapons = s?.actions?.filter((action)=> action.string.includes('Attack'))?.map((action)=> action.name).join(', ') || '';
   const age = `${s.age || 'unspecified'}`;
+  const stats = `${s.abilities.STR.name}: ${s.abilities.STR.number}, ${s.abilities.DEX.name}: ${s.abilities.DEX.number}, ${s.abilities.CON.name}: ${s.abilities.CON.number}, ${s.abilities.INT.name}: ${s.abilities.INT.number}, ${s.abilities.WIS.name}: ${s.abilities.WIS.number}, ${s.abilities.CHA.name}: ${s.abilities.CHA.number}`;
   const bodyType = s.bodyType || '';
   const height = character.character?.height?.toString() || '';
   const simpleAlignment = `${getSimpleAlignmentDescription(s.alignment.string)}`;
   const alignment = await getAlignmentDescription(s.alignment.string, character);
-  const personality = s.personality || '';
+  const personality = s.personality? `${s.personality.name} (${s.personality.description})` : '';
   const voice = s.voice || '';
   const involvment = getInvolvmentInTheAdventure(s.alignment.string);
   const cause = await parsePolygenGrammar(`
 
-S ::= (- Relationship |+ Monster from the game "Dungeons and Dragons 5th edition" | Event | Organization | deity | Magicalstuff );
+S ::= (- Relationship |++ Monster from the game "Dungeons and Dragons 5th edition" | Event | deity | Organization | Magicalstuff );
 
 Magicalstuff ::= (Magical Wearable | Magical Weapon | Magical Anomaly | Magical Item | Magical Instrument);
 Magical ::= (enchanted | magical | cursed |-- sentient |-- haunted |- blessed);
@@ -313,8 +315,8 @@ Valuables ::= (coin | crystal | gem | key | orb | + potion | relic | scepter | p
 Furniture ::= (barrel | bottle | bauble | bowl | bucket | carpet | cauldron | chair | chalice | chest | crate | cup | door | fireplace | fork | goblet | jar | jug | kettle | pan | plate | banner | pedestal | flag | rod | rug | saucer | spoon | stove | tapestry | vase);
 Transportation ::= ([--flying] (boat | ship | galleon) | chariot | cart | carriage);
 Tools ::= (abacus | pen | quill | ink | rake | scythe | shovel | spade | stick | wheelbarrow | hammer | sledgehammer | scissors | pocket knife | saw | paperclip | pliers | wrench | chisel);
-Instrument ::= (++lute | flute | drum | harp | lyre | horn | trumpet | violin | cello | bagpipes | "hurdy gurdy" | accordion | harmonica | tambourine | triangle | maracas | cymbals | gong | drumset | bass guitar | guitar | banjo | mandolin | ukulele | bongo | harmonica | harp | harpsichord | piano);
 Monster ::= ( homunculus | lemure | shrieker | kobold | merfolk | stirge | aarakocra | dretch | drow | flying sword | goblin | grimlock | pseudodragon | pteranodon | skeleton | sprite | steam mephit | violet fungus | zombie | cockatrice | darkmantle | dust mephit | gnoll | svirfneblin | gray ooze | hobgoblin | ice mephit | lizardfolk | magma mephit | magmin | orc | rust monster | sahuagin | satyr | shadow | warhorse skeleton | animated armor | brass dragon wyrmling | bugbear | copper dragon wyrmling | dryad | duergar | ghoul | harpy | hippogriff | imp | quasit | specter | allosaurus | ankheg | azer | black dragon wyrmling | bronze dragon wyrmling | centaur | ettercap | gargoyle | gelatinous cube | ghast | gibbering mouther | green dragon wyrmling | grick | griffon | merrow | mimic | minotaur skeleton | ochre jelly | ogre | ogre zombie | pegasus | plesiosaurus | rug of smothering | sea hag | wererat | white dragon wyrmling | will o wisp | silver dragon wyrmling | ankylosaurus | basilisk | bearded devil | blue dragon wyrmling | doppelganger | green hag | hell hound | manticore | minotaur | mummy | nightmare | owlbear | werewolf | wight | gold dragon wyrmling | black pudding | chuul | couatl | ettin | ghost | lamia | red dragon wyrmling | succubus | incubus | wereboar | weretiger | air elemental | barbed devil | bulette | earth elemental | fire elemental | flesh golem | gorgon | hill giant | night hag | otyugh | roper | salamander | shambling mound | triceratops | troll | unicorn | vampire spawn | water elemental | werebear | wraith | xorn | chimera | drider | invisible stalker | medusa | vrock | wyvern | young brass dragon | young white dragon | oni | shield guardian | stone giant | young black dragon | young copper dragon | chain devil | cloaker | frost giant | hezrou | hydra | spirit naga | tyrannosaurus rex | young bronze dragon | young green dragon | bone devil | clay golem | cloud giant | fire giant | glabrezu | treant | young blue dragon | young silver dragon | aboleth | deva | guardian naga | stone golem | young red dragon | young gold dragon | behir | djinni | efreeti | gynosphinx | horned devil | remorhaz | roc | erinyes | adult brass dragon | adult white dragon | nalfeshnee | rakshasa | storm giant | vampire | adult black dragon | adult copper dragon | ice devil | adult bronze dragon | adult green dragon | mummy lord | purple worm | adult blue dragon | iron golem | marilith | planetar | adult silver dragon | adult red dragon | androsphinx | dragon turtle | adult gold dragon | balor | ancient brass dragon | ancient white dragon | pit fiend | ancient black dragon | ancient copper dragon | lich | solar | ancient bronze dragon | ancient green dragon | ancient blue dragon | kraken | ancient silver dragon | ancient red dragon | ancient gold dragon | tarrasque );
+Instrument ::= (++lute | flute | drum | harp | lyre | horn | trumpet | violin | cello | bagpipes | "hurdy gurdy" | accordion | harmonica | tambourine | triangle | maracas | cymbals | gong | drumset | bass guitar | guitar | banjo | mandolin | ukulele | bongo | harmonica | harp | harpsichord | piano);
 Socialevent ::= ( festival | celebration | ritual | ceremony | battle | war | skirmish | duel | competition | contest | rebellion | revolution | uprising | coup | assassination );
 Naturalevent ::= ( aurora | avalanche | blizzard | cold snap | comet | drought | earthquake | eclipse | flood | fog | hailstorm | heatwave | hurricane | meteor shower | mist | rainbow | rainstorm | sandstorm | snowfall | storm | thunderstorm | tornado | tsunami | volcanic eruption | wildfire );
 Event ::= ( Naturalevent | Socialevent );
@@ -327,7 +329,7 @@ Relationship ::= ( betrayal | (unrequited | forbidden | secret) love | love tria
 S ::= Locationstatus Locationtype ;
 
 Locationstatus ::= [ abandoned | ancient | cursed | haunted | hidden | lost | magical | mysterious | sacred | secret | strange | unknown | unexplored | uninhabited | unfinished | forgotten | forbidden | hidden ];
-Locationtype ::= ( castle | fortress | tower | keep | palace | temple | shrine | cathedral | church | monastery | abbey | library | university | school | academy | guildhall | inn | tavern | pub | market | bazaar | fair | festival | carnival | circus | theater | opera house | concert hall | amphitheater | stadium | arena | coliseum | bathhouse | brothel | prison | jail | dungeon | catacombs | sewers | crypt | graveyard | cemetery | mausoleum | tomb | pyramid | ziggurat | obelisk | statue | monument | fountain | well | spring | river | lake | pond | waterfall | stream | brook | canal | aqueduct | bridge | causeway | road | highway | path | trail | street | alley | lane | square | plaza | park | garden | woods | bog | moor | heath | glacier | valley | canyon | cave | cavern | grotto | mine);
+Locationtype ::= ( castle | fortress | tower | keep | palace | temple | cathedral | shrine | church | monastery | abbey | library |- university | school | academy | guildhall | inn | tavern | pub | market | bazaar | fair | festival | carnival | circus | theater | opera house | concert hall | amphitheater | stadium | arena | coliseum | bathhouse | brothel | prison | jail | dungeon | catacombs | sewers | crypt | graveyard | cemetery | mausoleum | tomb | pyramid | ziggurat | obelisk | statue | monument | fountain | well | spring | river | lake | pond | waterfall | stream | brook | canal | aqueduct | bridge | causeway | road | highway | path | trail | street | alley | lane | square | plaza | park | garden | woods | bog | moor | heath | glacier | valley | canyon | cave | cavern | grotto | mine);
 
   `);
   const environment = await parsePolygenGrammar(`
@@ -342,6 +344,7 @@ S ::= (+(city | town | village | hamlet) | arctic | forest | underdark | desert 
     classDetails,
     professionDetails,
     age,
+    stats,
     bodyType,
     height,
     armor,
@@ -374,11 +377,14 @@ export async function getPhysicalAppearancePrompt(character: Character, stats: R
     createStats(character);
   }
   const prompt = `
-  Write the physical description of the following NPC from a Dungeons & Dragons adventure, as if you were the Dungeon Master describing it to the players.
-  Write maximum 70 words. Write about the NPC's physical appearance, expression, clothing, and any other details that might be relevant. Don't include the NPC's name or any other information not apparent from the NPC's appearance.
+  Describe the physical appearance of an NPC in a Dungeons & Dragons adventure in up to 70 words.
+  Focus on their looks, expression, clothing, and any other notable details.
+  Avoid mentioning their name, alignment, profession, magical abilities, or nature.
+  When possible, vary ethnicities based on the NPC's race.
   [His] name is ${stats.name}, 
   [He] is a ${stats.age} ${stats.gender} ${stats.race}.
   ${stats.bodyType? `[His] body type is ${stats.bodyType}, [his] height is ${stats.height || 'average'}.` : ''}
+  [His] ability scores will tell you [his] physical and mental prowess (or weaknesses): ${stats.stats}.
   ${stats.armor? `[His] armor is ${stats.armor}.` : ''}
   ${stats.weapons? `[He] fights using ${stats.weapons}.` : ''}
   Profession details: ${describeCharacterProfession(stats.classDetails, stats.professionDetails)}.
@@ -389,14 +395,14 @@ export async function getPhysicalAppearancePrompt(character: Character, stats: R
 
 function describeCharacterProfession(classDetails?: string, professionDetails?: string): string {
   let output = '';
-  if (classDetails) {
-    output += classDetails;
-    if (professionDetails) {
-      output += '. [He] is also a ';
+  if (professionDetails) {
+    output += `[He] is a ${professionDetails}. `;
+    if (classDetails) {
+      output += 'In addition, [he] possesses other skills: ';
     }
   }
-  if (professionDetails) {
-    output += professionDetails;
+  if (classDetails) {
+    output += classDetails;
   }
   return output;
 }
@@ -471,12 +477,13 @@ export async function getDnDAdventurePrompt(character: Character, stats: Rolepla
   if (!character.statistics) {
     createStats(character);
   }
-  let backstory = `
+  let adventure = '';
+  const adventureAtWork = `
 S ::=
   "Write a Dungeons and Dragons adventure in markdown format."
-  "The adventure should be held in a" ("${stats.location}" | "${stats.environment}" environment).
-  "The adventure should have this markdown format: 
-  (start directly with the following line, don't write \`\`\`markdown or other syntax)
+  "The adventure should have this markdown format 
+  (start directly with the following line, including the markdown quote character >, and don't write other syntax):
+  > A small sentence describing a moment in the adventure from the perspective of the NPC, where we can get a glimpse of [his] personality
   ## Adventure idea: [write the name of the adventure]
   [write an introduction]
   ### Secret 1: [write a title for the secret]
@@ -485,67 +492,67 @@ S ::=
   ### Climax: [write a name for the climax of the adventure]
   [write the climax description and conclusion]."
   "Secrets are steps which define a linear path that the player characters playing the adventure will follow to complete the adventure, by discovering pieces of the story until they reach the final climax."
-  "The adventure must revolve around a ${stats.cause}, which is a threat to" ("the life of another NPC" | "the life of many NPCs" | "the life of someone close to the NPC" | the life of innocent people| the life of a "good-aligned" monster from the dungeons and dragons 5th edition books | forces stopping an "evil-aligned" monster from the game dungeons and dragons 5th edition from hurting people | the life of a local ruler | the life of a local ( hero | villain) | the political balance of the local area | the equilibrium between two political forces | the equilibrium between two secret factions |- the borders between the material plane and another plane of existence from the dungeons and dragons books | the balance of nature | the fate of the kingdom |- the future of the world | the life of the player characters).
-  "The cause of the threat (${stats.cause}) is never mentioned at the beginning of the adventure, and will be revealed towards the end of the adventure, through investigation or by being revealed by an NPC."
-  "A NPC, ${stats.name}, is going to be present, at some point, in the adventure."
-  "Whatever situation the player characters are trying to solve, ${stats.name} ${stats.involvment}."
+  "The adventure will revolve around an an NPC and [his] profession."
+  "The player characters will be hired to solve an issue happening" (at | because of) "the NPC's profession, and will have to investigate the situation to find out what is happening."
+  "The issue" (is caused by a "${stats.cause}" | is happening in a ( "${stats.location}" | "${stats.environment}" ))"."
+  "The NPC will act according to [his] alignment, and may be of help, be a hindrance, or even an enemy to the player characters."
+  "Use also the NPC's character hook to shape the adventure."
+  ["If the NPC's profession is not related to magic, AVOID INCLUDING ANY MAGIC OR SPELLS IN THE ADVENTURE. This is very important, because the adventure must focus on the NPC's profession and the issue at work."]
+  "The NPC which is going to be the cue for the adventure is the following"
   "${stats.name} is a ${stats.age} ${stats.gender} ${stats.race}."
   "Profession details: ${describeCharacterProfession(stats.classDetails, stats.professionDetails)}."
+  "Character hook: ${stats.characterHook}"
   "[His] defining personality trait is '${stats.personality}', and ${stats.alignment}. "
-  "Include other NPCs if necessary"
-  "Avoid including rituals or similar elements in the adventure. Simply focus on the ${stats.cause}."
+  "Create other NPCs if necessary"
   `;
-  // "The adventure revolves around a ${stats.cause}, which is a (threat | ^n opportunity) to (+the player characters | the local area |- the kingdom |- the world |+ a local authority | a local peasant | the local flora | a local animal |- a monster from the game dungeons and dragons | the (wealth | sanity | health | serenity) of the local community)."
-
-  //   let backstory = `S ::=
-  // "Write the description of a Dungeons and Dragons adventure, as if extracted from a module."
-  // "The adventure is set in a fantasy medieval world, and will revolve around the character hook of an NPC, which is the following: '${stats.characterHook}'."
-  // "The character hook will define the whole adventure and no other plot elements should be included."
-  // "[His] name is ${stats.name}, "
-  // "[He] is a ${stats.age} ${stats.gender} ${stats.race}."
-  // "Profession details: ${stats.professionDetails}."
-  // "[His] defining personality trait is '${stats.personality}', and ${stats.alignment}. " 
-  // "The adventure should have a title that goes like this: ## Adventure idea: (the name of the adventure), an introduction, and a list of steps we could call 'secrets'. These steps define a linear path that the player characters playing the adventure will follow to complete the adventure, by discovering pieces of the story until they reach the final climax."
-  // "Do not mention the NPC's traits directly, just be inspired by them to shape the adventure."
-  // "The adventure should be held in a ${stats.location}, in a ${stats.environment} environment."
-  // "Make sure to also include a ${stats.cause} in the plot of the adventure."
-  // "Whatever (evil | problem | event | situation | force) the player characters are trying to stop, the NPC ${stats.involvment}."
-  //   `;
-  //"Do not use the word 'shadow'."
-  // "Use the NPC's traits and backstory to fabricate a story where" (+ "the life of another NPC is" | "the life of many NPCs is" | "the life of someone close to the NPC is" | the life of innocent people is | the life of a "good-aligned" monster from the dungeons and dragons 5th edition books is | the forces stopping an "evil-aligned" monster from the game dungeons and dragons 5th edition from hurting people are | the life of a local ruler is | the political balance of the local area is | the equilibrium between two political forces is | the equilibrium between two secret factions is |- the borders between the material plane and another plane of existence from the dungeons and dragons books is | the balance of nature is | the fate of the kingdom is |- the future of the world is | the life of the player characters is ) " at stake, and the NPC ${stats.involvment}."
-
-
   /**
-`
-S ::=
-  "Write the description of a Dungeons and Dragons adventure."
-  "The adventure should be held in a ${stats.location}, in a ${stats.environment} environment."
-  "The adventure should have a title that goes like this: ## Adventure idea: (the name of the adventure), an introduction, and a list of steps we could call 'secrets'. These steps define a linear path that the player characters playing the adventure will follow to complete the adventure, by discovering pieces of the story until they reach the final climax."
-  "A NPC, ${stats.name}, is the central figure of the adventure."
-  "Whatever situation the player characters are trying to solve, ${stats.name} ${stats.involvment}."
-  "[He] is a ${stats.age} ${stats.gender} ${stats.race}."
-  "Profession details: ${stats.professionDetails}."
-  "[His] defining personality trait is '${stats.personality}', and ${stats.alignment}. "
-  "Shape the adventure around the character hook and the profession of the NPC."
-  "Try, through the adventure and its plot and secrets, to immerse the player characters in the profession of the NPC."
-  "Try to give meaning to the character hook, and slowly reveal, through the secrets, why the NPC is the way [he] is."
-  "Include a ${stats.cause} in one of the secrets, which could be a (threat | ^n opportunity) to the player characters."
-  "Avoid including rituals or similar elements in the adventure. Simply focus on ${stats.name} and why [he] is called ${stats.characterHook}."
-  "The player characters must have a reason to be involved in the adventure, which is" (the promise of acquiring (riches | a magical item linked to the "NPC"'s (character hook | profession)) | protecting (someone linked to the "NPC" | a local town | a local authority | the kingdom | another person |- the world |themselves) from the main threat of the adventure)
-  `
- */
+   * 2024-10-04: the "Adventure at work" prompt is WAY BETTER than this other one.
+   */
+  //   const adventureAtRandom = `
+  // S ::=
+  //   "Write a Dungeons and Dragons adventure in markdown format."
+  //   "The adventure should be held in a" ("${stats.location}" | "${stats.environment}" environment).
+  //   "The adventure should have this markdown format: 
+  //   (start directly with the following line, don't write \`\`\`markdown or other syntax)
+  //   ## Adventure idea: [write the name of the adventure]
+  //   [write an introduction]
+  //   ### Secret 1: [write a title for the secret]
+  //   [write a description of the secret].
+  //   [repeat for at least 4 secrets]
+  //   ### Climax: [write a name for the climax of the adventure]
+  //   [write the climax description and conclusion]."
+  //   "Secrets are steps which define a linear path that the player characters playing the adventure will follow to complete the adventure, by discovering pieces of the story until they reach the final climax."
+  //   "The adventure must revolve around a ${stats.cause}, which is a threat to" ("the life of another NPC" | "the life of many NPCs" | "the life of someone close to the NPC" | the life of innocent people| the life of a "good-aligned" monster from the dungeons and dragons 5th edition books | forces stopping an "evil-aligned" monster from the game dungeons and dragons 5th edition from hurting people | the life of a local ruler | the life of a local ( hero | villain) | the political balance of the local area | the equilibrium between two political forces | the equilibrium between two secret factions |- the borders between the material plane and another plane of existence from the dungeons and dragons books | the balance of nature | the fate of the kingdom |- the future of the world | the life of the player characters).
+  //   "The cause of the threat (${stats.cause}) is never mentioned at the beginning of the adventure, and will be revealed towards the end of the adventure, through investigation or by being revealed by an NPC."
+  //   "A NPC, ${stats.name}, is going to be present, at some point, in the adventure."
+  //   "Whatever situation the player characters are trying to solve, ${stats.name} ${stats.involvment}."
+  //   "${stats.name} is a ${stats.age} ${stats.gender} ${stats.race}."
+  //   "Profession details: ${describeCharacterProfession(stats.classDetails, stats.professionDetails)}."
+  //   "[His] defining personality trait is '${stats.personality}', and ${stats.alignment}. "
+  //   "Include other NPCs if necessary"
+  //   "Avoid including rituals or similar elements in the adventure. Simply focus on the ${stats.cause}."
+  //   `;
 
+  //   switch (random(1,1)) {
+  //   case 1:
+  //     adventure = adventureAtWork;
+  //     break;
+  //   default:
+  //     adventure = adventureAtRandom;
+  //   }
 
-  if (excerpt) {
-    backstory += `"Here's an excerpt from a story where ${stats.name} is mentioned:"`;
-    const sanitizedExcerpt = excerpt.replace(/"/g, '\\"');
-    backstory += `"${sanitizePolygenString(sanitizedExcerpt)}"`;
-  }
-  // backstory += '"Include a Dungeons & Dragons monster from the open-source 5th edition material in the adventure, and don \'t worry about its statistics or its Challenge Rating compatibility"';
-  backstory += ';';
-  backstory = parsePromptTags(backstory, character);
-  backstory = await parsePolygenGrammar(backstory);
-  return backstory;
+  adventure = adventureAtWork;
+
+  // if (excerpt) {
+  //   adventure += `"Here's an excerpt from a story where ${stats.name} is mentioned:"`;
+  //   const sanitizedExcerpt = excerpt.replace(/"/g, '\\"');
+  //   adventure += `"${sanitizePolygenString(sanitizedExcerpt)}"`;
+  // }
+  adventure += ';';
+  adventure = parsePromptTags(adventure, character);
+  adventure = await parsePolygenGrammar(adventure);
+  console.log(adventure);
+  return adventure;
 }
 
 export function getCharacterHookPrompt(stats: RoleplayStats, backstory: string) {

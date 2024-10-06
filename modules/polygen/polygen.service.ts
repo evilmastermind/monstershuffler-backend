@@ -18,6 +18,6 @@ export async function parsePolygenGrammar(grammar: string) {
 }
 
 export function sanitizePolygenString(input: string) {
-  const allowedCharacters = /[^A-Za-z0-9\s()\-_?.,!:\\&#+*/%$�[\]{}~@;:|<>=^'""]/g;
+  const allowedCharacters = /[^A-Za-z0-9\s()\-_?.,!:\\&#+*/%$�[\]{}~@;:|<>=^'""áéíóúàèìòùäëïöüâêîôûãñõ]/g;
   return input.replace(allowedCharacters, '');
 }

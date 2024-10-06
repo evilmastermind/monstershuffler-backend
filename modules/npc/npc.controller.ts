@@ -141,29 +141,29 @@ export async function generateBackstoryHandler(
       const roleplayStats = await parseRoleplayStats(npc.object as Character);
 
       // generate the backstory
-      const backstoryPrompt = await getBackstoryPrompt(npc.object as Character, roleplayStats);
+      // const backstoryPrompt = await getBackstoryPrompt(npc.object as Character, roleplayStats);
       let backstory = '';
 
 
       reply.sse((async function * source () {
       // start the stream for the backstory
-        const excerptStream = await generateTextStream(backstoryPrompt, CURRENT_CHEAP_MODEL);
-        // backstory += '“';
-        // yield {
-        //   id: '00',
-        //   data: JSON.stringify('“'),
-        // };
-        for await (const chunk of excerptStream) {
-          backstory += chunk.choices[0]?.delta?.content || '';
-          yield {
-            id: chunk.id,
-            data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
-          };
-        }
+        // const excerptStream = await generateTextStream(backstoryPrompt, CURRENT_CHEAP_MODEL);
+        // // backstory += '“';
+        // // yield {
+        // //   id: '00',
+        // //   data: JSON.stringify('“'),
+        // // };
+        // for await (const chunk of excerptStream) {
+        //   backstory += chunk.choices[0]?.delta?.content || '';
+        //   yield {
+        //     id: chunk.id,
+        //     data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
+        //   };
+        // }
 
         const adventurePrompt = await getDnDAdventurePrompt(npc.object as Character, roleplayStats, backstory);
         // start the stream for the adventure module
-        const adventureStream = await generateTextStream(adventurePrompt, CURRENT_CHEAP_MODEL);
+        const adventureStream = await generateTextStream(adventurePrompt, CURRENT_GOOD_MODEL);
 
         backstory += '\n\n';
         // return \n\n as a separator between the backstory and the adventure
