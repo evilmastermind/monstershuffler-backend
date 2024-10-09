@@ -7,7 +7,7 @@ import { handleError } from '@/utils/errors';
 import { getRaceWithVariantsList } from '../race/race.service';
 import { getClassWithVariantsList } from '../class/class.service';
 import { getBackgroundList } from '../background/background.service';
-import { getBackstoryPrompt, getDnDAdventurePrompt, parseRoleplayStats, type RoleplayStats, getCharacterHookPrompt, getPhysicalAppearancePrompt } from './backstory';
+import { getBackstoryPrompt, getDnDAdventurePrompt, parseRoleplayStats, type RoleplayStats, getCharacterHookPrompt, getPhysicalAppearancePrompt } from './prompts';
 import { generateTextStream, generateText } from '@/modules/ai/ai.service';
 import { postAnswer } from '../feedback/feedback.service';
 import { CURRENT_CHEAP_MODEL, CURRENT_GOOD_MODEL } from '@/modules/ai/ai.schema';

@@ -66,7 +66,7 @@ export async function scheduleDbMaintenance() {
     await setSearchPath();
     // Delete NPCs without a backstory that are older than a month
     await client.query('DELETE FROM npcs WHERE hasbackstory = false AND datecreated < NOW() - INTERVAL \'1 month\'');
-    console.log('----MAINTENANCE: Deleted old NPCs without a backstory');
+    console.info('----MAINTENANCE: Deleted old NPCs without a backstory');
     await client.end();
   });
 }

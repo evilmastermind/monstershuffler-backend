@@ -1,6 +1,5 @@
 // @ts-expect-error old school import here
 import plugin = require('@/plugins/polygen.js');
-import crypto from 'crypto';
 
 
 export async function parsePolygenGrammar(grammar: string) {
@@ -18,6 +17,12 @@ export async function parsePolygenGrammar(grammar: string) {
 }
 
 export function sanitizePolygenString(input: string) {
+  let output = '';
+  output = replaceAccentCharacters(input);
   const allowedCharacters = /[^A-Za-z0-9\s()\-_?.,!:\\&#+*/%$�[\]{}~@;:|<>=^'""áéíóúàèìòùäëïöüâêîôûãñõ]/g;
-  return input.replace(allowedCharacters, '');
+  return output.replace(allowedCharacters, '');
+}
+
+export function replaceAccentCharacters(input: string) {
+  return input.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }

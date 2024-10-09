@@ -165,12 +165,12 @@ function getSimpleAlignmentDescription(alignment: string) {
 
 function getInvolvmentInTheAdventure(alignment: string) {
   if (alignment.includes('Good')) {
-    return 'needs help to prevent it';
+    return 'needs help to prevent it and should be considered an ally';
   }
   if (alignment.includes('Evil')) {
-    return 'is behind it';
+    return 'is behind it and should be considered an enemy';
   }
-  return 'is involved in it';
+  return 'is involved in it and could be an ally or an enemy';
 }
 
 function getArchetypeDescription(archetype: string) {
@@ -493,9 +493,9 @@ S ::=
   [write the climax description and conclusion]."
   "Secrets are steps which define a linear path that the player characters playing the adventure will follow to complete the adventure, by discovering pieces of the story until they reach the final climax."
   "The adventure will revolve around an an NPC and [his] profession."
-  "The player characters will be hired to solve an issue happening" (at | because of) "the NPC's profession, and will have to investigate the situation to find out what is happening."
-  "The issue" (is caused by a "${stats.cause}" | is happening in a ( "${stats.location}" | "${stats.environment}" ))"."
-  "The NPC will act according to [his] alignment, and may be of help, be a hindrance, or even an enemy to the player characters."
+  "The player characters will be hired to solve an issue or threat that will be strictly related to the NPC's profession, and will have to investigate the situation to find out what is happening before things get worse."
+  "Whatever threat or issue the player characters are trying to solve, ${stats.name} ${stats.involvment}."
+  "Make sure to include" (++ a "${stats.cause}" | a "${stats.location} as one of the locations" | "${stats.environment} as one of the locations" ) "in the adventure."
   "Use also the NPC's character hook to shape the adventure."
   ["If the NPC's profession is not related to magic, AVOID INCLUDING ANY MAGIC OR SPELLS IN THE ADVENTURE. This is very important, because the adventure must focus on the NPC's profession and the issue at work."]
   "The NPC which is going to be the cue for the adventure is the following"
@@ -551,7 +551,7 @@ S ::=
   adventure += ';';
   adventure = parsePromptTags(adventure, character);
   adventure = await parsePolygenGrammar(adventure);
-  console.log(adventure);
+  // console.info(adventure);
   return adventure;
 }
 
