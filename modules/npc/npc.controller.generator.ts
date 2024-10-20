@@ -151,7 +151,7 @@ export async function createRandomNpc(
     const alignmentEthical = alignmentEthicalChosen;
     const alignmentMoral = alignmentMoralChosen;
     const characterHook = await getRandomCharacterhookForAge(age.string);
-    const height = race? calculateHeight(race, age) : 0;
+    const height = race? calculateHeight(race, age, pronouns) : 0;
     const weight = calculateWeight();
     const voice = await calculateVoice(pronouns);
 
@@ -298,7 +298,7 @@ function calculateAge(race: Race, includeChildren = false): Age {
   return age;
 }
 
-function calculateHeight(race: Race, age: Age) {
+function calculateHeight(race: Race, age: Age, pronouns: string): number {
   let heightMin = race.heightMin || race.heightMax || 0;
   let heightMax = race.heightMax || race.heightMin || 0;
   let height = 6;
@@ -347,6 +347,10 @@ function calculateHeight(race: Race, age: Age) {
         height = (height / 4) + (height / 4) * 3  * (age.number/ageAdult);
       }
     }
+  }
+  if (pronouns === 'female') {
+    // "For most human populations, men are on average about eight percent taller than women"
+    height = height * 0.926;
   }
   return round2Decimals(height);
 }

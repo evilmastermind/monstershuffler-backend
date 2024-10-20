@@ -491,7 +491,7 @@ S ::=
   [repeat for at least 4 secrets]
   ### Climax: [write a name for the climax of the adventure]
   [write the climax description and conclusion]."
-  "Secrets are steps which define a linear path that the player characters playing the adventure will follow to complete the adventure, by discovering pieces of the story until they reach the final climax."
+  "Secrets are steps which define a linear path that the player characters playing the adventure will follow to complete the adventure, by discovering pieces of the story until they reach the final climax. The first secret should be about who hired the adventurers or what drove them to investigate."
   "The adventure will revolve around an an NPC and [his] profession."
   "The player characters will be hired to solve an issue or threat that will be strictly related to the NPC's profession, and will have to investigate the situation to find out what is happening before things get worse."
   "Whatever threat or issue the player characters are trying to solve, ${stats.name} ${stats.involvment}."
@@ -557,7 +557,7 @@ S ::=
 
 export function getCharacterHookPrompt(stats: RoleplayStats, backstory: string) {
   return `
-Read the following D&D adventure about an NPC called ${stats.name}, and create a one-line description about that character.
+Read the following D&D adventure about an NPC called ${stats.name}, and create a one-line description about that character. Use words easy to understand even for a third grader.
 Here are some examples of other one-line descriptions I have written already for other NPCs, to give you an idea of the format I need:
 
 whose heart is broken

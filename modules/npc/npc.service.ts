@@ -252,3 +252,16 @@ export async function postNpcRating(input: PostNpcRatingServiceParams) {
     DO UPDATE SET rating = EXCLUDED.rating, datecreated = CURRENT_TIMESTAMP;
   `;
 }
+
+export async function getNpc(uuid: string) {
+  const npc = await prisma.npcs.findUnique({
+    where: { id: uuid },
+  });
+  if (!npc) {
+    return null;
+  }
+  return {
+    id: npc.id,
+    object: npc.object,
+  };
+}

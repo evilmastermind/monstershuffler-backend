@@ -11,7 +11,7 @@ import { getBackstoryPrompt, getDnDAdventurePrompt, parseRoleplayStats, type Rol
 import { generateTextStream, generateText } from '@/modules/ai/ai.service';
 import { postAnswer } from '../feedback/feedback.service';
 import { CURRENT_CHEAP_MODEL, CURRENT_GOOD_MODEL } from '@/modules/ai/ai.schema';
-import { getRecycledNpcsForUser, getNpcForUpdate, postNpc, addNpcToSentAlreadyList, addBackstoryToNpc, postNpcRating } from './npc.service';
+import { getRecycledNpcsForUser, getNpcForUpdate, postNpc, addNpcToSentAlreadyList, addBackstoryToNpc, postNpcRating, getNpc } from './npc.service';
 import { calculateCharacterHook } from 'monstershuffler-shared';
 import prisma from '@/utils/prisma';
 
@@ -246,6 +246,22 @@ export async function postNpcRatingController(
     const sessionid = request.body?.sessionid;
     await postNpcRating ({ npcid: id, userid, rating, sessionid });
     return reply.code(200).send({ id, rating });
+  } catch (error) {
+    return handleError(error, reply);
+  }
+}
+
+export async function getNpcHandler(
+  request: FastifyRequest<{ Params: { uuid: string } }>,
+  reply: FastifyReply
+) {
+  try {
+    const { uuid } = request.params;
+    const npc = await getNpc(uuid);
+    if (!npc) {
+      throw new Error('NPC not found');
+    }
+    return reply.code(200).send(npc);
   } catch (error) {
     return handleError(error, reply);
   }

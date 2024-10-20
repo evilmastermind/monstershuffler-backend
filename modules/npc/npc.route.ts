@@ -5,8 +5,10 @@ import {
   getGeneratorDataHandler,
   generateBackstoryHandler,
   postNpcRatingController,
+  getNpcHandler,
 } from './npc.controller';
 
+import { sGetNpcResponse, sGetNpcParams } from './npc.schema';
 import {
   sPostRandomNpcBody,
   sPostRandomNpcResponse,
@@ -25,6 +27,7 @@ import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
 // schemas
 import { jwtHeaderOptional } from '@/schemas';
+import { get } from 'http';
 
 const npcRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   // server.post(
@@ -126,6 +129,27 @@ const npcRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance
       },
     },
     postNpcRatingController
+  );
+  server.get(
+    '/:uuid',
+    {
+      preHandler: [server.authenticateOptional],
+      schema: {
+        summary: 'Get an NPC by UUID',
+        description: 'Get an NPC by UUID',
+        tags: ['npcs'],
+        // params: {
+        //   type: 'object',
+        //   properties: {
+        //     uuid: { type: 'string' },
+        //   },
+        // },
+        response: {
+          200: sGetNpcResponse,
+        },
+      },
+    },
+    getNpcHandler
   );
 };
 
