@@ -144,6 +144,7 @@ export async function generateBackstoryHandler(
 
       reply.sse((async function * source () {
         const adventurePrompt = await getDnDAdventurePrompt(npc.object as Character, roleplayStats, backstory);
+        console.log('adventurePrompt', adventurePrompt);
         // start the stream for the adventure module
         const adventureStream = await generateTextStream(adventurePrompt, CURRENT_GOOD_MODEL);
 
@@ -163,6 +164,7 @@ export async function generateBackstoryHandler(
         }
 
         const physicalAppearancePrompt = await getPhysicalAppearancePrompt(npc.object as Character, roleplayStats);
+        console.log('physicalAppearancePrompt', physicalAppearancePrompt);
         const physicalAppearanceStream = await generateTextStream(physicalAppearancePrompt, CURRENT_CHEAP_MODEL);
 
         yield {

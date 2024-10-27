@@ -1,6 +1,6 @@
 import { replaceTags, random, createStats } from 'monstershuffler-shared';
 import { parsePolygenGrammar, sanitizePolygenString } from '@/modules/polygen/polygen.service';
-import type { Character } from 'monstershuffler-shared';
+import type { Character, Abilities } from 'monstershuffler-shared';
 
 async function getAlignmentDescription(alignment: string, character: Character) {
   let description = '';
@@ -257,10 +257,47 @@ export type RoleplayStats = {
   location: string;
   environment: string;
   personality: string;
+  bodyColors: string;
   voice: string;
   involvment: string;
   cause: string;
 };
+
+
+function describeStats(abilities: Abilities): string {
+  const output = [];
+  if (abilities.STR.number <= 9) {
+    output.push('weak');
+  } else if (abilities.STR.number > 12) {
+    output.push('muscular and strong');
+  }
+  if (abilities.DEX.number <= 9) {
+    output.push('clumsy');
+  } else if (abilities.DEX.number > 12) {
+    output.push('quick and nimble');
+  }
+  if (abilities.CON.number <= 9) {
+    output.push('frail');
+  } else if (abilities.CON.number > 12) {
+    output.push('tough and hardy');
+  }
+  if (abilities.INT.number <= 9) {
+    output.push('dull');
+  } else if (abilities.INT.number > 12) {
+    output.push('intelligent and sharp');
+  }
+  if (abilities.WIS.number <= 9) {
+    output.push('unwise');
+  } else if (abilities.WIS.number > 12) {
+    output.push('wise and perceptive');
+  }
+  if (abilities.CHA.number <= 9) {
+    output.push('uncharismatic');
+  } else if (abilities.CHA.number > 12) {
+    output.push('charming and persuasive');
+  }
+  return (output.join(', ') || 'average'); 
+}
 
 export async function parseRoleplayStats(character: Character): Promise<RoleplayStats> {
   const s = character.statistics;
@@ -293,8 +330,8 @@ export async function parseRoleplayStats(character: Character): Promise<Roleplay
   }
   const armor = s?.AC?.name || '';
   const weapons = s?.actions?.filter((action)=> action.string.includes('Attack'))?.map((action)=> action.name).join(', ') || '';
-  const age = `${s.age || 'unspecified'}`;
-  const stats = `${s.abilities.STR.name}: ${s.abilities.STR.number}, ${s.abilities.DEX.name}: ${s.abilities.DEX.number}, ${s.abilities.CON.name}: ${s.abilities.CON.number}, ${s.abilities.INT.name}: ${s.abilities.INT.number}, ${s.abilities.WIS.name}: ${s.abilities.WIS.number}, ${s.abilities.CHA.name}: ${s.abilities.CHA.number}`;
+  const age = `${s.age?.name || 'unspecified'}`;
+  const stats = describeStats(s.abilities);
   const bodyType = s.bodyType || '';
   const height = character.character?.height?.toString() || '';
   const simpleAlignment = `${getSimpleAlignmentDescription(s.alignment.string)}`;
@@ -329,6 +366,9 @@ Event ::= ( Naturalevent | Socialevent );
 Organization ::= ( guild | order | brotherhood | sisterhood | cult | sect | cabal | coven | circle | society | club | association | league | alliance | coalition | confederation | federation | corporation | company | business | firm | enterprise | consortium | syndicate | cartel | foundation | charity | institute | academy | university | school | college | seminary | fraternity | sorority | council | committee | board of directors | commission | agency | bureau | department | administration | government | regime | political authority | business corporation | company | bandit gang | criminal organization | thieves guild | assassins guild | mercenary company | military order | knightly order | religious order | secret society);
 Relationship ::= ( betrayal | (unrequited | forbidden | secret) love | love triangle | (arranged | political | forced) marriage | (estranged | lost) family | rival | enemy | gamble | loan | kidnapping | extortion | blackmail | torture);
   `);
+  const bodyColors = await parsePolygenGrammar(`
+S ::= "skin:" pick a (light|dark) color, "hair:" pick a (light|dark) color, "eyes:" pick a (light|dark) color;
+  `);
 
   const location = await parsePolygenGrammar(`
 
@@ -358,6 +398,7 @@ S ::= (+(city | town | village | hamlet) | arctic | forest | underdark | desert 
     alignment: random(1, 2) === 1 ? alignment : simpleAlignment,
     personality,
     voice,
+    bodyColors,
     involvment,
     cause,
     location,
@@ -383,14 +424,16 @@ export async function getPhysicalAppearancePrompt(character: Character, stats: R
     createStats(character);
   }
   const prompt = `
-  Describe the physical appearance of an NPC in a Dungeons & Dragons adventure in up to 70 words.
+  Describe the physical appearance of an NPC in a Dungeons & Dragons adventure in up to 70 words,
+  as if you were a Dungeon Master describing [him] to a player.
   Focus on their looks, expression, clothing, and any other notable details.
   Avoid mentioning their name, alignment, profession, magical abilities, or nature.
-  When possible, vary ethnicities based on the NPC's race.
+  Don't refer to the NPC as "NPC", just describe [him] as if [he] were a real person.
   [His] name is ${stats.name}, 
   [He] is a ${stats.age} ${stats.gender} ${stats.race}.
   ${stats.bodyType? `[His] body type is ${stats.bodyType}, [his] height is ${stats.height || 'average'}.` : ''}
-  [His] ability scores will tell you [his] physical and mental prowess (or weaknesses): ${stats.stats}.
+  [His] physical and mental traits: ${stats.stats}.
+  [His] body colors (replace light/dark with appropriate colors for [his] race): ${stats.bodyColors}.
   ${stats.armor? `[His] armor is ${stats.armor}.` : ''}
   ${stats.weapons? `[He] fights using ${stats.weapons}.` : ''}
   Profession details: ${describeCharacterProfession(stats.classDetails, stats.professionDetails)}.
@@ -503,13 +546,14 @@ S ::=
   "Whatever threat or issue the player characters are trying to solve, ${stats.name} ${stats.involvment}."
   "Make sure to include" (++ a "${stats.cause}" | a "${stats.location} as one of the locations" | "${stats.environment} as one of the locations" ) "in the adventure."
   "Use also the NPC's character hook to shape the adventure."
-  ["If the NPC's profession is not related to magic, AVOID INCLUDING ANY MAGIC OR SPELLS IN THE ADVENTURE. This is very important, because the adventure must focus on the NPC's profession and the issue at work."]
-  "The NPC which is going to be the cue for the adventure is the following"
+  ["If the NPC's profession is not related to magic, AVOID INCLUDING ANY MAGIC OR SPELLS IN THE ADVENTURE. This is very important, because the adventure must focus on the NPC's profession and the issue arised."]
+  "The NPC which is going to be the cue for the adventure is the following:"
   "${stats.name} is a ${stats.age} ${stats.gender} ${stats.race}."
   "Profession details: ${describeCharacterProfession(stats.classDetails, stats.professionDetails)}."
-  "Character hook: ${stats.characterHook}"
+  "Character hook: ${stats.characterHook}."
   "[His] defining personality trait is '${stats.personality}', and ${stats.alignment}. "
-  "Create other NPCs if necessary"
+  "[His] physical and mental traits: ${stats.stats}."
+  "Create other NPCs if necessary."
   `;
   /**
    * 2024-10-04: the "Adventure at work" prompt is WAY BETTER than this other one.
