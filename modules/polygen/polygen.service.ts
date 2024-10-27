@@ -23,6 +23,7 @@ export function sanitizePolygenString(input: string) {
   return output.replace(allowedCharacters, '');
 }
 
+
 export function replaceAccentCharacters(input: string) {
   return input.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }

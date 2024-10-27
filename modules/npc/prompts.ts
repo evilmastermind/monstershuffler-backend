@@ -270,8 +270,7 @@ export async function parseRoleplayStats(character: Character): Promise<Roleplay
     throw new Error('Character tags or statistics are missing');
   }
 
-  const name = '[Name]';
-  const fullName = '[Fullname]';
+  const name = s.fullName || '';
   let gender = '';
   if (s.pronouns === 'neutral') {
     gender = 'nonbinary (use they/them pronouns)';
@@ -305,7 +304,7 @@ export async function parseRoleplayStats(character: Character): Promise<Roleplay
   const involvment = getInvolvmentInTheAdventure(s.alignment.string);
   const cause = await parsePolygenGrammar(`
 
-S ::= (- Relationship |++ Monster from the game "Dungeons and Dragons 5th edition" | Event | deity | Organization | Magicalstuff );
+S ::= (++++ Monster from the game "Dungeons and Dragons 5th edition" |- Relationship | Event | deity | Organization |++ Magicalstuff );
 
 Magicalstuff ::= (Magical Wearable | Magical Weapon | Magical Anomaly | Magical Item | Magical Instrument);
 Magical ::= (enchanted | magical | cursed |-- sentient |-- haunted |- blessed);
@@ -345,7 +344,6 @@ S ::= (+(city | town | village | hamlet) | arctic | forest | underdark | desert 
 
   const roleplayStats: { [key: string]: string } = {
     name,
-    fullName,
     gender,
     race,
     characterHook,
