@@ -7,7 +7,7 @@ import { handleError } from '@/utils/errors';
 import { getRaceWithVariantsList } from '../race/race.service';
 import { getClassWithVariantsList } from '../class/class.service';
 import { getBackgroundList } from '../background/background.service';
-import { getBackstoryPrompt, getDnDAdventurePrompt, parseRoleplayStats, type RoleplayStats, getCharacterHookPrompt, getPhysicalAppearancePrompt } from './prompts';
+import { getDnDAdventurePrompt, parseRoleplayStats, type RoleplayStats, getCharacterHookPrompt, getPhysicalAppearancePrompt } from './prompts';
 import { generateTextStream, generateText } from '@/modules/ai/ai.service';
 import { postAnswer } from '../feedback/feedback.service';
 import { CURRENT_CHEAP_MODEL, CURRENT_GOOD_MODEL } from '@/modules/ai/ai.schema';
@@ -140,27 +140,9 @@ export async function generateBackstoryHandler(
 
       const roleplayStats = await parseRoleplayStats(npc.object as Character);
 
-      // generate the backstory
-      // const backstoryPrompt = await getBackstoryPrompt(npc.object as Character, roleplayStats);
       let backstory = '';
 
-
       reply.sse((async function * source () {
-      // start the stream for the backstory
-        // const excerptStream = await generateTextStream(backstoryPrompt, CURRENT_CHEAP_MODEL);
-        // // backstory += '“';
-        // // yield {
-        // //   id: '00',
-        // //   data: JSON.stringify('“'),
-        // // };
-        // for await (const chunk of excerptStream) {
-        //   backstory += chunk.choices[0]?.delta?.content || '';
-        //   yield {
-        //     id: chunk.id,
-        //     data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
-        //   };
-        // }
-
         const adventurePrompt = await getDnDAdventurePrompt(npc.object as Character, roleplayStats, backstory);
         // start the stream for the adventure module
         const adventureStream = await generateTextStream(adventurePrompt, CURRENT_GOOD_MODEL);
