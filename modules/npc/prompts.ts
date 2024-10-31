@@ -341,7 +341,7 @@ export async function parseRoleplayStats(character: Character): Promise<Roleplay
   const involvment = getInvolvmentInTheAdventure(s.alignment.string);
   const cause = await parsePolygenGrammar(`
 
-S ::= (++++ Monster from the game "Dungeons and Dragons 5th edition" |- Relationship | Event | deity | Organization |++ Magicalstuff );
+S ::= (++ Monster from the game "Dungeons and Dragons 5th edition" |- Relationship | Event | deity | Organization |++ Magicalstuff );
 
 Magicalstuff ::= (Magical Wearable | Magical Weapon | Magical Anomaly | Magical Item | Magical Instrument);
 Magical ::= (enchanted | magical | cursed |-- sentient |-- haunted |- blessed);
@@ -542,9 +542,9 @@ S ::=
   [write the climax description and conclusion]."
   "Secrets are steps which define a linear path that the player characters playing the adventure will follow to complete the adventure, by discovering pieces of the story until they reach the final climax. The first secret should be about who hired the adventurers or what drove them to investigate."
   "The adventure will revolve around an an NPC and [his] profession."
-  "The player characters will be hired to solve an issue or threat that will be strictly related to the NPC's profession, and will have to investigate the situation to find out what is happening before things get worse."
+  "The player characters will be hired to solve" (an issue | a threat | a menace) "that will be strictly related to the NPC's profession, and will have to investigate the situation to find out what is happening before things get worse."
   "Whatever threat or issue the player characters are trying to solve, ${stats.name} ${stats.involvment}."
-  "Make sure to include" (++ a "${stats.cause}" | a "${stats.location} as one of the locations" | "${stats.environment} as one of the locations" ) "in the adventure."
+  "Make sure to include" (++ a "${stats.cause}" as the origin of the problem | a "${stats.location} as one of the locations" | "${stats.environment} as one of the locations" ) "in the adventure."
   "Use also the NPC's character hook to shape the adventure."
   ["If the NPC's profession is not related to magic, AVOID INCLUDING ANY MAGIC OR SPELLS IN THE ADVENTURE. This is very important, because the adventure must focus on the NPC's profession and the issue arised."]
   "The NPC which is going to be the cue for the adventure is the following:"
