@@ -143,58 +143,64 @@ export async function generateBackstoryHandler(
       let backstory = '';
 
       reply.sse((async function * source () {
-        const adventurePrompt = await getDnDAdventurePrompt(npc.object as Character, roleplayStats, backstory);
-        console.log('adventurePrompt', adventurePrompt);
-        // start the stream for the adventure module
-        const adventureStream = await generateTextStream(adventurePrompt, CURRENT_GOOD_MODEL);
+        try {
+          const adventurePrompt = await getDnDAdventurePrompt(npc.object as Character, roleplayStats, backstory);
+          console.log('adventurePrompt', adventurePrompt);
+          // start the stream for the adventure module
+          const adventureStream = await generateTextStream(adventurePrompt, CURRENT_GOOD_MODEL);
 
-        backstory += '\n\n';
-        // return \n\n as a separator between the backstory and the adventure
-        yield {
-          id: '69',
-          data: JSON.stringify('\n\n'),
-        };
-
-        for await (const chunk of adventureStream) {
-          backstory += chunk.choices[0]?.delta?.content || '';
+          backstory += '\n\n';
+          // return \n\n as a separator between the backstory and the adventure
           yield {
-            id: chunk.id,
-            data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
+            id: '69',
+            data: JSON.stringify('\n\n'),
           };
-        }
 
-        const physicalAppearancePrompt = await getPhysicalAppearancePrompt(npc.object as Character, roleplayStats);
-        console.log('physicalAppearancePrompt', physicalAppearancePrompt);
-        const physicalAppearanceStream = await generateTextStream(physicalAppearancePrompt, CURRENT_CHEAP_MODEL);
+          for await (const chunk of adventureStream) {
+            backstory += chunk.choices[0]?.delta?.content || '';
+            yield {
+              id: chunk.id,
+              data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
+            };
+          }
 
-        yield {
-          id: 'appearance_incoming',
-          data: '',
-        };
+          const physicalAppearancePrompt = await getPhysicalAppearancePrompt(npc.object as Character, roleplayStats);
+          console.log('physicalAppearancePrompt', physicalAppearancePrompt);
+          const physicalAppearanceStream = await generateTextStream(physicalAppearancePrompt, CURRENT_CHEAP_MODEL);
 
-        let physicalAppearance = '';
-
-        for await (const chunk of physicalAppearanceStream) {
-          backstory += chunk.choices[0]?.delta?.content || '';
-          physicalAppearance += chunk.choices[0]?.delta?.content || '';
           yield {
-            id: chunk.id,
-            data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
+            id: 'appearance_incoming',
+            data: '',
           };
-        }
 
-        generateCharacterHookAndSaveBackstory(
-          prisma,
-          npcid,
-          backstory,
-          physicalAppearance,
+          let physicalAppearance = '';
+
+          for await (const chunk of physicalAppearanceStream) {
+            backstory += chunk.choices[0]?.delta?.content || '';
+            physicalAppearance += chunk.choices[0]?.delta?.content || '';
+            yield {
+              id: chunk.id,
+              data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
+            };
+          }
+
+          generateCharacterHookAndSaveBackstory(
+            prisma,
+            npcid,
+            backstory,
+            physicalAppearance,
         npc.object as Character,
         roleplayStats,
-        );
+          );
 
+        } catch (error) {
+          yield {
+            id: 'error',
+            data: JSON.stringify('An unexpected error occurred.'),
+          };
+        }
       })());
 
-      return;
     });
     
   } catch (error) {
