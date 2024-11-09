@@ -7,6 +7,7 @@ const feedbackRoutes: FastifyPluginAsyncZod = async function (server: FastifyIns
   server.post(
     '/questions/random',
     {
+      preHandler: [server.authenticateOptional, server.MSOnly],
       schema: {
         summary: 'Returns a random question based on a topic or created after a date.',
         description: 'Returns a random question',
@@ -23,6 +24,13 @@ const feedbackRoutes: FastifyPluginAsyncZod = async function (server: FastifyIns
   server.post(
     '/answers',
     {
+      config: {
+        rateLimit: {
+          max: 3,
+          timeWindow: '1 minute',
+        },
+      },
+      preHandler: [server.authenticateOptional, server.MSOnly],
       schema: {
         summary: 'Post an answer to a question.',
         description: 'Post an answer to a question.',
