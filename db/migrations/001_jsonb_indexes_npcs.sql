@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS npcs (
   gender VARCHAR(255) NOT NULL,
   ischild BOOLEAN NOT NULL DEFAULT FALSE,
   hasbackstory BOOLEAN NOT NULL DEFAULT FALSE,
+  backstorystatus VARCHAR(20) DEFAULT NULL,
   datecreated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT user_session_unique_npcs UNIQUE (id, userid, sessionid),
   CONSTRAINT user_fk_npcs FOREIGN KEY (userid) REFERENCES users(id),

@@ -182,6 +182,14 @@ export async function getNpcForUpdate(prisma: PrismaClient, id: string) {
   `;
 }
 
+
+export async function updateNpcBackstoryStatus(prisma: PrismaClient, id: string, status: 'pending' | 'completed' | null) {
+  return await prisma.npcs.update({
+    where: { id },
+    data: { backstorystatus: status },
+  });
+}
+
 export async function postNpc(input: PostNpc) {
   const { object, userid, sessionid } = input;
   const alignmentmoral = object.character?.alignmentMoral?.toLowerCase() || null;
@@ -230,7 +238,7 @@ export async function addBackstoryToNpc(input: AddBackstoryToNpcBody) {
   object.character.user.backstory = { string: backstory };
   return await (prisma as PrismaClient).npcs.update({
     where: { id },
-    data: { object, hasbackstory: true },
+    data: { object, hasbackstory: true, backstorystatus: 'completed' },
   });
 }
 

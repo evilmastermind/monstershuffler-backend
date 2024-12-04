@@ -341,7 +341,7 @@ export async function parseRoleplayStats(character: Character): Promise<Roleplay
   const involvment = getInvolvmentInTheAdventure(s.alignment.string);
   const cause = await parsePolygenGrammar(`
 
-S ::= (++ Monster from the game "Dungeons and Dragons 5th edition" |- Relationship | Event | deity | Organization |++ Magicalstuff );
+S ::= (+++ Monster from the game "Dungeons and Dragons 5th edition" | Relationship | Event | deity | Organization |+++ Magicalstuff );
 
 Magicalstuff ::= (Magical Wearable | Magical Weapon | Magical Anomaly | Magical Item | Magical Instrument);
 Magical ::= (enchanted | magical | cursed |-- sentient |-- haunted |- blessed);
@@ -381,6 +381,9 @@ Locationtype ::= ( castle | fortress | tower | keep | palace | temple | cathedra
   const environment = await parsePolygenGrammar(`
 S ::= (+(city | town | village | hamlet) | arctic | forest | underdark | desert | mountain | swamp | jungle |-- (sea | ocean)| coastal | grassland | savannah | wasteland | tundra );
 `);
+
+
+  console.log('cause:', cause, 'location:', location, 'environment:', environment);
 
   const roleplayStats: { [key: string]: string } = {
     name,
@@ -435,7 +438,7 @@ export async function getPhysicalAppearancePrompt(character: Character, stats: R
   [His] physical and mental traits: ${stats.stats}.
   [His] body colors (replace light/dark with appropriate colors for [his] race): ${stats.bodyColors}.
   ${stats.armor? `[His] armor is ${stats.armor}.` : ''}
-  ${stats.weapons? `[He] fights using ${stats.weapons}.` : ''}
+  ${stats.weapons? `Items or weapons [he] carries: ${stats.weapons}.` : ''}
   Profession details: ${describeCharacterProfession(stats.classDetails, stats.professionDetails)}.
   [His] defining personality trait is ${stats.personality}, and ${stats.alignment}.;
   `;
@@ -533,18 +536,18 @@ S ::=
   "The adventure should have this markdown format 
   (start directly with the following line, including the markdown quote character >, and don't write other syntax):
   > A small sentence describing a moment in the adventure from the perspective of the NPC, where we can get a glimpse of [his] personality
-  ## Adventure idea: [write the name of the adventure]
+  ## Adventure idea: (write the name of the adventure)
   [write an introduction]
-  ### Secret 1: [write a title for the secret]
+  ### Secret 1: (write a title for the secret)
   [write a description of the secret].
   [repeat for at least 4 secrets]
-  ### Climax: [write a name for the climax of the adventure]
-  [write the climax description and conclusion]."
+  ### Climax: (write a name for the climax of the adventure)
+  (write the climax description and conclusion)."
   "Secrets are steps which define a linear path that the player characters playing the adventure will follow to complete the adventure, by discovering pieces of the story until they reach the final climax. The first secret should be about who hired the adventurers or what drove them to investigate."
   "The adventure will revolve around an an NPC and [his] profession."
   "The player characters will be hired to solve" (an issue | a threat | a menace) "that will be strictly related to the NPC's profession, and will have to investigate the situation to find out what is happening before things get worse."
   "Whatever threat or issue the player characters are trying to solve, ${stats.name} ${stats.involvment}."
-  "Make sure to include" (++ a "${stats.cause}" as the origin of the problem | a "${stats.location} as one of the locations" | "${stats.environment} as one of the locations" ) "in the adventure."
+  "Make sure to include" ( "" |++ a "${stats.cause}" as the cause of the problem, and ) a ("${stats.location} as one of the locations" | "${stats.environment} as the environment" ) "of the adventure."
   "Use also the NPC's character hook to shape the adventure."
   ["If the NPC's profession is not related to magic, AVOID INCLUDING ANY MAGIC OR SPELLS IN THE ADVENTURE. This is very important, because the adventure must focus on the NPC's profession and the issue arised."]
   "The NPC which is going to be the cue for the adventure is the following:"
@@ -599,8 +602,9 @@ S ::=
   //   adventure += `"${sanitizePolygenString(sanitizedExcerpt)}"`;
   // }
   adventure += ';';
-  adventure = parsePromptTags(adventure, character);
   adventure = await parsePolygenGrammar(adventure);
+  console.log('adventure:', adventure);
+  adventure = parsePromptTags(adventure, character);
   // console.info(adventure);
   return adventure;
 }

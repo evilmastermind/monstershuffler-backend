@@ -11,7 +11,7 @@ import { getDnDAdventurePrompt, parseRoleplayStats, type RoleplayStats, getChara
 import { generateTextStream, generateText } from '@/modules/ai/ai.service';
 import { postAnswer } from '../feedback/feedback.service';
 import { CURRENT_CHEAP_MODEL, CURRENT_GOOD_MODEL } from '@/modules/ai/ai.schema';
-import { getRecycledNpcsForUser, getNpcForUpdate, postNpc, addNpcToSentAlreadyList, addBackstoryToNpc, postNpcRating, getNpc } from './npc.service';
+import { getRecycledNpcsForUser, getNpcForUpdate, postNpc, addNpcToSentAlreadyList, addBackstoryToNpc, postNpcRating, getNpc, updateNpcBackstoryStatus } from './npc.service';
 import { calculateCharacterHook } from 'monstershuffler-shared';
 import prisma from '@/utils/prisma';
 
@@ -134,7 +134,7 @@ export async function generateBackstoryHandler(
         throw new Error('NPC not found');
       }
       const npc = npcs[0];
-      if (npc.hasbackstory === true) {
+      if (npc.hasbackstory === true || npc.backstorystatus !== null) {
         throw new Error('It\'s currently possible to generate a backstory only once for an NPC');
       }
 
@@ -142,10 +142,11 @@ export async function generateBackstoryHandler(
 
       let backstory = '';
 
+      updateNpcBackstoryStatus(prisma, npcid, 'pending');
       reply.sse((async function * source () {
         try {
           const adventurePrompt = await getDnDAdventurePrompt(npc.object as Character, roleplayStats, backstory);
-          console.log('adventurePrompt', adventurePrompt);
+          // console.log('adventurePrompt', adventurePrompt);
           // start the stream for the adventure module
           const adventureStream = await generateTextStream(adventurePrompt, CURRENT_GOOD_MODEL);
 
@@ -165,7 +166,7 @@ export async function generateBackstoryHandler(
           }
 
           const physicalAppearancePrompt = await getPhysicalAppearancePrompt(npc.object as Character, roleplayStats);
-          console.log('physicalAppearancePrompt', physicalAppearancePrompt);
+          // console.log('physicalAppearancePrompt', physicalAppearancePrompt);
           const physicalAppearanceStream = await generateTextStream(physicalAppearancePrompt, CURRENT_CHEAP_MODEL);
 
           yield {

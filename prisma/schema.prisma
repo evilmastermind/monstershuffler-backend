@@ -151,6 +151,7 @@ model npcs {
   ischild          Boolean           @default(false)
   hasbackstory     Boolean           @default(false)
   datecreated      DateTime          @default(now()) @db.Timestamp(6)
+  backstorystatus  String?           @db.VarChar(20)
   users            users?            @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_fk_npcs")
   npcsrating       npcsrating[]
   npcssenttousers  npcssenttousers[]
