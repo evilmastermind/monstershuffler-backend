@@ -1,6 +1,16 @@
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 dotenv.config();
+import path from 'path';
+// @ts-expect-error module-alias is not typed
+import moduleAlias from 'module-alias';
 ////
+console.log('current path:', __dirname);
+moduleAlias.addAliases({
+  '@': path.join(__dirname),
+  '~': path.join(__dirname, 'modules'),
+});
+////
+
 import 'module-alias/register';
 import Fastify, { FastifyRequest, FastifyReply, FastifyError } from 'fastify';
 import { runMigrations, scheduleDbMaintenance } from '@/db';

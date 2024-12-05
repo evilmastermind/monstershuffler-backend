@@ -1,6 +1,6 @@
 import prisma from '@/utils/prisma';
 import { isAdmin } from '@/modules/user/user.service';
-import { objects } from '@prisma/client';
+import { objects, Prisma } from '@prisma/client';
 import type { Choice } from '@/types';
 
 export async function countObjects() {
