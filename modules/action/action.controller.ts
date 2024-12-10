@@ -1,4 +1,4 @@
-import { createActionInput, getActionListInput } from './action.schema';
+import { PostActionBody, GetActionListBody } from './action.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createAction,
@@ -7,10 +7,10 @@ import {
   updateAction,
   deleteAction,
 } from './action.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getActionListHandler(
-  request: FastifyRequest<{ Body: getActionListInput }>,
+  request: FastifyRequest<{ Body: GetActionListBody }>,
   reply: FastifyReply
 ) {
   const { body } = request;
@@ -37,14 +37,14 @@ export async function getActionHandler(
   const actionId = request.params.actionId;
   try {
     const actionObject = await getAction(id, parseInt(actionId));
-    return reply.code(200).send(actionObject);
+    return handleResultFound(actionObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
 export async function createActionHandler(
-  request: FastifyRequest<{ Body: createActionInput }>,
+  request: FastifyRequest<{ Body: PostActionBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -62,7 +62,7 @@ export async function updateActionHandler(
     Params: {
       actionId: string;
     };
-    Body: createActionInput;
+    Body: PostActionBody;
   }>,
   reply: FastifyReply
 ) {

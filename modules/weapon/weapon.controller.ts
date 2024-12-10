@@ -1,4 +1,4 @@
-import { createWeaponInput } from './weapon.schema';
+import { PostWeaponBody } from './weapon.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createWeapon,
@@ -7,7 +7,7 @@ import {
   updateWeapon,
   deleteWeapon,
 } from './weapon.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getWeaponListHandler(
   request: FastifyRequest,
@@ -36,14 +36,14 @@ export async function getWeaponHandler(
   const weaponId = request.params.weaponId;
   try {
     const weapon = await getWeapon(id, parseInt(weaponId));
-    return reply.code(200).send(weapon[0]);
+    return handleResultFound(weapon, reply);
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
 export async function createWeaponHandler(
-  request: FastifyRequest<{ Body: createWeaponInput }>,
+  request: FastifyRequest<{ Body: PostWeaponBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -61,7 +61,7 @@ export async function updateWeaponHandler(
     Params: {
       weaponId: string;
     };
-    Body: createWeaponInput;
+    Body: PostWeaponBody;
   }>,
   reply: FastifyReply
 ) {

@@ -2,19 +2,26 @@ import { FastifyInstance } from 'fastify';
 import {
   createSpellHandler,
   getSpellHandler,
-  getSpellListHandler,
+  sGetSpellListBodyHandler,
   updateSpellHandler,
   deleteSpellHandler,
 } from './spell.controller';
-import { $ref } from './spell.schema';
+import {
+  sGetSpellListResponse,
+  sGetSpellResponse,
+  sGetSpellListBody,
+  sPostSpellBody,
+  sPutSpellBody,
+} from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
 // TODO: a /random route that returns a random spell from the db, filtered by the values specified in the body.
-// TODO: spells should be have variants and be structured like the new version of actions.
+// TODO: spells should have variants and be structured like the new version of actions.
 // TODO: spells should have dynamic values, and be exactly like actions... spells should be actions?
 // TODO: it would be cool if spells could be used as actions, and actions could be used as spells.
 //       this is in line with the new way of creating monsters by WotC, like the ones in Monsters of the Multiverse
-async function spellRoutes(server: FastifyInstance) {
+const spellRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.post(
     '/filter',
     {
@@ -24,15 +31,15 @@ async function spellRoutes(server: FastifyInstance) {
           'Returns a list of spells from the db, filtered by the values specified in the body.',
         description:
           'Returns a list of spells from the db, filtered by the values specified in the body. If authenticated, also returns the spells created by the user.',
-        body: $ref('getSpellListSchema'),
+        body: sGetSpellListBody,
         headers: jwtHeaderOptional,
         tags: ['spells'],
         response: {
-          200: $ref('getSpellListResponseSchema'),
+          200: sGetSpellListResponse,
         },
       },
     },
-    getSpellListHandler
+    sGetSpellListBodyHandler
   );
 
   server.get(
@@ -48,7 +55,7 @@ async function spellRoutes(server: FastifyInstance) {
         tags: ['spells'],
         // params: $ref('getSpellParamsSchema'),
         response: {
-          200: $ref('getSpellResponseSchema'),
+          200: sGetSpellResponse,
         },
       },
     },
@@ -63,11 +70,11 @@ async function spellRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new spell to the db.',
         description: '[MS ONLY] Adds a new spell to the db.',
-        body: $ref('createSpellSchema'),
+        body: sPostSpellBody,
         tags: ['spells'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('getSpellResponseSchema'),
+          201: sGetSpellResponse,
         },
       },
     },
@@ -83,7 +90,7 @@ async function spellRoutes(server: FastifyInstance) {
         summary: '[MS ONLY] Updates the spell corresponding to the given id.',
         description:
           '[MS ONLY] Updates the spell corresponding to the given id.',
-        body: $ref('updateSpellSchema'),
+        body: sPutSpellBody,
         tags: ['spells'],
         headers: jwtHeaderRequired,
         response: {
@@ -112,6 +119,6 @@ async function spellRoutes(server: FastifyInstance) {
     },
     deleteSpellHandler
   );
-}
+};
 
 export default spellRoutes;

@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
 
 const id = z.number();
 const objectid = z.number();
@@ -17,27 +16,18 @@ const reportObject = z.object({
   action: z.string(),
 });
 
-const createReportSchema = z.object({
+export const sPostReportBody = z.object({
   objectid,
   reason,
   report,
 });
 
-const createReportResponseSchema = reportObject;
+export const sPostReportResponse = reportObject;
 
-const getReportListResponseSchema = z.object({
+export const sGetReportListResponse = z.object({
   list: z.array(reportObject),
 });
 
-export type createReportInput = z.infer<typeof createReportSchema>;
-export type createReportResponse = z.infer<typeof createReportResponseSchema>;
-export type getReportListResponse = z.infer<typeof getReportListResponseSchema>;
-
-export const { schemas: reportSchemas, $ref } = buildJsonSchemas(
-  {
-    createReportSchema,
-    createReportResponseSchema,
-    getReportListResponseSchema,
-  },
-  { $id: 'reportSchemas' }
-);
+export type PostReportBody = z.infer<typeof sPostReportBody>;
+export type PostReportResponse = z.infer<typeof sPostReportResponse>;
+export type GetReportListResponse = z.infer<typeof sGetReportListResponse>;

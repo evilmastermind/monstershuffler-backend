@@ -1,10 +1,10 @@
 import prisma from '@/utils/prisma';
-import { createLanguageInput } from './language.schema';
-import { ChoiceRandomObject, Choice } from '@/schemas/character/choices';
+import { PostLanguageBody } from './language.schema';
+import { ChoiceRandomObject, Choice } from '@/types';
 
 export async function createLanguage(
   userid: number,
-  input: createLanguageInput
+  input: PostLanguageBody
 ) {
   const { name, script } = input;
 
@@ -43,7 +43,7 @@ export async function getLanguageList(userid: number) {
 export async function updateLanguage(
   userid: number,
   id: number,
-  input: createLanguageInput
+  input: PostLanguageBody
 ) {
   const { name, script } = input;
 
@@ -81,15 +81,15 @@ export async function getChoiceLanguage(
   let additionalFilters = '';
 
   if (chosenAlreadyIds.length > 0) {
-    additionalFilters += ` AND id NOT IN (`;
+    additionalFilters += ' AND id NOT IN (';
     chosenAlreadyIds.forEach((id, index) => {
       if (index > 0) {
-        additionalFilters += `,`;
+        additionalFilters += ',';
       }
       parameters.push(id);
       additionalFilters += `$${parameters.length}`;
     });
-    additionalFilters += `) `;
+    additionalFilters += ') ';
   }
 
   parameters.push(choice?.number || 1);

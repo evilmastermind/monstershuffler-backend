@@ -1,5 +1,5 @@
 import prisma from '@/utils/prisma';
-import { ChoiceRandomObject, Choice } from '@/schemas/character/choices';
+import { ChoiceRandomObject, Choice } from '@/types';
 
 export async function getSkillList() {
   return await prisma.skills.findMany({
@@ -13,11 +13,14 @@ export async function getSkillList() {
 
 export async function getRandomSkill() {
   const skillCount = await prisma.skills.count();
-  const skill = await prisma.skills.findMany({
+  const array = await prisma.skills.findMany({
     skip: Math.floor(Math.random() * skillCount),
     take: 1,
   });
-  return skill[0];
+  if (array.length === 0) {
+    return null;
+  }
+  return array[0];
 }
 
 export async function getChoiceSkill(
@@ -33,15 +36,15 @@ export async function getChoiceSkill(
   let additionalFilters = '';
 
   if (chosenAlreadyIds.length > 0) {
-    additionalFilters += ` AND id NOT IN (`;
+    additionalFilters += ' AND id NOT IN (';
     chosenAlreadyIds.forEach((id, index) => {
       if (index > 0) {
-        additionalFilters += `,`;
+        additionalFilters += ',';
       }
       parameters.push(id);
       additionalFilters += `$${parameters.length}`;
     });
-    additionalFilters += `) `;
+    additionalFilters += ') ';
   }
 
   parameters.push(choice?.number || 1);

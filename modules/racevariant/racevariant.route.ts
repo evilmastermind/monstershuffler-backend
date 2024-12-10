@@ -7,10 +7,16 @@ import {
   updateRacevariantHandler,
   deleteRacevariantHandler,
 } from './racevariant.controller';
-import { $ref } from './racevariant.schema';
+import {
+  sGetRacevariantListResponse,
+  sGetRacevariantResponse,
+  sPostRacevariantBody,
+  sPutRacevariantBody,
+} from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function racevariantRoutes(server: FastifyInstance) {
+const racevariantRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/race/:raceId',
     {
@@ -24,7 +30,7 @@ async function racevariantRoutes(server: FastifyInstance) {
         tags: ['race variants'],
         // params: $ref('getRacevariantParamsSchema'),
         response: {
-          200: $ref('getRacevariantListResponseSchema'),
+          200: sGetRacevariantListResponse,
         },
       },
     },
@@ -44,7 +50,7 @@ async function racevariantRoutes(server: FastifyInstance) {
         tags: ['race variants'],
         // params: $ref('getRacevariantParamsSchema'),
         response: {
-          200: $ref('getRacevariantResponseSchema'),
+          200: sGetRacevariantResponse,
         },
       },
     },
@@ -64,7 +70,7 @@ async function racevariantRoutes(server: FastifyInstance) {
         tags: ['race variants'],
         // params: $ref('getRacevariantParamsSchema'),
         response: {
-          200: $ref('getRacevariantResponseSchema'),
+          200: sGetRacevariantResponse,
         },
       },
     },
@@ -79,12 +85,12 @@ async function racevariantRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new race variant to the db.',
         description: '[MS ONLY] Adds a new race variant to the db.',
-        body: $ref('createRacevariantSchema'),
+        body: sPostRacevariantBody,
         tags: ['race variants'],
         headers: jwtHeaderRequired,
         // params: $ref('getRacevariantParamsSchema'),
         response: {
-          201: $ref('getRacevariantResponseSchema'),
+          201: sGetRacevariantResponse,
         },
       },
     },
@@ -101,7 +107,7 @@ async function racevariantRoutes(server: FastifyInstance) {
           '[MS ONLY] Updates the race variant corresponding to the given id.',
         description:
           '[MS ONLY] Updates the race variant corresponding to the given id.',
-        body: $ref('updateRacevariantSchema'),
+        body: sPutRacevariantBody,
         tags: ['race variants'],
         headers: jwtHeaderRequired,
         response: {
@@ -131,6 +137,6 @@ async function racevariantRoutes(server: FastifyInstance) {
     },
     deleteRacevariantHandler
   );
-}
+};
 
 export default racevariantRoutes;

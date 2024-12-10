@@ -8,10 +8,11 @@ import {
   updateClassHandler,
   deleteClassHandler,
 } from './class.controller';
-import { $ref } from './class.schema';
+import { sGetClassWithVariantsListResponse, sGetClassListResponse, sGetClassResponse } from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function classRoutes(server: FastifyInstance) {
+const classRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/',
     {
@@ -23,7 +24,7 @@ async function classRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['classes'],
         response: {
-          200: $ref('getClassListResponseSchema'),
+          200: sGetClassListResponse,
         },
       },
     },
@@ -41,7 +42,7 @@ async function classRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['classes'],
         response: {
-          200: $ref('getClassResponseSchema'),
+          200: sGetClassResponse,
         },
       },
     },
@@ -49,7 +50,7 @@ async function classRoutes(server: FastifyInstance) {
   );
 
   server.get(
-    '/withvariants',
+    '/with-variants',
     {
       preHandler: [server.authenticateOptional],
       schema: {
@@ -60,7 +61,7 @@ async function classRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['classes'],
         response: {
-          200: $ref('getClassWithVariantsListResponseSchema'),
+          200: sGetClassWithVariantsListResponse,
         },
       },
     },
@@ -80,7 +81,7 @@ async function classRoutes(server: FastifyInstance) {
         tags: ['classes'],
         // params: $ref('getClassParamsSchema'),
         response: {
-          200: $ref('getClassResponseSchema'),
+          200: sGetClassResponse,
         },
       },
     },
@@ -95,11 +96,11 @@ async function classRoutes(server: FastifyInstance) {
   //       hide: true,
   //       summary: '[MS ONLY] Adds a new class to the db.',
   //       description: '[MS ONLY] Adds a new class to the db.',
-  //       body: $ref('createClassSchema'),
+  //       body: $ref('sPostClassBody'),
   //       tags: ['classes'],
   //       headers: jwtHeaderRequired,
   //       response: {
-  //         201: $ref('getClassResponseSchema')
+  //         201: $ref('sGetClassResponse')
   //       }
   //     },
   //   },
@@ -114,7 +115,7 @@ async function classRoutes(server: FastifyInstance) {
   //       hide: true,
   //       summary: '[MS ONLY] Updates the class corresponding to the given id.',
   //       description: '[MS ONLY] Updates the class corresponding to the given id.',
-  //       body: $ref('updateClassSchema'),
+  //       body: $ref('sPutClassBody'),
   //       tags: ['classes'],
   //       headers: jwtHeaderRequired,
   //       response: {
@@ -142,6 +143,6 @@ async function classRoutes(server: FastifyInstance) {
   //   },
   //   deleteClassHandler
   // );
-}
+};
 
 export default classRoutes;

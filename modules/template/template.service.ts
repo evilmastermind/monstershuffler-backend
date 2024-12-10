@@ -1,9 +1,9 @@
 import prisma from '@/utils/prisma';
-import { Template, createTemplateInput } from './template.schema';
+import { Template, PostTemplateBody, PutTemplateBody } from './template.schema';
 
 export async function createTemplate(
   userid: number,
-  input: createTemplateInput
+  input: PostTemplateBody
 ) {
   const { object, game } = input;
 
@@ -19,9 +19,11 @@ export async function createTemplate(
 }
 
 export async function getTemplate(userid: number, id: number) {
-  return await prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     select: {
       object: true,
+      id: true,
+      description: true,
     },
     where: {
       id,
@@ -36,6 +38,17 @@ export async function getTemplate(userid: number, id: number) {
       ],
     },
   });
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  const response = {
+    object: result.object as Template,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  response.object.description = result.description || '';
+  return response;
 }
 
 export async function getTemplateList(userid: number) {
@@ -70,7 +83,7 @@ export async function getTemplateList(userid: number) {
 export async function updateTemplate(
   userid: number,
   id: number,
-  input: createTemplateInput
+  input: PutTemplateBody
 ) {
   const { object, game } = input;
 

@@ -1,12 +1,13 @@
 import prisma from '@/utils/prisma';
 import {
-  createRacevariantInput,
-  updateRacevariantInput,
+  Racevariant,
+  PostRacevariantBody,
+  PutRacevariantBody,
 } from './racevariant.schema';
 
 export async function createRacevariant(
   userid: number,
-  input: createRacevariantInput
+  input: PostRacevariantBody
 ) {
   const { object, game, raceId } = input;
 
@@ -40,10 +41,11 @@ export async function createRacevariant(
 }
 
 export async function getRacevariant(userid: number, id: number) {
-  const raceResult = await prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     select: {
       object: true,
       id: true,
+      description: true,
     },
     where: {
       id,
@@ -58,7 +60,17 @@ export async function getRacevariant(userid: number, id: number) {
       ],
     },
   });
-  return raceResult[0];
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  const response = {
+    object: result.object as Racevariant,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  response.object.description = result.description || '';
+  return response;
 }
 
 export async function getRandomRacevariant(userid: number, variantof: number) {
@@ -79,7 +91,7 @@ export async function getRandomRacevariant(userid: number, variantof: number) {
   if (raceCount === 0) {
     return null;
   }
-  const race = await prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     skip: Math.floor(Math.random() * raceCount),
     take: 1,
     select: {
@@ -99,7 +111,16 @@ export async function getRandomRacevariant(userid: number, variantof: number) {
       ],
     },
   });
-  return race[0];
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  const response = {
+    object: result.object as Racevariant,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  return response;
 }
 
 export async function getRacevariantList(userid: number, variantof: number) {
@@ -135,7 +156,7 @@ export async function getRacevariantList(userid: number, variantof: number) {
 export async function updateRacevariant(
   userid: number,
   id: number,
-  input: updateRacevariantInput
+  input: PutRacevariantBody
 ) {
   const { object } = input;
 

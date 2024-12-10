@@ -1,16 +1,17 @@
 import prisma from '@/utils/prisma';
 import {
-  createSpellInput,
-  getSpellListInput,
-  updateSpellInput,
+  PostSpellBody,
+  GetSpellListBody,
+  PutSpellBody,
 } from './spell.schema';
+import { Spell } from 'monstershuffler-shared';
 
 // TODO: spells will be stored with their id and name inside objects
 // this means that if the spell's name changes, it will have to be updated in every object that uses it
 // I need to create an "update spell names" button in the editor, and maybe retrieve the new spell names from the database
 // when an object is loaded... and maybe allow users to use shared spells only if they copy them into their own folders
 
-export async function createSpell(userid: number, input: createSpellInput) {
+export async function createSpell(userid: number, input: PostSpellBody) {
   const { object, game, name } = input;
 
   const newObject = await prisma.objects.create({
@@ -26,7 +27,7 @@ export async function createSpell(userid: number, input: createSpellInput) {
   return newObject;
 }
 
-export async function getSpellList(userid: number, filters: getSpellListInput) {
+export async function getSpellList(userid: number, filters: GetSpellListBody) {
   const {
     game,
     name,
@@ -139,8 +140,12 @@ export async function getSpellList(userid: number, filters: getSpellListInput) {
   return spellList;
 }
 
-export async function getSpell(userid: number, id: number) {
-  const spell = await prisma.objects.findMany({
+export async function getSpell(userid: number, nameOrId: string) {
+  // if nameOrId is a number, it's an id, otherwise it's a name
+  // (Prisma ignores unefined fields)
+  const name = isNaN(parseInt(nameOrId)) ? nameOrId : undefined;
+  const id = isNaN(parseInt(nameOrId)) ? undefined : parseInt(nameOrId);
+  const array = await prisma.objects.findMany({
     select: {
       id: true,
       userid: true,
@@ -148,18 +153,29 @@ export async function getSpell(userid: number, id: number) {
     },
     where: {
       id,
+      name: {
+        contains: name,
+        mode: 'insensitive',
+      },
       userid,
       type: 102,
     },
   });
-
-  return spell;
+  if (array.length) {
+    // add id inside object for each action
+    const object = array[0].object as Spell;
+    if (object) {
+      object.id = array[0].id;
+    }
+    return array[0];
+  }
+  return null;
 }
 
 export async function updateSpell(
   userid: number,
   id: number,
-  input: updateSpellInput
+  input: PutSpellBody
 ) {
   const { name, object } = input;
 

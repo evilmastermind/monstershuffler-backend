@@ -1,4 +1,4 @@
-import { createReportInput } from './report.schema';
+import { PostReportBody } from './report.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createReport, getReportList } from './report.service';
 import { handleError } from '@/utils/errors';
@@ -19,7 +19,7 @@ export async function getReportListHandler(
 }
 
 export async function createReportHandler(
-  request: FastifyRequest<{ Body: createReportInput }>,
+  request: FastifyRequest<{ Body: PostReportBody }>,
   reply: FastifyReply
 ) {
   try {

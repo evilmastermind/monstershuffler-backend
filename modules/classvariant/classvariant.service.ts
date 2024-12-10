@@ -1,12 +1,13 @@
 import prisma from '@/utils/prisma';
 import {
-  createClassvariantInput,
-  updateClassvariantInput,
+  Classvariant,
+  PostClassvariantBody,
+  PutClassvariantBody,
 } from './classvariant.schema';
 
 export async function createClassvariant(
   userid: number,
-  input: createClassvariantInput
+  input: PostClassvariantBody
 ) {
   const { object, classId, game } = input;
 
@@ -40,9 +41,11 @@ export async function createClassvariant(
 }
 
 export async function getClassvariant(userid: number, id: number) {
-  const classResult = await prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     select: {
       object: true,
+      id: true,
+      description: true,
     },
     where: {
       id,
@@ -57,7 +60,17 @@ export async function getClassvariant(userid: number, id: number) {
       ],
     },
   });
-  return classResult[0];
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  const response = {
+    object: result.object as Classvariant,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  response.object.description = result.description || '';
+  return response;
 }
 
 export async function getRandomClassvariant(userid: number, variantof: number) {
@@ -78,7 +91,7 @@ export async function getRandomClassvariant(userid: number, variantof: number) {
   if (variantCount === 0) {
     return null;
   }
-  const classChosen = await prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     skip: Math.floor(Math.random() * variantCount),
     take: 1,
     select: {
@@ -98,7 +111,16 @@ export async function getRandomClassvariant(userid: number, variantof: number) {
       ],
     },
   });
-  return classChosen[0];
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  const response = {
+    object: result.object as Classvariant,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  return response;
 }
 
 export async function getClassvariantList(userid: number) {
@@ -175,7 +197,7 @@ export async function getClassvariantClassList(
 export async function updateClassvariant(
   userid: number,
   id: number,
-  input: updateClassvariantInput
+  input: PutClassvariantBody
 ) {
   const { object } = input;
 

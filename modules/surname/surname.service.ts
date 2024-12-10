@@ -1,14 +1,14 @@
 import prisma from '@/utils/prisma';
-import { getRandomSurnameInput } from './surname.schema';
+import { GetRandomSurnameBody } from './surname.schema';
 
-export async function getRandomSurname(input: getRandomSurnameInput) {
+export async function sGetRandomSurname(input: GetRandomSurnameBody) {
   const surnameCount = await prisma.surnames.count({
     where: {
       race: input.race,
       gender: input.gender,
     },
   });
-  const surname = await prisma.surnames.findMany({
+  const array = await prisma.surnames.findMany({
     skip: Math.floor(Math.random() * surnameCount),
     take: 1,
     where: {
@@ -16,6 +16,8 @@ export async function getRandomSurname(input: getRandomSurnameInput) {
       gender: input.gender,
     },
   });
-
-  return surname[0].surname;
+  if (array.length === 0) {
+    return null;
+  }
+  return array[0].surname;
 }

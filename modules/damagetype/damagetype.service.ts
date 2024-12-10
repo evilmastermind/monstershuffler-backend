@@ -1,9 +1,9 @@
 import prisma from '@/utils/prisma';
-import { createDamageTypeInput } from './damagetype.schema';
+import { PostDamageTypeInput } from './damagetype.schema';
 
 export async function createDamageType(
   userid: number,
-  input: createDamageTypeInput
+  input: PostDamageTypeInput
 ) {
   const { name, description } = input;
 
@@ -42,7 +42,7 @@ export async function getDamageTypeList(userid: number) {
 export async function updateDamageType(
   userid: number,
   id: number,
-  input: createDamageTypeInput
+  input: PostDamageTypeInput
 ) {
   const { name, description } = input;
 

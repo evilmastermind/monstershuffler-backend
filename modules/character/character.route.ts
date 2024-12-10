@@ -6,10 +6,11 @@ import {
   updateCharacterHandler,
   deleteCharacterHandler,
 } from './character.controller';
-import { $ref } from './character.schema';
+import { sGetCharacterListResponse, sGetCharacterResponse, sPostCharacterBody, sPutCharacterBody  } from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function characterRoutes(server: FastifyInstance) {
+const characterRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/',
     {
@@ -21,7 +22,7 @@ async function characterRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['characters'],
         response: {
-          200: $ref('getCharacterListResponseSchema'),
+          200: sGetCharacterListResponse,
         },
       },
     },
@@ -41,7 +42,7 @@ async function characterRoutes(server: FastifyInstance) {
         tags: ['characters'],
         // params: $ref('getCharacterParamsSchema'),
         response: {
-          200: $ref('getCharacterResponseSchema'),
+          200: sGetCharacterResponse,
         },
       },
     },
@@ -56,11 +57,11 @@ async function characterRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new character to the db.',
         description: '[MS ONLY] Adds a new character to the db.',
-        body: $ref('createCharacterSchema'),
+        body: sPostCharacterBody,
         tags: ['characters'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('getCharacterResponseSchema'),
+          201: sGetCharacterResponse,
         },
       },
     },
@@ -77,7 +78,7 @@ async function characterRoutes(server: FastifyInstance) {
           '[MS ONLY] Updates the character corresponding to the given id.',
         description:
           '[MS ONLY] Updates the character corresponding to the given id.',
-        body: $ref('updateCharacterSchema'),
+        body: sPutCharacterBody,
         tags: ['characters'],
         headers: jwtHeaderRequired,
         response: {
@@ -107,6 +108,6 @@ async function characterRoutes(server: FastifyInstance) {
     },
     deleteCharacterHandler
   );
-}
+};
 
 export default characterRoutes;

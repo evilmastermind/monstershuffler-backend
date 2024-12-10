@@ -1,4 +1,4 @@
-import { createLanguageInput } from './language.schema';
+import { PostLanguageBody } from './language.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createLanguage,
@@ -24,7 +24,7 @@ export async function getLanguageListHandler(
 }
 
 export async function createLanguageHandler(
-  request: FastifyRequest<{ Body: createLanguageInput }>,
+  request: FastifyRequest<{ Body: PostLanguageBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -42,7 +42,7 @@ export async function updateLanguageHandler(
     Params: {
       languageId: string;
     };
-    Body: createLanguageInput;
+    Body: PostLanguageBody;
   }>,
   reply: FastifyReply
 ) {

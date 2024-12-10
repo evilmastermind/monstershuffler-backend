@@ -25,11 +25,30 @@ model actionstags {
   @@id([objectid, tag])
 }
 
+model backgroundsdetails {
+  objectid    Int     @id
+  name        String  @db.VarChar(255)
+  femalename  String  @db.VarChar(255)
+  age         String  @db.VarChar(255)
+  description String?
+  objects     objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([objectid])
+}
+
 model bases {
   id    Int    @unique(map: "bases_id_idx") @default(autoincrement())
   age   String @db.VarChar(255)
   part  String @db.VarChar(255)
   value String @db.VarChar(255)
+}
+
+model characterhooks {
+  id     Int    @unique(map: "characterhooks_id_idx") @default(autoincrement())
+  hook   String @db.VarChar(255)
+  object Json
+
+  @@index([object], map: "idx_gin_characterhooks", type: Gin)
 }
 
 model charactersdetails {
@@ -115,15 +134,75 @@ model npcgeneratorblacklist {
   @@index([userid])
 }
 
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model npcs {
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  object           Json
+  userid           Int?
+  sessionid        String?           @db.VarChar(250)
+  raceid           Int
+  racevariantid    Int?
+  backgroundid     Int?
+  classid          Int?
+  classvariantid   Int?
+  alignmentethical String            @db.VarChar(255)
+  alignmentmoral   String?           @db.VarChar(255)
+  gender           String            @db.VarChar(255)
+  ischild          Boolean           @default(false)
+  hasbackstory     Boolean           @default(false)
+  datecreated      DateTime          @default(now()) @db.Timestamp(6)
+  backstorystatus  String?           @db.VarChar(20)
+  users            users?            @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_fk_npcs")
+  npcsrating       npcsrating[]
+  npcssenttousers  npcssenttousers[]
+
+  @@unique([id, userid, sessionid], map: "user_session_unique_npcs")
+  @@index([sessionid], map: "idx_npcs_sessionid")
+  @@index([userid], map: "idx_npcs_userid")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model npcsrating {
+  id          Int      @id @default(autoincrement())
+  npcid       String   @db.Uuid
+  userid      Int?
+  sessionid   String?  @db.VarChar(250)
+  rating      Int
+  datecreated DateTime @default(now()) @db.Timestamp(6)
+  npcs        npcs     @relation(fields: [npcid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users       users?   @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user_fk_npcsrating")
+
+  @@unique([npcid, userid, sessionid], map: "user_session_unique_npcsrating")
+  @@unique([npcid, userid, sessionid], map: "user_session_unique_npcsrating_idx")
+  @@index([npcid], map: "idx_npcsrating_npcid")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model npcssenttousers {
+  id          Int      @id @default(autoincrement())
+  npcid       String   @db.Uuid
+  userid      Int?
+  sessionid   String?  @db.VarChar(250)
+  datecreated DateTime @default(now()) @db.Timestamp(6)
+  npcs        npcs     @relation(fields: [npcid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users       users?   @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_fk_npcssenttousers")
+
+  @@unique([npcid, userid, sessionid], map: "user_session_unique_npcssenttousers")
+  @@index([npcid], map: "idx_npcssenttousers_npcid")
+  @@index([sessionid], map: "idx_npcssenttousers_sessionid")
+  @@index([userid], map: "idx_npcssenttousers_userid")
+}
+
 model objects {
   id                    Int                     @id @default(autoincrement())
   type                  Int
   name                  String                  @db.VarChar(255)
   game                  Int
+  description           String?
   userid                Int
   created               DateTime?               @default(now()) @db.Timestamp(6)
   lastedited            DateTime?               @default(now()) @db.Timestamp(6)
-  object                Json                    @db.Json
+  object                Json
   originalid            Int?
   originaluserid        Int?
   folderid              Int?
@@ -157,6 +236,15 @@ model objecttypes {
   name         String         @db.VarChar(255)
   objects      objects[]
   publications publications[]
+}
+
+model pagesettings {
+  userid Int
+  page   String @db.VarChar(255)
+  object Json   @db.Json
+  users  users  @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([userid, page])
 }
 
 model publications {
@@ -288,6 +376,9 @@ model traits {
   category    String  @db.VarChar(255)
   feeling     Int?    @default(0) @db.SmallInt
   description String?
+  object      Json
+
+  @@index([object], map: "idx_gin_traits", type: Gin)
 }
 
 model users {
@@ -314,11 +405,17 @@ model users {
   customerid                       String?                 @db.VarChar(255)
   subscriptionid                   String?                 @db.VarChar(255)
   avatar                           String?                 @db.VarChar(255)
+  settings                         Json?
   damagetypes                      damagetypes[]
+  feedbackanswers                  feedbackanswers[]
   folders                          folders[]
   languages                        languages[]
   npcgeneratorblacklist            npcgeneratorblacklist[]
+  npcs                             npcs[]
+  npcsrating                       npcsrating[]
+  npcssenttousers                  npcssenttousers[]
   objects                          objects[]
+  pagesettings                     pagesettings[]
   publicationsratings              publicationsratings[]
   reports_reports_moderatorTousers reports[]               @relation("reports_moderatorTousers")
   reports_reports_useridTousers    reports[]               @relation("reports_useridTousers")
@@ -328,21 +425,41 @@ model users {
 }
 
 model voices {
-  voice String @id @db.VarChar(255)
+  id         Int     @id @default(autoincrement())
+  gender     String  @db.VarChar(255)
+  person     String  @db.VarChar(255)
+  character  String? @db.VarChar(255)
+  production String? @db.VarChar(255)
+  filename   String  @db.VarChar(255)
 }
 
-model backgroundsdetails {
-  objectid    Int     @id
-  name        String  @db.VarChar(255)
-  femalename  String  @db.VarChar(255)
-  age         String  @db.VarChar(255)
-  description String?
-  objects     objects @relation(fields: [objectid], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@index([objectid])
+model schema_migrations {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique @db.VarChar(255)
+  applied_at DateTime @default(now()) @db.Timestamp(6)
 }
 
-model characterhooks {
-  id   Int    @unique(map: "characterhooks_id_idx") @default(autoincrement())
-  hook String @db.VarChar(255)
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model feedbackanswers {
+  id                Int               @id @default(autoincrement())
+  questionid        String            @db.Uuid
+  answer            Json
+  userid            Int?
+  sessionid         String?           @db.VarChar(250)
+  datecreated       DateTime          @default(now()) @db.Timestamp(6)
+  feedbackquestions feedbackquestions @relation(fields: [questionid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users             users?            @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_fk_feedbackanswers")
+
+  @@unique([questionid, userid, sessionid], map: "user_session_unique_feedbackanswers")
+  @@index([questionid], map: "idx_feedbackanswers_questionid")
+  @@index([sessionid], map: "idx_feedbackanswers_sessionid")
+  @@index([userid], map: "idx_feedbackanswers_userid")
+}
+
+model feedbackquestions {
+  id              String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  topic           String            @db.VarChar(255)
+  question        Json
+  datecreated     DateTime          @default(now()) @db.Timestamp(6)
+  feedbackanswers feedbackanswers[]
 }

@@ -1,46 +1,10 @@
 import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
+import { sGetRandomTraitBody, sGetRandomTraitResponse, sGetTraitDescriptionResponse } from 'monstershuffler-shared';
 
-const name = z.string().min(2);
-const type = z.string().min(2);
-const subtitle = z.number();
-const category = z.string();
-const feeling = z.number();
-const description = z.string();
-
-const getRandomTraitSchema = z.object({
-  type: type.optional(),
-  subtitle: subtitle.optional(),
-  category: category.optional(),
-  feeling: feeling.optional(),
-});
-
-const getRandomTraitResponseSchema = z.object({
-  name,
-  type,
-  subtitle,
-  category,
-  feeling,
-  description,
-});
-
-const getTraitDescriptionResponseSchema = z.object({
-  description,
-});
-
-export type getRandomTraitInput = z.infer<typeof getRandomTraitSchema>;
-export type getRandomTraitResponse = z.infer<
-  typeof getRandomTraitResponseSchema
+export type sGetRandomTraitBodyInput = z.infer<typeof sGetRandomTraitBody>;
+export type sGetRandomTraitResponse = z.infer<
+  typeof sGetRandomTraitResponse
 >;
-export type getTraitDescriptionResponse = z.infer<
-  typeof getTraitDescriptionResponseSchema
+export type GetTraitDescriptionResponse = z.infer<
+  typeof sGetTraitDescriptionResponse
 >;
-
-export const { schemas: traitSchemas, $ref } = buildJsonSchemas(
-  {
-    getRandomTraitSchema,
-    getRandomTraitResponseSchema,
-    getTraitDescriptionResponseSchema,
-  },
-  { $id: 'traitSchemas' }
-);

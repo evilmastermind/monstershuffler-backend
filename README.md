@@ -41,6 +41,9 @@ mysql -u your_mysql_username -p db_name < db_seeds.sql
 Create a file called `.env` in the root folder of this project, then add the following lines of code inside:
 
 ```bash
+# NODE SETTINGS
+MAX_LISTENERS=100
+
 # PRISMA SETTINGS
 # DATABASE_URL="mysql://root:password@localhost:3306/monstershuffler"
 DATABASE_URL="postgres://postgres:password@localhost:5432/monstershuffler?schema=monstershuffler"
@@ -53,6 +56,9 @@ SMTP_HOST="smtp.gmail.com"
 SMTP_PORT=25
 AUTH_USER="user"
 AUTH_PASSWORD="super secret password"
+
+#OPENAI
+OPENAI_API_KEY="sk-s3Cr3tK3y"
 
 ```
 

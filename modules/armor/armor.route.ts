@@ -6,10 +6,11 @@ import {
   updateArmorHandler,
   deleteArmorHandler,
 } from './armor.controller';
-import { $ref } from './armor.schema';
+import { armorObject, sPostArmorBody, sPutArmorBody, sGetArmorListResponse, sGetArmorParams, sGetArmorResponse } from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function armorRoutes(server: FastifyInstance) {
+const armorRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/',
     {
@@ -21,7 +22,7 @@ async function armorRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['armor'],
         response: {
-          200: $ref('getArmorListResponseSchema'),
+          200: sGetArmorListResponse,
         },
       },
     },
@@ -39,9 +40,8 @@ async function armorRoutes(server: FastifyInstance) {
           'Returns the details of the armor corresponding to the given id.',
         headers: jwtHeaderOptional,
         tags: ['armor'],
-        // params: $ref('getArmorParamsSchema'),
         response: {
-          200: $ref('getArmorResponseSchema'),
+          200: sGetArmorResponse,
         },
       },
     },
@@ -56,11 +56,11 @@ async function armorRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new type of armor to the db.',
         description: '[MS ONLY] Adds a new type of armor to the db.',
-        body: $ref('createArmorSchema'),
+        body: sPostArmorBody,
         tags: ['armor'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('getArmorResponseSchema'),
+          201: sGetArmorResponse,
         },
       },
     },
@@ -76,10 +76,10 @@ async function armorRoutes(server: FastifyInstance) {
         summary: '[MS ONLY] Updates the armor corresponding to the given id.',
         description:
           '[MS ONLY] Updates the armor corresponding to the given id.',
-        body: $ref('updateArmorSchema'),
+        body: sPutArmorBody,
         tags: ['armor'],
         headers: jwtHeaderRequired,
-        // params: $ref('getArmorParamsSchema'),
+        // params: $ref('sGetArmorParams'),
         response: {
           200: BatchPayload,
         },
@@ -99,7 +99,7 @@ async function armorRoutes(server: FastifyInstance) {
           '[MS ONLY] Deletes the armor corresponding to the given id.',
         tags: ['armor'],
         headers: jwtHeaderRequired,
-        // params: $ref('getArmorParamsSchema'),
+        // params: $ref('sGetArmorParams'),
         response: {
           200: BatchPayload,
         },
@@ -107,6 +107,6 @@ async function armorRoutes(server: FastifyInstance) {
     },
     deleteArmorHandler
   );
-}
+};
 
 export default armorRoutes;

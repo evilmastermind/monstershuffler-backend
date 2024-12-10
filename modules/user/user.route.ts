@@ -9,9 +9,21 @@ import {
   pwdResetHandler,
 } from './user.controller';
 import { jwtHeaderRequired } from '@/schemas';
-import { $ref } from './user.schema';
 
-async function userRoutes(server: FastifyInstance) {
+import {
+  sPostUserBody,
+  sPostUserResponse,
+  sLoginBody,
+  sLoginResponse,
+  sGetUserResponse,
+  sPutUserBody,
+  sActivateUserBody,
+  sReactivateUserBody,
+  sResetPasswordBody,
+} from 'monstershuffler-shared';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
+
+const userRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.post(
     '/login',
     {
@@ -20,9 +32,9 @@ async function userRoutes(server: FastifyInstance) {
         description:
           'Logs in a user and returns an access token. Logged users can then receive their creations through other routes, and access other protected routes.',
         tags: ['users'],
-        body: $ref('loginSchema'),
+        body: sLoginBody,
         response: {
-          200: $ref('loginResponseSchema'),
+          200: sLoginResponse
         },
       },
     },
@@ -40,9 +52,9 @@ async function userRoutes(server: FastifyInstance) {
         description:
           'Registers a new user in the database. Only accessible through monstershuffler.com',
         tags: ['users'],
-        body: $ref('createUserSchema'),
+        body: sPostUserBody,
         response: {
-          201: $ref('createUserResponseSchema'),
+          201: sPostUserResponse,
         },
       },
     },
@@ -56,13 +68,13 @@ async function userRoutes(server: FastifyInstance) {
       schema: {
         hide: true,
         summary:
-          "[MS ONLY] Verifies the user's email and activates the account.",
+          '[MS ONLY] Verifies the user\'s email and activates the account.',
         description:
           'Activates an account by providing the validation token sent via email. Only accessible through monstershuffler.com',
         tags: ['users'],
-        body: $ref('activateUserSchema'),
+        body: sActivateUserBody,
         response: {
-          200: $ref('loginResponseSchema'),
+          200: sLoginResponse,
         },
       },
     },
@@ -79,7 +91,7 @@ async function userRoutes(server: FastifyInstance) {
         description:
           'Resends the activation email to the user. The user will have to reset their password as well. Only accessible through monstershuffler.com',
         tags: ['users'],
-        body: $ref('reactivateUserSchema'),
+        body: sReactivateUserBody,
         response: {
           200: { type: 'string' },
           404: { type: 'string' },
@@ -95,13 +107,13 @@ async function userRoutes(server: FastifyInstance) {
       preHandler: [server.MSOnly],
       schema: {
         hide: true,
-        summary: "[MS ONLY] Resets the user's password.",
+        summary: '[MS ONLY] Resets the user\'s password.',
         description:
-          "Resets the user's password. Only accessible through monstershuffler.com",
+          'Resets the user\'s password. Only accessible through monstershuffler.com',
         tags: ['users'],
-        body: $ref('resetPasswordSchema'),
+        body: sResetPasswordBody,
         response: {
-          200: $ref('loginResponseSchema'),
+          200: sLoginResponse,
           404: { type: 'string' },
         },
       },
@@ -122,7 +134,7 @@ async function userRoutes(server: FastifyInstance) {
         tags: ['users'],
         headers: jwtHeaderRequired,
         response: {
-          200: $ref('getUserResponseSchema'),
+          200: sGetUserResponse,
         },
       },
     },
@@ -138,9 +150,9 @@ async function userRoutes(server: FastifyInstance) {
   //       description: 'Updates the user info corresponding to the given token. Only accessible through monstershuffler.com.',
   //       tags: ['users'],
   //       headers: jwtHeaderRequired,
-  //       body: $ref('updateUserSchema'),
+  //       body: $ref('sPutUserBody'),
   //       response: {
-  //         200: $ref('getUserResponseSchema')
+  //         200: $ref('sGetUserResponse')
   //       },
   //     }
   //   },
@@ -157,6 +169,6 @@ async function userRoutes(server: FastifyInstance) {
   //   }
   //   ,getUsersHandler
   // );
-}
+};
 
 export default userRoutes;

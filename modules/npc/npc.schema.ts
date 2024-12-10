@@ -1,41 +1,41 @@
 import { z } from 'zod';
-import { buildJsonSchemas } from 'fastify-zod';
-import { characterObject } from '@/schemas/character';
+import {
+  characterObject,
+  sPostRandomNpcBody,
+  sPostRandomNpcResponse,
+  sPostFourRandomNpcsResponse,
+  sGetGeneratorDataResponse,
+  sGenerateBackstoryBody,
+  sPostNpcBody,
+  sPostNpcToSentAlreadyListBody,
+  sAddBackstoryToNpcBody,
+  sPostNpcRatingBody,
+} from 'monstershuffler-shared';
 
-const id = z.number();
-
-const createRandomNpcInputSchema = z.object({
-  levelType: z.enum(['random', 'randomPeasantsMostly']).optional(),
-  classType: z
-    .enum(['none', 'randomSometimes', 'randomAlways', 'specific'])
-    .optional(),
-  backgroundType: z.enum(['none', 'random', 'specific']).optional(),
-  classId: id.optional(),
-  classvariantId: id.optional(),
-  backgroundId: id.optional(),
-  primaryRaceId: id.optional(),
-  secondaryRaceId: id.optional(),
-  primaryRacevariantId: id.optional(),
-  secondaryRacevariantId: id.optional(),
-  primaryRacePercentage: z.number().min(0).max(100).optional(),
-  secondaryRacePercentage: z.number().min(0).max(100).optional(),
+export const sPostNpcRatingServiceParams = z.object({
+  userid: z.number().optional(),
+  sessionid: z.string().optional(),
+  npcid: z.string().uuid(),
+  rating: z.number(),
 });
 
-const createRandomNpcResponseSchema = z.object({
-  npc: characterObject,
+export const sGetNpcParams = z.object({
+  uuid: z.string().uuid(),
+});
+export const sGetNpcResponse = z.object({
+  id: z.string().uuid(),
+  object: characterObject,
 });
 
-const createFourRandomNpcsResponseSchema = z.object({
-  npcs: z.array(characterObject),
-});
 
-export type createRandomNpcInput = z.infer<typeof createRandomNpcInputSchema>;
-
-export const { schemas: npcSchemas, $ref } = buildJsonSchemas(
-  {
-    createRandomNpcInputSchema,
-    createRandomNpcResponseSchema,
-    createFourRandomNpcsResponseSchema,
-  },
-  { $id: 'npcSchemas' }
-);
+export type PostRandomNpcBody = z.infer<typeof sPostRandomNpcBody>;
+export type PostRandomNpcResponse = z.infer<typeof sPostRandomNpcResponse>;
+export type PostFourRandomNpcsResponse = z.infer<typeof sPostFourRandomNpcsResponse>;
+export type GenerateBackstoryBody = z.infer<typeof sGenerateBackstoryBody>;
+export type GetNpcParams = z.infer<typeof sGetNpcParams>;
+export type GetNpcResponse = z.infer<typeof sGetNpcResponse>;
+export type PostNpc = z.infer<typeof sPostNpcBody>;
+export type PostNpcToSentAlreadyListBody = z.infer<typeof sPostNpcToSentAlreadyListBody>;
+export type AddBackstoryToNpcBody = z.infer<typeof sAddBackstoryToNpcBody>;
+export type PostNpcRatingBody = z.infer<typeof sPostNpcRatingBody>;
+export type PostNpcRatingServiceParams = z.infer<typeof sPostNpcRatingServiceParams>;

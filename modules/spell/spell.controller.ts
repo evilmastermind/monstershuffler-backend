@@ -1,4 +1,4 @@
-import { createSpellInput, getSpellListInput } from './spell.schema';
+import { PostSpellBody, GetSpellListBody } from './spell.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createSpell,
@@ -7,10 +7,10 @@ import {
   updateSpell,
   deleteSpell,
 } from './spell.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
-export async function getSpellListHandler(
-  request: FastifyRequest<{ Body: getSpellListInput }>,
+export async function sGetSpellListBodyHandler(
+  request: FastifyRequest<{ Body: GetSpellListBody }>,
   reply: FastifyReply
 ) {
   const { body } = request;
@@ -36,15 +36,15 @@ export async function getSpellHandler(
   const { id } = request.user || { id: 0 };
   const spellId = request.params.spellId;
   try {
-    const spell = await getSpell(id, parseInt(spellId));
-    return reply.code(200).send(spell[0]);
+    const spell = await getSpell(id, spellId);
+    return handleResultFound(spell, reply);
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
 export async function createSpellHandler(
-  request: FastifyRequest<{ Body: createSpellInput }>,
+  request: FastifyRequest<{ Body: PostSpellBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -62,7 +62,7 @@ export async function updateSpellHandler(
     Params: {
       spellId: string;
     };
-    Body: createSpellInput;
+    Body: PostSpellBody;
   }>,
   reply: FastifyReply
 ) {

@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { getSkillList, getRandomSkill } from './skill.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getSkillListHandler(
   request: FastifyRequest,
@@ -22,7 +22,7 @@ export async function getRandomSkillHandler(
 ) {
   try {
     const skillObject = await getRandomSkill();
-    return reply.code(200).send(skillObject);
+    return handleResultFound(skillObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }

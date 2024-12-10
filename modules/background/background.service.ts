@@ -1,9 +1,9 @@
 import prisma from '@/utils/prisma';
-import { createBackgroundInput, Background } from './background.schema';
+import { PostBackgroundBody, Background } from './background.schema';
 
 export async function createBackground(
   userid: number,
-  input: createBackgroundInput
+  input: PostBackgroundBody
 ) {
   const { object, description, age, game } = input;
 
@@ -29,32 +29,60 @@ export async function createBackground(
 }
 
 export async function getBackground(userid: number, id: number) {
-  return (
-    await prisma.objects.findMany({
-      select: {
-        object: true,
-        id: true,
-      },
-      where: {
-        id,
-        type: 5,
-        OR: [
-          {
-            userid: 0,
-          },
-          {
-            userid,
-          },
-        ],
-      },
-    })
-  )[0];
+  const backgrounds = (await prisma.objects.findMany({
+    select: {
+      object: true,
+      id: true,
+      description: true,
+      backgroundsdetails: true
+    },
+    where: {
+      id,
+      type: 5,
+      OR: [
+        {
+          userid: 0,
+        },
+        {
+          userid,
+        },
+      ],
+    },
+  })
+  );
+  if (backgrounds.length === 0) {
+    return null;
+  }
+  const result = backgrounds[0];
+  const response = {
+    object: result.object as Background,
+    id: result.id,
+    name: result.backgroundsdetails?.name || '',
+    femaleName: result.backgroundsdetails?.femalename || '',
+    age: result.backgroundsdetails?.age || '',
+    description: result.backgroundsdetails?.description || '',
+  };
+  response.object.id = result.id;
+  response.object.description = result.backgroundsdetails?.description || '';
+  return response;
+}
+
+export async function getBackgroundDetails(id: number) {
+  const array = await prisma.backgroundsdetails.findMany({
+    where: {
+      objectid: id,
+    },
+  });
+  if (array.length === 0) {
+    return null;
+  }
+  return array[0];
 }
 
 export async function getRandomBackground(userid: number) {
   const backgroundCount = await prisma.objects.count({
     where: {
-      type: 2,
+      type: 5,
       OR: [
         {
           userid: 0,
@@ -65,12 +93,18 @@ export async function getRandomBackground(userid: number) {
       ],
     },
   });
-  const background = await prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     skip: Math.floor(Math.random() * backgroundCount),
     take: 1,
     select: {
       object: true,
       id: true,
+      description: true,
+      backgroundsdetails: {
+        select: {
+          description: true
+        }
+      }
     },
     where: {
       type: 5,
@@ -84,7 +118,70 @@ export async function getRandomBackground(userid: number) {
       ],
     },
   });
-  return background[0];
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  const response = {
+    object: result.object as Background,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  response.object.description = result.backgroundsdetails?.description || '';
+  return response;
+}
+
+export async function getRandomBackgroundForAge(userid: number, age: string) {
+  const filter = {
+    type: 5,
+    AND: [
+      {
+        OR: [
+          {
+            userid: 0,
+          },
+          {
+            userid,
+          },
+        ],
+      },
+      {
+        object: {
+          path: ['compatibleAges'],
+          array_contains: [age],
+        },
+      },
+    ],
+  };
+  const backgroundCount = await prisma.objects.count({
+    where: filter,
+  });
+  const array = await prisma.objects.findMany({
+    skip: Math.floor(Math.random() * backgroundCount),
+    take: 1,
+    select: {
+      object: true,
+      id: true,
+      description: true,
+      backgroundsdetails: {
+        select: {
+          description: true
+        }
+      }
+    },
+    where: filter,
+  });
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  const response = {
+    object: result.object as Background,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  response.object.description = result.backgroundsdetails?.description || '';
+  return response;
 }
 
 export async function getBackgroundList(userid: number) {
@@ -119,7 +216,7 @@ export async function getBackgroundList(userid: number) {
 export async function updateBackground(
   userid: number,
   id: number,
-  input: createBackgroundInput
+  input: PostBackgroundBody
 ) {
   const { object, description, age, game } = input;
 

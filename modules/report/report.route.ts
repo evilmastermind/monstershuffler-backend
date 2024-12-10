@@ -1,9 +1,10 @@
 import { FastifyInstance } from 'fastify';
 import { createReportHandler, getReportListHandler } from './report.controller';
-import { $ref } from './report.schema';
+import { sPostReportBody, sPostReportResponse, sGetReportListResponse } from './report.schema';
 import { jwtHeaderRequired } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function reportRoutes(server: FastifyInstance) {
+const reportRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.post(
     '/',
     {
@@ -11,11 +12,11 @@ async function reportRoutes(server: FastifyInstance) {
       schema: {
         summary: 'Report a bug or malicious activities in the website.',
         description: 'Report a bug or malicious activities in the website.',
-        body: $ref('createReportSchema'),
+        body: sPostReportBody,
         tags: ['reports'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('createReportResponseSchema'),
+          201: sPostReportResponse,
         },
       },
     },
@@ -32,12 +33,12 @@ async function reportRoutes(server: FastifyInstance) {
         headers: jwtHeaderRequired,
         tags: ['reports'],
         response: {
-          200: $ref('getReportListResponseSchema'),
+          200: sGetReportListResponse,
         },
       },
     },
     getReportListHandler
   );
-}
+};
 
 export default reportRoutes;

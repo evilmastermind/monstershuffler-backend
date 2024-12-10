@@ -1,20 +1,43 @@
+import dotenv from 'dotenv';
+dotenv.config();
+import path from 'path';
+// @ts-expect-error module-alias is not typed
+import moduleAlias from 'module-alias';
+////
+moduleAlias.addAliases({
+  '@': path.join(__dirname),
+  '~': path.join(__dirname, 'modules'),
+});
+////
+
 import 'module-alias/register';
-import * as dotenv from 'dotenv';
 import Fastify, { FastifyRequest, FastifyReply, FastifyError } from 'fastify';
+import { runMigrations, scheduleDbMaintenance } from './db';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
-import { withRefResolver } from 'fastify-zod';
+import {FastifySSEPlugin} from 'fastify-sse-v2';
 import Sensible from '@fastify/sensible';
 import fjwt from '@fastify/jwt';
 import cors from '@fastify/cors';
+import events from 'events';
+import rateLimiter from '@fastify/rate-limit';
 import swaggerSettings from '@/plugins/swagger';
 import mailerSettings from '@/plugins/mailer';
-import { schemas, routes } from '@/modules';
-import fs from 'fs';
+import { routes } from '@/modules';
+import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 
-dotenv.config();
-export const server = Fastify({ logger: true });
+export const server = Fastify({
+  logger: true,
+  ajv: {
+    customOptions: {
+      allowUnionTypes: true,
+    }
+  } 
+});
 // export const server = Fastify();
+
+
+events.EventEmitter.defaultMaxListeners = parseInt(process.env.MAX_LISTENERS || '100');
 
 const secret = process.env.JWT_SECRET;
 if (secret === undefined) {
@@ -23,9 +46,18 @@ if (secret === undefined) {
 }
 
 server
+  // json schema transform
+  .setValidatorCompiler(validatorCompiler)
+  .setSerializerCompiler(serializerCompiler)
   // cors
   .register(cors, {
     origin: true,
+  })
+  // rate limiter
+  .register(rateLimiter, {
+    global : true,
+    max: 100,
+    timeWindow: '1 minute',
   })
   // jwt
   .register(fjwt, {
@@ -34,7 +66,10 @@ server
   // default responses & other tools
   .register(Sensible)
   // mailer
+  // eslint-disable-next-line
   .register(require('fastify-mailer'), mailerSettings)
+  // SSE
+  .register(FastifySSEPlugin)
   // authentication with jwt
   .decorate(
     'authenticate',
@@ -64,7 +99,7 @@ server
       const ip = request.ip;
 
       if (!whitelist.includes(ip)) {
-        reply.status(403).send({ error: 'Not allowed' });
+        reply.status(403).send({ error: 'This request is available only to specific ip addresses.' });
       } else {
         done();
       }
@@ -72,7 +107,7 @@ server
   )
   // test route
   .get('/api/health', async function () {
-    return { status: "'TIS WORKIN', CHIEF!" };
+    return { status: '\'TIS WORKIN\', CHIEF!' };
   })
 
   .setErrorHandler(function (error, request, reply) {
@@ -84,31 +119,34 @@ server
     }
   });
 
+
 async function main() {
+
   try {
-    for (const schema of schemas) {
-      server.addSchema(schema);
-    }
+    await runMigrations();
+    await scheduleDbMaintenance();
 
-    server.register(swagger, withRefResolver(swaggerSettings));
-
+    server.register(swagger, swaggerSettings);
     server.register(swaggerUi, {
       routePrefix: 'api/docs',
       staticCSP: true,
     });
 
-    for (const route of routes) {
+
+    server.after(() => { for (const route of routes) {
       server.register(route.routes, { prefix: route.prefix });
-    }
+    }});  
+
+    await server.ready();
 
     await server.listen({ port: 3000, host: '0.0.0.0' });
     console.info('///////////////////////////////////////////');
     console.info('// M O N S T E R S H U F F L E R   A P I');
     console.info('// ✓ Server ready at http://localhost:3000');
     console.info('// ✓ Docs at http://localhost:3000/api/docs');
-    const swaggerYAML = server.swagger({ yaml: true });
-    fs.writeFileSync('./swagger.yaml', swaggerYAML);
-    console.info('// ✓ swagger.yaml written!');
+    // const swaggerYAML = server.swagger({ yaml: true });
+    // fs.writeFileSync('./swagger.yaml', swaggerYAML);
+    // console.info('// ✓ swagger.yaml written!');
     console.info('///////////////////////////////////////////');
   } catch (error) {
     console.info(error);

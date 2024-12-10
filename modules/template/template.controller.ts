@@ -1,4 +1,4 @@
-import { createTemplateInput, updateTemplateInput } from './template.schema';
+import { PostTemplateBody, PutTemplateBody } from './template.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createTemplate,
@@ -7,7 +7,7 @@ import {
   updateTemplate,
   deleteTemplate,
 } from './template.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getTemplateListHandler(
   request: FastifyRequest,
@@ -36,14 +36,14 @@ export async function getTemplateHandler(
   const templateId = request.params.templateId;
   try {
     const templateObject = await getTemplate(id, parseInt(templateId));
-    return reply.code(200).send(templateObject[0]);
+    return handleResultFound(templateObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
 export async function createTemplateHandler(
-  request: FastifyRequest<{ Body: createTemplateInput }>,
+  request: FastifyRequest<{ Body: PostTemplateBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -61,7 +61,7 @@ export async function updateTemplateHandler(
     Params: {
       templateId: string;
     };
-    Body: updateTemplateInput;
+    Body: PutTemplateBody;
   }>,
   reply: FastifyReply
 ) {

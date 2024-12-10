@@ -5,10 +5,16 @@ import {
   updateLanguageHandler,
   deleteLanguageHandler,
 } from './language.controller';
-import { $ref } from './language.schema';
+import {
+  sPostLanguageBody,
+  sPutLanguageBody,
+  sGetLanguageResponse,
+  sGetLanguageListResponse,
+} from 'monstershuffler-shared';
 import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function languageRoutes(server: FastifyInstance) {
+const languageRoutes:FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/',
     {
@@ -20,7 +26,7 @@ async function languageRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['languages'],
         response: {
-          200: $ref('getLanguageListResponseSchema'),
+          200: sGetLanguageListResponse,
         },
       },
     },
@@ -35,11 +41,11 @@ async function languageRoutes(server: FastifyInstance) {
         hide: true,
         summary: '[MS ONLY] Adds a new type of language to the db.',
         description: '[MS ONLY] Adds a new type of language to the db.',
-        body: $ref('createLanguageSchema'),
+        body: sPostLanguageBody,
         tags: ['languages'],
         headers: jwtHeaderRequired,
         response: {
-          201: $ref('getLanguageResponseSchema'),
+          201: sGetLanguageResponse,
         },
       },
     },
@@ -56,11 +62,11 @@ async function languageRoutes(server: FastifyInstance) {
           '[MS ONLY] Updates the details of the language corresponding to the given id.',
         description:
           '[MS ONLY] Updates the details of the language corresponding to the given id.',
-        body: $ref('updateLanguageSchema'),
+        body: sPutLanguageBody,
         tags: ['languages'],
         headers: jwtHeaderRequired,
         response: {
-          200: $ref('getLanguageResponseSchema'),
+          200: sGetLanguageResponse,
         },
       },
     },
@@ -86,6 +92,6 @@ async function languageRoutes(server: FastifyInstance) {
     },
     deleteLanguageHandler
   );
-}
+};
 
 export default languageRoutes;

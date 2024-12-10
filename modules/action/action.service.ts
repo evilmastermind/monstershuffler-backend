@@ -1,11 +1,12 @@
 import prisma from '@/utils/prisma';
 import {
-  createActionInput,
-  getActionListInput,
-  updateActionInput,
+  PostActionBody,
+  GetActionListBody,
+  PutActionBody,
 } from './action.schema';
+import { ChosenAction } from 'monstershuffler-shared';
 
-export async function createAction(userid: number, input: createActionInput) {
+export async function createAction(userid: number, input: PostActionBody) {
   const { object, game, name, type, subtype, source, tags } = input;
 
   const newObject = await prisma.objects.create({
@@ -23,7 +24,7 @@ export async function createAction(userid: number, input: createActionInput) {
       objectid: newObject.id,
       name,
       actiontype: type,
-      subtype,
+      subtype: subtype || null,
       source,
     },
   });
@@ -42,7 +43,7 @@ export async function createAction(userid: number, input: createActionInput) {
 
 export async function getActionList(
   userid: number,
-  filters: getActionListInput
+  filters: GetActionListBody
 ) {
   const actionList = await prisma.objects.findMany({
     select: {
@@ -108,14 +109,21 @@ export async function getAction(userid: number, id: number) {
       type: 101,
     },
   });
-
-  return action;
+  if (action.length) {
+    // add id inside object for each action
+    const object = action[0].object as ChosenAction;
+    if (object) {
+      object.id = action[0].id;
+    }
+    return action[0];
+  }
+  return null;
 }
 
 export async function updateAction(
   userid: number,
   id: number,
-  input: updateActionInput
+  input: PutActionBody
 ) {
   const { object, name, type, subtype, source, tags } = input;
   const result = await prisma.objects.updateMany({

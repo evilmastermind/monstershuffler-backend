@@ -1,4 +1,4 @@
-import { createArmorInput } from './armor.schema';
+import { PostArmorBody } from './armor.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
   createArmor,
@@ -7,7 +7,7 @@ import {
   updateArmor,
   deleteArmor,
 } from './armor.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getArmorListHandler(
   request: FastifyRequest,
@@ -36,14 +36,14 @@ export async function getArmorHandler(
   const armorId = request.params.armorId;
   try {
     const armor = await getArmor(id, parseInt(armorId));
-    return reply.code(200).send(armor[0]);
+    return handleResultFound(armor, reply);
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
 export async function createArmorHandler(
-  request: FastifyRequest<{ Body: createArmorInput }>,
+  request: FastifyRequest<{ Body: PostArmorBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -61,7 +61,7 @@ export async function updateArmorHandler(
     Params: {
       armorId: string;
     };
-    Body: createArmorInput;
+    Body: PostArmorBody;
   }>,
   reply: FastifyReply
 ) {
@@ -70,7 +70,7 @@ export async function updateArmorHandler(
     const { body } = request;
     const armorId = request.params.armorId;
     const armor = await updateArmor(id, parseInt(armorId), body);
-    return reply.code(200).send(armor[0]);
+    return handleResultFound(armor, reply);
   } catch (error) {
     return handleError(error, reply);
   }

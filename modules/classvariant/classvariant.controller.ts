@@ -1,6 +1,6 @@
 import {
-  createClassvariantInput,
-  updateClassvariantInput,
+  PostClassvariantBody,
+  PutClassvariantBody,
 } from './classvariant.schema';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import {
@@ -12,7 +12,7 @@ import {
   updateClassvariant,
   deleteClassvariant,
 } from './classvariant.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getClassvariantClassListHandler(
   request: FastifyRequest<{
@@ -67,7 +67,7 @@ export async function getClassvariantHandler(
       id,
       parseInt(classvariantId)
     );
-    return reply.code(200).send(classvariantObject);
+    return handleResultFound(classvariantObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }
@@ -88,14 +88,14 @@ export async function getRandomClassvariantHandler(
       id,
       parseInt(classId)
     );
-    return reply.code(200).send(classvariantObject);
+    return handleResultFound(classvariantObject, reply);
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
 export async function createClassvariantHandler(
-  request: FastifyRequest<{ Body: createClassvariantInput }>,
+  request: FastifyRequest<{ Body: PostClassvariantBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -113,7 +113,7 @@ export async function updateClassvariantHandler(
     Params: {
       classvariantId: string;
     };
-    Body: updateClassvariantInput;
+    Body: PutClassvariantBody;
   }>,
   reply: FastifyReply
 ) {

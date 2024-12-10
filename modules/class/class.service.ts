@@ -1,5 +1,5 @@
 import prisma from '@/utils/prisma';
-import { createClassInput, Class, updateClassInput } from './class.schema';
+import { PostClassBody, Class, PutClassBody } from './class.schema';
 
 ///////////////////////////////////
 // O B J E C T   T Y P E S
@@ -21,7 +21,7 @@ import { createClassInput, Class, updateClassInput } from './class.schema';
 //
 ///////////////////////////////////
 
-export async function createClass(userid: number, input: createClassInput) {
+export async function createClass(userid: number, input: PostClassBody) {
   const { object, game } = input;
 
   return await prisma.objects.create({
@@ -36,25 +36,36 @@ export async function createClass(userid: number, input: createClassInput) {
 }
 
 export async function getClass(userid: number, id: number) {
-  return (
-    await prisma.objects.findMany({
-      select: {
-        object: true,
-      },
-      where: {
-        id,
-        type: 3,
-        OR: [
-          {
-            userid: 0,
-          },
-          {
-            userid,
-          },
-        ],
-      },
-    })
-  )[0];
+  const array = await prisma.objects.findMany({
+    select: {
+      object: true,
+      id: true,
+      description: true,
+    },
+    where: {
+      id,
+      type: 3,
+      OR: [
+        {
+          userid: 0,
+        },
+        {
+          userid,
+        },
+      ],
+    },
+  });
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  const response = {
+    object: result.object as Class,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  response.object.description = result.description || '';
+  return response;
 }
 
 export async function getRandomClass(userid: number) {
@@ -71,7 +82,7 @@ export async function getRandomClass(userid: number) {
       ],
     },
   });
-  const race = await prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     skip: Math.floor(Math.random() * raceCount),
     take: 1,
     select: {
@@ -90,11 +101,20 @@ export async function getRandomClass(userid: number) {
       ],
     },
   });
-  return race[0];
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  const response = {
+    object: result.object as Class,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  return response;
 }
 
 export async function getClassWithVariantsList(userid: number) {
-  const result = prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     select: {
       id: true,
       userid: true,
@@ -145,7 +165,10 @@ export async function getClassWithVariantsList(userid: number) {
       },
     ],
   });
-  return result;
+  if (array.length === 0) {
+    return null;
+  }
+  return { list: array };
 }
 
 export async function getClassList(userid: number) {
@@ -182,7 +205,7 @@ export async function getClassList(userid: number) {
 export async function updateClass(
   userid: number,
   id: number,
-  input: updateClassInput
+  input: PutClassBody
 ) {
   const { object, game } = input;
 

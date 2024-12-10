@@ -1,8 +1,8 @@
 import prisma from '@/utils/prisma';
-import { CreateUserInput, UpdateUserInput } from './user.schema';
+import { PostUserBody, PutUserBody } from './user.schema';
 import { hashPassword, generateToken } from '@/utils/hash';
 
-export async function createUser(input: CreateUserInput) {
+export async function createUser(input: PostUserBody) {
   const { password, ...rest } = input;
 
   const hashedPassword = await hashPassword(password);
@@ -23,7 +23,7 @@ export async function createTokenPwd(id: number) {
   });
 }
 
-export async function resetPassword(token: string, password: string) {
+export async function sResetPasswordBody(token: string, password: string) {
   const hashedPassword = await hashPassword(password);
   await prisma.users.updateMany({
     where: {
@@ -49,7 +49,7 @@ export async function getUserByToken(token: string) {
     },
   });
 }
-export async function activateUser(id: number) {
+export async function sActivateUserBody(id: number) {
   return prisma.users.update({
     where: {
       id,
@@ -87,7 +87,7 @@ export async function getUser(id: number) {
   });
 }
 
-export async function updateUser(id: number, input: UpdateUserInput) {
+export async function updateUser(id: number, input: PutUserBody) {
   await prisma.users.update({
     where: {
       id,

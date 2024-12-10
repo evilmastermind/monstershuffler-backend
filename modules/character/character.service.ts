@@ -1,11 +1,14 @@
 import prisma from '@/utils/prisma';
-import { createCharacterInput, updateCharacterInput } from './character.schema';
+import { PostCharacterBody, PutCharacterBody } from './character.schema';
+import { Character } from 'monstershuffler-shared';
 
 export async function createCharacter(
   userid: number,
-  input: createCharacterInput
+  input: PostCharacterBody
 ) {
-  const { object, game, name } = input;
+  const { object, game } = input;
+
+  const name = getCharacterName(object);
 
   const character = await prisma.objects.create({
     data: {
@@ -16,17 +19,16 @@ export async function createCharacter(
       object,
     },
   });
-
   // TODO: define characters' stats object
   await prisma.charactersdetails.create({
     data: {
       objectid: character.id,
       name,
-      monstertype: character.stats.type.value,
-      cr: character.stats.cr.value,
-      alignment: character.stats.alignment.value,
-      size: character.stats.size.value,
-      meta: character.stats.meta.value,
+      monstertype: object?.statistics?.type?.number || 0,
+      cr: object?.statistics?.CR?.number || 0,
+      alignment: object?.statistics?.alignment?.number || 0,
+      size: object?.statistics?.size?.number || 0,
+      meta: object?.statistics?.meta?.string || '',
     },
   });
 
@@ -34,9 +36,10 @@ export async function createCharacter(
 }
 
 export async function getCharacter(userid: number, id: number) {
-  return await prisma.objects.findMany({
+  const array = await prisma.objects.findMany({
     select: {
       object: true,
+      id: true,
     },
     where: {
       id,
@@ -51,6 +54,16 @@ export async function getCharacter(userid: number, id: number) {
       ],
     },
   });
+  if (array.length === 0) {
+    return null;
+  }
+  const result = array[0];
+  const response = {
+    object: result.object as Character,
+    id: result.id,
+  };
+  response.object.id = result.id;
+  return response;
 }
 
 export async function getCharacterList(userid: number) {
@@ -85,9 +98,11 @@ export async function getCharacterList(userid: number) {
 export async function updateCharacter(
   userid: number,
   id: number,
-  input: updateCharacterInput
+  input: PutCharacterBody
 ) {
-  const { object, game, name } = input;
+  const { object, game } = input;
+
+  const name = getCharacterName(object);
 
   const result = await prisma.objects.updateMany({
     where: {
@@ -109,11 +124,11 @@ export async function updateCharacter(
     },
     data: {
       name,
-      monstertype: object.stats.type.value,
-      cr: object.stats.cr.value,
-      alignment: object.stats.alignment.value,
-      size: object.stats.size.value,
-      meta: object.stats.meta.value,
+      monstertype: object?.statistics?.type?.number || 0,
+      cr: object?.statistics?.CR?.number || 0,
+      alignment: object?.statistics?.alignment?.number || 0,
+      size: object?.statistics?.size?.number || 0,
+      meta: object?.statistics?.meta?.string || '',
     },
   });
 
@@ -128,4 +143,10 @@ export async function deleteCharacter(userid: number, id: number) {
       type: 1,
     },
   });
+}
+
+
+function getCharacterName(object: Character) {
+  const c = object.character;
+  return `${c?.prename || ''} ${c.name} ${c.surname || ''}`.trim();
 }

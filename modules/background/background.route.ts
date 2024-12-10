@@ -1,20 +1,19 @@
 import { FastifyInstance } from 'fastify';
 import {
-  createBackgroundHandler,
   getBackgroundHandler,
   getRandomBackgroundHandler,
+  getRandomBackgroundForAgeHandler,
   getBackgroundListHandler,
-  updateBackgroundHandler,
-  deleteBackgroundHandler,
 } from './background.controller';
-import { $ref } from './background.schema';
-import { jwtHeaderOptional, jwtHeaderRequired, BatchPayload } from '@/schemas';
+import { jwtHeaderOptional } from '@/schemas';
+import { sGetBackgroundListResponse, sGetBackgroundResponse } from 'monstershuffler-shared';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
 // TODO: backgrounds have some random choices that choose a weapon based
 // on the weapon's name. This might cause issues if there are multiple
 // weapons with the same name.
 
-async function backgroundRoutes(server: FastifyInstance) {
+const backgroundRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/',
     {
@@ -26,7 +25,7 @@ async function backgroundRoutes(server: FastifyInstance) {
         headers: jwtHeaderOptional,
         tags: ['backgrounds'],
         response: {
-          200: $ref('getBackgroundListResponseSchema'),
+          200: sGetBackgroundListResponse,
         },
       },
     },
@@ -46,7 +45,7 @@ async function backgroundRoutes(server: FastifyInstance) {
         tags: ['backgrounds'],
         // params: $ref('getBackgroundParamsSchema'),
         response: {
-          200: $ref('getBackgroundResponseSchema'),
+          200: sGetBackgroundResponse,
         },
       },
     },
@@ -66,11 +65,31 @@ async function backgroundRoutes(server: FastifyInstance) {
         tags: ['backgrounds'],
         // params: $ref('getBackgroundParamsSchema'),
         response: {
-          200: $ref('getBackgroundResponseSchema'),
+          200: sGetBackgroundResponse,
         },
       },
     },
     getRandomBackgroundHandler
+  );
+
+  server.get(
+    '/random/:age',
+    {
+      preHandler: [server.authenticateOptional],
+      schema: {
+        summary:
+          'Returns the details of a random background for a specific age.',
+        description:
+          'Returns the details of a random background, for a specific age, from list of backgrounds available to the user in the database. The age must be one of the following: "child", "adolescent", "young adult", "adult", "middle-aged", "elderly", "venerable".',
+        headers: jwtHeaderOptional,
+        tags: ['backgrounds'],
+        // params: $ref('getBackgroundParamsSchema'),
+        response: {
+          200: sGetBackgroundResponse,
+        },
+      },
+    },
+    getRandomBackgroundForAgeHandler
   );
 
   // server.post(
@@ -85,7 +104,7 @@ async function backgroundRoutes(server: FastifyInstance) {
   //       tags: ['backgrounds'],
   //       headers: jwtHeaderRequired,
   //       response: {
-  //         201: $ref('getBackgroundResponseSchema')
+  //         201: $ref('sGetBackgroundResponseSchema')
   //       }
   //     },
   //   },
@@ -128,6 +147,6 @@ async function backgroundRoutes(server: FastifyInstance) {
   //   },
   //   deleteBackgroundHandler
   // );
-}
+};
 
 export default backgroundRoutes;

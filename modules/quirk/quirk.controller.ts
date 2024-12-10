@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { getRandomQuirk } from './quirk.service';
-import { handleError } from '@/utils/errors';
+import { handleError, handleResultFound } from '@/utils/errors';
 
 export async function getRandomQuirkHandler(
   request: FastifyRequest,
@@ -8,7 +8,7 @@ export async function getRandomQuirkHandler(
 ) {
   try {
     const quirk = await getRandomQuirk();
-    return reply.code(200).send(quirk);
+    return handleResultFound(quirk, reply);
   } catch (error) {
     return handleError(error, reply);
   }

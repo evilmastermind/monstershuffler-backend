@@ -1,24 +1,25 @@
 import { FastifyInstance } from 'fastify';
-import { getRandomSurnameHandler } from './surname.controller';
-import { $ref } from './surname.schema';
+import { sGetRandomSurnameHandler } from './surname.controller';
+import { sGetRandomSurnameBody, sGetRandomSurnameResponse } from 'monstershuffler-shared';
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-async function surnameRoutes(server: FastifyInstance) {
+const surnameRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.post(
     '/random',
     {
       schema: {
         summary: 'Returns a random surname.',
         description:
-          "Returns a random surname, which is a string like 'Aldric' or 'Aldric the Brave'.",
-        body: $ref('getRandomSurnameSchema'),
+          'Returns a random surname, which is a string like \'Aldric\' or \'Aldric the Brave\'.',
+        body: sGetRandomSurnameBody,
         tags: ['surnames'],
         response: {
-          200: $ref('getRandomSurnameResponseSchema'),
+          200: sGetRandomSurnameResponse,
         },
       },
     },
-    getRandomSurnameHandler
+    sGetRandomSurnameHandler
   );
-}
+};
 
 export default surnameRoutes;
