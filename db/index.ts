@@ -7,7 +7,7 @@ const client = new Client({
   connectionString: process.env.DATABASE_URL,
 });
 
-const migrationsDir = path.join(__dirname, 'migrations');
+const migrationsDir = path.join(__dirname, '../resources/migrations');
 
 async function setSearchPath() {
   const schema = process.env.DATABASE_URL?.split('=').pop();

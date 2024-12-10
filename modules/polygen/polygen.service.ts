@@ -1,4 +1,3 @@
-// @ts-expect-error old school import here
 import plugin = require('@/plugins/polygen.js');
 
 
@@ -10,6 +9,7 @@ export async function parsePolygenGrammar(grammar: string) {
   // replace next line with a space
   parsedGrammar = grammar.replace(/\n/g, ' ');
   try {
+    // @ts-expect-error there is no type for Polygen
     return await plugin.Polygen.generate(parsedGrammar)();
   } catch (error) {
     throw new Error(`error: ${error}`);

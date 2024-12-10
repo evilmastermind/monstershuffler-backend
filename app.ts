@@ -4,7 +4,6 @@ import path from 'path';
 // @ts-expect-error module-alias is not typed
 import moduleAlias from 'module-alias';
 ////
-console.log('current path:', __dirname);
 moduleAlias.addAliases({
   '@': path.join(__dirname),
   '~': path.join(__dirname, 'modules'),
@@ -13,7 +12,7 @@ moduleAlias.addAliases({
 
 import 'module-alias/register';
 import Fastify, { FastifyRequest, FastifyReply, FastifyError } from 'fastify';
-import { runMigrations, scheduleDbMaintenance } from '@/db';
+import { runMigrations, scheduleDbMaintenance } from './db';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import {FastifySSEPlugin} from 'fastify-sse-v2';
