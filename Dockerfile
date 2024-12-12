@@ -1,5 +1,5 @@
 # Use an official Node runtime as the base image
-FROM node:20-alpine
+FROM node:20
 
 # Set working directory in the container
 WORKDIR /app
@@ -8,7 +8,14 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN yarn install
+# RUN apt-get update && apt-get install -y git && npm install -g yarn
+# Use a deeper clone with more retries
+RUN git config --global http.postBuffer 524288000 && \
+    git config --global core.compression 0 && \
+    git config --global http.version HTTP/1.1
+
+# Install packages
+RUN yarn install --network-timeout 600000 --verbose
 
 # Copy the rest of the project files
 COPY . .
