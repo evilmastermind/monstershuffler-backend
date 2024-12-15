@@ -95,11 +95,11 @@ server
       reply: FastifyReply,
       done: (err?: FastifyError) => void
     ) {
-      const whitelist = ['127.0.0.1'];
-      const ip = request.ip;
+      const clients = process.env.CLIENTS?.split(',');
+      const header = request.headers.origin || request.headers.referer;
 
-      if (!whitelist.includes(ip)) {
-        reply.status(403).send({ error: 'This request is available only to specific ip addresses.' });
+      if (!header || !clients?.includes(header)) {
+        reply.status(403).send({ error: `This request is available only to specific addresses. Your address: ${header}. Please contact info@monstershuffler.com to request access.` });
       } else {
         done();
       }
