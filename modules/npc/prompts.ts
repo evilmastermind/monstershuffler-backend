@@ -52,7 +52,8 @@ async function getAlignmentDescription(alignment: string, character: Character) 
   "[Name] is a rebel who fights rules and restrictions" |
   "[Name] is a wild card who follows [his] own path, no matter where it leads" |
   "[Name] does whatever [he] wants, whenever [he] wants, with no regard for the consequences" |
-  "[Name] is a force of chaos in the world, who follows [his] own whims and desires"
+  "[Name] is a force of chaos in the world, who follows [his] own whims and desires" |
+  "[Name] loves randomness and disorder, and acts according to whatever [he] feels like doing"
   ;`;
     break;
   case 'Lawful Evil':

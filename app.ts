@@ -11,20 +11,22 @@ moduleAlias.addAliases({
 ////
 
 import 'module-alias/register';
+import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
+import {FastifySSEPlugin} from 'fastify-sse-v2';
+import cors from '@fastify/cors';
 import Fastify, { FastifyRequest, FastifyReply, FastifyError } from 'fastify';
-import { runMigrations, scheduleDbMaintenance } from './db';
+import fjwt from '@fastify/jwt';
+import rateLimiter from '@fastify/rate-limit';
+import Sensible from '@fastify/sensible';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
-import {FastifySSEPlugin} from 'fastify-sse-v2';
-import Sensible from '@fastify/sensible';
-import fjwt from '@fastify/jwt';
-import cors from '@fastify/cors';
-import events from 'events';
-import rateLimiter from '@fastify/rate-limit';
+import helmet from '@fastify/helmet';
+import underPressure from '@fastify/under-pressure';
 import swaggerSettings from '@/plugins/swagger';
 import mailerSettings from '@/plugins/mailer';
 import { routes } from '@/modules';
-import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
+import { runMigrations, scheduleDbMaintenance } from './db';
+import events from 'events';
 
 export const server = Fastify({
   logger: true,
@@ -70,6 +72,16 @@ server
   .register(require('fastify-mailer'), mailerSettings)
   // SSE
   .register(FastifySSEPlugin)
+  // helmet
+  .register(helmet)
+  // under pressure
+  .register(underPressure, {
+    maxEventLoopDelay: 1000,
+    maxHeapUsedBytes: 100000000,
+    maxRssBytes: 100000000,
+    maxEventLoopUtilization: 0.98,
+    message: '♕👨‍🎤 Under pressure 👨‍🎤♕',
+  })
   // authentication with jwt
   .decorate(
     'authenticate',
