@@ -77,8 +77,8 @@ server
   // under pressure
   .register(underPressure, {
     maxEventLoopDelay: 1000,
-    maxHeapUsedBytes: 100000000,
-    maxRssBytes: 100000000,
+    maxHeapUsedBytes: 1000000000,
+    maxRssBytes: 1000000000,
     maxEventLoopUtilization: 0.98,
     message: '♕👨‍🎤 Under pressure 👨‍🎤♕',
   })
@@ -119,6 +119,11 @@ server
   )
   // test route
   .get('/api/health', async function () {
+    if (server.isUnderPressure()) {
+      return {
+        status: `♕👨‍🎤 Under pressure 👨‍🎤♕ Mem: ${server.memoryUsage()}`,
+      };
+    }
     return { status: '\'TIS WORKIN\', CHIEF!' };
   })
 
