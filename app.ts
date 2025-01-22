@@ -118,13 +118,20 @@ server
     }
   )
   // test route
-  .get('/api/health', async function () {
+  .get('/api/health', {
+    config: {
+      rateLimit: {
+        max: 10,
+        timeWindow: 500,
+      }
+    }
+  }, async function () {
     if (server.isUnderPressure()) {
       return {
         status: `♕👨‍🎤 Under pressure 👨‍🎤♕ Mem: ${server.memoryUsage()}`,
       };
     }
-    return { status: '\'TIS WORKIN\', CHIEF!' };
+    return { status: `'TIS WORKIN', CHIEF! 🌈 Mem: ${server.memoryUsage()}` };
   })
 
   .setErrorHandler(function (error, request, reply) {
