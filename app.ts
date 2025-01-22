@@ -131,7 +131,7 @@ server
         status: `♕👨‍🎤 Under pressure 👨‍🎤♕ Mem: ${server.memoryUsage()}`,
       };
     }
-    return { status: `'TIS WORKIN', CHIEF! 🌈 Mem: ${server.memoryUsage()}` };
+    return { status: `'TIS WORKIN', CHIEF! 🌈 Mem: ${JSON.stringify(server.memoryUsage(), null, 2)}` };
   })
 
   .setErrorHandler(function (error, request, reply) {
