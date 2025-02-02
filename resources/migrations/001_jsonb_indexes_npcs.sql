@@ -149,3 +149,5 @@ INSERT INTO feedbackquestions (id, topic, question) VALUES
 ('f1a73150-7c20-429e-93a0-12efbd6f3b03', 'npcgenerator_prompt_words', '{"question": "Which words didn''t find a match in the prompt?"}'),
 ('019306e3-f9eb-7dba-a650-ace9b2ecb3f7', 'npcgenerator_new_ideas', '{"question": "Are there any features you would like to see added to the NPC generator?"}'),
 ('019306e4-1f06-7bd1-a875-df052189d19f', 'npcgenerator_improvements', '{"question": "Are there any improvements we could make to the NPC generator?"}');
+('464a22a2-0896-4d61-8280-2c750b0d5c09', 'tools_features', '{"question": "Are there any other tools or features you would like to see added to the final version?"}'),
+('6d80c61a-00e2-4c36-83d0-1f870aad8295', 'tools_features', '{"question": "Which tool are you looking forward to using the most?", "type": "poll", "options": ["Notes", "Note Groups", "Stat Block Editor v2", "Combat Manager", "Random Text Generators"] }'),

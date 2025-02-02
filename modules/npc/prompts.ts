@@ -384,7 +384,6 @@ S ::= (+(city | town | village | hamlet) | arctic | forest | underdark | desert 
 `);
 
 
-  console.log('cause:', cause, 'location:', location, 'environment:', environment);
 
   const roleplayStats: { [key: string]: string } = {
     name,
@@ -604,7 +603,6 @@ S ::=
   // }
   adventure += ';';
   adventure = await parsePolygenGrammar(adventure);
-  console.log('adventure:', adventure);
   adventure = parsePromptTags(adventure, character);
   // console.info(adventure);
   return adventure;
