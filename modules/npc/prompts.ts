@@ -267,34 +267,34 @@ export type RoleplayStats = {
 
 function describeStats(abilities: Abilities): string {
   const output = [];
-  if (abilities.STR.number <= 9) {
+  if (abilities.STR.score.number <= 9) {
     output.push('weak');
-  } else if (abilities.STR.number > 12) {
+  } else if (abilities.STR.score.number > 12) {
     output.push('muscular and strong');
   }
-  if (abilities.DEX.number <= 9) {
+  if (abilities.DEX.score.number <= 9) {
     output.push('clumsy');
-  } else if (abilities.DEX.number > 12) {
+  } else if (abilities.DEX.score.number > 12) {
     output.push('quick and nimble');
   }
-  if (abilities.CON.number <= 9) {
+  if (abilities.CON.score.number <= 9) {
     output.push('frail');
-  } else if (abilities.CON.number > 12) {
+  } else if (abilities.CON.score.number > 12) {
     output.push('tough and hardy');
   }
-  if (abilities.INT.number <= 9) {
+  if (abilities.INT.score.number <= 9) {
     output.push('dull');
-  } else if (abilities.INT.number > 12) {
+  } else if (abilities.INT.score.number > 12) {
     output.push('intelligent and sharp');
   }
-  if (abilities.WIS.number <= 9) {
+  if (abilities.WIS.score.number <= 9) {
     output.push('unwise');
-  } else if (abilities.WIS.number > 12) {
+  } else if (abilities.WIS.score.number > 12) {
     output.push('wise and perceptive');
   }
-  if (abilities.CHA.number <= 9) {
+  if (abilities.CHA.score.number <= 9) {
     output.push('uncharismatic');
-  } else if (abilities.CHA.number > 12) {
+  } else if (abilities.CHA.score.number > 12) {
     output.push('charming and persuasive');
   }
   return (output.join(', ') || 'average'); 
@@ -545,7 +545,7 @@ S ::=
   (write the climax description and conclusion)."
   "Secrets are steps which define a linear path that the player characters playing the adventure will follow to complete the adventure, by discovering pieces of the story until they reach the final climax. The first secret should be about who hired the adventurers or what drove them to investigate."
   "The adventure will revolve around an an NPC and [his] profession."
-  "The player characters will be hired to solve" (an issue | a threat | a menace) "that will be strictly related to the NPC's profession, and will have to investigate the situation to find out what is happening before things get worse."
+  "The player characters will be hired by a third party to solve" (an issue | a threat | a menace) "that will be strictly related to the NPC's profession, and will have to investigate the situation to find out what is happening before things get worse."
   "Whatever threat or issue the player characters are trying to solve, ${stats.name} ${stats.involvment}."
   "Make sure to include" ( "" |++ a "${stats.cause}" as the cause of the problem, and ) a ("${stats.location} as one of the locations" | "${stats.environment} as the environment" ) "of the adventure."
   "Use also the NPC's character hook to shape the adventure."
