@@ -26,7 +26,7 @@ Naturalevent ::= ( aurora | avalanche | blizzard | cold snap | comet | drought |
 Event ::= ( Naturalevent | Socialevent | Magicalevent );
 Magicalevent ::= ( ritual | ceremony | spell | curse | enchantment | prophecy );
 Organization ::= ( guild | order | brotherhood | sisterhood | cult | sect | cabal | coven | circle | society | club | association | league | alliance | coalition | confederation | federation | corporation | company | business | firm | enterprise | consortium | syndicate | cartel | foundation | charity | institute | academy | university | school | college | seminary | fraternity | sorority | council | committee | board of directors | commission | agency | bureau | department | administration | government | regime | political authority | business corporation | company | bandit gang | criminal organization | thieves guild | assassins guild | mercenary company | military order | knightly order | religious order | secret society);
-Relationship ::= ( betrayal | (unrequited | forbidden | secret) love | love triangle | (arranged | political | forced) marriage | (estranged | lost) family | rival | enemy | gamble | loan | kidnapping | extortion | blackmail | torture |+ murder | adoption | disgrace | parenthood);
+Relationship ::= ( betrayal | (unrequited | forbidden | secret) love | love triangle | (arranged | political | forced) marriage | (estranged | lost) family | rival | enemy | gamble | loan | kidnapping | extortion | blackmail | torture |+ murder | adoption | disgrace | parenthood | inheritance | (+ death of (a parent | both parents | a relative | a sibling | a friend) ) );
 
 `);
 }
