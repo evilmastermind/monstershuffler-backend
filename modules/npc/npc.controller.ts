@@ -13,6 +13,7 @@ import { postAnswer } from '../feedback/feedback.service';
 import { CURRENT_CHEAP_MODEL, CURRENT_GOOD_MODEL } from '@/modules/ai/ai.schema';
 import { getRecycledNpcsForUser, getNpcForUpdate, postNpc, addNpcToSentAlreadyList, addBackstoryToNpc, postNpcRating, getNpc, updateNpcBackstoryStatus } from './npc.service';
 import { calculateCharacterHook } from 'monstershuffler-shared';
+import { generateBackstoryLines } from './backstory';
 import prisma from '@/utils/prisma';
 
 //////////////////////////////////////////////
@@ -139,6 +140,7 @@ export async function generateBackstoryHandler(
       }
 
       const roleplayStats = await parseRoleplayStats(npc.object as Character);
+      generateBackstoryLines(npc.object as Character);
 
       let backstory = '';
 
