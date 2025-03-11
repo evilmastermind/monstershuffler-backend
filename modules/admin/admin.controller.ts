@@ -15,7 +15,7 @@ import {
   getSpellDataFromName,
   getIdsFromNames,
   convertBackgroundPronouns,
-} from './converter.service';
+} from './admin.service';
 import { handleError } from '@/utils/errors';
 import prisma from '@/utils/prisma';
 import { url } from 'inspector';

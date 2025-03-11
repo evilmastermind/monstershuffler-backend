@@ -11,6 +11,7 @@ declare module 'fastify' {
   export interface FastifyInstance {
     authenticate: any;
     authenticateOptional: any;
+    admin: any;
     MSOnly: any;
     mailer: FastifyMailer;
   }

@@ -2,7 +2,7 @@ import { parsePolygenGrammar } from '@/modules/polygen/polygen.service';
 
 export async function getCause() {
   return await parsePolygenGrammar(`
-S ::= (+++ Monster from the game "Dungeons and Dragons 5th edition" | Relationship | Event | deity | Organization |+++ Magicalstuff );
+S ::= (+++ Monster from the game "Dungeons and Dragons 5th edition" | +Relationship | Event | deity | Organization |++ Magicalstuff | Animal );
 
 Magicalstuff ::= (Magical Wearable | Magical Weapon | Magical Anomaly | Magical Item | Magical Instrument);
 Magical ::= (enchanted | magical | cursed |-- sentient |-- haunted |- blessed);
@@ -27,8 +27,9 @@ Event ::= ( Naturalevent | Socialevent | Magicalevent );
 Magicalevent ::= ( ritual | ceremony | spell | curse | enchantment | prophecy );
 Organization ::= ( guild | order | brotherhood | sisterhood | cult | sect | cabal | coven | circle | society | club | association | league | alliance | coalition | confederation | federation | corporation | company | business | firm | enterprise | consortium | syndicate | cartel | foundation | charity | institute | academy | university | school | college | seminary | fraternity | sorority | council | committee | board of directors | commission | agency | bureau | department | administration | government | regime | political authority | business corporation | company | bandit gang | criminal organization | thieves guild | assassins guild | mercenary company | military order | knightly order | religious order | secret society);
 Relationship ::= ( betrayal | (unrequited | forbidden | secret) love | love triangle | (arranged | political | forced) marriage | (estranged | lost) family | rival | enemy | gamble | loan | kidnapping | extortion | blackmail | torture |+ murder | adoption | disgrace | parenthood | inheritance | (+ death of (a parent | both parents | a relative | a sibling | a friend) ) );
-
+Animal ::= (++ cat |++ dog |+ horse | albatross | alligator | anaconda | anglerfish | anteater | antelope | armadillo | baboon | badger | bat | beaver | bison | boar | bobcat | buffalo | bullfrog | camel | capybara | catfish | cheetah | chimpanzee | cobra | condor | coyote | crab | crocodile | deer | dolphin | donkey | eagle | eel | elephant | falcon | ferret | flamingo | fox | frog | gazelle | gecko | giraffe | gorilla | hedgehog | hippopotamus | hornet | hyena | iguana | jaguar | jellyfish | kangaroo | koala | komodo dragon | krill | leopard | lion | lizard | lobster | lynx | mantis | mole | moose | nightingale | octopus | opossum | orangutan | orca | ostrich | otter | owl | ox | oyster | panther | parrot | peacock | pelican | penguin | pheasant | piranha | platypus | porcupine | rabbit | raccoon | rattlesnake | reindeer | rhinoceros | salamander | scorpion | seahorse | seal | shark | sheep | skunk | sloth | snail | snake | sparrow | squid | squirrel | starfish | stingray | swan | tarantula | tiger | tortoise | tuna | turkey | turtle | vulture | weasel | whale | wolf | woodpecker | yak | zebra );
 `);
+// TODO: add plants too Plant ::= ( acacia | aloe vera | apple tree | azalea | bamboo | basil | beech | bell pepper | birch | blueberry | bonsai | broccoli | cactus | carrot | cedar | cherry blossom | chestnut | chrysanthemum | cilantro | clover | coconut tree | corn | cucumber | cypress | daffodil | dahlia | dandelion | daisy | eggplant | elm | eucalyptus | fern | fir | garlic | ginger | grapevine | hibiscus | holly | ivy | jasmine | juniper | kale | lavender | lemon tree | lettuce | lily | maple | marigold | mint | mushroom | oak | olive tree | onion | orchid | palm tree | parsley | pea | pear tree | peach tree | peony | pine | poppy | potato | pumpkin | radish | redwood | rose | rosemary | sage | sequoia | spinach | sunflower | sycamore | tea plant | thyme | tomato | tulip | violet | walnut tree | watermelon | wheat | willow | yam | yew | zucchini );
 }
 
 export async function getLocation() {

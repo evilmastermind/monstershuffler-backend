@@ -29,6 +29,10 @@ export async function createThread() {
   return await openai.beta.threads.create();
 }
 
+export async function deleteThread(id: string) {
+  return await openai.beta.threads.del(id);
+}
+
 export async function queryAssistant(assistant_id: string, request: string) {
   const thread = await openai.beta.threads.create({
     messages: [
@@ -53,7 +57,7 @@ export async function queryAssistant(assistant_id: string, request: string) {
 
   if (status === 'completed') {
     const messages = await openai.beta.threads.messages.list(thread.id);
-    console.log(messages.data[0].content);
+    return messages.data;
   } else {
     console.error('Failed to query assistant.');
   }

@@ -26,6 +26,7 @@ import swaggerSettings from '@/plugins/swagger';
 import mailerSettings from '@/plugins/mailer';
 import { routes } from '@/modules';
 import { runMigrations, scheduleDbMaintenance } from './db';
+import { isAdmin } from '@/modules/user/user.service';
 import events from 'events';
 
 export const server = Fastify({
@@ -83,13 +84,26 @@ server
     message: '♕👨‍🎤 Under pressure 👨‍🎤♕',
   })
   // authentication with jwt
+  .decorate('admin', 
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      try {
+        await request.jwtVerify();
+        const id = request.user.id;
+        if (!await isAdmin(id)) {
+          reply.status(403).send({ error: 'You are not an admin.' });
+        }
+      } catch (error) {
+        return reply.status(401).send(error);
+      }
+    }
+  )
   .decorate(
     'authenticate',
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         await request.jwtVerify();
       } catch (error) {
-        return reply.send(error);
+        return reply.status(401).send(error);
       }
     }
   )

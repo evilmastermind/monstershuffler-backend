@@ -1,13 +1,14 @@
 import { FastifyInstance } from 'fastify';
-import { convertObjectsHandler } from './converter.controller';
+import { convertObjectsHandler } from './admin.controller';
 import { jwtHeaderRequired } from '@/schemas';
 import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
+import { generateBackstorySentences } from '../npc/backstory';
 
 const converterRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
     '/converter',
     {
-      preHandler: [server.authenticate, server.MSOnly],
+      preHandler: [server.admin],
       schema: {
         hide: true,
         summary:
@@ -15,11 +16,28 @@ const converterRoutes: FastifyPluginAsyncZod = async function (server: FastifyIn
         description:
           'Converts objects from the old monstershuffler format to the new one.',
         headers: jwtHeaderRequired,
-        tags: ['converter'],
+        tags: ['admin'],
         response: 200,
       },
     },
     convertObjectsHandler
+  );
+  server.get(
+    '/backstory-sentences',
+    {
+      preHandler: [server.admin],
+      schema: {
+        hide: true,
+        summary:
+          'Generates NPC backstory sentences.',
+        description:
+          'Generates NPC backstory sentences from a pretrained model with random inputs.',
+        headers: jwtHeaderRequired,
+        tags: ['admin'],
+        response: 200,
+      },
+    },
+    generateBackstorySentences
   );
 };
 

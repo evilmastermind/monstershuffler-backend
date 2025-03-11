@@ -61,7 +61,7 @@ import userRoutes from '@/modules/user/user.route';
 // import weaponRoutes from '@/modules/weapon/weapon.route';
 // import { hashPassword } from '@/utils/hash';
 // utility routes
-import converterRoutes from '@/modules/converter/converter.route';
+import adminRoutes from '@/modules/admin/admin.route';
 
 export const schemas = [
   // ...actionSchemas,
@@ -121,5 +121,5 @@ export const routes = [
   { routes: traitRoutes,  prefix: 'api/traits' },
   { routes: userRoutes, prefix: 'api/users' },
   // {routes: weaponRoutes,  prefix: 'api/weapons' },
-  { routes: converterRoutes, prefix: 'api/converter' },
+  { routes: adminRoutes, prefix: 'api/admin' },
 ];

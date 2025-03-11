@@ -110,6 +110,7 @@ export async function getUserLevel(id: number) {
 
 export async function isAdmin(id: number) {
   const { level } = (await getUserLevel(id)) || { level: 0 };
+  console.log('level', level);
   return level && level >= 2;
 }
 
