@@ -140,8 +140,6 @@ export async function generateBackstoryHandler(
       }
 
       const roleplayStats = await parseRoleplayStats(npc.object as Character);
-      generateBackstorySentences(npc.object as Character);
-
       let backstory = '';
 
       updateNpcBackstoryStatus(prisma, npcid, 'pending');

@@ -3,9 +3,11 @@ import type { Character } from 'monstershuffler-shared';
 import { getCause, getLocation } from './grammars';
 import { queryAssistant } from '@/modules/ai/ai.service';
 import fs from 'fs';
+import { countBackstorysentences, getBackstorysentencesWithPagination, getFirstBackstorySentence } from './npc.service';
 
 const filePath = 'resources/002_backstory_sentences.sql';
 const BACKSTORY_ASSISTANT_ID = 'asst_VUscAl0mHfPw30ktTa7lREMV';
+const BACKSTORY_FIXER_ID = 'asst_hb861ktW1N9MZjvoVnhMCmB1';
 type SentenceType = 'youth' | 'career' | 'plot';
 
 const classes = ['barbarian','bard','cleric','druid','fighter','monk','paladin','ranger','rogue','sorcerer','warlock','wizard']; 
@@ -30,12 +32,12 @@ export async function generateBackstorySentences() {
             console.log(`Request #${requestNumber}`);
             const sentenceType = sentenceTypes[s];
             const plotHookType = random(1,4) === 1 ? await getLocation() : await getCause();
-            // const location = professionLocations[i];
+            const location = professionLocations[i];
             const alignmentEthical = alignmentsEthical[j];
             const alignmentMoral = alignmentsMoral[k];
             const alignment = alignmentEthical === alignmentMoral ? alignmentEthical : `${alignmentEthical} ${alignmentMoral}`;
-            // const message = `Generate an NPC backstory sentence with the following parameters: type: ${sentenceType}, hook: ${plotHookType}, ${THIS NEEDS TO BE IMPROVEDlocation}, alignment: ${alignment}`;
-            const message = `Generate an NPC backstory sentence with the following parameters: type: ${sentenceType}, hook: ${plotHookType}, alignment: ${alignment}`;
+            const message = `Generate an NPC backstory sentence with the following parameters: type: ${sentenceType}, hook: ${plotHookType}, profession_location: ${location}, alignment: ${alignment}`;
+            // const message = `Generate an NPC backstory sentence with the following parameters: type: ${sentenceType}, hook: ${plotHookType}, alignment: ${alignment}`;
             const response = await queryAssistant(BACKSTORY_ASSISTANT_ID, message);
             if (!response || !response.length) {
               console.error('Failed to generate NPC backstory sentence.');
@@ -43,7 +45,7 @@ export async function generateBackstorySentences() {
             }
             // @ts-expect-error - it looks like the response is not typed correctly
             const sentence = JSON.parse(response[0].content[0].text.value) as Sentence;
-            saveBackstorySentence(sentence, sentenceType, (j+1) + (k+1)*10);
+            saveBackstorySentence(sentence, sentenceType, (j+1) + (k+1)*10, location);
           }
         }
       }
@@ -67,7 +69,7 @@ function saveBackstorySentence(sentence: Sentence, type: string, alignment: numb
     }
 
     // Match INSERT INTO block
-    const insertRegex = /(INSERT INTO backstorysentences.*VALUES\s*)([^;]+)(;)/s;
+    const insertRegex = /(INSERT INTO backstorysentences\s*\(.*?\)\s*VALUES\s*)(\([\s\S]*?\))(\s*;)/;
     const match = data.match(insertRegex);
 
     if (match) {
@@ -93,4 +95,27 @@ function saveBackstorySentence(sentence: Sentence, type: string, alignment: numb
       console.error('INSERT statement not found.');
     }
   });
+}
+
+
+
+export async function fixBackstorySentences() {
+  let cursor = await getFirstBackstorySentence();
+  const pageSize = 100;
+  const totalSentences = await countBackstorysentences();
+  let processed = 0;
+  while (processed < totalSentences) {
+    const sentences = await getBackstorysentencesWithPagination(cursor, pageSize);
+    processed += sentences.length;
+    cursor = sentences[sentences.length - 1].id;
+    for (const sentence of sentences) {
+      const object = {
+        sentence: sentence.sentence,
+        summary: sentence.summary,
+      };
+      const response = await queryAssistant(BACKSTORY_FIXER_ID,JSON.stringify(object));
+      // @ts-expect-error - it looks like the response is not typed correctly
+      console.log(response[0].content[0].text.value);
+    }
+  }
 }

@@ -150,8 +150,8 @@ model npcs {
   gender           String            @db.VarChar(255)
   ischild          Boolean           @default(false)
   hasbackstory     Boolean           @default(false)
-  datecreated      DateTime          @default(now()) @db.Timestamp(6)
   backstorystatus  String?           @db.VarChar(20)
+  datecreated      DateTime          @default(now()) @db.Timestamp(6)
   users            users?            @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_fk_npcs")
   npcsrating       npcsrating[]
   npcssenttousers  npcssenttousers[]
@@ -462,4 +462,20 @@ model feedbackquestions {
   question        Json
   datecreated     DateTime          @default(now()) @db.Timestamp(6)
   feedbackanswers feedbackanswers[]
+}
+
+model backstorysentences {
+  id              Int     @id @default(autoincrement())
+  type            String  @db.VarChar(255)
+  alignment       Int
+  locationorclass String? @db.VarChar(255)
+  sentence        String
+  summary         String
+
+  @@index([alignment])
+  @@index([locationorclass])
+  @@index([type])
+  @@index([alignment], map: "backstorysentences_alignment_idx1")
+  @@index([locationorclass], map: "backstorysentences_locationorclass_idx1")
+  @@index([type], map: "backstorysentences_type_idx1")
 }

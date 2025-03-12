@@ -273,3 +273,40 @@ export async function getNpc(uuid: string) {
     object: npc.object,
   };
 }
+
+export async function getFirstBackstorySentence() {
+  const first = await prisma.backstorysentences.findFirst({
+    select: {
+      id: true,
+    },
+    orderBy: {
+      id: 'asc',
+    },
+  });
+
+  return first?.id;
+}
+
+export async function countBackstorysentences() {
+  return await prisma.backstorysentences.count();
+}
+
+export async function getBackstorysentencesWithPagination(
+  cursor: number | undefined,
+  pageSize: number
+) {
+  return await prisma.backstorysentences.findMany({
+    skip: 1,
+    take: pageSize,
+    cursor: {
+      id: cursor,
+    },
+  });
+}
+
+export async function putBackstorysentence(id: number, sentence: string, summary: string) {
+  return await prisma.backstorysentences.update({
+    where: { id },
+    data: { sentence, summary },
+  });
+}
