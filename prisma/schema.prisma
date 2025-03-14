@@ -173,7 +173,6 @@ model npcsrating {
   users       users?   @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "user_fk_npcsrating")
 
   @@unique([npcid, userid, sessionid], map: "user_session_unique_npcsrating")
-  @@unique([npcid, userid, sessionid], map: "user_session_unique_npcsrating_idx")
   @@index([npcid], map: "idx_npcsrating_npcid")
 }
 
@@ -462,20 +461,4 @@ model feedbackquestions {
   question        Json
   datecreated     DateTime          @default(now()) @db.Timestamp(6)
   feedbackanswers feedbackanswers[]
-}
-
-model backstorysentences {
-  id              Int     @id @default(autoincrement())
-  type            String  @db.VarChar(255)
-  alignment       Int
-  locationorclass String? @db.VarChar(255)
-  sentence        String
-  summary         String
-
-  @@index([alignment])
-  @@index([locationorclass])
-  @@index([type])
-  @@index([alignment], map: "backstorysentences_alignment_idx1")
-  @@index([locationorclass], map: "backstorysentences_locationorclass_idx1")
-  @@index([type], map: "backstorysentences_type_idx1")
 }

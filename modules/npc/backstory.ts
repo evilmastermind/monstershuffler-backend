@@ -21,22 +21,23 @@ type Sentence = {
   summary: string;
 }
 
+
 export async function generateBackstorySentences() {
   let requestNumber = 0;
   try {
     for (let s = 0; s < sentenceTypes.length; s++) {
-      for (let i = 0; i < professionLocations.length; i++) {
+      for (let i = 0; i < classes.length; i++) {
         for (let j = 0; j < alignmentsEthical.length; j++) {
           for (let k = 0; k < alignmentsMoral.length; k++) {
             requestNumber++;
             console.log(`Request #${requestNumber}`);
             const sentenceType = sentenceTypes[s];
             const plotHookType = random(1,4) === 1 ? await getLocation() : await getCause();
-            const location = professionLocations[i];
+            const classChosen = classes[i];
             const alignmentEthical = alignmentsEthical[j];
             const alignmentMoral = alignmentsMoral[k];
             const alignment = alignmentEthical === alignmentMoral ? alignmentEthical : `${alignmentEthical} ${alignmentMoral}`;
-            const message = `Generate an NPC backstory sentence with the following parameters: type: ${sentenceType}, hook: ${plotHookType}, profession_location: ${location}, alignment: ${alignment}`;
+            const message = `Generate an NPC backstory sentence with the following parameters: type: ${sentenceType}, hook: ${plotHookType}, class: ${classChosen}, alignment: ${alignment}`;
             // const message = `Generate an NPC backstory sentence with the following parameters: type: ${sentenceType}, hook: ${plotHookType}, alignment: ${alignment}`;
             const response = await queryAssistant(BACKSTORY_ASSISTANT_ID, message);
             if (!response || !response.length) {
@@ -45,7 +46,7 @@ export async function generateBackstorySentences() {
             }
             // @ts-expect-error - it looks like the response is not typed correctly
             const sentence = JSON.parse(response[0].content[0].text.value) as Sentence;
-            saveBackstorySentence(sentence, sentenceType, (j+1) + (k+1)*10, location);
+            saveBackstorySentence(sentence, sentenceType, (j+1) + (k+1)*10, classChosen);
           }
         }
       }
@@ -54,6 +55,76 @@ export async function generateBackstorySentences() {
     console.error('Error generating NPC backstory sentences:', err);
   }
 }
+
+// GENERIC VERSION
+// export async function generateBackstorySentences() {
+//   let requestNumber = 0;
+//   try {
+//     for (let s = 0; s < sentenceTypes.length; s++) {
+//       for (let i = 0; i < professionLocations.length; i++) {
+//         for (let j = 0; j < alignmentsEthical.length; j++) {
+//           for (let k = 0; k < alignmentsMoral.length; k++) {
+//             requestNumber++;
+//             console.log(`Request #${requestNumber}`);
+//             const sentenceType = sentenceTypes[s];
+//             const plotHookType = random(1,4) === 1 ? await getLocation() : await getCause();
+//             // const location = professionLocations[i];
+//             const alignmentEthical = alignmentsEthical[j];
+//             const alignmentMoral = alignmentsMoral[k];
+//             const alignment = alignmentEthical === alignmentMoral ? alignmentEthical : `${alignmentEthical} ${alignmentMoral}`;
+//             const message = `Generate an NPC backstory sentence with the following parameters: type: ${sentenceType}, hook: ${plotHookType}, alignment: ${alignment}`;
+//             // const message = `Generate an NPC backstory sentence with the following parameters: type: ${sentenceType}, hook: ${plotHookType}, alignment: ${alignment}`;
+//             const response = await queryAssistant(BACKSTORY_ASSISTANT_ID, message);
+//             if (!response || !response.length) {
+//               console.error('Failed to generate NPC backstory sentence.');
+//               continue;
+//             }
+//             // @ts-expect-error - it looks like the response is not typed correctly
+//             const sentence = JSON.parse(response[0].content[0].text.value) as Sentence;
+//             saveBackstorySentence(sentence, sentenceType, (j+1) + (k+1)*10);
+//           }
+//         }
+//       }
+//     }
+//   } catch (err) {
+//     console.error('Error generating NPC backstory sentences:', err);
+//   }
+// }
+
+// PROFESSION LOCATION VERSION
+// export async function generateBackstorySentences() {
+//   let requestNumber = 0;
+//   try {
+//     for (let s = 0; s < sentenceTypes.length; s++) {
+//       for (let i = 0; i < professionLocations.length; i++) {
+//         for (let j = 0; j < alignmentsEthical.length; j++) {
+//           for (let k = 0; k < alignmentsMoral.length; k++) {
+//             requestNumber++;
+//             console.log(`Request #${requestNumber}`);
+//             const sentenceType = sentenceTypes[s];
+//             const plotHookType = random(1,4) === 1 ? await getLocation() : await getCause();
+//             const location = professionLocations[i];
+//             const alignmentEthical = alignmentsEthical[j];
+//             const alignmentMoral = alignmentsMoral[k];
+//             const alignment = alignmentEthical === alignmentMoral ? alignmentEthical : `${alignmentEthical} ${alignmentMoral}`;
+//             const message = `Generate an NPC backstory sentence with the following parameters: type: ${sentenceType}, hook: ${plotHookType}, profession_location: ${location}, alignment: ${alignment}`;
+//             // const message = `Generate an NPC backstory sentence with the following parameters: type: ${sentenceType}, hook: ${plotHookType}, alignment: ${alignment}`;
+//             const response = await queryAssistant(BACKSTORY_ASSISTANT_ID, message);
+//             if (!response || !response.length) {
+//               console.error('Failed to generate NPC backstory sentence.');
+//               continue;
+//             }
+//             // @ts-expect-error - it looks like the response is not typed correctly
+//             const sentence = JSON.parse(response[0].content[0].text.value) as Sentence;
+//             saveBackstorySentence(sentence, sentenceType, (j+1) + (k+1)*10, location);
+//           }
+//         }
+//       }
+//     }
+//   } catch (err) {
+//     console.error('Error generating NPC backstory sentences:', err);
+//   }
+// }
 
 const sanitize = (value: string) => value.replace(/'/g, '\'\'');
 
