@@ -1,30 +1,16 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { getRandomCharacterhook,getRandomCharacterhookForAge } from './characterhook.service';
+import { PostRandomCharacterhookBody } from './characterhook.schema';
+import { getRandomCharacterhook } from './characterhook.service';
 import { handleError, handleResultFound } from '@/utils/errors';
 
-export async function getRandomCharacterhookHandler(
-  request: FastifyRequest,
-  reply: FastifyReply
-) {
-  try {
-    const characterhook = await getRandomCharacterhook();
-    return handleResultFound(characterhook, reply);
-  } catch (error) {
-    return handleError(error, reply);
-  }
-}
-
-export async function getRandomCharacterhookForAgeHandler(
+export async function postRandomCharacterhookHandler(
   request: FastifyRequest<{
-    Params: {
-      age: string;
-    };
+    Body: PostRandomCharacterhookBody
   }>,
   reply: FastifyReply
 ) {
-  const age = request.params.age;
   try {
-    const characterhook = await getRandomCharacterhookForAge(age);
+    const characterhook = await getRandomCharacterhook(request.body);
     return handleResultFound(characterhook, reply);
   } catch (error) {
     return handleError(error, reply);

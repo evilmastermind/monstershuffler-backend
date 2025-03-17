@@ -3,11 +3,12 @@ import type { Character } from 'monstershuffler-shared';
 import { getCause, getLocation } from './grammars';
 import { queryAssistant } from '@/modules/ai/ai.service';
 import fs from 'fs';
-import { countBackstorysentences, getBackstorysentencesWithPagination, getFirstBackstorySentence } from './npc.service';
+import { actionsForThisBackstorysentence, countBackstorysentences, getBackstorysentencesWithPagination, getFirstBackstorySentence, postBackstorysentencesaction } from './npc.service';
 
 const filePath = 'resources/002_backstory_sentences.sql';
-const BACKSTORY_ASSISTANT_ID = 'asst_VUscAl0mHfPw30ktTa7lREMV';
-const BACKSTORY_FIXER_ID = 'asst_hb861ktW1N9MZjvoVnhMCmB1';
+const BACKSTORY_ASSISTANT_ID  = 'asst_VUscAl0mHfPw30ktTa7lREMV';
+const BACKSTORY_FIXER_ID      = 'asst_hb861ktW1N9MZjvoVnhMCmB1';
+const ACTIONS_ASSISTANT_ID    = 'asst_bDMoludYeaehMKEMQYcwjWDm';
 type SentenceType = 'youth' | 'career' | 'plot';
 
 const classes = ['barbarian','bard','cleric','druid','fighter','monk','paladin','ranger','rogue','sorcerer','warlock','wizard']; 
@@ -21,7 +22,7 @@ type Sentence = {
   summary: string;
 }
 
-
+// CLASS VERSION
 export async function generateBackstorySentences() {
   let requestNumber = 0;
   try {
@@ -30,7 +31,6 @@ export async function generateBackstorySentences() {
         for (let j = 0; j < alignmentsEthical.length; j++) {
           for (let k = 0; k < alignmentsMoral.length; k++) {
             requestNumber++;
-            console.log(`Request #${requestNumber}`);
             const sentenceType = sentenceTypes[s];
             const plotHookType = random(1,4) === 1 ? await getLocation() : await getCause();
             const classChosen = classes[i];
@@ -56,6 +56,29 @@ export async function generateBackstorySentences() {
   }
 }
 
+export async function generateBackstorySentenceActions() {
+  let cursor = await getFirstBackstorySentence();
+  const pageSize = 100;
+  const totalSentences = await countBackstorysentences();
+  let processed = 0;
+  while (processed < totalSentences) {
+    const sentences = await getBackstorysentencesWithPagination(cursor, pageSize);
+    processed += sentences.length;
+    cursor = sentences[sentences.length - 1].id;
+    for (const sentence of sentences) {
+      if (await actionsForThisBackstorysentence(sentence.id)) {
+        continue;
+      }
+      const request = `Generate an action, attack, trait, reaction or bonus action for the following sentence: "${sentence.sentence}"`;
+      const response = await queryAssistant(ACTIONS_ASSISTANT_ID,request);
+      if (response && response.length) {
+        // @ts-expect-error - it looks like the response is not typed correctly
+        postBackstorysentencesaction(sentence.id, JSON.parse(response[0].content[0].text.value));
+      }
+    }
+  }
+}
+
 // GENERIC VERSION
 // export async function generateBackstorySentences() {
 //   let requestNumber = 0;
@@ -65,7 +88,6 @@ export async function generateBackstorySentences() {
 //         for (let j = 0; j < alignmentsEthical.length; j++) {
 //           for (let k = 0; k < alignmentsMoral.length; k++) {
 //             requestNumber++;
-//             console.log(`Request #${requestNumber}`);
 //             const sentenceType = sentenceTypes[s];
 //             const plotHookType = random(1,4) === 1 ? await getLocation() : await getCause();
 //             // const location = professionLocations[i];
@@ -100,7 +122,6 @@ export async function generateBackstorySentences() {
 //         for (let j = 0; j < alignmentsEthical.length; j++) {
 //           for (let k = 0; k < alignmentsMoral.length; k++) {
 //             requestNumber++;
-//             console.log(`Request #${requestNumber}`);
 //             const sentenceType = sentenceTypes[s];
 //             const plotHookType = random(1,4) === 1 ? await getLocation() : await getCause();
 //             const location = professionLocations[i];
@@ -158,8 +179,6 @@ function saveBackstorySentence(sentence: Sentence, type: string, alignment: numb
       fs.writeFile(filePath, updatedSQL, 'utf8', (writeErr) => {
         if (writeErr) {
           console.error('Error writing file:', writeErr);
-        } else {
-          console.log('New record added successfully.');
         }
       });
     } else {
@@ -185,8 +204,7 @@ export async function fixBackstorySentences() {
         summary: sentence.summary,
       };
       const response = await queryAssistant(BACKSTORY_FIXER_ID,JSON.stringify(object));
-      // @ts-expect-error - it looks like the response is not typed correctly
-      console.log(response[0].content[0].text.value);
+      // console.info(response[0].content[0].text.value);
     }
   }
 }

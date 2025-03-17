@@ -2,7 +2,7 @@ import { FastifyInstance } from 'fastify';
 import { convertObjectsHandler } from './admin.controller';
 import { jwtHeaderRequired } from '@/schemas';
 import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import { generateBackstorySentences } from '../npc/backstory';
+import { generateBackstorySentenceActions, generateBackstorySentences } from '../npc/backstory';
 
 const converterRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
   server.get(
@@ -38,6 +38,22 @@ const converterRoutes: FastifyPluginAsyncZod = async function (server: FastifyIn
       },
     },
     generateBackstorySentences
+  );
+  server.get(
+    '/backstory-sentences-actions', {
+      preHandler: [server.admin],
+      schema: {
+        hide: true,
+        summary:
+          'Generates actions for backstory sentences.',
+        description:
+          'Generates actions for backstory sentences.',
+        headers: jwtHeaderRequired,
+        tags: ['admin'],
+        response: 200,
+      },
+    },
+    generateBackstorySentenceActions
   );
 };
 

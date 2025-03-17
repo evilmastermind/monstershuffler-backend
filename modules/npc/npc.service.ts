@@ -1,8 +1,10 @@
+import { z } from 'zod';
 import prisma from '@/utils/prisma';
 import { Prisma, type PrismaClient, npcs } from '@prisma/client';
 import type { PostNpc, PostNpcToSentAlreadyListBody, PostRandomNpcBody, PostRandomNpcResponse, AddBackstoryToNpcBody, PostNpcRatingServiceParams } from './npc.schema';
 import { FastifyRequest } from 'fastify';
 import { random } from '@/utils/functions';
+import { templateObject } from 'monstershuffler-shared';
 
 /**
  * Gets npcs that the user hasn't seen yet.
@@ -310,3 +312,31 @@ export async function putBackstorysentence(id: number, sentence: string, summary
     data: { sentence, summary },
   });
 }
+
+export async function getBackstorysentencesactions(backstorysentenceid: number) {
+  return await prisma.backstorysentencesactions.findMany({
+    where: { backstorysentenceid },
+  });
+}
+
+export async function postBackstorysentencesaction(backstorysentenceid: number, object: z.infer<typeof templateObject>) {
+  return await prisma.backstorysentencesactions.create({
+    data: {
+      backstorysentenceid,
+      object,
+    },
+  });
+}
+
+export async function putBackstorysentencesaction(id: number, object: z.infer<typeof templateObject>) {
+  return await prisma.backstorysentencesactions.update({
+    where: { id },
+    data: { object },
+  });
+}
+
+export async function actionsForThisBackstorysentence(backstorysentenceid: number) {
+  return await prisma.backstorysentencesactions.count({
+    where: { backstorysentenceid },
+  });
+};

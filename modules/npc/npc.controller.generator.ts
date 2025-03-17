@@ -17,11 +17,11 @@ import {
 } from '@/modules/background/background.service';
 import { getRandomSkill } from '@/modules/skill/skill.service';
 import { sGetRandomTraitBodyForAge } from '@/modules/trait/trait.service';
-import { getRandomCharacterhookForAge } from '@/modules/characterhook/characterhook.service';
+import { getRandomActionForCharacterhook, getRandomCharacterhook } from '@/modules/characterhook/characterhook.service';
 import { handleError } from '@/utils/errors';
 import { random } from '@/utils/functions';
 import { findChoices } from '@/modules/choiceSolver';
-import { adjustLevel, createStats, createUserObjectIfNotExists } from 'monstershuffler-shared';
+import { adjustLevel, createStats, createUserObjectIfNotExists, calculateAlignmentFromModifiers, calculateAlignmentNumber, parseDescriptionChoices, Action } from 'monstershuffler-shared';
 import { calculateLevel } from './stats';
 import { calculateVoice, calculatePronouns, calculateName, calculateSurname, calculateAlignment, calculateHeight, calculateWeight, calculateAge } from './roleplayStats';
 
@@ -147,7 +147,6 @@ export async function createRandomNpc(
     const alignmentModifiers = calculateAlignment(traitObject?.category);
     const alignmentEthical = alignmentEthicalChosen;
     const alignmentMoral = alignmentMoralChosen;
-    const characterHook = await getRandomCharacterhookForAge(age.string);
     const height = race? calculateHeight(race, age, pronouns) : 0;
     const weight = calculateWeight();
     const voice = await calculateVoice(pronouns);
@@ -163,7 +162,6 @@ export async function createRandomNpc(
         ...(surname !== null && { surname }),
         ...(traitObject !== null && { trait: { name: traitObject.name, description: traitObject.description || '' } }),
         ...(feelingObject !== null && { feeling: { name: feelingObject.name, description: feelingObject.description || '' } }),
-        ...(characterHook !== null && { characterHook: characterHook.hook }),
         ...(voice !== null && { voice }),
         ...(height > 0 && { height }),
         ...(alignmentEthical !== undefined && { alignmentEthical }),
@@ -206,6 +204,8 @@ export async function createRandomNpc(
 
     character.CRCalculation =  { name: 'npcstandard'};
 
+    calculateAlignmentFromModifiers(result);
+    addCharacterHooks(result);
     adjustLevel(result);
     createStats(result);
 
@@ -216,5 +216,51 @@ export async function createRandomNpc(
   } catch (error) {
     console.warn(error);
     return handleError(error, reply);
+  }
+}
+
+
+export async function addCharacterHooks(character: Character) {
+  // Retrieving character hooks
+    
+  const c = character.character;
+  if (!c.characterHooks) {
+    c.characterHooks = [];
+  }
+  const types: Array<'youth' | 'career' | 'plot'> = ['youth'];
+  if (!['child','adolescent'].includes(c.age?.string || '') ) {
+    types.push(random(1,2) === 1 ? 'career' : 'plot');
+  }
+
+  const locationorclass = c.class?.name || c?.background?.workplace;
+  const alignment = calculateAlignmentNumber(c.alignmentEthical || 'Neutral', c.alignmentMoral || 'Neutral');
+
+  const hookWithLocationIndex = random(0, types.length - 1);
+
+  for (let i = 0; i < types.length; i++) {
+    const newHook = await getRandomCharacterhook({
+      type: types[i],
+      locationorclass: i === hookWithLocationIndex ? locationorclass : undefined,
+      alignment,
+    });
+    if (!newHook) {
+      continue;
+    }
+
+    newHook.sentence = parseDescriptionChoices(newHook.sentence);
+    newHook.summary = parseDescriptionChoices(newHook.summary);
+    c.characterHooks.push(newHook);
+      
+    const action = await getRandomActionForCharacterhook(newHook.id);
+    if (!action || !action.object) {
+      continue;
+    }
+    if (!c.user) {
+      c.user = {};
+    }
+    if (!c.user?.actions?.length) {
+      c.user.actions = [];
+    }
+    c.user.actions.push(action.object as Action);
   }
 }

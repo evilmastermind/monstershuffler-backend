@@ -105,7 +105,7 @@ export async function loginHandler(
     }
     return reply.code(401).send(genericErrorMessage);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return handleError(error, reply);
   }
 }
