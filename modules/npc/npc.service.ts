@@ -1,7 +1,14 @@
 import { z } from 'zod';
 import prisma from '@/utils/prisma';
 import { Prisma, type PrismaClient, npcs } from '@prisma/client';
-import type { PostNpc, PostNpcToSentAlreadyListBody, PostRandomNpcBody, PostRandomNpcResponse, AddBackstoryToNpcBody, PostNpcRatingServiceParams } from './npc.schema';
+import type {
+  PostNpc,
+  PostNpcToSentAlreadyListBody,
+  PostRandomNpcBody,
+  PostRandomNpcResponse,
+  AddBackstoryToNpcBody,
+  PostNpcRatingServiceParams,
+} from './npc.schema';
 import { FastifyRequest } from 'fastify';
 import { random } from '@/utils/functions';
 import { templateObject } from 'monstershuffler-shared';
@@ -25,7 +32,7 @@ export async function getRecycledNpcsForUser(
     alignmentEthicalChosen,
     alignmentMoralChosen,
     pronounsChosen,
-    includeChildren
+    includeChildren,
   } = request.body;
 
   // raceFilters is an array of query filters
@@ -37,26 +44,44 @@ export async function getRecycledNpcsForUser(
   // additional query filters
   const classFilter = getClassFilter(request);
   const backgroundFilter = getBackgroundFilter(request);
-  const alignmentEthicalFilter = alignmentEthicalChosen ? `n.alignmentethical = '${alignmentEthicalChosen.toLowerCase()}'` : '';
-  const alignmentMoralFilter = alignmentMoralChosen ? `n.alignmentmoral = '${alignmentMoralChosen.toLowerCase()}'` : '';
-  const pronounsFilter = pronounsChosen ? `n.gender = '${pronounsChosen.toLowerCase()}'` : '';
+  const alignmentEthicalFilter = alignmentEthicalChosen
+    ? `n.alignmentethical = '${alignmentEthicalChosen.toLowerCase()}'`
+    : '';
+  const alignmentMoralFilter = alignmentMoralChosen
+    ? `n.alignmentmoral = '${alignmentMoralChosen.toLowerCase()}'`
+    : '';
+  const pronounsFilter = pronounsChosen
+    ? `n.gender = '${pronounsChosen.toLowerCase()}'`
+    : '';
   const childrenFilter = includeChildren === true ? '' : 'n.ischild = false';
 
   // merging all filters
-  filtersArray.push(classFilter, backgroundFilter, alignmentEthicalFilter, alignmentMoralFilter, pronounsFilter, childrenFilter);
+  filtersArray.push(
+    classFilter,
+    backgroundFilter,
+    alignmentEthicalFilter,
+    alignmentMoralFilter,
+    pronounsFilter,
+    childrenFilter
+  );
   filtersArray = filtersArray.filter((filter) => filter !== '');
   let filters = filtersArray.join(' AND ');
   if (filters) {
     filters = `AND ${filters}`;
   }
 
-  let npcs: PostRandomNpcResponse[] = []; 
-  const userQuery = `userid ${userid !== undefined? `= ${userid}` : 'IS NULL'} AND sessionid ${sessionid !== undefined? `= '${sessionid}'` : 'IS NULL'}`;
-  
+  let npcs: PostRandomNpcResponse[] = [];
+  const userQuery = `userid ${
+    userid !== undefined ? `= ${userid}` : 'IS NULL'
+  } AND sessionid ${sessionid !== undefined ? `= '${sessionid}'` : 'IS NULL'}`;
+
   // loop through the raceFilters and get npcs
   for (let i = 0; i < raceFilters.length; i++) {
-    const racefilter = raceFilters[i].filter ? `AND ${raceFilters[i].filter}` : '';
-    npcs = npcs.concat(await prisma.$queryRaw`
+    const racefilter = raceFilters[i].filter
+      ? `AND ${raceFilters[i].filter}`
+      : '';
+    npcs = npcs.concat(
+      await prisma.$queryRaw`
       SELECT n.id, n.object, AVG(r.rating) as rating, COUNT(r.rating) as ratingcount
       FROM
         npcs n
@@ -73,12 +98,16 @@ export async function getRecycledNpcsForUser(
       GROUP BY n.id, n.object
       ORDER BY COALESCE(AVG(rating), '-Infinity')::float DESC, ratingcount DESC
       LIMIT ${raceFilters[i].quantity}
-    `);
+    `
+    );
   }
   return npcs;
 }
 
-function getRaceFilters(request: FastifyRequest<{ Body: PostRandomNpcBody }>, quantity = 1) {
+function getRaceFilters(
+  request: FastifyRequest<{ Body: PostRandomNpcBody }>,
+  quantity = 1
+) {
   const {
     primaryRaceId,
     secondaryRaceId,
@@ -99,8 +128,8 @@ function getRaceFilters(request: FastifyRequest<{ Body: PostRandomNpcBody }>, qu
     },
     {
       filter: '',
-      quantity: 0
-    }
+      quantity: 0,
+    },
   ];
 
   if (primaryRacevariantId) {
@@ -115,7 +144,6 @@ function getRaceFilters(request: FastifyRequest<{ Body: PostRandomNpcBody }>, qu
     const random100 = random(1, 100);
     if (primaryRaceId && random100 <= primaryRacePercentage) {
       filters[0].quantity += 1;
-
     } else if (secondaryRaceId && random100 <= secondaryRacePercentage) {
       filters[1].quantity += 1;
     } else {
@@ -127,11 +155,7 @@ function getRaceFilters(request: FastifyRequest<{ Body: PostRandomNpcBody }>, qu
 }
 
 function getClassFilter(request: FastifyRequest<{ Body: PostRandomNpcBody }>) {
-  const {
-    classType,
-    classId,
-    classvariantId,
-  } = request.body;
+  const { classType, classId, classvariantId } = request.body;
 
   let filter = '';
 
@@ -160,11 +184,10 @@ function getClassFilter(request: FastifyRequest<{ Body: PostRandomNpcBody }>) {
   return filter;
 }
 
-function getBackgroundFilter(request: FastifyRequest<{ Body: PostRandomNpcBody }>) {
-  const {
-    backgroundType,
-    backgroundId,
-  } = request.body;
+function getBackgroundFilter(
+  request: FastifyRequest<{ Body: PostRandomNpcBody }>
+) {
+  const { backgroundType, backgroundId } = request.body;
 
   let filter = '';
 
@@ -184,8 +207,11 @@ export async function getNpcForUpdate(prisma: PrismaClient, id: string) {
   `;
 }
 
-
-export async function updateNpcBackstoryStatus(prisma: PrismaClient, id: string, status: 'pending' | 'completed' | null) {
+export async function updateNpcBackstoryStatus(
+  prisma: PrismaClient,
+  id: string,
+  status: 'pending' | 'completed' | null
+) {
   return await prisma.npcs.update({
     where: { id },
     data: { backstorystatus: status },
@@ -194,8 +220,10 @@ export async function updateNpcBackstoryStatus(prisma: PrismaClient, id: string,
 
 export async function postNpc(input: PostNpc) {
   const { object, userid, sessionid } = input;
-  const alignmentmoral = object.character?.alignmentMoral?.toLowerCase() || null;
-  const alignmentethical = object.character?.alignmentEthical?.toLowerCase() || null;
+  const alignmentmoral =
+    object.character?.alignmentMoral?.toLowerCase() || null;
+  const alignmentethical =
+    object.character?.alignmentEthical?.toLowerCase() || null;
   const gender = object.character.pronouns?.toLowerCase() || null;
   const age = object.character.age?.string || null;
   const raceid = object.character?.race?.id;
@@ -220,7 +248,9 @@ export async function postNpc(input: PostNpc) {
   });
 }
 
-export async function addNpcToSentAlreadyList(input: PostNpcToSentAlreadyListBody) {
+export async function addNpcToSentAlreadyList(
+  input: PostNpcToSentAlreadyListBody
+) {
   const { npcid, userid, sessionid } = input;
   return await prisma.npcssenttousers.create({
     data: {
@@ -250,14 +280,16 @@ export async function postNpcRating(input: PostNpcRatingServiceParams) {
    * Prisma's upsert method limitations:
    * (https://www.prisma.io/docs/orm/prisma-client/queries/crud#update-or-create-records)
    * "Prisma Client does not have a findOrCreate() query.
-   * A limitation to using upsert() as a workaround for findOrCreate() is that upsert() 
-   * will only accept unique model fields in the where condition. So it's not possible 
+   * A limitation to using upsert() as a workaround for findOrCreate() is that upsert()
+   * will only accept unique model fields in the where condition. So it's not possible
    * to use upsert() to emulate findOrCreate() if the where condition contains non-unique fields.""
    */
 
   return await prisma.$queryRaw`
     INSERT INTO npcsrating (npcid, userid, sessionid, rating)
-    VALUES (${npcid}::uuid, ${userid !== undefined ? userid : null}, ${sessionid !== undefined ? sessionid : null}, ${rating})
+    VALUES (${npcid}::uuid, ${userid !== undefined ? userid : null}, ${
+    sessionid !== undefined ? sessionid : null
+  }, ${rating})
     ON CONFLICT (npcid, userid, sessionid)
     DO UPDATE SET rating = EXCLUDED.rating, datecreated = CURRENT_TIMESTAMP;
   `;
@@ -276,19 +308,6 @@ export async function getNpc(uuid: string) {
   };
 }
 
-export async function getFirstBackstorySentence() {
-  const first = await prisma.backstorysentences.findFirst({
-    select: {
-      id: true,
-    },
-    orderBy: {
-      id: 'asc',
-    },
-  });
-
-  return first?.id;
-}
-
 export async function countBackstorysentences() {
   return await prisma.backstorysentences.count();
 }
@@ -298,45 +317,65 @@ export async function getBackstorysentencesWithPagination(
   pageSize: number
 ) {
   return await prisma.backstorysentences.findMany({
-    skip: 1,
+    skip: cursor ? 1 : 0,
     take: pageSize,
-    cursor: {
-      id: cursor,
+    cursor: cursor
+      ? {
+          id: cursor,
+        }
+      : undefined,
+    orderBy: {
+      id: 'asc',
     },
   });
 }
 
-export async function putBackstorysentence(id: number, sentence: string, summary: string) {
+export async function putBackstorysentence(
+  id: number,
+  sentence: string,
+  summary: string
+) {
   return await prisma.backstorysentences.update({
     where: { id },
     data: { sentence, summary },
   });
 }
 
-export async function getBackstorysentencesactions(backstorysentenceid: number) {
-  return await prisma.backstorysentencesactions.findMany({
-    where: { backstorysentenceid },
+export async function postBackstorysentencesobject(
+  backstorysentenceid: number,
+  object: z.infer<typeof templateObject>
+) {
+  const objectRow = await prisma.objects.create({
+    data: {
+      type: 6,
+      name: 'sentence',
+      game: 1,
+      userid: 0,
+      object,
+    },
   });
-}
-
-export async function postBackstorysentencesaction(backstorysentenceid: number, object: z.infer<typeof templateObject>) {
-  return await prisma.backstorysentencesactions.create({
+  return await prisma.backstorysentencesobjects.create({
     data: {
       backstorysentenceid,
-      object,
+      objectid: objectRow.id,
     },
   });
 }
 
-export async function putBackstorysentencesaction(id: number, object: z.infer<typeof templateObject>) {
-  return await prisma.backstorysentencesactions.update({
+export async function putBackstorysentencesobject(
+  id: number,
+  object: z.infer<typeof templateObject>
+) {
+  return await prisma.objects.update({
     where: { id },
     data: { object },
   });
 }
 
-export async function actionsForThisBackstorysentence(backstorysentenceid: number) {
-  return await prisma.backstorysentencesactions.count({
+export async function objectsForThisBackstorysentence(
+  backstorysentenceid: number
+) {
+  return await prisma.backstorysentencesobjects.count({
     where: { backstorysentenceid },
   });
-};
+}

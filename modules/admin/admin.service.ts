@@ -8,19 +8,6 @@ export async function countObjects() {
   return objectCount;
 }
 
-export async function getFirstObjectId() {
-  const firstObject = await prisma.objects.findFirst({
-    select: {
-      id: true,
-    },
-    orderBy: {
-      id: 'asc',
-    },
-  });
-
-  return firstObject?.id;
-}
-
 export async function getObjectsWithPagination(
   userid: number,
   cursor: number | undefined,
@@ -31,11 +18,11 @@ export async function getObjectsWithPagination(
   }
 
   return await prisma.objects.findMany({
-    skip: 1,
+    skip: cursor ? 1 : 0,
     take: pageSize,
-    cursor: {
+    cursor: cursor ? {
       id: cursor,
-    },
+    } : undefined,
   });
 }
 

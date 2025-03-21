@@ -9,7 +9,6 @@
 
 import {
   countObjects,
-  getFirstObjectId,
   getObjectsWithPagination,
   saveObject,
   getSpellDataFromName,
@@ -47,7 +46,7 @@ export async function convertObjectsHandler(request, reply) {
   const { id } = request.user;
   try {
     // OBJECTS
-    let cursor = await getFirstObjectId();
+    let cursor: number | undefined = undefined;
     const pageSize = 100;
     const totalObjects = await countObjects();
     let objectsProcessed = 0;

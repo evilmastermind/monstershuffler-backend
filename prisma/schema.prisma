@@ -194,35 +194,36 @@ model npcssenttousers {
 }
 
 model objects {
-  id                    Int                     @id @default(autoincrement())
-  type                  Int
-  name                  String                  @db.VarChar(255)
-  game                  Int
-  description           String?
-  userid                Int
-  created               DateTime?               @default(now()) @db.Timestamp(6)
-  lastedited            DateTime?               @default(now()) @db.Timestamp(6)
-  object                Json
-  originalid            Int?
-  originaluserid        Int?
-  folderid              Int?
-  trashed               Int?                    @default(0) @db.SmallInt
-  variantof             Int?
-  oldid                 Int?
-  actionsdetails        actionsdetails?
-  actionstags           actionstags[]
-  backgroundsdetails    backgroundsdetails?
-  charactersdetails     charactersdetails?
-  classesdetails        classesdetails?
-  npcgeneratorblacklist npcgeneratorblacklist[]
-  folders               folders?                @relation(fields: [folderid], references: [id], onUpdate: NoAction)
-  objecttypes           objecttypes             @relation(fields: [type], references: [type], onDelete: NoAction, onUpdate: NoAction)
-  users                 users                   @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  objects               objects?                @relation("objectsToobjects", fields: [variantof], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  other_objects         objects[]               @relation("objectsToobjects")
-  publications          publications?
-  racesdetails          racesdetails?
-  templatesdetails      templatesdetails?
+  id                        Int                         @id @default(autoincrement())
+  type                      Int
+  name                      String                      @db.VarChar(255)
+  game                      Int
+  description               String?
+  userid                    Int
+  created                   DateTime?                   @default(now()) @db.Timestamp(6)
+  lastedited                DateTime?                   @default(now()) @db.Timestamp(6)
+  object                    Json
+  originalid                Int?
+  originaluserid            Int?
+  folderid                  Int?
+  trashed                   Int?                        @default(0) @db.SmallInt
+  variantof                 Int?
+  oldid                     Int?
+  actionsdetails            actionsdetails?
+  actionstags               actionstags[]
+  backgroundsdetails        backgroundsdetails?
+  backstorysentencesobjects backstorysentencesobjects[]
+  charactersdetails         charactersdetails?
+  classesdetails            classesdetails?
+  npcgeneratorblacklist     npcgeneratorblacklist[]
+  folders                   folders?                    @relation(fields: [folderid], references: [id], onUpdate: NoAction)
+  objecttypes               objecttypes                 @relation(fields: [type], references: [type], onDelete: NoAction, onUpdate: NoAction)
+  users                     users                       @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  objects                   objects?                    @relation("objectsToobjects", fields: [variantof], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  other_objects             objects[]                   @relation("objectsToobjects")
+  publications              publications?
+  racesdetails              racesdetails?
+  templatesdetails          templatesdetails?
 
   @@index([folderid])
   @@index([id])
@@ -471,17 +472,17 @@ model backstorysentences {
   locationorclass           String?                     @db.VarChar(255)
   sentence                  String
   summary                   String
-  backstorysentencesactions backstorysentencesactions[]
+  backstorysentencesobjects backstorysentencesobjects[]
 
   @@index([alignment])
   @@index([locationorclass])
   @@index([type])
 }
 
-model backstorysentencesactions {
+model backstorysentencesobjects {
   id                  Int                @id @default(autoincrement())
   backstorysentenceid Int
-  game                Int?               @default(1)
-  object              Json
+  objectid            Int?
   backstorysentences  backstorysentences @relation(fields: [backstorysentenceid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  objects             objects?           @relation(fields: [objectid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "backstorysentencesobjects_objects_fk")
 }

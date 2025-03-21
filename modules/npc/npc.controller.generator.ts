@@ -5,7 +5,16 @@ import {
   getRacevariant,
   getRandomRacevariant,
 } from '@/modules/racevariant/racevariant.service';
-import type { Character, Race, Racevariant, Class, Classvariant, Age, Weight, Background } from '@/types';
+import type {
+  Character,
+  Race,
+  Racevariant,
+  Class,
+  Classvariant,
+  Age,
+  Weight,
+  Background,
+} from '@/types';
 import { getClass, getRandomClass } from '@/modules/class/class.service';
 import {
   getClassvariant,
@@ -17,13 +26,35 @@ import {
 } from '@/modules/background/background.service';
 import { getRandomSkill } from '@/modules/skill/skill.service';
 import { sGetRandomTraitBodyForAge } from '@/modules/trait/trait.service';
-import { getRandomActionForCharacterhook, getRandomCharacterhook } from '@/modules/characterhook/characterhook.service';
+import {
+  getRandomObjectForCharacterhook,
+  getRandomCharacterhook,
+} from '@/modules/characterhook/characterhook.service';
 import { handleError } from '@/utils/errors';
 import { random } from '@/utils/functions';
 import { findChoices } from '@/modules/choiceSolver';
-import { adjustLevel, createStats, createUserObjectIfNotExists, calculateAlignmentFromModifiers, calculateAlignmentNumber, parseDescriptionChoices, Action } from 'monstershuffler-shared';
+import {
+  adjustLevel,
+  createStats,
+  createUserObjectIfNotExists,
+  calculateAlignmentFromModifiers,
+  calculateAlignmentNumber,
+  parseDescriptionChoices,
+  Action,
+  CharacterObject,
+} from 'monstershuffler-shared';
 import { calculateLevel } from './stats';
-import { calculateVoice, calculatePronouns, calculateName, calculateSurname, calculateAlignment, calculateHeight, calculateWeight, calculateAge } from './roleplayStats';
+import {
+  calculateVoice,
+  calculatePronouns,
+  calculateName,
+  calculateSurname,
+  calculateAlignment,
+  calculateHeight,
+  calculateWeight,
+  calculateAge,
+} from './roleplayStats';
+import { Template } from '../template/template.schema';
 
 export async function createRandomNpc(
   request: FastifyRequest<{ Body: PostRandomNpcBody }>,
@@ -47,7 +78,7 @@ export async function createRandomNpc(
     pronounsChosen,
     alignmentEthicalChosen,
     alignmentMoralChosen,
-    CRChosen
+    CRChosen,
   } = request.body;
 
   try {
@@ -57,12 +88,11 @@ export async function createRandomNpc(
     const random100 = random(1, 100);
     let race: Race | null = null;
     let racevariant: Racevariant | null = null;
-    if (
-      primaryRaceId &&
-      random100 <= primaryRacePercentage
-    ) {
+    if (primaryRaceId && random100 <= primaryRacePercentage) {
       const raceResult = await getRace(id, primaryRaceId);
-      const raceVariantResult = primaryRacevariantId? await getRacevariant(id, primaryRacevariantId) : await getRandomRacevariant(id, primaryRaceId);
+      const raceVariantResult = primaryRacevariantId
+        ? await getRacevariant(id, primaryRacevariantId)
+        : await getRandomRacevariant(id, primaryRaceId);
       if (raceResult) {
         race = raceResult.object;
       }
@@ -71,10 +101,12 @@ export async function createRandomNpc(
       }
     } else if (
       secondaryRaceId &&
-      random100 <= (primaryRacePercentage + secondaryRacePercentage)
+      random100 <= primaryRacePercentage + secondaryRacePercentage
     ) {
       const raceResult = await getRace(id, secondaryRaceId);
-      const raceVariantResult = secondaryRacevariantId? await getRacevariant(id, secondaryRacevariantId) : await getRandomRacevariant(id, secondaryRaceId);
+      const raceVariantResult = secondaryRacevariantId
+        ? await getRacevariant(id, secondaryRacevariantId)
+        : await getRandomRacevariant(id, secondaryRaceId);
       if (raceResult) {
         race = raceResult.object;
       }
@@ -86,14 +118,16 @@ export async function createRandomNpc(
       if (result) {
         race = result.object as Race;
         racevariant =
-          ((await getRandomRacevariant(id, result.id))?.object as Racevariant) ||
-          null;
+          ((await getRandomRacevariant(id, result.id))
+            ?.object as Racevariant) || null;
       }
     }
     ///////////////////////////////////////
     // A G E
     ///////////////////////////////////////
-    const age: Age = race? calculateAge(race, includeChildren) : { string: 'adult', number: 0 };
+    const age: Age = race
+      ? calculateAge(race, includeChildren)
+      : { string: 'adult', number: 0 };
     ///////////////////////////////////////
     // C L A S S   &   B A C K G R O U N D
     ///////////////////////////////////////
@@ -103,7 +137,9 @@ export async function createRandomNpc(
     const random20 = classType === 'randomSometimes' ? random(1, 20) : 0;
     if (classId && classType === 'specific') {
       const classResult = await getClass(id, classId);
-      const classvariantResult = classvariantId? await getClassvariant(id, classvariantId) : await getRandomClassvariant(id, classId);
+      const classvariantResult = classvariantId
+        ? await getClassvariant(id, classvariantId)
+        : await getRandomClassvariant(id, classId);
       if (classResult) {
         classChosen = classResult.object;
       }
@@ -139,18 +175,23 @@ export async function createRandomNpc(
     // R O L E P L A Y   F E A T U R E S
     ///////////////////////////////////////
     const pronouns = pronounsChosen || calculatePronouns(race, racevariant);
-    const name = await calculateName(pronouns, race) || 'Character Name';
+    const name = (await calculateName(pronouns, race)) || 'Character Name';
     const surname = await calculateSurname(pronouns, race);
     const favouriteSkill = await getRandomSkill();
-    const traitObject = await sGetRandomTraitBodyForAge({ feeling: 0 }, age.string);
-    const feelingObject = await sGetRandomTraitBodyForAge({ feeling: 1 }, age.string);
+    const traitObject = await sGetRandomTraitBodyForAge(
+      { feeling: 0 },
+      age.string
+    );
+    const feelingObject = await sGetRandomTraitBodyForAge(
+      { feeling: 1 },
+      age.string
+    );
     const alignmentModifiers = calculateAlignment(traitObject?.category);
     const alignmentEthical = alignmentEthicalChosen;
     const alignmentMoral = alignmentMoralChosen;
-    const height = race? calculateHeight(race, age, pronouns) : 0;
+    const height = race ? calculateHeight(race, age, pronouns) : 0;
     const weight = calculateWeight();
     const voice = await calculateVoice(pronouns);
-
 
     const result: Character = {
       character: {
@@ -160,8 +201,18 @@ export async function createRandomNpc(
         weight,
         alignmentModifiers,
         ...(surname !== null && { surname }),
-        ...(traitObject !== null && { trait: { name: traitObject.name, description: traitObject.description || '' } }),
-        ...(feelingObject !== null && { feeling: { name: feelingObject.name, description: feelingObject.description || '' } }),
+        ...(traitObject !== null && {
+          trait: {
+            name: traitObject.name,
+            description: traitObject.description || '',
+          },
+        }),
+        ...(feelingObject !== null && {
+          feeling: {
+            name: feelingObject.name,
+            description: feelingObject.description || '',
+          },
+        }),
         ...(voice !== null && { voice }),
         ...(height > 0 && { height }),
         ...(alignmentEthical !== undefined && { alignmentEthical }),
@@ -170,14 +221,16 @@ export async function createRandomNpc(
       variations: {
         ...(CRChosen !== undefined && { currentCR: CRChosen }),
         ...(CRChosen === undefined && { currentHD: level }),
-      }
+      },
     };
 
     if (favouriteSkill) {
       createUserObjectIfNotExists(result);
-      result.character.user!.skills = [{
-        value: favouriteSkill.name,
-      }];
+      result.character.user!.skills = [
+        {
+          value: favouriteSkill.name,
+        },
+      ];
     }
 
     const character = result.character;
@@ -202,13 +255,12 @@ export async function createRandomNpc(
       await findChoices(character.background, character.background, 0, id);
     }
 
-    character.CRCalculation =  { name: 'npcstandard'};
+    character.CRCalculation = { name: 'npcstandard' };
 
     calculateAlignmentFromModifiers(result);
     addCharacterHooks(result);
     adjustLevel(result);
     createStats(result);
-
 
     return {
       npc: result,
@@ -219,28 +271,32 @@ export async function createRandomNpc(
   }
 }
 
-
 export async function addCharacterHooks(character: Character) {
   // Retrieving character hooks
-    
+
   const c = character.character;
   if (!c.characterHooks) {
     c.characterHooks = [];
   }
   const types: Array<'youth' | 'career' | 'plot'> = ['youth'];
-  if (!['child','adolescent'].includes(c.age?.string || '') ) {
-    types.push(random(1,2) === 1 ? 'career' : 'plot');
+  if (!['child', 'adolescent'].includes(c.age?.string || '')) {
+    types.push(random(1, 2) === 1 ? 'career' : 'plot');
   }
 
-  const locationorclass = c.class?.name || c?.background?.workplace;
-  const alignment = calculateAlignmentNumber(c.alignmentEthical || 'Neutral', c.alignmentMoral || 'Neutral');
+  const locationorclass =
+    c.class?.name?.toLowerCase() || c?.background?.workplace?.toLowerCase();
+  const alignment = calculateAlignmentNumber(
+    c.alignmentEthical || 'Neutral',
+    c.alignmentMoral || 'Neutral'
+  );
 
   const hookWithLocationIndex = random(0, types.length - 1);
 
   for (let i = 0; i < types.length; i++) {
     const newHook = await getRandomCharacterhook({
       type: types[i],
-      locationorclass: i === hookWithLocationIndex ? locationorclass : undefined,
+      locationorclass:
+        i === hookWithLocationIndex ? locationorclass : undefined,
       alignment,
     });
     if (!newHook) {
@@ -250,17 +306,14 @@ export async function addCharacterHooks(character: Character) {
     newHook.sentence = parseDescriptionChoices(newHook.sentence);
     newHook.summary = parseDescriptionChoices(newHook.summary);
     c.characterHooks.push(newHook);
-      
-    const action = await getRandomActionForCharacterhook(newHook.id);
-    if (!action || !action.object) {
+
+    const object = await getRandomObjectForCharacterhook(newHook.id);
+    if (!object) {
       continue;
     }
-    if (!c.user) {
-      c.user = {};
+    if (!c.conditions) {
+      c.conditions = [];
     }
-    if (!c.user?.actions?.length) {
-      c.user.actions = [];
-    }
-    c.user.actions.push(action.object as Action);
+    c.conditions.push(object as Template);
   }
 }
