@@ -46,8 +46,6 @@ export async function getRandomObjectForCharacterhook(
   }
   const id = array[0].objectid;
 
-  console.log('OBJECT ID', id);
-
   const object = await prisma.objects.findUnique({
     where: {
       id,

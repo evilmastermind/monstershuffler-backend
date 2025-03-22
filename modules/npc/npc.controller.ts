@@ -2,16 +2,39 @@ import { PrismaClient } from '@prisma/client';
 import { Character } from '@/types';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createRandomNpc } from './npc.controller.generator';
-import type { GenerateBackstoryBody, PostRandomNpcBody, PostRandomNpcResponse, PostNpcRatingBody } from './npc.schema';
+import type {
+  GenerateBackstoryBody,
+  PostRandomNpcBody,
+  PostRandomNpcResponse,
+  PostNpcRatingBody,
+} from './npc.schema';
 import { handleError } from '@/utils/errors';
 import { getRaceWithVariantsList } from '../race/race.service';
 import { getClassWithVariantsList } from '../class/class.service';
 import { getBackgroundList } from '../background/background.service';
-import { getDnDAdventurePrompt, parseRoleplayStats, type RoleplayStats, getCharacterHookPrompt, getPhysicalAppearancePrompt } from './prompts';
+import {
+  getDnDAdventurePrompt,
+  parseRoleplayStats,
+  type RoleplayStats,
+  getCharacterHookPrompt,
+  getPhysicalAppearancePrompt,
+} from './prompts';
 import { generateTextStream, generateText } from '@/modules/ai/ai.service';
 import { postAnswer } from '../feedback/feedback.service';
-import { CURRENT_CHEAP_MODEL, CURRENT_GOOD_MODEL } from '@/modules/ai/ai.schema';
-import { getRecycledNpcsForUser, getNpcForUpdate, postNpc, addNpcToSentAlreadyList, addBackstoryToNpc, postNpcRating, getNpc, updateNpcBackstoryStatus } from './npc.service';
+import {
+  CURRENT_CHEAP_MODEL,
+  CURRENT_GOOD_MODEL,
+} from '@/modules/ai/ai.schema';
+import {
+  getRecycledNpcsForUser,
+  getNpcForUpdate,
+  postNpc,
+  addNpcToSentAlreadyList,
+  addBackstoryToNpc,
+  postNpcRating,
+  getNpc,
+  updateNpcBackstoryStatus,
+} from './npc.service';
 import { calculateCharacterHook } from 'monstershuffler-shared';
 import { generateBackstorySentences } from './backstory';
 import prisma from '@/utils/prisma';
@@ -48,13 +71,17 @@ export async function createFourRandomNpcHandler(
     const sessionid = request.body?.sessionId;
 
     // check if the generator (prompt mode) couldn't find some keywords written by the user
-    const wordsNotFound = [...new Set(request.body.wordsNotFound || [])].filter((word) => word.length > 0);
-    reportWordsNotFound(wordsNotFound, id, sessionid,);
+    const wordsNotFound = [...new Set(request.body.wordsNotFound || [])].filter(
+      (word) => word.length > 0
+    );
+    reportWordsNotFound(wordsNotFound, id, sessionid);
 
     const NPCS_TO_GENERATE = 4;
 
     // get recycled npcs for the user
-    npcs = npcs.concat(await getRecycledNpcsForUser(request, NPCS_TO_GENERATE, id, sessionid));
+    npcs = npcs.concat(
+      await getRecycledNpcsForUser(request, NPCS_TO_GENERATE, id, sessionid)
+    );
     const npcsRemaining = NPCS_TO_GENERATE - npcs.length;
 
     for (let i = 0; i < npcsRemaining; i++) {
@@ -69,17 +96,17 @@ export async function createFourRandomNpcHandler(
         const result = await postNpc({
           userid: id,
           sessionid,
-          object: npc.npc
+          object: npc.npc,
         });
         npcs.push({
           id: result.id,
-          object: npc.npc
+          object: npc.npc,
         });
       } else {
         throw new Error('Failed to create npc');
       }
     }
-    npcs.forEach((npc)=> {
+    npcs.forEach((npc) => {
       // user's choices
       if (!request.body.addVoice) {
         delete npc.object.character.voice;
@@ -91,7 +118,7 @@ export async function createFourRandomNpcHandler(
       addNpcToSentAlreadyList({
         npcid: npc.id,
         userid: id,
-        sessionid
+        sessionid,
       });
     });
     return { npcs };
@@ -120,7 +147,7 @@ export async function getGeneratorDataHandler(
 }
 
 export async function generateBackstoryHandler(
-  request: FastifyRequest<{ Body: GenerateBackstoryBody }>, 
+  request: FastifyRequest<{ Body: GenerateBackstoryBody }>,
   reply: FastifyReply
 ) {
   try {
@@ -136,94 +163,108 @@ export async function generateBackstoryHandler(
       }
       const npc = npcs[0];
       if (npc.hasbackstory === true || npc.backstorystatus !== null) {
-        throw new Error('It\'s currently possible to generate a backstory only once for an NPC');
+        throw new Error(
+          "It's currently possible to generate a backstory only once for an NPC"
+        );
       }
 
       const roleplayStats = await parseRoleplayStats(npc.object as Character);
       let backstory = '';
 
       updateNpcBackstoryStatus(prisma, npcid, 'pending');
-      reply.sse((async function * source () {
-        try {
-          const adventurePrompt = await getDnDAdventurePrompt(npc.object as Character, roleplayStats, backstory);
-          // start the stream for the adventure module
-          const adventureStream = await generateTextStream(adventurePrompt, CURRENT_GOOD_MODEL);
+      reply.sse(
+        (async function* source() {
+          try {
+            const adventurePrompt = await getDnDAdventurePrompt(
+              npc.object as Character,
+              roleplayStats,
+              backstory
+            );
+            // start the stream for the adventure module
+            const adventureStream = await generateTextStream(
+              adventurePrompt,
+              CURRENT_GOOD_MODEL
+            );
 
-          backstory += '\n\n';
-          // return \n\n as a separator between the backstory and the adventure
-          yield {
-            id: '69',
-            data: JSON.stringify('\n\n'),
-          };
-
-          for await (const chunk of adventureStream) {
-            backstory += chunk.choices[0]?.delta?.content || '';
+            backstory += '\n\n';
+            // return \n\n as a separator between the backstory and the adventure
             yield {
-              id: chunk.id,
-              data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
+              id: '69',
+              data: JSON.stringify('\n\n'),
+            };
+
+            for await (const chunk of adventureStream) {
+              backstory += chunk.choices[0]?.delta?.content || '';
+              yield {
+                id: chunk.id,
+                data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
+              };
+            }
+
+            const physicalAppearancePrompt = await getPhysicalAppearancePrompt(
+              npc.object as Character,
+              roleplayStats
+            );
+            const physicalAppearanceStream = await generateTextStream(
+              physicalAppearancePrompt,
+              CURRENT_CHEAP_MODEL
+            );
+
+            yield {
+              id: 'appearance_incoming',
+              data: '',
+            };
+
+            let physicalAppearance = '';
+
+            for await (const chunk of physicalAppearanceStream) {
+              backstory += chunk.choices[0]?.delta?.content || '';
+              physicalAppearance += chunk.choices[0]?.delta?.content || '';
+              yield {
+                id: chunk.id,
+                data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
+              };
+            }
+
+            //   generateCharacterHookAndSaveBackstory(
+            //     prisma,
+            //     npcid,
+            //     backstory,
+            //     physicalAppearance,
+            // npc.object as Character,
+            // roleplayStats,
+            //   );
+          } catch (error) {
+            yield {
+              id: 'error',
+              data: JSON.stringify('An unexpected error occurred.'),
             };
           }
-
-          const physicalAppearancePrompt = await getPhysicalAppearancePrompt(npc.object as Character, roleplayStats);
-          const physicalAppearanceStream = await generateTextStream(physicalAppearancePrompt, CURRENT_CHEAP_MODEL);
-
-          yield {
-            id: 'appearance_incoming',
-            data: '',
-          };
-
-          let physicalAppearance = '';
-
-          for await (const chunk of physicalAppearanceStream) {
-            backstory += chunk.choices[0]?.delta?.content || '';
-            physicalAppearance += chunk.choices[0]?.delta?.content || '';
-            yield {
-              id: chunk.id,
-              data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
-            };
-          }
-
-          generateCharacterHookAndSaveBackstory(
-            prisma,
-            npcid,
-            backstory,
-            physicalAppearance,
-        npc.object as Character,
-        roleplayStats,
-          );
-
-        } catch (error) {
-          yield {
-            id: 'error',
-            data: JSON.stringify('An unexpected error occurred.'),
-          };
-        }
-      })());
-
+        })()
+      );
     });
-    
   } catch (error) {
     return handleError(error, reply);
   }
 }
 
-async function generateCharacterHookAndSaveBackstory(prisma: PrismaClient, id: string, backstory: string, physicalAppearance: string, object: Character, roleplayStats: RoleplayStats) {
+// async function generateCharacterHookAndSaveBackstory(prisma: PrismaClient, id: string, backstory: string, physicalAppearance: string, object: Character, roleplayStats: RoleplayStats) {
 
-  const characterHookPrompt = getCharacterHookPrompt(roleplayStats, backstory);
-  const characterHook = await generateText(characterHookPrompt, CURRENT_CHEAP_MODEL);
+//   const characterHookPrompt = getCharacterHookPrompt(roleplayStats, backstory);
+//   const characterHook = await generateText(characterHookPrompt, CURRENT_CHEAP_MODEL);
 
-  object.character.characterHook = characterHook.choices[0].message.content || '';
-  calculateCharacterHook(object);
+//   object.character.characterHooks = characterHook.choices[0].message.content || '';
+//   calculateCharacterHook(object);
 
-  addBackstoryToNpc({
-    prisma,
-    id,
-    backstory,
-    physicalAppearance,
-    object,
-  });
-  
-};
+//   addBackstoryToNpc({
+//     prisma,
+//     id,
+//     backstory,
+//     physicalAppearance,
+//     object,
+//   });
+
+// };
 
 export async function postNpcRatingController(
   request: FastifyRequest<{ Body: PostNpcRatingBody }>,
@@ -233,7 +274,7 @@ export async function postNpcRatingController(
     const { id, rating } = request.body;
     const userid = request?.user?.id;
     const sessionid = request.body?.sessionid;
-    await postNpcRating ({ npcid: id, userid, rating, sessionid });
+    await postNpcRating({ npcid: id, userid, rating, sessionid });
     return reply.code(200).send({ id, rating });
   } catch (error) {
     return handleError(error, reply);
@@ -256,8 +297,11 @@ export async function getNpcHandler(
   }
 }
 
-
-function reportWordsNotFound(wordsNotFound: string[], userid?: number, sessionid?: string) {
+function reportWordsNotFound(
+  wordsNotFound: string[],
+  userid?: number,
+  sessionid?: string
+) {
   if (wordsNotFound.length) {
     postAnswer({
       answer: {

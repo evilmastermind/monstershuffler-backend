@@ -8,7 +8,7 @@
     "dev": "tsnd --respawn --transpile-only --exit-child app.ts",
     "prebuild": "rimraf ./dist && npx prisma generate",
     "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json && npm run copy-resources",
-    "copy-resources": "copyfiles resources/**/* dist",
+    "copy-resources": "copyfiles resources/**/*.sql dist",
     "start": "node dist/app.js",
     "unbuild": "tsc --build --clean",
     "schemas": "yarn upgrade monstershuffler-shared"

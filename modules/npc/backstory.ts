@@ -135,6 +135,7 @@ export async function generateBackstorySentenceActions() {
       if (response && response.length) {
         postBackstorysentencesobject(sentence.id, {
           name: 'sentence',
+          // @ts-expect-error - it looks like the response is not typed correctly
           actions: [JSON.parse(response[0].content[0].text.value)],
         });
       }
