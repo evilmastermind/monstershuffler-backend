@@ -6,7 +6,6 @@
  * We'll try to handle this with migrations in the future.
  */
 
-
 import {
   countObjects,
   getObjectsWithPagination,
@@ -62,7 +61,7 @@ export async function convertObjectsHandler(request, reply) {
       }
     }
     if (!testRun) {
-    // BACKGROUNDS
+      // BACKGROUNDS
       await convertBackgroundPronouns();
     }
     return reply.code(200).send('OK');
@@ -80,44 +79,44 @@ async function convertObject(object) {
   }
 
   switch (object.type) {
-  case 1: // character
-    await convertCharacter(objectJSON, object.id);
-    break;
-  case 2: // race
-    await convertNonCharacter(objectJSON, object.id);
-    break;
-  case 3: // class
-    removeAbilityScoresLimit(objectJSON);
-    await convertNonCharacter(objectJSON, object.id);
-    break;
-  case 4: // template
-    await convertNonCharacter(objectJSON, object.id);
-    break;
-  case 5: // background
-    addCompatibleAgesToBackground(objectJSON);
-    await convertNonCharacter(objectJSON, object.id);
-    break;
-  case 10002: // racevariant
-    await convertNonCharacter(objectJSON, object.id);
-    break;
-  case 10003: // classvariant
-    await convertNonCharacter(objectJSON, object.id);
-    removeAbilityScoresLimit(objectJSON);
-    break;
-  case 101: // action
-    object.object = await convertAction(objectJSON, object.id);
-    break;
-  case 102: // spell
-    // object.object = convertSpell(objectJSON);
-    break;
-  case 1001: // weapon
-    object.object = await convertWeapon(objectJSON);
-    break;
-  case 1002: // armor
-    object.object = await convertArmor(objectJSON);
-    break;
-  default:
-    break;
+    case 1: // character
+      await convertCharacter(objectJSON, object.id);
+      break;
+    case 2: // race
+      await convertNonCharacter(objectJSON, object.id);
+      break;
+    case 3: // class
+      removeAbilityScoresLimit(objectJSON);
+      await convertNonCharacter(objectJSON, object.id);
+      break;
+    case 4: // template
+      await convertNonCharacter(objectJSON, object.id);
+      break;
+    case 5: // background
+      addCompatibleAgesToBackground(objectJSON);
+      await convertNonCharacter(objectJSON, object.id);
+      break;
+    case 10002: // racevariant
+      await convertNonCharacter(objectJSON, object.id);
+      break;
+    case 10003: // classvariant
+      await convertNonCharacter(objectJSON, object.id);
+      removeAbilityScoresLimit(objectJSON);
+      break;
+    case 101: // action
+      object.object = await convertAction(objectJSON, object.id);
+      break;
+    case 102: // spell
+      // object.object = convertSpell(objectJSON);
+      break;
+    case 1001: // weapon
+      object.object = await convertWeapon(objectJSON);
+      break;
+    case 1002: // armor
+      object.object = await convertArmor(objectJSON);
+      break;
+    default:
+      break;
   }
 }
 
@@ -157,7 +156,10 @@ async function convertCharacter(object, id) {
     }
     if (!'skills' in object.user) {
       object.user.skills = object.skills;
-    } else if (Array.isArray(object.skills) && Array.isArray(object.user.skills)) {
+    } else if (
+      Array.isArray(object.skills) &&
+      Array.isArray(object.user.skills)
+    ) {
       object.user.skills.push(...object.skills);
     } else {
       object.user.skills = object.skills;
@@ -204,66 +206,69 @@ function renameStuff(object) {
     delete object.background;
   }
   // backgroundImage => imageBackground
-  if (Object.hasOwn(object, 'backgroundImage') || Object.hasOwn(object, 'image')) {
+  if (
+    Object.hasOwn(object, 'backgroundImage') ||
+    Object.hasOwn(object, 'image')
+  ) {
     object.sheet = {};
     if ('image' in object) {
       object.sheet.images = [
         {
           url: object.image?.imgdir,
-        }
+        },
       ];
       delete object.image;
     }
     if ('backgroundImage' in object) {
       switch (object.backgroundImage) {
-      case 'background_dragon.jpg': 
-        object.sheet.decoration = 'dragon';
-        break;
-      case 'background_blood.jpg': 
-        object.sheet.decoration = 'blood';
-        break;
-      case 'background_bluedots.jpg': 
-        object.sheet.decoration = 'mana';
-        break;
-      case 'background_dunes.jpg': 
-        object.sheet.decoration = 'desert';
-        break;
-      case 'background_burn.jpg': 
-        object.sheet.decoration = 'fire';
-        break;
-      case 'background_candle.jpg': 
-        object.sheet.decoration = 'urban';
-        break;
-      case 'background_cavern.jpg': 
-        object.sheet.decoration = 'cavern';
-        break;
-      case 'background_cogs.jpg': 
-        object.sheet.decoration = 'construct';
-        break;
-      case 'background_creepy.jpg': 
-        object.sheet.decoration = 'creepy';
-        break;
-      case 'background_fairy.jpg': 
-        object.sheet.decoration = 'fey';
-        break;
-      case 'background_mountains.jpg': 
-        object.sheet.decoration = 'mountains';
-        break;
-      case 'background_ocean.jpg': 
-        object.sheet.decoration = 'ocean';
-        break;
-      case 'background_undergrowth.jpg': 
-        object.sheet.decoration = 'nature';
-        break;
-      case 'background_skulls.jpg': 
-        object.sheet.decoration = 'undead';
-        break;
-      case 'background_underwater.jpg': 
-        object.sheet.decoration = 'jungle';
-        break;
-      default:
-        object.sheet.decoration = 'default';
-        break;
+        case 'background_dragon.jpg':
+          object.sheet.decoration = 'dragon';
+          break;
+        case 'background_blood.jpg':
+          object.sheet.decoration = 'blood';
+          break;
+        case 'background_bluedots.jpg':
+          object.sheet.decoration = 'mana';
+          break;
+        case 'background_dunes.jpg':
+          object.sheet.decoration = 'desert';
+          break;
+        case 'background_burn.jpg':
+          object.sheet.decoration = 'fire';
+          break;
+        case 'background_candle.jpg':
+          object.sheet.decoration = 'urban';
+          break;
+        case 'background_cavern.jpg':
+          object.sheet.decoration = 'cavern';
+          break;
+        case 'background_cogs.jpg':
+          object.sheet.decoration = 'construct';
+          break;
+        case 'background_creepy.jpg':
+          object.sheet.decoration = 'creepy';
+          break;
+        case 'background_fairy.jpg':
+          object.sheet.decoration = 'fey';
+          break;
+        case 'background_mountains.jpg':
+          object.sheet.decoration = 'mountains';
+          break;
+        case 'background_ocean.jpg':
+          object.sheet.decoration = 'ocean';
+          break;
+        case 'background_undergrowth.jpg':
+          object.sheet.decoration = 'nature';
+          break;
+        case 'background_skulls.jpg':
+          object.sheet.decoration = 'undead';
+          break;
+        case 'background_underwater.jpg':
+          object.sheet.decoration = 'jungle';
+          break;
+        default:
+          object.sheet.decoration = 'default';
+          break;
       }
     }
     object.imageBackground = object.backgroundImage;
@@ -324,27 +329,27 @@ async function convertCharacterObject(object, id) {
   // swarmSize fix
   if (Object.hasOwn(object, 'swarmSize')) {
     switch (object.swarmSize.toLowerCase()) {
-    case 'tiny':
-      object.swarmSize = '1';
-      break;
-    case 'small':
-      object.swarmSize = '2';
-      break;
-    case 'medium':
-      object.swarmSize = '3';
-      break;
-    case 'large':
-      object.swarmSize = '4';
-      break;
-    case 'huge':
-      object.swarmSize = '5';
-      break;
-    case 'gargantuan':
-      object.swarmSize = '6';
-      break;
-    default:
-      object.swarmSize = '3';
-      break;
+      case 'tiny':
+        object.swarmSize = '1';
+        break;
+      case 'small':
+        object.swarmSize = '2';
+        break;
+      case 'medium':
+        object.swarmSize = '3';
+        break;
+      case 'large':
+        object.swarmSize = '4';
+        break;
+      case 'huge':
+        object.swarmSize = '5';
+        break;
+      case 'gargantuan':
+        object.swarmSize = '6';
+        break;
+      default:
+        object.swarmSize = '3';
+        break;
     }
   }
   // armor random choice fix
@@ -539,10 +544,18 @@ async function addIdsToSpells(spellSlots) {
       delete spellSlot.timesDay;
     }
     if ('timesDayMax' in spellSlot) {
-      if (spellSlot.timesDayMax !== null && spellSlot.timesDayMax !== undefined) {
+      if (
+        spellSlot.timesDayMax !== null &&
+        spellSlot.timesDayMax !== undefined
+      ) {
         spellSlot.timesMax = spellSlot.timesDayMax.trim();
         if (isNaN(parseInt(spellSlot.timesMax))) {
-          if (spellSlot.timesMax.toLowerCase().trim().replace(/[^a-z]/g, '') !== 'atwill') {
+          if (
+            spellSlot.timesMax
+              .toLowerCase()
+              .trim()
+              .replace(/[^a-z]/g, '') !== 'atwill'
+          ) {
             delete spellSlot.timesMax;
           }
         }
@@ -558,7 +571,7 @@ async function addIdsToSpells(spellSlots) {
           value: spell,
           properties: {
             level: parseInt(spellData?.object?.level ?? '1'),
-          }
+          },
         });
       }
       spellSlot.spells = newArray;
@@ -655,20 +668,20 @@ async function convertAction(object, id) {
     return object;
   }
 
-  if(Object.hasOwn(object, 'recharge')) {
+  if (Object.hasOwn(object, 'recharge')) {
     switch (object.recharge) {
-    case '3–6':
-      object.recharge = '3-6';
-      break;
-    case '4–6':
-      object.recharge = '4-6';
-      break;
-    case '5–6':
-      object.recharge = '5-6';
-      break;
-    case '6–6':
-      object.recharge = '6-6';
-      break;
+      case '3–6':
+        object.recharge = '3-6';
+        break;
+      case '4–6':
+        object.recharge = '4-6';
+        break;
+      case '5–6':
+        object.recharge = '5-6';
+        break;
+      case '6–6':
+        object.recharge = '6-6';
+        break;
     }
   }
 
@@ -745,7 +758,7 @@ async function convertAction(object, id) {
           attack.enchantment.name = 'enchantment';
           convertDiceObject(attack.enchantment.dice);
         }
-        attack.enchantments = [{...attack.enchantment}];
+        attack.enchantments = [{ ...attack.enchantment }];
         delete attack.enchantment;
       }
       if (Object.hasOwn(attack, 'attributes')) {
@@ -891,27 +904,27 @@ async function convertChoiceRandom(object, source) {
 
   if (object.choice.type === 'random') {
     switch (source) {
-    case 'actions':
-      object.choice.source = 'objects';
-      object.choice.objectType = 101;
-      convertProfessionFiltersInActions(object.choice.filters);
-      break;
-    case 'armor':
-      object.choice.source = 'objects';
-      object.choice.objectType = 1002;
-      break;
-    case 'weapons':
-      object.choice.source = 'objects';
-      object.choice.objectType = 1001;
-      break;
-    case 'spells':
-      object.choice.source = 'objects';
-      object.choice.objectType = 102;
-      break;
-    case 'skills':
-    case 'languages':
-      object.choice.source = source;
-      break;
+      case 'actions':
+        object.choice.source = 'objects';
+        object.choice.objectType = 101;
+        convertProfessionFiltersInActions(object.choice.filters);
+        break;
+      case 'armor':
+        object.choice.source = 'objects';
+        object.choice.objectType = 1002;
+        break;
+      case 'weapons':
+        object.choice.source = 'objects';
+        object.choice.objectType = 1001;
+        break;
+      case 'spells':
+        object.choice.source = 'objects';
+        object.choice.objectType = 102;
+        break;
+      case 'skills':
+      case 'languages':
+        object.choice.source = source;
+        break;
     }
   } else {
     if (Object.hasOwn(object.choice, 'source')) {
@@ -956,12 +969,12 @@ function convertProfessionFiltersInActions(filters) {
   }
   for (const filter of filters) {
     switch (filter.keyName) {
-    case 'actiontype':
-      filter.keyName = 'actionType';
-      break;
-    case 'subtype':
-      filter.keyName = 'subType';
-      break;
+      case 'actiontype':
+        filter.keyName = 'actionType';
+        break;
+      case 'subtype':
+        filter.keyName = 'subType';
+        break;
     }
   }
 }

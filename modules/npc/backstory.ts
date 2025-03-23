@@ -14,6 +14,7 @@ const filePath = 'resources/002_backstory_sentences.sql';
 const BACKSTORY_ASSISTANT_ID = 'asst_VUscAl0mHfPw30ktTa7lREMV';
 const BACKSTORY_FIXER_ID = 'asst_hb861ktW1N9MZjvoVnhMCmB1';
 const ACTIONS_ASSISTANT_ID = 'asst_bDMoludYeaehMKEMQYcwjWDm';
+
 type SentenceType = 'youth' | 'career' | 'plot';
 
 const classes = [

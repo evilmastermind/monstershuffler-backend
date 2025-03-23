@@ -3,15 +3,20 @@ import { isAdmin } from '@/modules/user/user.service';
 import { objects, Prisma } from '@prisma/client';
 import type { Choice } from '@/types';
 
-export async function countObjects() {
-  const objectCount = await prisma.objects.count();
+export async function countObjects(type?: number) {
+  const objectCount = await prisma.objects.count({
+    where: {
+      type: type,
+    },
+  });
   return objectCount;
 }
 
 export async function getObjectsWithPagination(
   userid: number,
   cursor: number | undefined,
-  pageSize: number
+  pageSize: number,
+  type?: number
 ) {
   if (!(await isAdmin(userid))) {
     return [];
@@ -20,9 +25,14 @@ export async function getObjectsWithPagination(
   return await prisma.objects.findMany({
     skip: cursor ? 1 : 0,
     take: pageSize,
-    cursor: cursor ? {
-      id: cursor,
-    } : undefined,
+    cursor: cursor
+      ? {
+          id: cursor,
+        }
+      : undefined,
+    where: {
+      type: type,
+    },
   });
 }
 
@@ -101,30 +111,30 @@ export async function getIdsFromNames(chosenAlready: string[], source: string) {
   let table = 'objects';
   let objectType = 0;
   switch (source) {
-  case 'actions':
-    objectType = 101;
-    break;
-  case 'armor':
-    objectType = 1002;
-    break;
-  case 'languages':
-    table = 'languages';
-    break;
-  case 'skills':
-    table = 'skills';
-    break;
-  case 'weapons':
-    objectType = 1001;
-    break;
-  case 'spells':
-    objectType = 102;
-    break;
-  case 'objects':
-    break;
-  default:
-    console.warn('UNDEFINED TYPE DETECTED: ' + source);
-    table = 'somethingwrongtomakethisfail';
-    break;
+    case 'actions':
+      objectType = 101;
+      break;
+    case 'armor':
+      objectType = 1002;
+      break;
+    case 'languages':
+      table = 'languages';
+      break;
+    case 'skills':
+      table = 'skills';
+      break;
+    case 'weapons':
+      objectType = 1001;
+      break;
+    case 'spells':
+      objectType = 102;
+      break;
+    case 'objects':
+      break;
+    default:
+      console.warn('UNDEFINED TYPE DETECTED: ' + source);
+      table = 'somethingwrongtomakethisfail';
+      break;
   }
 
   const newChosenAlready: Choice[] = [];
@@ -147,9 +157,13 @@ export async function getIdsFromNames(chosenAlready: string[], source: string) {
       if (ids.length > 0) {
         if (source === 'spells') {
           const object = ids[0].object as { level: string };
-          newChosenAlready.push({ id: ids[0].id, value: name, properties: {
-            level: parseInt(object.level ?? '1'),
-          } });
+          newChosenAlready.push({
+            id: ids[0].id,
+            value: name,
+            properties: {
+              level: parseInt(object.level ?? '1'),
+            },
+          });
         } else {
           newChosenAlready.push({ id: ids[0].id, value: name });
         }

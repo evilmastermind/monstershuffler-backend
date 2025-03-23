@@ -142,7 +142,8 @@ const multiattack: Action = {
     {
       name: 'Multiattack',
       type: 'multiattack',
-      description: '[Name] makes {value1} with [their] [profession_weapon].',
+      description:
+        '[Name] makes {value1} with [their] [profession_weapon] or another weapon [they] are holding.',
       availableAt: 5,
     },
   ],

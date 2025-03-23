@@ -1,10 +1,16 @@
 import { FastifyInstance } from 'fastify';
 import { convertObjectsHandler } from './admin.controller';
+import { launchRoutine } from './routines';
 import { jwtHeaderRequired } from '@/schemas';
 import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
-import { generateBackstorySentenceActions, generateBackstorySentences } from '../npc/backstory';
+import {
+  generateBackstorySentenceActions,
+  generateBackstorySentences,
+} from '../npc/backstory';
 
-const converterRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
+const converterRoutes: FastifyPluginAsyncZod = async function (
+  server: FastifyInstance
+) {
   server.get(
     '/converter',
     {
@@ -28,8 +34,7 @@ const converterRoutes: FastifyPluginAsyncZod = async function (server: FastifyIn
       preHandler: [server.admin],
       schema: {
         hide: true,
-        summary:
-          'Generates NPC backstory sentences.',
+        summary: 'Generates NPC backstory sentences.',
         description:
           'Generates NPC backstory sentences from a pretrained model with random inputs.',
         headers: jwtHeaderRequired,
@@ -40,20 +45,35 @@ const converterRoutes: FastifyPluginAsyncZod = async function (server: FastifyIn
     generateBackstorySentences
   );
   server.get(
-    '/backstory-sentences-actions', {
+    '/backstory-sentences-actions',
+    {
       preHandler: [server.admin],
       schema: {
         hide: true,
-        summary:
-          'Generates actions for backstory sentences.',
-        description:
-          'Generates actions for backstory sentences.',
+        summary: 'Generates actions for backstory sentences.',
+        description: 'Generates actions for backstory sentences.',
         headers: jwtHeaderRequired,
         tags: ['admin'],
         response: 200,
       },
     },
     generateBackstorySentenceActions
+  );
+
+  server.get(
+    '/worker',
+    {
+      preHandler: [server.admin],
+      schema: {
+        hide: true,
+        summary: 'Launches a routine.',
+        description: 'Lanches a routine.',
+        headers: jwtHeaderRequired,
+        tags: ['admin'],
+        response: 200,
+      },
+    },
+    launchRoutine
   );
 };
 
