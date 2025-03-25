@@ -3,10 +3,13 @@ import { isAdmin } from '@/modules/user/user.service';
 import { objects, Prisma } from '@prisma/client';
 import type { Choice } from '@/types';
 
-export async function countObjects(type?: number) {
+export async function countObjects(type?: number, lastedited?: Date) {
   const objectCount = await prisma.objects.count({
     where: {
-      type: type,
+      type,
+      lastedited: {
+        lte: lastedited,
+      }
     },
   });
   return objectCount;
@@ -16,7 +19,8 @@ export async function getObjectsWithPagination(
   userid: number,
   cursor: number | undefined,
   pageSize: number,
-  type?: number
+  type?: number,
+  lastedited?: Date
 ) {
   if (!(await isAdmin(userid))) {
     return [];
@@ -31,7 +35,10 @@ export async function getObjectsWithPagination(
         }
       : undefined,
     where: {
-      type: type,
+      type,
+      lastedited: {
+        lte: lastedited,
+      }
     },
   });
 }
@@ -43,6 +50,7 @@ export async function saveObject(object: objects) {
     },
     data: {
       object: object.object !== null ? object.object : Prisma.JsonNull,
+      lastedited: new Date(),
     },
   });
 }
