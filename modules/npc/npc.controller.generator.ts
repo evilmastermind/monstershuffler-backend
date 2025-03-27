@@ -307,13 +307,13 @@ export async function addCharacterHooks(character: Character) {
     newHook.summary = parseDescriptionChoices(newHook.summary);
     c.characterHooks.push(newHook);
 
-    const object = await getRandomObjectForCharacterhook(newHook.id);
-    if (!object) {
-      continue;
-    }
-    if (!c.conditions) {
-      c.conditions = [];
-    }
-    c.conditions.push(object as Template);
+    // const object = await getRandomObjectForCharacterhook(newHook.id);
+    // if (!object) {
+    //   continue;
+    // }
+    // if (!c.conditions) {
+    //   c.conditions = [];
+    // }
+    // c.conditions.push(object as Template);
   }
 }

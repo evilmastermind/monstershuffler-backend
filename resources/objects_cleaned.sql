@@ -1,23 +1,3 @@
-INSERT INTO objecttypes (type, name) VALUES
-(6, 'sentence');
-
-CREATE TABLE IF NOT EXISTS backstorysentencesobjects (
-  id SERIAL PRIMARY KEY,
-  backstorysentenceid INT NOT NULL,
-  objectid INT NOT NULL,
-  FOREIGN KEY (backstorysentenceid) REFERENCES backstorysentences(id) ON DELETE CASCADE,
-  FOREIGN KEY (objectid) REFERENCES objects (id) ON DELETE CASCADE
-);
-
-
-CREATE TABLE IF NOT EXISTS temp_objects (
-  id SERIAL PRIMARY KEY,
-  object JSONB NOT NULL,
-  lastedited timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-  backstorysentenceid INT NOT NULL
-);
-
-INSERT INTO temp_objects (object, lastedited, backstorysentenceid) VALUES
 ('{"name": "sentence", "actions": [{"tag": "trait0", "values": [{"name": "value1", "type": "DC Charisma", "expression": "8+PROF+CHA"}, {"name": "value2", "type": "minute", "expression": "CR\\2"}], "priority": 10, "variants": [{"name": "Whispers of Chaos", "type": "action", "description": "[Name] can subtly influence creatures within 30 feet, sowing discord and confusion. Once per short rest, [he] can force a creature to make a {value1} saving throw. On a failed save, the target is charmed or frightened (his choice) for {value2}."}], "availableUnit": "level"}]}', '2025-03-24 11:42:55.936', 1587),
 ('{"name": "sentence", "actions": [{"tag": "action0", "values": [{"name": "value1", "type": "DC Charisma", "expression": "8+PROF+CHA"}], "priority": 15, "variants": [{"name": "Divine Command", "type": "action", "ability": "CHA", "description": "[Name] issues a command imbued with divine authority. One creature of [his] choice within 60 feet must succeed on a {value1} saving throw or be charmed for 1 minute. While charmed, the creature must follow a single-word command given by [name] on its next turn. The creature can repeat the saving throw at the end of each of its turns, ending the effect on a success."}], "availableUnit": "level"}]}', '2025-03-24 08:29:29.693', 21),
 ('{"name": "sentence", "actions": [{"tag": "action1", "priority": 15, "variants": [{"name": "Mariner''s Command", "type": "bonus", "availableAt": 1, "description": "[Name] grants [himself] or an ally within 30 feet advantage on a Wisdom (Perception) or Wisdom (Insight) check to navigate the seas or discern maritime details. This benefit lasts for 10 minutes."}], "availableUnit": "level"}]}', '2025-03-24 08:32:17.316', 20),
@@ -2445,17 +2425,3 @@ INSERT INTO temp_objects (object, lastedited, backstorysentenceid) VALUES
 ('{"name": "sentence", "actions": [{"tag": "action5", "values": [{"name": "value1", "type": "DC Constitution", "expression": "8+PROF+CHA"}, {"name": "value2", "type": "round", "expression": "1+CR\\2"}, {"dice": {"dice": 1, "sides": 4, "availableAt": 5, "unitInterval": 2, "availableUnit": "level", "diceIncrement": 1}, "name": "value3", "type": "poison damage"}], "priority": 15, "variants": [{"name": "Poison Brew", "type": "action", "availableAt": 1, "description": "[Name] prepares a poisoned brew and offers it to an unsuspecting target. The target must succeed on a {value1} saving throw or become poisoned for {value2}. While poisoned, the target''s hit points are reduced by {value3} at the start of each of their turns."}]}]}', '2025-03-24 14:16:52.351', 570),
 ('{"name": "sentence", "actions": [{"tag": "trait3", "priority": 10, "variants": [{"name": "Whispers of the Bathhouse", "type": "trait", "description": "[Name] manipulates the curse-laden bathhouse to listen to whispered conversations, gaining insight into the secrets of patrons. Once per day, [he] can cast ''Detect Thoughts'' at will without expending a spell slot."}, {"name": "Whispers of the Bathhouse", "type": "bonus", "availableAt": 1, "description": "[Name] further enhances the nefarious abilities of the bathhouse, allowing [him] to cast ''Detect Thoughts'' twice per day at will without expending a spell slot.", "availableUnit": "level"}], "availableUnit": "level"}]}', '2025-03-24 11:17:26.319', 1185),
 ('{"name": "sentence", "actions": [{"tag": "action1", "values": [{"name": "value1", "type": "DC Charisma", "expression": "8+PROF+CHA"}], "priority": 15, "variants": [{"name": "Animated Armor Command", "type": "action", "ability": "CHA", "charges": "1", "recharge": "short", "description": "[Name] commands the ancient set of animated armor to attack one creature within 30 feet. The armor strikes with a threatening presence, causing the target to make a {value1} saving throw or become frightened until the end of their next turn. If the saving throw fails by 5 or more, the target is also stunned until the end of their next turn."}], "availableUnit": "level"}]}', '2025-03-24 12:14:51.432', 1833);
-
-ALTER TABLE objects ADD COLUMN backstorysentenceid INTEGER;
-
-INSERT INTO objects (type, name, game, userid, object, lastedited, backstorysentenceid)
-SELECT 6, t.backstorysentenceid::text, 1, 0, t.object, t.lastedited, t.backstorysentenceid
-FROM temp_objects t;
-
-INSERT INTO backstorysentencesobjects (objectid, backstorysentenceid)
-SELECT id, backstorysentenceid
-FROM objects
-WHERE type = 6;
-
-DROP TABLE temp_objects;
-ALTER TABLE objects DROP COLUMN backstorysentenceid;
