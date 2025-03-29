@@ -278,6 +278,7 @@ export async function addCharacterHooks(character: Character) {
   if (!c.characterHooks) {
     c.characterHooks = [];
   }
+
   const types: Array<'youth' | 'career' | 'plot'> = ['youth'];
   if (!['child', 'adolescent'].includes(c.age?.string || '')) {
     types.push(random(1, 2) === 1 ? 'career' : 'plot');
@@ -285,6 +286,7 @@ export async function addCharacterHooks(character: Character) {
 
   const locationorclass =
     c.class?.name?.toLowerCase() || c?.background?.workplace?.toLowerCase();
+
   const alignment = calculateAlignmentNumber(
     c.alignmentEthical || 'Neutral',
     c.alignmentMoral || 'Neutral'
