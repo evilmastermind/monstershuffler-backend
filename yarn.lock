@@ -1937,7 +1937,7 @@ module-alias@^2.2.2:
 
 "monstershuffler-shared@git+https://github.com/evilmastermind/monstershuffler-shared#main":
   version "0.0.1"
-  resolved "git+https://github.com/evilmastermind/monstershuffler-shared#60de789e19bc9eea2886174805d765587ba58514"
+  resolved "git+https://github.com/evilmastermind/monstershuffler-shared#d08f41c7d7022fec2790e32c328fd5b059fcf89b"
   dependencies:
     jspath "^0.4.0"
     zod "^3.22.4"

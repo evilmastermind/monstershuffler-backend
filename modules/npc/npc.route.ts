@@ -24,12 +24,13 @@ import {
 import { sGenerateTextResponse } from '@/modules/ai/ai.schema';
 import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
-
 // schemas
 import { jwtHeaderOptional } from '@/schemas';
 import { get } from 'http';
 
-const npcRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance) {
+const npcRoutes: FastifyPluginAsyncZod = async function (
+  server: FastifyInstance
+) {
   // server.post(
   //   '/',
   //   {
@@ -79,8 +80,10 @@ const npcRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance
       preHandler: [server.authenticateOptional, server.MSOnly],
       schema: {
         // hide: true,
-        summary: '[MS ONLY] Gets the data used by the NPC Generator on the frontend.',
-        description: 'Gets the data used by the NPC Generator page in one single call (lists of classes, races and backgrounds). Only accessible through monstershuffler.com',
+        summary:
+          '[MS ONLY] Gets the data used by the NPC Generator on the frontend.',
+        description:
+          'Gets the data used by the NPC Generator page in one single call (lists of classes, races and backgrounds). Only accessible through monstershuffler.com',
         headers: jwtHeaderOptional,
         tags: ['npcs'],
         response: {
@@ -95,14 +98,15 @@ const npcRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstance
     {
       config: {
         rateLimit: {
-          max: 6,
+          max: 4,
           timeWindow: '1 minute',
         },
       },
       preHandler: [server.authenticateOptional, server.MSOnly],
       schema: {
         summary: '[MS ONLY] Generates a random backstory for an NPC.',
-        description: 'Generates a random backstory for an NPC. Only accessible through monstershuffler.com',
+        description:
+          'Generates a random backstory for an NPC. Only accessible through monstershuffler.com',
         tags: ['npcs'],
         headers: jwtHeaderOptional,
         body: sGenerateBackstoryBody,

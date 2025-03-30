@@ -258,7 +258,7 @@ export async function createRandomNpc(
     character.CRCalculation = { name: 'npcstandard' };
 
     calculateAlignmentFromModifiers(result);
-    addCharacterHooks(result);
+    await addCharacterHooks(result);
     adjustLevel(result);
     createStats(result);
 

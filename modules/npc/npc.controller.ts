@@ -1,4 +1,3 @@
-import { PrismaClient } from '@prisma/client';
 import { Character } from '@/types';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { createRandomNpc } from './npc.controller.generator';
@@ -15,11 +14,9 @@ import { getBackgroundList } from '../background/background.service';
 import {
   getDnDAdventurePrompt,
   parseRoleplayStats,
-  type RoleplayStats,
-  getCharacterHookPrompt,
   getPhysicalAppearancePrompt,
 } from './prompts';
-import { generateTextStream, generateText } from '@/modules/ai/ai.service';
+import { generateTextStream } from '@/modules/ai/ai.service';
 import { postAnswer } from '../feedback/feedback.service';
 import {
   CURRENT_CHEAP_MODEL,
@@ -27,17 +24,14 @@ import {
 } from '@/modules/ai/ai.schema';
 import {
   getRecycledNpcsForUser,
-  getNpcForUpdate,
+  getFullNpc,
   postNpc,
   addNpcToSentAlreadyList,
-  addBackstoryToNpc,
   postNpcRating,
   getNpc,
-  updateNpcBackstoryStatus,
+  saveBackstory,
+  savePhysicalAppearance,
 } from './npc.service';
-import { calculateCharacterHook } from 'monstershuffler-shared';
-import { generateBackstorySentences } from './backstory';
-import prisma from '@/utils/prisma';
 
 //////////////////////////////////////////////
 // CONTROLLER FUNCTIONS
@@ -153,30 +147,54 @@ export async function generateBackstoryHandler(
   try {
     const body = request.body;
     const npcid = body.id;
+    const hookIndex = body.hook;
 
     const { id } = request.user || { id: undefined };
 
-    await prisma.$transaction(async () => {
-      const npcs = await getNpcForUpdate(prisma, npcid); // TODO: manually assign Prisma's table type
-      if (!npcs.length) {
-        throw new Error('NPC not found');
-      }
-      const npc = npcs[0];
-      if (npc.hasbackstory === true || npc.backstorystatus !== null) {
-        throw new Error(
-          "It's currently possible to generate a backstory only once for an NPC"
-        );
-      }
+    const npc = await getFullNpc(npcid);
 
-      const roleplayStats = await parseRoleplayStats(npc.object as Character);
-      let backstory = '';
+    if (!npc || !npc.objects) {
+      throw new Error('NPC not found');
+    }
 
-      updateNpcBackstoryStatus(prisma, npcid, 'pending');
-      reply.sse(
-        (async function* source() {
-          try {
+    const object = npc.objects.object as Character;
+
+    let backstory = '';
+
+    // check if there is a backstory already generated
+    // for that npc and hook
+    if (hookIndex && npc.npcsbackstories?.length) {
+      backstory =
+        npc.npcsbackstories.find((backstory) => backstory.hook === hookIndex)
+          ?.backstory || '';
+    }
+
+    const roleplayStats = await parseRoleplayStats(object, hookIndex);
+
+    /**
+     * if you found a backstory alread, return that
+     * if not, generate it (but use the new hook in the prompt)
+     * if there isn't a physical appearance already, genrate it and
+     * save it inside the npc object
+     */
+
+    reply.sse(
+      (async function* source() {
+        try {
+          if (!npc || !npc.objects) {
+            throw new Error('NPC not found');
+          }
+
+          if (backstory) {
+            // return the backstory that was already generated
+            yield {
+              id: 'backstory_incoming',
+              data: JSON.stringify(backstory),
+            };
+          } else {
+            // generate the backstory
             const adventurePrompt = await getDnDAdventurePrompt(
-              npc.object as Character,
+              object,
               roleplayStats,
               backstory
             );
@@ -200,9 +218,12 @@ export async function generateBackstoryHandler(
                 data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
               };
             }
+            saveBackstory(npc.id, backstory, hookIndex || 0);
+          }
 
+          if (!object.character.physicalAppearance) {
             const physicalAppearancePrompt = await getPhysicalAppearancePrompt(
-              npc.object as Character,
+              object,
               roleplayStats
             );
             const physicalAppearanceStream = await generateTextStream(
@@ -225,46 +246,29 @@ export async function generateBackstoryHandler(
                 data: JSON.stringify(chunk.choices[0]?.delta?.content || ''),
               };
             }
-
-            //   generateCharacterHookAndSaveBackstory(
-            //     prisma,
-            //     npcid,
-            //     backstory,
-            //     physicalAppearance,
-            // npc.object as Character,
-            // roleplayStats,
-            //   );
-          } catch (error) {
-            yield {
-              id: 'error',
-              data: JSON.stringify('An unexpected error occurred.'),
-            };
+            savePhysicalAppearance(npc.objects.id, object, physicalAppearance);
           }
-        })()
-      );
-    });
+
+          //   generateCharacterHookAndSaveBackstory(
+          //     prisma,
+          //     npcid,
+          //     backstory,
+          //     physicalAppearance,
+          // npc.object as Character,
+          // roleplayStats,
+          //   );
+        } catch (error) {
+          yield {
+            id: 'error',
+            data: JSON.stringify('An unexpected error occurred.'),
+          };
+        }
+      })()
+    );
   } catch (error) {
     return handleError(error, reply);
   }
 }
-
-// async function generateCharacterHookAndSaveBackstory(prisma: PrismaClient, id: string, backstory: string, physicalAppearance: string, object: Character, roleplayStats: RoleplayStats) {
-
-//   const characterHookPrompt = getCharacterHookPrompt(roleplayStats, backstory);
-//   const characterHook = await generateText(characterHookPrompt, CURRENT_CHEAP_MODEL);
-
-//   object.character.characterHooks = characterHook.choices[0].message.content || '';
-//   calculateCharacterHook(object);
-
-//   addBackstoryToNpc({
-//     prisma,
-//     id,
-//     backstory,
-//     physicalAppearance,
-//     object,
-//   });
-
-// };
 
 export async function postNpcRatingController(
   request: FastifyRequest<{ Body: PostNpcRatingBody }>,

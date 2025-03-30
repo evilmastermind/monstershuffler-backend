@@ -131,7 +131,6 @@ export async function generateBackstorySentenceActions() {
         continue;
       }
       const request = `Generate an action, attack, trait, reaction or bonus action for the following sentence: "${sentence.sentence}"`;
-      console.log('#', sentence.id);
       const response = await queryAssistant(ACTIONS_ASSISTANT_ID, request);
       if (response && response.length) {
         postBackstorysentencesobject(sentence.id, {

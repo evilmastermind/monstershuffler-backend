@@ -11,7 +11,7 @@ import type {
 } from './npc.schema';
 import { FastifyRequest } from 'fastify';
 import { random } from '@/utils/functions';
-import { templateObject } from 'monstershuffler-shared';
+import { templateObject, type Character } from 'monstershuffler-shared';
 
 /**
  * Gets npcs that the user hasn't seen yet.
@@ -82,20 +82,21 @@ export async function getRecycledNpcsForUser(
       : '';
     npcs = npcs.concat(
       await prisma.$queryRaw`
-      SELECT n.id, n.object, AVG(r.rating) as rating, COUNT(r.rating) as ratingcount
+      SELECT n.id, n.objectid, o.object, AVG(r.rating) as rating, COUNT(r.rating) as ratingcount
       FROM
         npcs n
         LEFT JOIN npcsrating r on n.id = r.npcid
+        LEFT JOIN objects o on n.objectid = o.id
+        LEFT JOIN npcsbackstories b on n.id = b.npcid
       WHERE
         n.id NOT IN (
           SELECT npcid
           FROM npcssenttousers
           WHERE ${Prisma.raw(userQuery)}
-        ) AND
-        n.hasbackstory = true
+        )
         ${Prisma.raw(filters)}
         ${Prisma.raw(racefilter)}
-      GROUP BY n.id, n.object
+      GROUP BY n.id, n.objectid, o.object
       ORDER BY COALESCE(AVG(rating), '-Infinity')::float DESC, ratingcount DESC
       LIMIT ${raceFilters[i].quantity}
     `
@@ -201,10 +202,14 @@ function getBackgroundFilter(
   return filter;
 }
 
-export async function getNpcForUpdate(prisma: PrismaClient, id: string) {
-  return await prisma.$queryRaw<npcs[]>`
-    SELECT * FROM npcs WHERE id = ${id}::uuid FOR UPDATE;
-  `;
+export async function getFullNpc(id: string) {
+  return await prisma.npcs.findUnique({
+    where: { id },
+    include: {
+      objects: true,
+      npcsbackstories: true,
+    },
+  });
 }
 
 export async function updateNpcBackstoryStatus(
@@ -230,9 +235,18 @@ export async function postNpc(input: PostNpc) {
   if (!raceid || !alignmentmoral || !alignmentethical || !gender) {
     throw new Error('Invalid input');
   }
+  const objectRow = await prisma.objects.create({
+    data: {
+      type: 7,
+      name: object.statistics?.fullName || 'npc',
+      game: 1,
+      userid: 0,
+      object,
+    },
+  });
   return await prisma.npcs.create({
     data: {
-      object,
+      objectid: objectRow.id,
       userid: userid || null,
       sessionid: sessionid || null,
       raceid,
@@ -261,19 +275,6 @@ export async function addNpcToSentAlreadyList(
   });
 }
 
-export async function addBackstoryToNpc(input: AddBackstoryToNpcBody) {
-  const { prisma, id, backstory, physicalAppearance, object } = input;
-  if (!object.character.user) {
-    object.character.user = {};
-  }
-  object.character.physicalAppearance = physicalAppearance;
-  object.character.user.backstory = { string: backstory };
-  return await (prisma as PrismaClient).npcs.update({
-    where: { id },
-    data: { object, hasbackstory: true, backstorystatus: 'completed' },
-  });
-}
-
 export async function postNpcRating(input: PostNpcRatingServiceParams) {
   const { npcid, rating, userid, sessionid } = input;
   /**
@@ -298,13 +299,19 @@ export async function postNpcRating(input: PostNpcRatingServiceParams) {
 export async function getNpc(uuid: string) {
   const npc = await prisma.npcs.findUnique({
     where: { id: uuid },
+    include: {
+      objects: true,
+    },
   });
   if (!npc) {
     return null;
   }
+  if (!npc.objects) {
+    return null;
+  }
   return {
     id: npc.id,
-    object: npc.object,
+    object: npc.objects.object,
   };
 }
 
@@ -377,5 +384,31 @@ export async function objectsForThisBackstorysentence(
 ) {
   return await prisma.backstorysentencesobjects.count({
     where: { backstorysentenceid },
+  });
+}
+
+export async function saveBackstory(
+  id: string,
+  backstory: string,
+  hook: number
+) {
+  return await prisma.npcsbackstories.create({
+    data: {
+      npcid: id,
+      backstory,
+      hook,
+    },
+  });
+}
+
+export async function savePhysicalAppearance(
+  id: number,
+  object: Character,
+  physicalAppearance: string
+) {
+  object.character.physicalAppearance = physicalAppearance;
+  return await prisma.objects.update({
+    where: { id },
+    data: { object },
   });
 }

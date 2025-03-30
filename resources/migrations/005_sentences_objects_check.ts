@@ -64,7 +64,7 @@ async function checkActions(object: Template, id: number, client: Client) {
           'SELECT backstorysentenceid from backstorysentencesobjects where objectid = $1',
           [id]
         );
-        console.log('Invalid action', result.rows[0].backstorysentenceid);
+        console.error('Invalid action', result.rows[0].backstorysentenceid);
       }
     }
   }

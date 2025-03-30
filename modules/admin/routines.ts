@@ -80,7 +80,7 @@ async function fixObjectsInFile() {
     // Write the cleaned content to the output file
     fs.writeFileSync(outputPath, cleanedContent, 'utf8');
 
-    console.log('File successfully cleaned and processed.');
+    console.info('File successfully cleaned and processed.');
   } catch (error) {
     console.error('Error processing file:', error);
   }
@@ -94,7 +94,7 @@ async function fixObjectsWithAssistant() {
   let objectsProcessed = 0;
   let counter = 0;
   const startingDate = new Date();
-  console.log('Starting routine at', startingDate.toISOString());
+  console.info('Starting routine at', startingDate.toISOString());
   while (objectsProcessed < totalObjects - 1) {
     const objects = await getObjectsWithPagination(
       0,
@@ -113,7 +113,7 @@ async function fixObjectsWithAssistant() {
       counter++;
       if (!testRun && isSuccessful) {
         await saveObject(object);
-        console.log(counter, '/', totalObjects);
+        console.info(counter, '/', totalObjects);
       }
     }
   }
@@ -131,7 +131,7 @@ async function fixObject(object: any) {
       object.object = JSON.parse(response[0].content[0].text.value);
       return true;
     } catch (e) {
-      console.log('❌ error for #', object.id);
+      console.info('❌ error for #', object.id);
       return false;
       // save the object id inside the file using fs
     }
