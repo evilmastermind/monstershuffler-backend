@@ -6,7 +6,8 @@
   "scripts": {
     "serve": "yarn dev",
     "dev": "tsnd --respawn --transpile-only --exit-child app.ts",
-    "prebuild": "rimraf ./dist && npx prisma generate",
+    "migrate": "npx tsnd --no-respawn --transpile-only --exit-child migrate.ts",
+    "prebuild": "rimraf ./dist && yarn migrate && npx prisma db pull && npx prisma generate",
     "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json && npm run copy-resources",
     "copy-resources": "copyfiles resources/**/*.sql dist",
     "start": "node dist/app.js",

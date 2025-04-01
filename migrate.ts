@@ -1,5 +1,15 @@
-import fs from 'fs';
+import dotenv from 'dotenv';
+dotenv.config();
 import path from 'path';
+// @ts-expect-error module-alias is not typed
+import moduleAlias from 'module-alias';
+////
+moduleAlias.addAliases({
+  '@': path.join(__dirname),
+  '~': path.join(__dirname, 'modules'),
+});
+
+import fs from 'fs';
 import cron from 'node-cron';
 import { Client } from 'pg';
 
@@ -7,7 +17,7 @@ const client = new Client({
   connectionString: process.env.DATABASE_URL,
 });
 
-const migrationsDir = path.join(__dirname, '../resources/migrations');
+const migrationsDir = path.join(__dirname, 'resources/migrations');
 
 async function setSearchPath() {
   const schema = process.env.DATABASE_URL?.split('=').pop();
@@ -40,7 +50,7 @@ export async function runMigrations() {
 
   for (const file of migrationFiles) {
     if (appliedMigrationNames.has(file)) {
-      console.info(`Skipping already applied migration: ${file}`);
+      // console.info(`Skipping already applied migration: ${file}`);
       continue;
     }
     console.info(` ===> Applying migration: ${file}`);
@@ -76,18 +86,30 @@ export async function runMigrations() {
   }
 
   await client.end();
+  console.info('🌈 All migrations applied successfully');
 }
 
+// TODO: you need to handle cron jobs like migrations.
+// create a cronjobs table and insert the job name, so you
+// can create/delete jobs when needed
 export async function scheduleDbMaintenance() {
   // Run this every Sunday at midnight '0 0 * * Sunday'
-  cron.schedule('0 0 * * Sunday', async () => {
+  const job = cron.schedule('0 0 * * Sunday', async () => {
     await client.connect();
     await setSearchPath();
     // Delete NPCs without a backstory that are older than a month
     await client.query(
-      "DELETE FROM npcs WHERE hasbackstory = false AND datecreated < NOW() - INTERVAL '1 month'"
+      'DELETE FROM objects WHERE type = 7 AND id IN ( 	SELECT n.objectid 	FROM npcs n JOIN npcsbackstories b 	WHERE n.datecreated < NOW() - INTERVAL \'1 month\' 	AND b.id IS NULL );'
     );
     console.info('----MAINTENANCE: Deleted old NPCs without a backstory');
     await client.end();
   });
 }
+
+async function main() {
+  await runMigrations();
+  await scheduleDbMaintenance();
+  process.exit(0);
+}
+
+main();

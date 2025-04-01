@@ -25,7 +25,6 @@ import underPressure from '@fastify/under-pressure';
 import swaggerSettings from '@/plugins/swagger';
 import mailerSettings from '@/plugins/mailer';
 import { routes } from '@/modules';
-import { runMigrations, scheduleDbMaintenance } from './db';
 import { isAdmin } from '@/modules/user/user.service';
 import events from 'events';
 
@@ -161,9 +160,6 @@ server
 async function main() {
 
   try {
-    await runMigrations();
-    await scheduleDbMaintenance();
-
     server.register(swagger, swaggerSettings);
     server.register(swaggerUi, {
       routePrefix: 'api/docs',
