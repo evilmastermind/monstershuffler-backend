@@ -94,6 +94,7 @@ export const schemas = [
 ];
 
 export const routes = [
+  { routes: adminRoutes, prefix: 'api/admin' },
   //  {routes: actionRoutes,  prefix: 'api/actions' },
   // { routes: aiRoutes, prefix: 'api/ai' },
   //  {routes: armorRoutes,  prefix: 'api/armor' },
@@ -121,5 +122,4 @@ export const routes = [
   { routes: traitRoutes,  prefix: 'api/traits' },
   { routes: userRoutes, prefix: 'api/users' },
   // {routes: weaponRoutes,  prefix: 'api/weapons' },
-  { routes: adminRoutes, prefix: 'api/admin' },
 ];

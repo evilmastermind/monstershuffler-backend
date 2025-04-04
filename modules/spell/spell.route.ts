@@ -62,63 +62,63 @@ const spellRoutes: FastifyPluginAsyncZod = async function (server: FastifyInstan
     getSpellHandler
   );
 
-  server.post(
-    '/',
-    {
-      preHandler: [server.authenticate, server.MSOnly],
-      schema: {
-        hide: true,
-        summary: '[MS ONLY] Adds a new spell to the db.',
-        description: '[MS ONLY] Adds a new spell to the db.',
-        body: sPostSpellBody,
-        tags: ['spells'],
-        headers: jwtHeaderRequired,
-        response: {
-          201: sGetSpellResponse,
-        },
-      },
-    },
-    createSpellHandler
-  );
+  // server.post(
+  //   '/',
+  //   {
+  //     preHandler: [server.authenticate, server.MSOnly],
+  //     schema: {
+  //       hide: true,
+  //       summary: '[MS ONLY] Adds a new spell to the db.',
+  //       description: '[MS ONLY] Adds a new spell to the db.',
+  //       body: sPostSpellBody,
+  //       tags: ['spells'],
+  //       headers: jwtHeaderRequired,
+  //       response: {
+  //         201: sGetSpellResponse,
+  //       },
+  //     },
+  //   },
+  //   createSpellHandler
+  // );
 
-  server.put(
-    '/:spellId',
-    {
-      preHandler: [server.authenticate, server.MSOnly],
-      schema: {
-        hide: true,
-        summary: '[MS ONLY] Updates the spell corresponding to the given id.',
-        description:
-          '[MS ONLY] Updates the spell corresponding to the given id.',
-        body: sPutSpellBody,
-        tags: ['spells'],
-        headers: jwtHeaderRequired,
-        response: {
-          200: BatchPayload,
-        },
-      },
-    },
-    updateSpellHandler
-  );
+  // server.put(
+  //   '/:spellId',
+  //   {
+  //     preHandler: [server.authenticate, server.MSOnly],
+  //     schema: {
+  //       hide: true,
+  //       summary: '[MS ONLY] Updates the spell corresponding to the given id.',
+  //       description:
+  //         '[MS ONLY] Updates the spell corresponding to the given id.',
+  //       body: sPutSpellBody,
+  //       tags: ['spells'],
+  //       headers: jwtHeaderRequired,
+  //       response: {
+  //         200: BatchPayload,
+  //       },
+  //     },
+  //   },
+  //   updateSpellHandler
+  // );
 
-  server.delete(
-    '/:spellId',
-    {
-      preHandler: [server.authenticate, server.MSOnly],
-      schema: {
-        hide: true,
-        summary: '[MS ONLY] Deletes the spell corresponding to the given id.',
-        description:
-          '[MS ONLY] Deletes the spell corresponding to the given id.',
-        tags: ['spells'],
-        headers: jwtHeaderRequired,
-        response: {
-          200: BatchPayload,
-        },
-      },
-    },
-    deleteSpellHandler
-  );
+  // server.delete(
+  //   '/:spellId',
+  //   {
+  //     preHandler: [server.authenticate, server.MSOnly],
+  //     schema: {
+  //       hide: true,
+  //       summary: '[MS ONLY] Deletes the spell corresponding to the given id.',
+  //       description:
+  //         '[MS ONLY] Deletes the spell corresponding to the given id.',
+  //       tags: ['spells'],
+  //       headers: jwtHeaderRequired,
+  //       response: {
+  //         200: BatchPayload,
+  //       },
+  //     },
+  //   },
+  //   deleteSpellHandler
+  // );
 };
 
 export default spellRoutes;

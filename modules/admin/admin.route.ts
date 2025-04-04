@@ -28,53 +28,53 @@ const converterRoutes: FastifyPluginAsyncZod = async function (
     },
     convertObjectsHandler
   );
-  server.get(
-    '/backstory-sentences',
-    {
-      preHandler: [server.admin],
-      schema: {
-        hide: true,
-        summary: 'Generates NPC backstory sentences.',
-        description:
-          'Generates NPC backstory sentences from a pretrained model with random inputs.',
-        headers: jwtHeaderRequired,
-        tags: ['admin'],
-        response: 200,
-      },
-    },
-    generateBackstorySentences
-  );
-  server.get(
-    '/backstory-sentences-actions',
-    {
-      preHandler: [server.admin],
-      schema: {
-        hide: true,
-        summary: 'Generates actions for backstory sentences.',
-        description: 'Generates actions for backstory sentences.',
-        headers: jwtHeaderRequired,
-        tags: ['admin'],
-        response: 200,
-      },
-    },
-    generateBackstorySentenceActions
-  );
+  // server.get(
+  //   '/backstory-sentences',
+  //   {
+  //     preHandler: [server.admin],
+  //     schema: {
+  //       hide: true,
+  //       summary: 'Generates NPC backstory sentences.',
+  //       description:
+  //         'Generates NPC backstory sentences from a pretrained model with random inputs.',
+  //       headers: jwtHeaderRequired,
+  //       tags: ['admin'],
+  //       response: 200,
+  //     },
+  //   },
+  //   generateBackstorySentences
+  // );
+  // server.get(
+  //   '/backstory-sentences-actions',
+  //   {
+  //     preHandler: [server.admin],
+  //     schema: {
+  //       hide: true,
+  //       summary: 'Generates actions for backstory sentences.',
+  //       description: 'Generates actions for backstory sentences.',
+  //       headers: jwtHeaderRequired,
+  //       tags: ['admin'],
+  //       response: 200,
+  //     },
+  //   },
+  //   generateBackstorySentenceActions
+  // );
 
-  server.get(
-    '/worker',
-    {
-      preHandler: [server.admin],
-      schema: {
-        hide: true,
-        summary: 'Launches a routine.',
-        description: 'Lanches a routine.',
-        headers: jwtHeaderRequired,
-        tags: ['admin'],
-        response: 200,
-      },
-    },
-    launchRoutine
-  );
+  // server.get(
+  //   '/worker',
+  //   {
+  //     preHandler: [server.admin],
+  //     schema: {
+  //       hide: true,
+  //       summary: 'Launches a routine.',
+  //       description: 'Launches a routine.',
+  //       headers: jwtHeaderRequired,
+  //       tags: ['admin'],
+  //       response: 200,
+  //     },
+  //   },
+  //   launchRoutine
+  // );
 };
 
 export default converterRoutes;

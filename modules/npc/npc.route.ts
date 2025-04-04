@@ -139,8 +139,8 @@ const npcRoutes: FastifyPluginAsyncZod = async function (
     {
       preHandler: [server.authenticateOptional],
       schema: {
-        summary: 'Get an NPC by UUID',
-        description: 'Get an NPC by UUID',
+        summary: 'Get an NPC by its UUID',
+        description: 'Get an NPC by its UUID',
         tags: ['npcs'],
         // params: {
         //   type: 'object',
